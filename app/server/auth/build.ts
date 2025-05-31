@@ -86,12 +86,24 @@ const build = async (
                 (user_id, session_token, created_at, ip, user_agent, expires_at, signature) 
                 VALUES (?, ?, ?, ?, ?, ?, ?)
             `,
-            [user.id, token, new Date(), ipAdress, userAgent, expiringDate, passphrase || ""]
+            [
+                user.id,
+                token,
+                new Date(), // created_at
+                auth.hash(ipAdress), // ip
+                auth.hash(userAgent), // user_agent
+                expiringDate, // expires_at
+                passphrase ? auth.hash(passphrase) : "" // signature, use null if no passphrase
+            ]
         );
     } catch (error) {
+        console.error('Database query error:', error);
         return {
             success: false,
-            message: 'Database error.'
+            message: 'Database error.',
+            infos : {
+                error : error instanceof Error ? error.message : 'Unknown error'
+            }
         };
     }
 

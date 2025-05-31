@@ -19,10 +19,11 @@ app.post('/auth/build', async (req: Request, res: Response) => {
         if (reply.success) {
             res.status(200).json(reply);
         } else {
+            console.error('Error in /auth/build:', reply.message, reply.infos?.error);
             res.status(400).json(reply);
         }
     } catch (error) {
-        console.error('Error in /auth/build:', error);
+        console.error('Unexpected error in /auth/build:', error);
         res.status(500).json({ success: false, message: 'Internal server error.' });
     }
 });

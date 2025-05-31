@@ -2,7 +2,7 @@ import pool from "../../../db"
 import auth from "../../auth-dir"
 import TReply from "../../utils/reply.type";
 import TToken from "../../utils/token.type";
-
+import crypto from 'crypto';
 
 const getToken = async (
     username : string,
@@ -21,7 +21,7 @@ const getToken = async (
             user_agent = ? AND
             ip = ? AND 
             signature = ?   
-        `, [user.id, userAgent, ipAdress, passphrase ? passphrase : ""]);
+        `, [user.id, auth.hash(userAgent), auth.hash(ipAdress), passphrase ? auth.hash(passphrase) : ""]);
         if (tokens.length > 0) {
             const token : TToken = tokens[0] as TToken;
             const expirationDate : Date = token.expires_at;

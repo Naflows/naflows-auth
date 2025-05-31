@@ -9,4 +9,7 @@ COPY app ./
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+
+RUN npm install -g nodemon
+
+CMD ["nodemon", "--exec", "npx tsx index.ts"]
