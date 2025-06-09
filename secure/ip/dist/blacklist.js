@@ -60,7 +60,7 @@ function blacklistIP(mongoose, req, res, reason) {
                         return res.status(500).send('Internal server error');
                     }
                     console.log("IP " + ip + " has been blacklisted.");
-                    serve_1.serve("IP Blacklisted", "styles/blacklist.css", "static/", res, {
+                    serve_1.serve("IP Blacklisted", "styles/blacklist.css", "blacklist.html", res, {
                         "blacklist_date": new Date().toISOString(),
                         "blacklist_reason": reason || "No reason provided"
                     });

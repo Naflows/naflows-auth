@@ -45,29 +45,27 @@ app.use(async (req, res, next) => {
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const blacklistCollection = mongoose.connection.collection("blacklist");
     if (blacklistCollection) {
-        const relatedIPs: any | null = await blacklistCollection.findOne({
+        const relatedIP: any | null = await blacklistCollection.findOne({
             ip: ip
         });
-        if (relatedIPs && relatedIPs.length > 0) {
-            serve("IP Blacklisted", "styles/blacklist.css", "static/", res, {
-                "blacklist_date" : relatedIPs[0].date.toISOString(),
-                "blacklist_reason" : relatedIPs[0].reason
+        if (relatedIP) {
+            serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
+                "blacklist_date": relatedIP.date.toISOString(),
+                "blacklist_reason": relatedIP.reason
             });
+            return; // Prevent calling next() after response is sent
+        } else {
+            next();
         }
+    } else {
+        res.status(500).send('Blacklist collection not found');
     }
 
 
-    next();
 });
 
 
-app.get('/blacklist', (req, res) => {
-    // Serve the blacklist page 
-    serve("IP Blacklisted", "styles/blacklist.css","blacklist.html",res, {
-        "blacklist_date": new Date().toISOString(),
-        "blacklist_reason": "No reason provided",
-    }) ;
-});
+
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Auth API');
@@ -109,7 +107,7 @@ app.post('/team/add/service/post', async (req, res) => {
 
 
 app.get('/team/add/service', (req, res) => {
-    serve("Add service", "form-style.css", "static/", res);
+    serve("Add service", "form-style.css", "add-service.html", res);
 })
 
 const PORT = process.env.PORT || 3000;

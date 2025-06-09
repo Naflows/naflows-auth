@@ -63,7 +63,7 @@ mongoose_1["default"].connection.once('open', function () {
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var ip, blacklistCollection, relatedIPs;
+    var ip, blacklistCollection, relatedIP;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -79,27 +79,25 @@ app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, fun
                         ip: ip
                     })];
             case 1:
-                relatedIPs = _a.sent();
-                if (relatedIPs && relatedIPs.length > 0) {
-                    serve_1.serve("IP Blacklisted", "styles/blacklist.css", "static/", res, {
-                        "blacklist_date": relatedIPs[0].date.toISOString(),
-                        "blacklist_reason": relatedIPs[0].reason
+                relatedIP = _a.sent();
+                if (relatedIP) {
+                    serve_1.serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
+                        "blacklist_date": relatedIP.date.toISOString(),
+                        "blacklist_reason": relatedIP.reason
                     });
+                    return [2 /*return*/]; // Prevent calling next() after response is sent
                 }
-                _a.label = 2;
+                else {
+                    next();
+                }
+                return [3 /*break*/, 3];
             case 2:
-                next();
-                return [2 /*return*/];
+                res.status(500).send('Blacklist collection not found');
+                _a.label = 3;
+            case 3: return [2 /*return*/];
         }
     });
 }); });
-app.get('/blacklist', function (req, res) {
-    // Serve the blacklist page 
-    serve_1.serve("IP Blacklisted", "styles/blacklist.css", "blacklist.html", res, {
-        "blacklist_date": new Date().toISOString(),
-        "blacklist_reason": "No reason provided"
-    });
-});
 app.get('/', function (req, res) {
     res.send('Welcome to the Auth API');
 });
@@ -145,7 +143,7 @@ app.post('/team/add/service/post', function (req, res) { return __awaiter(void 0
     });
 }); });
 app.get('/team/add/service', function (req, res) {
-    serve_1.serve("Add service", "form-style.css", "static/", res);
+    serve_1.serve("Add service", "form-style.css", "add-service.html", res);
 });
 var PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
