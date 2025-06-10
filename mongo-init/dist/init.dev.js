@@ -3,10 +3,16 @@
 db = db.getSiblingDB('NASS');
 db.createCollection('users');
 db.createCollection('sessions');
-db.createCollection('tokens');
-db.createCollection('connections');
+db.createCollection('tokens'); // User tokens, used for authentication
+
+db.createCollection('connections'); // Service connections for direct access to the NASS
+
+db.createCollection('service-tokens'); // Tokens for services to authenticate with the NASS
+
 db.createCollection('nass_contracts');
 db.createCollection('blacklist');
+db.createCollection('logs');
+db.createCollection('requests');
 db.users.createIndex({
   id: 1
 }, {
@@ -70,6 +76,16 @@ db.blacklist.createIndex({
 });
 db.blacklist.createIndex({
   ip: 1
+}, {
+  unique: true
+});
+db.logs.createIndex({
+  id: 1
+}, {
+  unique: true
+});
+db.requests.createIndex({
+  id: 1
 }, {
   unique: true
 });

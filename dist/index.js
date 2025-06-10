@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+exports.db = void 0;
 var serve_1 = require("./public/method/serve");
 var dir_1 = require("./secure/dir");
 var mongoose_1 = require("mongoose");
@@ -63,7 +64,7 @@ mongoose_1["default"].connection.once('open', function () {
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var ip, blacklistCollection, relatedIPs;
+    var ip, blacklistCollection, blacklistedIP;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -79,23 +80,31 @@ app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, fun
                         ip: ip
                     })];
             case 1:
-                relatedIPs = _a.sent();
-                if (relatedIPs && relatedIPs.length > 0) {
-                    serve_1.serve("IP Blacklisted", "styles/blacklist.css", "static/", res, {
-                        "blacklist_date": relatedIPs[0].date.toISOString(),
-                        "blacklist_reason": relatedIPs[0].reason
+                blacklistedIP = _a.sent();
+                console.log('Related IPs:', blacklistedIP);
+                if (blacklistedIP) {
+                    console.log("IP " + ip + " is blacklisted.");
+                    serve_1.serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
+                        "blacklist_date": blacklistedIP.date.toISOString(),
+                        "blacklist_reason": blacklistedIP.reason
                     });
+                    return [2 /*return*/];
                 }
-                _a.label = 2;
+                else {
+                    console.log("IP " + ip + " is not blacklisted.");
+                    next();
+                }
+                return [3 /*break*/, 3];
             case 2:
-                next();
-                return [2 /*return*/];
+                res.status(500).send("Internal server error.");
+                _a.label = 3;
+            case 3: return [2 /*return*/];
         }
     });
 }); });
 app.get('/blacklist', function (req, res) {
     // Serve the blacklist page 
-    serve_1.serve("IP Blacklisted", "styles/blacklist.css", "blacklist.html", res, {
+    serve_1.serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
         "blacklist_date": new Date().toISOString(),
         "blacklist_reason": "No reason provided"
     });
@@ -145,9 +154,10 @@ app.post('/team/add/service/post', function (req, res) { return __awaiter(void 0
     });
 }); });
 app.get('/team/add/service', function (req, res) {
-    serve_1.serve("Add service", "form-style.css", "static/", res);
+    serve_1.serve("Add service", "form-style.css", "add-service.html", res);
 });
 var PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
     console.log("NASS is running on http://localhost:" + PORT);
 });
+exports.db = mongoose_1["default"].connection;

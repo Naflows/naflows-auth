@@ -8,7 +8,10 @@ const secure = {
     deactivate : 0,
     block : 0,
     crypt : crypt,
-    blacklist : blacklistIP
+    blacklist : blacklistIP,
+    token : () => {
+        
+    }
 };
 
 export default secure;

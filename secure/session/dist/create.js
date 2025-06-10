@@ -36,42 +36,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.blacklistIP = void 0;
-var serve_1 = require("../../public/method/serve");
-function blacklistIP(mongoose, req, res, reason) {
+exports.createSession = void 0;
+function createSession(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var ip, blacklistCollection;
+        var body, sessionId;
         return __generator(this, function (_a) {
-            ip = req.ip || req.connection.remoteAddress;
-            if (!ip) {
-                console.error('IP address not found');
-                return [2 /*return*/, res.status(400).send('IP address not found')];
+            body = req.body;
+            // Validate the request body
+            if (!body || !body.username || !body.password) {
+                return [2 /*return*/, res.status(400).send('Invalid request body')];
             }
-            blacklistCollection = mongoose.connection.collection("blacklist");
-            if (blacklistCollection) {
-                blacklistCollection.insertOne({
-                    ip: ip,
-                    userAgent: req.headers['user-agent'] || 'unknown',
-                    reason: reason || 'No reason provided',
-                    date: new Date()
-                }, function (err, result) {
-                    if (err) {
-                        console.error('Error inserting into blacklist:', err);
-                        return res.status(500).send('Internal server error');
-                    }
-                    console.log("IP " + ip + " has been blacklisted.");
-                    serve_1.serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
-                        "blacklist_date": new Date().toISOString(),
-                        "blacklist_reason": reason || "No reason provided"
-                    });
-                });
+            // Simulate session creation logic
+            try {
+                sessionId = Math.random().toString(36).substring(2, 15);
+                // Respond with the session ID
+                return [2 /*return*/, res.status(201).json({ sessionId: sessionId })];
             }
-            else {
-                console.error('Blacklist collection not found');
+            catch (error) {
+                console.error('Error creating session:', error);
                 return [2 /*return*/, res.status(500).send('Internal server error')];
             }
             return [2 /*return*/];
         });
     });
 }
-exports.blacklistIP = blacklistIP;
+exports.createSession = createSession;

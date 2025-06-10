@@ -23,7 +23,7 @@ export async function blacklistIP(mongoose, req : Request, res : Response, reaso
                 return res.status(500).send('Internal server error');
             }
             console.log(`IP ${ip} has been blacklisted.`);
-            serve("IP Blacklisted", "styles/blacklist.css", "static/", res, {
+            serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
                 "blacklist_date": new Date().toISOString(),
                 "blacklist_reason": reason || "No reason provided",
             });

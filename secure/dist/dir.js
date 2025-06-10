@@ -8,6 +8,8 @@ var secure = {
     deactivate: 0,
     block: 0,
     crypt: hash_1.crypt,
-    blacklist: blacklist_1.blacklistIP
+    blacklist: blacklist_1.blacklistIP,
+    token: function () {
+    }
 };
 exports["default"] = secure;

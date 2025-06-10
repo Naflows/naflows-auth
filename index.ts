@@ -31,6 +31,7 @@ mongoose.connection.once('open', () => {
 });
 
 
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -44,26 +45,38 @@ app.use(async (req, res, next) => {
 
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const blacklistCollection = mongoose.connection.collection("blacklist");
+    
+    /*
+        Collections must be loaded for the middleware. 
+        Unauthorized access must be filtered or request is canceled.
+    */
     if (blacklistCollection) {
-        const relatedIPs: any | null = await blacklistCollection.findOne({
+        const blacklistedIP: any | null = await blacklistCollection.findOne({
             ip: ip
         });
-        if (relatedIPs && relatedIPs.length > 0) {
-            serve("IP Blacklisted", "styles/blacklist.css", "static/", res, {
-                "blacklist_date" : relatedIPs[0].date.toISOString(),
-                "blacklist_reason" : relatedIPs[0].reason
+        console.log('Related IPs:', blacklistedIP);
+        if (blacklistedIP) {
+            console.log(`IP ${ip} is blacklisted.`);
+            serve("IP Blacklisted", "blacklist.css","blacklist.html",res, {
+                "blacklist_date" : blacklistedIP.date.toISOString(),
+                "blacklist_reason" : blacklistedIP.reason
             });
+            return;
+        } else {
+            console.log(`IP ${ip} is not blacklisted.`);
+            next();
         }
+    } else {
+        res.status(500).send("Internal server error.")
     }
 
 
-    next();
 });
 
 
 app.get('/blacklist', (req, res) => {
     // Serve the blacklist page 
-    serve("IP Blacklisted", "styles/blacklist.css","blacklist.html",res, {
+    serve("IP Blacklisted", "blacklist.css","blacklist.html",res, {
         "blacklist_date": new Date().toISOString(),
         "blacklist_reason": "No reason provided",
     }) ;
@@ -109,7 +122,7 @@ app.post('/team/add/service/post', async (req, res) => {
 
 
 app.get('/team/add/service', (req, res) => {
-    serve("Add service", "form-style.css", "static/", res);
+    serve("Add service", "form-style.css", "add-service.html", res);
 })
 
 const PORT = process.env.PORT || 3000;
@@ -117,3 +130,4 @@ app.listen(PORT, () => {
     console.log(`NASS is running on http://localhost:${PORT}`);
 });
 
+export const db = mongoose.connection;

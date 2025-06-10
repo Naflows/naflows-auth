@@ -4,16 +4,16 @@ import * as path from 'path';
 
 export function serve(title: string, style: string, stc: string, res: Response, parameters?: any) {
 
-    const assetsPath = path.join(__dirname, `../${style}`);
+    const assetsPath = path.join(__dirname, `../styles/`);
     let stylesheetContent: string;
-    let staticContentPath = path.join(__dirname, `../${stc}`);
+    let staticContentPath = path.join(__dirname, `../static/`);
     let fileContent: string;
     if (!fs.existsSync(assetsPath)) {
         console.error('Stylesheet not found:', assetsPath);
         return res.status(404).send('Stylesheet not found');
     } else {
         console.log('Stylesheet found:', assetsPath);
-        stylesheetContent = fs.readFileSync(assetsPath, 'utf8');
+        stylesheetContent = fs.readFileSync(assetsPath + style, 'utf8');
         fileContent = fs.readFileSync(staticContentPath + stc, 'utf8');
     }
 
@@ -23,7 +23,7 @@ export function serve(title: string, style: string, stc: string, res: Response, 
         });
     }
 
-    res.send(`
+    return res.send(`
         <!DOCTYPE html>
         <html>
         <head>
