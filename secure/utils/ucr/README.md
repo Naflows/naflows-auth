@@ -10,6 +10,6 @@ UCR is made off three different information blocks:
 
 Some informations, such as the IP adress, session ID, Identifier / Password are hashed before being processed. 
 
-UCR's user part must have either token or identifier and password, but not both. This is to ensure that the request can be authenticated securely without exposing sensitive information.
+UCR's user part must have either token and identifier and password, but not both. This is to ensure that the request can be authenticated securely without exposing sensitive information.
 
 UCR is the only acceptable request format for the NASS system, and it is used to ensure that all requests are processed in a consistent and secure manner.
