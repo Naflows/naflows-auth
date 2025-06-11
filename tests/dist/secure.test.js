@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,19 +35,115 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
+exports.__esModule = true;
 var _a = require('@jest/globals'), test = _a.test, expect = _a.expect;
 var axios = require('axios');
-var app = "http://localhost:3000";
-test("UCR Validity", function () { return __awaiter(_this, void 0, void 0, function () {
+var app = "http://localhost:3000/test";
+var validUCR = {
+    user: {
+        ip: "192.168.1.111",
+        agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+        session_id: "session123",
+        token: "token",
+        device_fingerprint: "fingerprint",
+        user_origin: "/test/"
+    },
+    client: {
+        ip: "service-ip",
+        dns: "service-dns",
+        service: "test-service",
+        service_token: "service-token",
+        service_token_birth: 1700000000
+    },
+    request: {
+        method: "POST",
+        url: "/test",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: { key: "value" },
+        query: { param: "value" },
+        request_date: 1700000000
+    }
+};
+test("UCR is valid (correct informations | token)", function () { return __awaiter(void 0, void 0, void 0, function () {
     var response;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, axios.post(app + "/", {})];
+            case 0: return [4 /*yield*/, axios.post("" + app, validUCR)];
             case 1:
                 response = _a.sent();
-                expect(result).toBe(2);
+                // Expect status 200 with message "successful connection"
+                expect(response.status).toBe(200);
+                expect(response.data).toBe("Successful connection");
                 return [2 /*return*/];
+        }
+    });
+}); });
+test("UCR is valid (correct informations | password + identifier)", function () { return __awaiter(void 0, void 0, void 0, function () {
+    var ucr, response;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                ucr = validUCR;
+                delete ucr.user.token;
+                ucr.user.identifier = "identifier";
+                ucr.user.password = "password";
+                return [4 /*yield*/, axios.post("" + app, ucr)];
+            case 1:
+                response = _a.sent();
+                // Expect status 200 with message "successful connection"
+                expect(response.status).toBe(200);
+                expect(response.data).toBe("Successful connection");
+                return [2 /*return*/];
+        }
+    });
+}); });
+test("UCR is invalid (password + token + identifier)", function () { return __awaiter(void 0, void 0, void 0, function () {
+    var ucr, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                ucr = validUCR;
+                ucr.user.identifier = "identifier";
+                ucr.user.password = "password";
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, axios.post("" + app, ucr)];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _a.sent();
+                expect(error_1.response.status).toBe(400);
+                expect(error_1.response.data).toBe("Invalid request format.");
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+test("UCR is invalid (missing random parameters)", function () { return __awaiter(void 0, void 0, void 0, function () {
+    var ucr, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                ucr = validUCR;
+                delete ucr.user.device_fingerprint; // Missing device fingerprint
+                delete ucr.client.service_token; // Missing service token
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, axios.post("" + app, ucr)];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                error_2 = _a.sent();
+                expect(error_2.response.status).toBe(400);
+                expect(error_2.response.data).toBe("Invalid request format.");
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });

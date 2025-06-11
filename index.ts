@@ -37,6 +37,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
+
 app.use(async (req, res, next) => {
     // Middleware to log requests
     console.log(`${req.method} request for '${req.url}'`);
@@ -57,44 +58,46 @@ app.use(async (req, res, next) => {
 
     */
 
-    if (!middleware.check.isUCR(req.body)) {
+    if (middleware.check.isUCR(req.body) == false) {
         return res.status(400).send("Invalid request format.");
-    }
-
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    const blacklistCollection = mongoose.connection.collection("blacklist");
-    const requestsCollection = mongoose.connection.collection("requests");
-
-    
-    /*
-        Collections must be loaded for the middleware. 
-        Unauthorized access must be filtered or request is canceled.
-    */
-
-    if (blacklistCollection && requestsCollection) {
-        const blacklistedIP: any | null = await blacklistCollection.findOne({
-            ip: ip
-        });
-        console.log('Related IPs:', blacklistedIP);
-        if (blacklistedIP) {
-            console.log(`IP ${ip} is blacklisted.`);
-            serve("IP Blacklisted", "blacklist.css","blacklist.html",res, {
-                "blacklist_date" : blacklistedIP.date.toISOString(),
-                "blacklist_reason" : blacklistedIP.reason
-            });
-            return;
-        } else {
-            console.log(`IP ${ip} is not blacklisted.`);
-            next();
-        }
     } else {
-        res.status(500).send("Internal server error.")
-    }
+        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        const blacklistCollection = mongoose.connection.collection("blacklist");
+        const requestsCollection = mongoose.connection.collection("requests");
 
+        
+        /*
+            Collections must be loaded for the middleware. 
+            Unauthorized access must be filtered or request is canceled.
+        */
+
+        if (blacklistCollection && requestsCollection) {
+            const blacklistedIP: any | null = await blacklistCollection.findOne({
+                ip: ip
+            });
+            console.log('Related IPs:', blacklistedIP);
+            if (blacklistedIP) {
+                console.log(`IP ${ip} is blacklisted.`);
+                serve("IP Blacklisted", "blacklist.css","blacklist.html",res, {
+                    "blacklist_date" : blacklistedIP.date.toISOString(),
+                    "blacklist_reason" : blacklistedIP.reason
+                });
+                return;
+            } else {
+                console.log(`IP ${ip} is not blacklisted.`);
+                next();
+            }
+        } else {
+            res.status(500).send("Internal server error.")
+        }
+
+    }
 
 });
 
-
+app.post('/test', (req,res) => {
+    res.status(200).send("Successful connection");
+});
 app.get('/blacklist', (req, res) => {
     // Serve the blacklist page 
     serve("IP Blacklisted", "blacklist.css","blacklist.html",res, {

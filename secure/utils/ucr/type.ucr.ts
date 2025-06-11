@@ -30,7 +30,8 @@ interface UCRType {
         body?: any; // Body of the request, if applicable
         query?: Record<string, string>; // Query parameters of the request
         request_date: number; // UNIX TIMESTAMP
+        request_additional? : 'TOKEN_RENEWAL';
     }
 }
 
-export type { UCRType };
+export default UCRType ;
