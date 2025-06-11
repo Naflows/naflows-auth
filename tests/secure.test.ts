@@ -76,7 +76,4 @@ test("UCR is invalid (missing random parameters)", async () => {
     expect(error.response.status).toBe(400);
     expect(error.response.data).toBe("Invalid request format.");
   }
-
-  
-
 });
