@@ -1,11 +1,11 @@
-
-
-// Basic test just to debug jest
-
 const { test, expect } = require('@jest/globals');
+const axios = require('axios');
+const app = "http://localhost:3000";
 
-test("1 + 1 = 2", async () => {
-  const result = 1 + 1;
+test("UCR Validity", async () => {
+  const response = await axios.post(`${app}/`, {
+
+  });
   expect(result).toBe(2);
 });
 

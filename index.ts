@@ -3,6 +3,7 @@ import { serve } from "./public/method/serve";
 import secure from "./secure/dir";
 import mongoose from 'mongoose';
 import { blacklistIP } from "./secure/ip/blacklist";
+import middleware from "./middleware/dir";
 
 const express = require('express');
 const app = express();
@@ -43,14 +44,34 @@ app.use(async (req, res, next) => {
     console.log('Request Headers:', req.headers);
     console.log('Request Body:', req.body);
 
+    /*
+
+        * Must externalize this middleware
+        * First UCR
+        * Then blacklist
+        * Then requests rates
+        * Then service/client
+        * Then user
+        * Then token
+        * Then ok
+
+    */
+
+    if (!middleware.check.isUCR(req.body)) {
+        return res.status(400).send("Invalid request format.");
+    }
+
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const blacklistCollection = mongoose.connection.collection("blacklist");
+    const requestsCollection = mongoose.connection.collection("requests");
+
     
     /*
         Collections must be loaded for the middleware. 
         Unauthorized access must be filtered or request is canceled.
     */
-    if (blacklistCollection) {
+
+    if (blacklistCollection && requestsCollection) {
         const blacklistedIP: any | null = await blacklistCollection.findOne({
             ip: ip
         });
