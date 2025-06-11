@@ -12,7 +12,8 @@ db.createCollection('service-tokens'); // Tokens for services to authenticate wi
 db.createCollection('nass_contracts');
 db.createCollection('blacklist');
 db.createCollection('logs');
-db.createCollection('requests');
+db.createCollection('requests'); // Logging requests to the NASS
+
 db.users.createIndex({
   id: 1
 }, {
@@ -88,6 +89,9 @@ db.requests.createIndex({
   id: 1
 }, {
   unique: true
+});
+db.requests.createIndex({
+  ip: 1
 });
 db.users.insertOne({
   id: 1,

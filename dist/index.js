@@ -40,6 +40,7 @@ exports.db = void 0;
 var serve_1 = require("./public/method/serve");
 var dir_1 = require("./secure/dir");
 var mongoose_1 = require("mongoose");
+var dir_2 = require("./middleware/dir");
 var express = require('express');
 var app = express();
 var fs = require('fs');
@@ -64,7 +65,7 @@ mongoose_1["default"].connection.once('open', function () {
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var ip, blacklistCollection, blacklistedIP;
+    var ip, blacklistCollection, requestsCollection, blacklistedIP;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -73,9 +74,25 @@ app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, fun
                 // Log all req informations 
                 console.log('Request Headers:', req.headers);
                 console.log('Request Body:', req.body);
+                /*
+            
+                    * Must externalize this middleware
+                    * First UCR
+                    * Then blacklist
+                    * Then requests rates
+                    * Then service/client
+                    * Then user
+                    * Then token
+                    * Then ok
+            
+                */
+                if (!dir_2["default"].check.isUCR(req.body)) {
+                    return [2 /*return*/, res.status(400).send("Invalid request format.")];
+                }
                 ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
                 blacklistCollection = mongoose_1["default"].connection.collection("blacklist");
-                if (!blacklistCollection) return [3 /*break*/, 2];
+                requestsCollection = mongoose_1["default"].connection.collection("requests");
+                if (!(blacklistCollection && requestsCollection)) return [3 /*break*/, 2];
                 return [4 /*yield*/, blacklistCollection.findOne({
                         ip: ip
                     })];
