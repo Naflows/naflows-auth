@@ -65,10 +65,10 @@ db.services.createIndex({
   unique: true
 });
 db.services.createIndex({
-  ip: 1
+  ip_address: 1
 });
 db.services.createIndex({
-  token_id: 1
+  service_token: 1
 }, {
   unique: true
 });
@@ -121,21 +121,65 @@ db.users.insertOne({
 
 db.services.insertOne({
   id: "1",
-  name: "Test Service",
+  name: "Test Service : token is not expired",
+  ip_address: "127.0.0.1",
+  dns: "local.nass.com",
+  description: "This is a test service for the NASS.",
+  created_at: 123456789,
+  created_by: "NASS",
+  status: "ACTIVE",
+  service_token: "1"
+});
+db.services.insertOne({
+  id: "2",
+  name: "Test Service : token is expired",
   ip_address: "127.0.0.1",
   dns: "local.nass.com",
   description: "This is a test service for the NASS.",
   created_at: new Date().getTime(),
   created_by: "NASS",
   status: "ACTIVE",
-  service_token: "1"
+  service_token: "2"
+});
+db.services.insertOne({
+  id: "3",
+  name: "Test Service : expired",
+  ip_address: "127.0.0.1",
+  dns: "local.nass.com",
+  description: "This is a test service for the NASS.",
+  created_at: new Date().getTime(),
+  created_by: "NASS",
+  status: "INACTIVE",
+  service_token: "3"
 });
 db.service_tokens.insertOne({
   id: "1",
   service_id: "1",
   token: "test-service-token",
+  created_at: 123456789,
+  expires_at: new Date(new Date().getTime() + 1000 * 60 * 60 * 24).getTime(),
+  // 24 hours
+  lifespan: 1000 * 60 * 60 * 24,
+  // 24 hours
+  uses: 0
+});
+db.service_tokens.insertOne({
+  id: "2",
+  service_id: "2",
+  token: "test-service-token-expired",
   created_at: new Date().getTime(),
-  expires_at: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
+  expires_at: new Date(new Date().getTime() - 1000 * 60 * 60 * 24).getTime(),
+  // 24 hours ago
+  lifespan: 1000 * 60 * 60 * 24,
+  // 24 hours
+  uses: 0
+});
+db.service_tokens.insertOne({
+  id: "3",
+  service_id: "3",
+  token: "test-service-token-inactive",
+  created_at: new Date().getTime(),
+  expires_at: new Date(new Date().getTime() + 1000 * 60 * 60 * 24).getTime(),
   // 24 hours
   lifespan: 1000 * 60 * 60 * 24,
   // 24 hours

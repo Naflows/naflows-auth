@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-import { Blacklist } from "./types/collections.type";
 import { serve } from "./public/method/serve";
 import secure from "./secure/dir";
 import mongoose from 'mongoose';

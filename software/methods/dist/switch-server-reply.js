@@ -36,47 +36,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.NASS_Verification_Process = void 0;
-var dir_1 = require("../software/dir");
-var dir_2 = require("./dir");
-function NASS_Verification_Process(req, res, next) {
+exports.SwitchServerReply = void 0;
+function SwitchServerReply(rep, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var isUCRCorrect, ip, isBlackListed, isRequestOriginValid;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    console.log("NASS Verification Process started.");
-                    console.log(req.body);
-                    if (!(process.env.NASS_SCV_ENABLED !== "true")) return [3 /*break*/, 1];
-                    return [2 /*return*/, next()];
-                case 1:
-                    if (process.env.NASS_UCR_ENABLED === "true") {
-                        isUCRCorrect = dir_2["default"].check.ucr(req.body);
-                        if (!isUCRCorrect) {
-                            return [2 /*return*/, res.status(400).send("Invalid request format.")];
-                        }
-                    }
-                    if (!(process.env.NASS_BLACKLIST_ENABLED === "true")) return [3 /*break*/, 3];
-                    ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-                    return [4 /*yield*/, dir_2["default"].check.blacklist(res, ip)];
-                case 2:
-                    isBlackListed = _a.sent();
-                    if (!isBlackListed.success) {
-                        return [2 /*return*/, dir_1.software.methods.manageErrorCode(isBlackListed, res)];
-                    }
-                    _a.label = 3;
-                case 3:
-                    if (!(process.env.NASS_SERVICE_FILTER === "true")) return [3 /*break*/, 5];
-                    return [4 /*yield*/, dir_2["default"].check.origin(req.body)];
-                case 4:
-                    isRequestOriginValid = _a.sent();
-                    if (!isRequestOriginValid.success) {
-                        return [2 /*return*/, dir_1.software.methods.manageErrorCode(isRequestOriginValid, res)];
-                    }
-                    _a.label = 5;
-                case 5: return [2 /*return*/, next()];
+            switch (rep.status) {
+                case 200:
+                    break;
+                case 403:
+                    console.error("Forbidden: " + rep.message);
+                    break;
+                case 500:
+                    console.error("Internal Server Error: " + rep.message);
+                    break;
             }
+            return [2 /*return*/];
         });
     });
 }
-exports.NASS_Verification_Process = NASS_Verification_Process;
+exports.SwitchServerReply = SwitchServerReply;

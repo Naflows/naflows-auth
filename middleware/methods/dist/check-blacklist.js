@@ -52,7 +52,8 @@ function checkBlacklist(res, ip) {
                         })];
                 case 1:
                     blacklistedIP = _a.sent();
-                    if (blacklistedIP && process.env.NASS_BLACKLIST_ENABLED === "true") {
+                    if (blacklistedIP &&
+                        process.env.NASS_BLACKLIST_ENABLED === "true") {
                         serve_1.serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
                             "blacklist_date": blacklistedIP.date.toISOString(),
                             "blacklist_reason": blacklistedIP.reason

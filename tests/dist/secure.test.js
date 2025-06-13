@@ -49,11 +49,11 @@ var validUCR = {
         user_origin: "/test/"
     },
     client: {
-        ip: "service-ip",
-        dns: "service-dns",
-        service: "test-service",
-        service_token: "service-token",
-        service_token_birth: 1700000000
+        ip: "127.0.0.1",
+        dns: "local.nass.com",
+        service: "Test Service : token is not expired",
+        service_token: "test-service-token",
+        service_token_birth: 123456789
     },
     request: {
         method: "POST",
@@ -147,3 +147,11 @@ test("UCR is invalid (missing random parameters)", function () { return __awaite
         }
     });
 }); });
+// test("UCR is valid (correct service & token)", async () => {
+//   const ucr = validUCR;
+//   ucr.client.ip = "127.0.0.1";
+//   ucr.client.dns = "local.nass.com";
+//   ucr.client.service = "Test service : token is not expired";
+//   ucr.client.service_token = "test-service-token";
+//   ucr.client.service_token_birth = 123456789;
+// })

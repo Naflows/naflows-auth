@@ -1,4 +1,4 @@
-import { ReplyType } from "../../types/reply.type";
+import { ReplyType } from "../../types/.types/reply.type";
 
 
 export async function SwitchServerReply(
