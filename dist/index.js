@@ -66,48 +66,9 @@ mongoose_1["default"].connection.once('open', function () {
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var ip, blacklistCollection, requestsCollection, blacklistedIP;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                // Middleware to log requests
-                console.log(req.method + " request for '" + req.url + "'");
-                // Log all req informations 
-                console.log('Request Headers:', req.headers);
-                console.log('Request Body:', req.body);
-                if (!(process.env.NASS_SCV_ENABLED === "false")) return [3 /*break*/, 1];
-                console.log("NASS Service Client Validation is disabled, skipping middleware.");
-                return [2 /*return*/, next()];
-            case 1:
-                console.log("NASS UCR Verification is " + (process.env.NASS_UCR_ENABLED === "true" ? "enabled" : "disabled"));
-                if (!(dir_2["default"].check.isUCR(req.body) == false && process.env.NASS_UCR_ENABLED === "true")) return [3 /*break*/, 2];
-                return [2 /*return*/, res.status(400).send("Invalid request format.")];
-            case 2:
-                ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-                blacklistCollection = mongoose_1["default"].connection.collection("blacklist");
-                requestsCollection = mongoose_1["default"].connection.collection("requests");
-                if (!(blacklistCollection && requestsCollection)) return [3 /*break*/, 4];
-                return [4 /*yield*/, blacklistCollection.findOne({
-                        ip: ip
-                    })];
-            case 3:
-                blacklistedIP = _a.sent();
-                if (blacklistedIP && process.env.NASS_BLACKLIST_ENABLED === "true") {
-                    serve_1.serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
-                        "blacklist_date": blacklistedIP.date.toISOString(),
-                        "blacklist_reason": blacklistedIP.reason
-                    });
-                    return [2 /*return*/];
-                }
-                else {
-                    next();
-                }
-                return [3 /*break*/, 5];
-            case 4:
-                res.status(500).send("Internal server error.");
-                _a.label = 5;
-            case 5: return [2 /*return*/];
-        }
+        dir_2["default"].main(req, res, next);
+        return [2 /*return*/];
     });
 }); });
 app.post('/test', function (req, res) {
