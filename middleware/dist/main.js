@@ -36,49 +36,40 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.checkBlacklist = void 0;
-var serve_1 = require("../../public/method/serve");
-var __1 = require("../../");
-function checkBlacklist(res, ip) {
-    return __awaiter(this, void 0, Promise, function () {
-        var blacklistCollection, blacklistedIP;
+exports.NASS_Verification_Process = void 0;
+var dir_1 = require("../software/dir");
+var dir_2 = require("./dir");
+function NASS_Verification_Process(req, res, next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var ip, isBlackListed;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    blacklistCollection = __1.db.collection("blacklist");
-                    if (!blacklistCollection) return [3 /*break*/, 2];
-                    return [4 /*yield*/, blacklistCollection.findOne({
-                            ip: ip
-                        })];
+                    // Middleware to log requests
+                    console.log(req.method + " request for '" + req.url + "'");
+                    // Log all req informations 
+                    console.log('Request Headers:', req.headers);
+                    console.log('Request Body:', req.body);
+                    if (!(process.env.NASS_SCV_ENABLED !== "true")) return [3 /*break*/, 1];
+                    return [2 /*return*/, next()];
                 case 1:
-                    blacklistedIP = _a.sent();
-                    if (blacklistedIP && process.env.NASS_BLACKLIST_ENABLED === "true") {
-                        serve_1.serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
-                            "blacklist_date": blacklistedIP.date.toISOString(),
-                            "blacklist_reason": blacklistedIP.reason
-                        });
-                        return [2 /*return*/, {
-                                status: 403,
-                                message: "Your IP is blacklisted.",
-                                success: false
-                            }];
+                    if (!(dir_2["default"].check.isUCR(req.body) == false && process.env.NASS_UCR_ENABLED === "true")) return [3 /*break*/, 2];
+                    return [2 /*return*/, res.status(400).send("Invalid request format.")];
+                case 2:
+                    ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+                    return [4 /*yield*/, dir_2["default"].check.blacklist(res, ip)];
+                case 3:
+                    isBlackListed = _a.sent();
+                    if (!isBlackListed.success) {
+                        dir_1.software.methods.manageErrorCode(isBlackListed, res);
                     }
                     else {
-                        return [2 /*return*/, {
-                                status: 200,
-                                message: "IP is not blacklisted.",
-                                success: true
-                            }]; // IP is not blacklisted
+                        next();
                     }
-                    return [3 /*break*/, 3];
-                case 2: return [2 /*return*/, {
-                        status: 500,
-                        message: "Internal server error. Blacklist collection not found.",
-                        success: false
-                    }];
-                case 3: return [2 /*return*/];
+                    _a.label = 4;
+                case 4: return [2 /*return*/];
             }
         });
     });
 }
-exports.checkBlacklist = checkBlacklist;
+exports.NASS_Verification_Process = NASS_Verification_Process;

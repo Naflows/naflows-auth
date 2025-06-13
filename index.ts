@@ -41,65 +41,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use(async (req, res, next) => {
-    // Middleware to log requests
-    console.log(`${req.method} request for '${req.url}'`);
-    // Log all req informations 
-    console.log('Request Headers:', req.headers);
-    console.log('Request Body:', req.body);
-
-    /*
-
-        * Must externalize this middleware
-        * First UCR
-        * Then blacklist
-        * Then requests rates
-        * Then service/client
-        * Then user
-        * Then token
-        * Then ok
-
-    */
-
-    if (process.env.NASS_SCV_ENABLED === "false") {
-        console.log("NASS Service Client Validation is disabled, skipping middleware.");
-        return next();
-    } else {
-        console.log(`NASS UCR Verification is ${process.env.NASS_UCR_ENABLED === "true" ? "enabled" : "disabled"}`);
-        if (middleware.check.isUCR(req.body) == false && process.env.NASS_UCR_ENABLED === "true") {
-            return res.status(400).send("Invalid request format.");
-        } else {
-            const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-            const blacklistCollection = mongoose.connection.collection("blacklist");
-            const requestsCollection = mongoose.connection.collection("requests");
-
-
-            /*
-                Collections must be loaded for the middleware. 
-                Unauthorized access must be filtered or request is canceled.
-            */
-
-            if (blacklistCollection && requestsCollection) {
-                const blacklistedIP: any | null = await blacklistCollection.findOne({
-                    ip: ip
-                });
-                if (blacklistedIP && process.env.NASS_BLACKLIST_ENABLED === "true") {
-                    serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
-                        "blacklist_date": blacklistedIP.date.toISOString(),
-                        "blacklist_reason": blacklistedIP.reason
-                    });
-                    return;
-                } else {
-                    next();
-                }
-            } else {
-                res.status(500).send("Internal server error.")
-            }
-
-        }
-    }
-
-
-
+    middleware.main(req,res,next);
 });
 
 app.post('/test', (req, res) => {

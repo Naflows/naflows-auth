@@ -36,49 +36,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.checkBlacklist = void 0;
-var serve_1 = require("../../public/method/serve");
-var __1 = require("../../");
-function checkBlacklist(res, ip) {
-    return __awaiter(this, void 0, Promise, function () {
-        var blacklistCollection, blacklistedIP;
+exports.SwitchServerReply = void 0;
+function SwitchServerReply(rep, res) {
+    return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    blacklistCollection = __1.db.collection("blacklist");
-                    if (!blacklistCollection) return [3 /*break*/, 2];
-                    return [4 /*yield*/, blacklistCollection.findOne({
-                            ip: ip
-                        })];
-                case 1:
-                    blacklistedIP = _a.sent();
-                    if (blacklistedIP && process.env.NASS_BLACKLIST_ENABLED === "true") {
-                        serve_1.serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
-                            "blacklist_date": blacklistedIP.date.toISOString(),
-                            "blacklist_reason": blacklistedIP.reason
-                        });
-                        return [2 /*return*/, {
-                                status: 403,
-                                message: "Your IP is blacklisted.",
-                                success: false
-                            }];
-                    }
-                    else {
-                        return [2 /*return*/, {
-                                status: 200,
-                                message: "IP is not blacklisted.",
-                                success: true
-                            }]; // IP is not blacklisted
-                    }
-                    return [3 /*break*/, 3];
-                case 2: return [2 /*return*/, {
-                        status: 500,
-                        message: "Internal server error. Blacklist collection not found.",
-                        success: false
-                    }];
-                case 3: return [2 /*return*/];
+            switch (rep.status) {
+                case 200:
+                    break;
+                case 403:
+                    console.error("Forbidden: " + rep.message);
+                    break;
+                case 500:
+                    console.error("Internal Server Error: " + rep.message);
+                    break;
             }
+            return [2 /*return*/];
         });
     });
 }
-exports.checkBlacklist = checkBlacklist;
+exports.SwitchServerReply = SwitchServerReply;
