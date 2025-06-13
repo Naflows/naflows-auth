@@ -1,5 +1,5 @@
 import { serve } from "../../public/method/serve";
-import { ReplyType } from "../../types/reply.type";
+import { ReplyType } from "../../types/.types/reply.type";
 import { db } from "../../";
 
 export async function checkBlacklist(
@@ -10,7 +10,10 @@ export async function checkBlacklist(
         const blacklistedIP: any | null = await blacklistCollection.findOne({
             ip: ip
         });
-        if (blacklistedIP && process.env.NASS_BLACKLIST_ENABLED === "true") {
+        if (
+            blacklistedIP && 
+            process.env.NASS_BLACKLIST_ENABLED === "true"
+        ) {
             serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
                 "blacklist_date": blacklistedIP.date.toISOString(),
                 "blacklist_reason": blacklistedIP.reason

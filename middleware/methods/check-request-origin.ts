@@ -1,0 +1,80 @@
+import { db } from "../..";
+import { Service, NassServiceToken } from "../../types/.types/collections.type";
+import { ReplyType } from "../../types/.types/reply.type";
+import UCRType from "../../types/.types/ucr.type";
+
+export async function checkRequestOrigin(
+    UCR : UCRType
+) : Promise<ReplyType> {
+    /*
+
+        This function checks the origin of the request by validating the client origin in the UCR.
+        It comes in two steps:
+        - Check if the client origin is valid 
+        - Check if the client origin is still active
+        - Check the client token
+
+    */
+
+    const servicesCollection = db.collection("services");
+    const servicesToken = db.collection("service_tokens");
+
+    console.log("Checking request origin for service:", UCR);
+
+    if (servicesCollection && servicesToken) {
+        console.log(`Searching for service in the database with:\nIP: ${UCR.client.ip}\nDNS: ${UCR.client.dns}\nService: ${UCR.client.service}`);
+        // The easiest way to check if a service exists is first to check ip + dns + service.
+        const queriedService = await servicesCollection.findOne({
+            ip_address: UCR.client.ip,
+            dns: UCR.client.dns,
+            name: UCR.client.service
+        }) as Service | null;
+        console.log("Queried service:", queriedService);
+        if (queriedService && queriedService.status === "ACTIVE") {
+            console.log(`Service ${queriedService.name} is active, checking service token...`);
+            console.log(`Token parameters are:\nService ID: ${queriedService.id}\nToken: ${UCR.client.service_token}\nCreated at: ${UCR.client.service_token_birth}`);
+            const serviceToken = await servicesToken.findOne({
+                service_id: queriedService.id,
+                token: UCR.client.service_token,
+                created_at : UCR.client.service_token_birth
+            }) as NassServiceToken | null;
+            console.log(`The following service token are related to ${queriedService.name}: `, serviceToken)
+            if (
+                serviceToken &&
+                serviceToken.created_at + serviceToken.lifespan < Date.now() && 
+                (process.env.SERVICE_TOKEN_MAXIMAL_RATES && serviceToken.uses < parseInt(process.env.SERVICE_TOKEN_MAXIMAL_RATES))
+            ) {
+                return {
+                    status: 200,
+                    message: "Service access granted.",
+                    success: true,
+                    data: {
+                        service: queriedService,
+                        token: serviceToken
+                    }
+                };
+            } else {
+                return {
+                    status: 403,
+                    message: "Invalid or expired service token.",
+                    success: false
+                };
+            }
+        } else {
+            return {
+                status: 403,
+                message: "Unauthorized service access.",
+                success: false
+            };
+        }
+    } else {
+        return {
+            status : 500,
+            message: "Internal server error. Services collections not found.",
+            success: false
+        }
+    }
+
+    
+
+}

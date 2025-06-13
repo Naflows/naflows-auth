@@ -10,6 +10,7 @@ export interface Blacklist {
 
 
 
+
 // Requests are related to counting the number of requests made by a user or an IP address
 // to the NASS services, this is used for rate limiting and abuse detection
 export interface Requests {
@@ -100,6 +101,8 @@ export interface Service {
     service_token: string; // Service token, a secure way of connecting to the service, optional
 }
 
+
+
 export interface CentralContracts {
     id : string;
     issued_at : Date; // Date when the contract was issued
@@ -117,13 +120,16 @@ export interface CentralContracts {
     ending_reason? : "COMPLETED" | "CANCELED" | "EXPIRED" | "FORCED"; // The reason why the contract ended, if it ended
 }
 
+
+
 // This service token type is only available in the NASS itself
+// NASS Service Token is found under the service_tokens collection
 export interface NassServiceToken {
     id : string; // Service token ID
     service_id : string; // Service ID, the service that owns the token
     token : string; // The service token, a secure way of connecting to the service
-    created_at : Date; // Date when the token was created
-    expires_at: Date; // Date when the token expires, if not set, it never expires
+    created_at : number; // Date when the token was created
+    expires_at: number; // Date when the token expires, if not set, it never expires
     lifespan: number; // How long the token is valid for, in seconds, if not set, it never expires
     uses : number; // How many times the token has been used
 }
@@ -134,3 +140,4 @@ export interface ServiceToken {
     token : string; // The service token, a secure way of connecting to the service
     created_at: Date; // Date when the token was created
 }
+
