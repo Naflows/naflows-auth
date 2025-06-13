@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.db = void 0;
+require('dotenv').config();
 var serve_1 = require("./public/method/serve");
 var dir_1 = require("./secure/dir");
 var mongoose_1 = require("mongoose");
@@ -74,11 +75,12 @@ app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, fun
                 // Log all req informations 
                 console.log('Request Headers:', req.headers);
                 console.log('Request Body:', req.body);
-                if (!!process.env.NASS_SCV_ENABLED) return [3 /*break*/, 1];
-                next();
-                return [3 /*break*/, 5];
+                if (!(process.env.NASS_SCV_ENABLED === "false")) return [3 /*break*/, 1];
+                console.log("NASS Service Client Validation is disabled, skipping middleware.");
+                return [2 /*return*/, next()];
             case 1:
-                if (!(dir_2["default"].check.isUCR(req.body) == false && process.env.NASS_UCR_ENABLED)) return [3 /*break*/, 2];
+                console.log("NASS UCR Verification is " + (process.env.NASS_UCR_ENABLED === "true" ? "enabled" : "disabled"));
+                if (!(dir_2["default"].check.isUCR(req.body) == false && process.env.NASS_UCR_ENABLED === "true")) return [3 /*break*/, 2];
                 return [2 /*return*/, res.status(400).send("Invalid request format.")];
             case 2:
                 ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -90,7 +92,7 @@ app.use(function (req, res, next) { return __awaiter(void 0, void 0, void 0, fun
                     })];
             case 3:
                 blacklistedIP = _a.sent();
-                if (blacklistedIP && process.env.NASS_BLACKLIST_ENABLED) {
+                if (blacklistedIP && process.env.NASS_BLACKLIST_ENABLED === "true") {
                     serve_1.serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
                         "blacklist_date": blacklistedIP.date.toISOString(),
                         "blacklist_reason": blacklistedIP.reason
