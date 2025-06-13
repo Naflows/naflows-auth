@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 import { Blacklist } from "./mongo-init/collections.type";
 import { serve } from "./public/method/serve";
 import secure from "./secure/dir";
@@ -58,10 +60,12 @@ app.use(async (req, res, next) => {
 
     */
 
-    if (!process.env.NASS_SCV_ENABLED) {
-        next();
+    if (process.env.NASS_SCV_ENABLED === "false") {
+        console.log("NASS Service Client Validation is disabled, skipping middleware.");
+        return next();
     } else {
-        if (middleware.check.isUCR(req.body) == false && process.env.NASS_UCR_ENABLED) {
+        console.log(`NASS UCR Verification is ${process.env.NASS_UCR_ENABLED === "true" ? "enabled" : "disabled"}`);
+        if (middleware.check.isUCR(req.body) == false && process.env.NASS_UCR_ENABLED === "true") {
             return res.status(400).send("Invalid request format.");
         } else {
             const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -78,7 +82,7 @@ app.use(async (req, res, next) => {
                 const blacklistedIP: any | null = await blacklistCollection.findOne({
                     ip: ip
                 });
-                if (blacklistedIP && process.env.NASS_BLACKLIST_ENABLED) {
+                if (blacklistedIP && process.env.NASS_BLACKLIST_ENABLED === "true") {
                     serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
                         "blacklist_date": blacklistedIP.date.toISOString(),
                         "blacklist_reason": blacklistedIP.reason
