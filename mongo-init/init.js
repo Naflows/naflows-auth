@@ -114,9 +114,9 @@ db.service_tokens.insertOne({
     id : "1",
     service_id : "1",
     token : "test-service-token",
-    created_at :123456789,
+    created_at :1749676800,
     expires_at : new Date(new Date().getTime() + 1000 * 60 * 60 * 24).getTime(), // 24 hours
-    lifespan: 1000 * 60 * 60 * 24, // 24 hours
+    lifespan: 1000 * 60 * 60 * 24 * 100, // 24 hours
     uses : 0  
 })
 
@@ -126,7 +126,7 @@ db.service_tokens.insertOne({
     token : "test-service-token-expired",
     created_at : new Date().getTime(),
     expires_at : new Date(new Date().getTime() - 1000 * 60 * 60 * 24).getTime(), // 24 hours ago
-    lifespan: 1000 * 60 * 60 * 24, // 24 hours
+    lifespan: 1, // 24 hours
     uses : 0
 })
 
@@ -135,8 +135,8 @@ db.service_tokens.insertOne({
     id : "3",
     service_id : "3",
     token : "test-service-token-inactive",
-    created_at : new Date().getTime(),
+    created_at : 1749676800,
     expires_at : new Date(new Date().getTime() + 1000 * 60 * 60 * 24).getTime(), // 24 hours
-    lifespan: 1000 * 60 * 60 * 24, // 24 hours
+    lifespan: 1000 * 60 * 60 * 24 * 100, // 24 hours
     uses : 0  
 })

@@ -46,7 +46,6 @@ function checkRequestOrigin(UCR) {
                 case 0:
                     servicesCollection = __1.db.collection("services");
                     servicesToken = __1.db.collection("service_tokens");
-                    console.log("Checking request origin for service:", UCR);
                     if (!(servicesCollection && servicesToken)) return [3 /*break*/, 5];
                     console.log("Searching for service in the database with:\nIP: " + UCR.client.ip + "\nDNS: " + UCR.client.dns + "\nService: " + UCR.client.service);
                     return [4 /*yield*/, servicesCollection.findOne({
