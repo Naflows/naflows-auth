@@ -1,18 +1,28 @@
 "use strict";
 
-db = db.getSiblingDB('NASS');
+var db = db.getSiblingDB('NASS');
 db.createCollection('users');
 db.createCollection('sessions');
 db.createCollection('tokens'); // User tokens, used for authentication
 
-db.createCollection('connections'); // Service connections for direct access to the NASS
+db.createCollection('services'); // Service connections for direct access to the NASS
 
-db.createCollection('service-tokens'); // Tokens for services to authenticate with the NASS
+db.createCollection('service_tokens'); // Tokens for services to authenticate with the NASS
 
 db.createCollection('nass_contracts');
 db.createCollection('blacklist');
 db.createCollection('logs');
 db.createCollection('requests'); // Logging requests to the NASS
+
+var users = db.getCollection('users');
+var sessions = db.getCollection('sessions');
+var tokens = db.getCollection('tokens');
+var services = db.getCollection('services');
+var service_tokens = db.getCollection('service_tokens');
+var nass_contracts = db.getCollection('nass_contracts');
+var blacklist = db.getCollection('blacklist');
+var logs = db.getCollection('logs');
+var requests = db.getCollection('requests'); // Create indexes for the collections to improve performance and ensure uniqueness where necessary
 
 db.users.createIndex({
   id: 1
@@ -49,15 +59,15 @@ db.tokens.createIndex({
 db.tokens.createIndex({
   frozen_until: 1
 });
-db.connections.createIndex({
+db.services.createIndex({
   id: 1
 }, {
   unique: true
 });
-db.connections.createIndex({
+db.services.createIndex({
   ip: 1
 });
-db.connections.createIndex({
+db.services.createIndex({
   token_id: 1
 }, {
   unique: true
@@ -92,7 +102,8 @@ db.requests.createIndex({
 });
 db.requests.createIndex({
   ip: 1
-});
+}); // See the .env file in the root directory of the naflows-system repository for the unhashed password
+
 db.users.insertOne({
   id: 1,
   identifier: "100000:bb27678ee563cd25c9dd1ada61c35dfe:6d4e898c7ff538f3e812ef214aaacc047b5cadb651468cd8fdf90e5f00923aa84b9870bb37d73b2c5ccd6d2a0f713d884fc2111e55cdae59d26820d97edbb738",
@@ -102,4 +113,31 @@ db.users.insertOne({
   rights: "SUPER_ADMIN",
   created_at: new Date().getTime(),
   updated_at: new Date().getTime()
+}); // Dummy data for testing purposes - should be removed in production
+
+/*
+    The following data is only available in the NASS. 
+*/
+
+db.services.insertOne({
+  id: "1",
+  name: "Test Service",
+  ip_address: "127.0.0.1",
+  dns: "local.nass.com",
+  description: "This is a test service for the NASS.",
+  created_at: new Date().getTime(),
+  created_by: "NASS",
+  status: "ACTIVE",
+  service_token: "1"
+});
+db.service_tokens.insertOne({
+  id: "1",
+  service_id: "1",
+  token: "test-service-token",
+  created_at: new Date().getTime(),
+  expires_at: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
+  // 24 hours
+  lifespan: 1000 * 60 * 60 * 24,
+  // 24 hours
+  uses: 0
 });

@@ -96,8 +96,8 @@ export interface Service {
     created_by: string; // User ID of the user who created the service
     status: "ACTIVE" | "INACTIVE" | "DEPRECATED"; // Service status, ACTIVE means the service is running, INACTIVE means the service is not running, DEPRECATED means the service is no longer supported
     dns: string; // DNS of the service, used to identify the service
-    ip_adress?: string; // IP address of the service, optional
-    service_token?: string; // Service token, a secure way of connecting to the service, optional
+    ip_address: string; // IP address of the service, optional
+    service_token: string; // Service token, a secure way of connecting to the service, optional
 }
 
 export interface CentralContracts {
@@ -107,7 +107,7 @@ export interface CentralContracts {
     completed_at?: Date; // Date when the contract was completed, optional
     completed : boolean;
     service : string; // Destination service of the contract, usually the service that is being contracted
-    type : "ISSUED_REQUEST" | "TOKEN_RENEWAL" | "USER_AUTHENTIFICATION" | "DATA_MANIPULATION" | "USER_MANAGEMENT" | "SERVICE_MANAGEMENT" | "BLACKLIST_MANAGEMENT" | "REQUESTS_MANAGEMENT";
+    type : "ISSUED_REQUEST" | "TOKEN_RENEWAL" | "USER_AUTHENTIFICATION" | "DATA_MANIPULATION" | "USER_MANAGEMENT" | "SERVICE_MANAGEMENT" | "BLACKLIST_MANAGEMENT" | "REQUESTS_MANAGEMENT" | "SERVICE_CONNECTION";
     req : string; // JSON stringified request, the request that was made to the service
     res? : string; // JSON stringified response, the response that was received from the service
     routes : string[]; // Concerned API(s) routes, the routes that were used in the request
@@ -125,8 +125,6 @@ export interface NassServiceToken {
     created_at : Date; // Date when the token was created
     expires_at: Date; // Date when the token expires, if not set, it never expires
     lifespan: number; // How long the token is valid for, in seconds, if not set, it never expires
-    dns : string; // DNS of the service, used to identify the service
-    service_status?: string; // Idk what to use it for rn, maybe the status of the service
     uses : number; // How many times the token has been used
 }
 
