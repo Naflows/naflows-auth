@@ -53,7 +53,7 @@ var validUCR = {
         dns: "local.nass.com",
         service: "Test Service : token is not expired",
         service_token: "test-service-token",
-        service_token_birth: 123456789
+        service_token_birth: 1749676800
     },
     request: {
         method: "POST",
@@ -129,8 +129,7 @@ test("UCR is invalid (missing random parameters)", function () { return __awaite
         switch (_a.label) {
             case 0:
                 ucr = validUCR;
-                delete ucr.user.device_fingerprint; // Missing device fingerprint
-                delete ucr.client.service_token; // Missing service token
+                ucr.user.device_fingerprint = undefined; // Missing device fingerprint
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
@@ -147,11 +146,126 @@ test("UCR is invalid (missing random parameters)", function () { return __awaite
         }
     });
 }); });
-// test("UCR is valid (correct service & token)", async () => {
-//   const ucr = validUCR;
-//   ucr.client.ip = "127.0.0.1";
-//   ucr.client.dns = "local.nass.com";
-//   ucr.client.service = "Test service : token is not expired";
-//   ucr.client.service_token = "test-service-token";
-//   ucr.client.service_token_birth = 123456789;
-// })
+test("Service connection is invalid (incorrect service IP address)", function () { return __awaiter(void 0, void 0, void 0, function () {
+    var ucr, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                ucr = validUCR;
+                ucr.client.ip = "123.123.123.1";
+                ucr.client.service_token = "test-service-token"; // Valid token but incorrect IP
+                ucr.user.device_fingerprint = "fingerprint"; // Valid fingerprint
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, axios.post("" + app, ucr)];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                error_3 = _a.sent();
+                expect(error_3.response.status).toBe(403);
+                expect(error_3.response.data).toBe("Unauthorized service access.");
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+test("Service connection is invalid (incorrect token creation time)", function () { return __awaiter(void 0, void 0, void 0, function () {
+    var ucr, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                ucr = validUCR;
+                ucr.client.ip = "127.0.0.1";
+                ucr.client.service_token_birth = 156321; // Token creation time is in the past
+                ucr.client.service_token = "test-service-token"; // Valid token but incorrect creation time
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, axios.post("" + app, ucr)];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                error_4 = _a.sent();
+                expect(error_4.response.status).toBe(403);
+                expect(error_4.response.data).toBe("Invalid or expired service token.");
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+test("Service connection is invalid (incorrect token)", function () { return __awaiter(void 0, void 0, void 0, function () {
+    var ucr, error_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                ucr = validUCR;
+                ucr.client.service_token = "invalid-token"; // Invalid service token
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, axios.post("" + app, ucr)];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                error_5 = _a.sent();
+                expect(error_5.response.status).toBe(403);
+                expect(error_5.response.data).toBe("Invalid or expired service token.");
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+test("Service is outdated (service is not active)", function () { return __awaiter(void 0, void 0, void 0, function () {
+    var ucr, error_6;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                ucr = validUCR;
+                ucr.client.service = "Test Service : expired";
+                ucr.client.service_token = "test-service-token-inactive"; // Valid token but service is not active
+                ucr.client.service_token_birth = 1749676800;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, axios.post("" + app, ucr)];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                error_6 = _a.sent();
+                expect(error_6.response.status).toBe(403);
+                expect(error_6.response.data).toBe("Unauthorized service access.");
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+test("Service token is expired (token is not valid anymore)", function () { return __awaiter(void 0, void 0, void 0, function () {
+    var ucr, error_7;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                ucr = validUCR;
+                ucr.client.service = "Test Service : token is expired";
+                ucr.client.service_token = "test-service-token-expired"; // Valid token but service token is expired
+                ucr.client.service_token_birth = 123456789; // Token creation time is in the past
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, axios.post("" + app, ucr)];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                error_7 = _a.sent();
+                expect(error_7.response.status).toBe(403);
+                expect(error_7.response.data).toBe("Invalid or expired service token.");
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });

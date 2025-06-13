@@ -19,7 +19,6 @@ export async function checkRequestOrigin(
     const servicesCollection = db.collection("services");
     const servicesToken = db.collection("service_tokens");
 
-    console.log("Checking request origin for service:", UCR);
 
     if (servicesCollection && servicesToken) {
         console.log(`Searching for service in the database with:\nIP: ${UCR.client.ip}\nDNS: ${UCR.client.dns}\nService: ${UCR.client.service}`);

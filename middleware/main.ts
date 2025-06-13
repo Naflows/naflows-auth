@@ -8,13 +8,15 @@ export async function NASS_Verification_Process(
     req, res, next 
 ) {
     console.log("NASS Verification Process started.");
-    console.log(req.body)
     if (process.env.NASS_SCV_ENABLED !== "true") {
+        console.log("NASS SCV is disabled, skipping verification process.");
         return next();
     } else {
         if (process.env.NASS_UCR_ENABLED === "true") {
             const isUCRCorrect : boolean = middleware.check.ucr(req.body);
             if (!isUCRCorrect) {
+                console.log("Something is wrong with the UCR - exiting NASS Verification Process.")
+                console.log("UCR is not valid, see the following: ", req.body)
                 return res.status(400).send("Invalid request format.");
             }
         }
@@ -34,6 +36,7 @@ export async function NASS_Verification_Process(
             }
         }
 
+        console.log("NASS Verification Process completed successfully.");
         return next();
     }
 

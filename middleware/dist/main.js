@@ -46,13 +46,15 @@ function NASS_Verification_Process(req, res, next) {
             switch (_a.label) {
                 case 0:
                     console.log("NASS Verification Process started.");
-                    console.log(req.body);
                     if (!(process.env.NASS_SCV_ENABLED !== "true")) return [3 /*break*/, 1];
+                    console.log("NASS SCV is disabled, skipping verification process.");
                     return [2 /*return*/, next()];
                 case 1:
                     if (process.env.NASS_UCR_ENABLED === "true") {
                         isUCRCorrect = dir_2["default"].check.ucr(req.body);
                         if (!isUCRCorrect) {
+                            console.log("Something is wrong with the UCR - exiting NASS Verification Process.");
+                            console.log("UCR is not valid, see the following: ", req.body);
                             return [2 /*return*/, res.status(400).send("Invalid request format.")];
                         }
                     }
@@ -74,7 +76,9 @@ function NASS_Verification_Process(req, res, next) {
                         return [2 /*return*/, dir_1.software.methods.manageErrorCode(isRequestOriginValid, res)];
                     }
                     _a.label = 5;
-                case 5: return [2 /*return*/, next()];
+                case 5:
+                    console.log("NASS Verification Process completed successfully.");
+                    return [2 /*return*/, next()];
             }
         });
     });
