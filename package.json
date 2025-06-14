@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --runInBand --no-cache"
   },
   "author": "",
   "license": "ISC",
@@ -15,7 +15,8 @@
     "mongo": "^0.1.0",
     "mongodb": "^6.17.0",
     "mongoose": "^8.15.1",
-    "mysql2": "^3.14.1"
+    "mysql2": "^3.14.1",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.27.4",

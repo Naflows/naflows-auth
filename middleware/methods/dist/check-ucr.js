@@ -48,11 +48,11 @@ function isUCRType(obj) {
     var userValid = isValidUser(obj.user);
     var clientValid = isValidClient(obj.client);
     var requestValid = isValidRequest(obj.request);
-    console.log("UCR validation results:", {
-        userValid: userValid,
-        clientValid: clientValid,
-        requestValid: requestValid
-    });
+    // console.log("UCR validation results:", {
+    //     userValid,
+    //     clientValid,
+    //     requestValid
+    // });
     return (userValid &&
         clientValid &&
         requestValid);

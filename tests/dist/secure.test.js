@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var _a = require('@jest/globals'), test = _a.test, expect = _a.expect;
+var _a = require('@jest/globals'), test = _a.test, expect = _a.expect, describe = _a.describe;
 var axios = require('axios');
 var app = "http://localhost:3000/test";
 var validUCR = {
@@ -80,6 +80,7 @@ test("UCR is valid (correct informations | token)", function () { return __await
         }
     });
 }); });
+validUCR.user.ip = "1.1.1.1";
 test("UCR is valid (correct informations | password + identifier)", function () { return __awaiter(void 0, void 0, void 0, function () {
     var ucr, response;
     return __generator(this, function (_a) {
@@ -99,6 +100,7 @@ test("UCR is valid (correct informations | password + identifier)", function () 
         }
     });
 }); });
+validUCR.user.ip = "1.1.1.2";
 test("UCR is invalid (password + token + identifier)", function () { return __awaiter(void 0, void 0, void 0, function () {
     var ucr, error_1;
     return __generator(this, function (_a) {
@@ -123,6 +125,7 @@ test("UCR is invalid (password + token + identifier)", function () { return __aw
         }
     });
 }); });
+validUCR.user.ip = "1.1.1.3";
 test("UCR is invalid (missing random parameters)", function () { return __awaiter(void 0, void 0, void 0, function () {
     var ucr, error_2;
     return __generator(this, function (_a) {
@@ -146,6 +149,7 @@ test("UCR is invalid (missing random parameters)", function () { return __awaite
         }
     });
 }); });
+validUCR.user.ip = "1.1.1.4";
 test("Service connection is invalid (incorrect service IP address)", function () { return __awaiter(void 0, void 0, void 0, function () {
     var ucr, error_3;
     return __generator(this, function (_a) {
@@ -171,6 +175,7 @@ test("Service connection is invalid (incorrect service IP address)", function ()
         }
     });
 }); });
+validUCR.user.ip = "1.1.1.5";
 test("Service connection is invalid (incorrect token creation time)", function () { return __awaiter(void 0, void 0, void 0, function () {
     var ucr, error_4;
     return __generator(this, function (_a) {
@@ -196,6 +201,7 @@ test("Service connection is invalid (incorrect token creation time)", function (
         }
     });
 }); });
+validUCR.user.ip = "1.1.1.6";
 test("Service connection is invalid (incorrect token)", function () { return __awaiter(void 0, void 0, void 0, function () {
     var ucr, error_5;
     return __generator(this, function (_a) {
@@ -219,6 +225,7 @@ test("Service connection is invalid (incorrect token)", function () { return __a
         }
     });
 }); });
+validUCR.user.ip = "1.1.1.7";
 test("Service is outdated (service is not active)", function () { return __awaiter(void 0, void 0, void 0, function () {
     var ucr, error_6;
     return __generator(this, function (_a) {
@@ -244,6 +251,7 @@ test("Service is outdated (service is not active)", function () { return __await
         }
     });
 }); });
+validUCR.user.ip = "1.1.1.8";
 test("Service token is expired (token is not valid anymore)", function () { return __awaiter(void 0, void 0, void 0, function () {
     var ucr, error_7;
     return __generator(this, function (_a) {
@@ -266,6 +274,66 @@ test("Service token is expired (token is not valid anymore)", function () { retu
                 expect(error_7.response.data).toBe("Invalid or expired service token.");
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
+        }
+    });
+}); });
+// Reseting the valid UCR for the next tests but changing IP adress 
+var tmrUCR = {
+    user: {
+        ip: "135.215.3.111",
+        agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+        session_id: "session123",
+        token: "token",
+        device_fingerprint: "fingerprint",
+        user_origin: "/test/"
+    },
+    client: {
+        ip: "127.0.0.1",
+        dns: "local.nass.com",
+        service: "Test Service : token is not expired",
+        service_token: "test-service-token",
+        service_token_birth: 1749676800
+    },
+    request: {
+        method: "POST",
+        url: "/test/too-many-requests",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: { key: "value" },
+        query: { param: "value" },
+        request_date: 1700000000
+    }
+};
+test("Rates limit exceeded (too many requests)", function () { return __awaiter(void 0, void 0, void 0, function () {
+    var rates, ucr, i, error_8;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                rates = process.env.BLACKLIST_RATES ? parseInt(process.env.BLACKLIST_RATES) : 100;
+                ucr = tmrUCR;
+                i = 0;
+                _a.label = 1;
+            case 1:
+                if (!(i < rates * 2)) return [3 /*break*/, 6];
+                _a.label = 2;
+            case 2:
+                _a.trys.push([2, 4, , 5]);
+                return [4 /*yield*/, axios.post("" + app, ucr)];
+            case 3:
+                _a.sent();
+                return [3 /*break*/, 5];
+            case 4:
+                error_8 = _a.sent();
+                if (error_8.response.status === 429) {
+                    expect(error_8.response.data).toBe("Rate limit exceeded. Too many requests.");
+                    return [3 /*break*/, 6];
+                }
+                return [3 /*break*/, 5];
+            case 5:
+                i++;
+                return [3 /*break*/, 1];
+            case 6: return [2 /*return*/];
         }
     });
 }); });

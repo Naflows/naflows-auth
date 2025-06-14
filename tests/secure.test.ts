@@ -1,6 +1,6 @@
 import UCRType from "../types/.types/ucr.type";
 
-const { test, expect } = require('@jest/globals');
+const { test, expect, describe } = require('@jest/globals');
 const axios = require('axios');
 
 
@@ -40,6 +40,7 @@ test("UCR is valid (correct informations | token)", async () => {
   expect(response.data).toBe("Successful connection");
 });
 
+validUCR.user.ip = "1.1.1.1";
 test("UCR is valid (correct informations | password + identifier)", async () => {
   const ucr = validUCR;
   delete ucr.user.token;
@@ -52,6 +53,7 @@ test("UCR is valid (correct informations | password + identifier)", async () => 
   expect(response.data).toBe("Successful connection");
 });
 
+validUCR.user.ip = "1.1.1.2";
 test("UCR is invalid (password + token + identifier)", async () => {
   const ucr = validUCR;
   ucr.user.identifier = "identifier";
@@ -65,6 +67,7 @@ test("UCR is invalid (password + token + identifier)", async () => {
   }
 });
 
+validUCR.user.ip = "1.1.1.3";
 test("UCR is invalid (missing random parameters)", async () => {
   const ucr = validUCR as any;
   ucr.user.device_fingerprint = undefined; // Missing device fingerprint
@@ -77,6 +80,7 @@ test("UCR is invalid (missing random parameters)", async () => {
   }
 });
 
+validUCR.user.ip = "1.1.1.4";
 test("Service connection is invalid (incorrect service IP address)", async () => {
   const ucr = validUCR;
   ucr.client.ip = "123.123.123.1";
@@ -90,6 +94,7 @@ test("Service connection is invalid (incorrect service IP address)", async () =>
   }
 })
 
+validUCR.user.ip = "1.1.1.5";
 test("Service connection is invalid (incorrect token creation time)", async () => {
   const ucr = validUCR;
   ucr.client.ip = "127.0.0.1";
@@ -103,6 +108,7 @@ test("Service connection is invalid (incorrect token creation time)", async () =
   }
 })
 
+validUCR.user.ip = "1.1.1.6";
 test("Service connection is invalid (incorrect token)", async () => {
   const ucr = validUCR;
   ucr.client.service_token = "invalid-token"; // Invalid service token
@@ -114,6 +120,7 @@ test("Service connection is invalid (incorrect token)", async () => {
   }
 })
 
+validUCR.user.ip = "1.1.1.7";
 test("Service is outdated (service is not active)", async () => {
   const ucr = validUCR;
   ucr.client.service = "Test Service : expired";
@@ -127,6 +134,7 @@ test("Service is outdated (service is not active)", async () => {
   }
 })
 
+validUCR.user.ip = "1.1.1.8";
 test("Service token is expired (token is not valid anymore)", async () => {
   const ucr = validUCR;
   ucr.client.service = "Test Service : token is expired";
@@ -139,3 +147,51 @@ test("Service token is expired (token is not valid anymore)", async () => {
     expect(error.response.data).toBe("Invalid or expired service token.");
   }
 });
+
+
+// Reseting the valid UCR for the next tests but changing IP adress 
+const tmrUCR = {
+  user: {
+    ip: "135.215.3.111",
+    agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+    session_id: "session123",
+    token: "token",
+    device_fingerprint: "fingerprint",
+    user_origin: "/test/"
+  },
+  client: {
+    ip: "127.0.0.1",
+    dns: "local.nass.com",
+    service: "Test Service : token is not expired",
+    service_token: "test-service-token",
+    service_token_birth: 1749676800
+  },
+  request: {
+    method: "POST",
+    url: "/test/too-many-requests",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: { key: "value" },
+    query: { param: "value" },
+    request_date: 1700000000,
+  }
+};
+
+test("Rates limit exceeded (too many requests)", async () => {
+  const rates = process.env.BLACKLIST_RATES ? parseInt(process.env.BLACKLIST_RATES) : 100;
+  const ucr = tmrUCR;
+   for (let i = 0; i < rates*2; i++) {
+    try {
+      await axios.post(`${app}`, ucr);
+    } catch (error) {
+      if (error.response.status === 429) {
+        expect(error.response.data).toBe("Rate limit exceeded. Too many requests.");
+        break;
+      }
+    }
+   }
+
+});
+
+

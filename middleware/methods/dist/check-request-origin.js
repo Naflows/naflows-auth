@@ -47,7 +47,6 @@ function checkRequestOrigin(UCR) {
                     servicesCollection = __1.db.collection("services");
                     servicesToken = __1.db.collection("service_tokens");
                     if (!(servicesCollection && servicesToken)) return [3 /*break*/, 5];
-                    console.log("Searching for service in the database with:\nIP: " + UCR.client.ip + "\nDNS: " + UCR.client.dns + "\nService: " + UCR.client.service);
                     return [4 /*yield*/, servicesCollection.findOne({
                             ip_address: UCR.client.ip,
                             dns: UCR.client.dns,
@@ -55,10 +54,7 @@ function checkRequestOrigin(UCR) {
                         })];
                 case 1:
                     queriedService = _a.sent();
-                    console.log("Queried service:", queriedService);
                     if (!(queriedService && queriedService.status === "ACTIVE")) return [3 /*break*/, 3];
-                    console.log("Service " + queriedService.name + " is active, checking service token...");
-                    console.log("Token parameters are:\nService ID: " + queriedService.id + "\nToken: " + UCR.client.service_token + "\nCreated at: " + UCR.client.service_token_birth);
                     return [4 /*yield*/, servicesToken.findOne({
                             service_id: queriedService.id,
                             token: UCR.client.service_token,
@@ -66,7 +62,7 @@ function checkRequestOrigin(UCR) {
                         })];
                 case 2:
                     serviceToken = _a.sent();
-                    console.log("The following service token are related to " + queriedService.name + ": ", serviceToken);
+                    //console.log(`The following service token are related to ${queriedService.name}: `, serviceToken ? serviceToken.id : "No service token found");
                     if (serviceToken &&
                         serviceToken.created_at + serviceToken.lifespan < Date.now() &&
                         (process.env.SERVICE_TOKEN_MAXIMAL_RATES && serviceToken.uses < parseInt(process.env.SERVICE_TOKEN_MAXIMAL_RATES))) {
