@@ -56,11 +56,11 @@ export function isUCRType(obj: any): obj is UCRType {
     const userValid = isValidUser(obj.user);
     const clientValid = isValidClient(obj.client);
     const requestValid = isValidRequest(obj.request);
-    console.log("UCR validation results:", {
-        userValid,
-        clientValid,
-        requestValid
-    });
+    // console.log("UCR validation results:", {
+    //     userValid,
+    //     clientValid,
+    //     requestValid
+    // });
 
     return (
         userValid &&

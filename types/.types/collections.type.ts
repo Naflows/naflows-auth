@@ -1,3 +1,4 @@
+import UCRType from "./ucr.type";
 
 
 // Self explanatory
@@ -16,9 +17,13 @@ export interface Blacklist {
 export interface Requests {
     ip : string;
     userAgent: string;
-    count: number;
-    lastRequest: Date;
-    firstRequest: Date;
+    requests: Array<{
+        date: number; // Timestamp of the request
+        request : UCRType;
+    }>;
+    lastRequest: number;
+    firstRequest: number;
+    device_fingerprint: string; // Device fingerprint of the user, used for security purposes
 }
 
 export interface User {

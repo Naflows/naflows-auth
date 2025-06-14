@@ -10,14 +10,17 @@ export async function SwitchServerReply(
         case 200:
             break;
         case 403:
-            console.error("Forbidden: " + rep.message);
+            console.error('\x1b[31m%s\x1b[0m',"Forbidden: " + rep.message);
             break;
         case 500:
-            console.error("Internal Server Error: " + rep.message);
+            console.error('\x1b[31m%s\x1b[0m',"Internal Server Error: " + rep.message);
+            break;
+        case 429:
+            console.error('\x1b[31m%s\x1b[0m',"Too Many Requests: " + rep.message);
             break;
     }
     if (!rep.success) {
-        console.log(`Exiting NASS connection with status ${rep.status} and message: ${rep.message}`);
+        console.log('\x1b[31m%s\x1b[0m',`Exiting NASS connection with status ${rep.status} and message: ${rep.message}`);
         return res.status(rep.status).send(rep.message);
     }
 }

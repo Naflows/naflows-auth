@@ -41,44 +41,71 @@ var dir_1 = require("../software/dir");
 var dir_2 = require("./dir");
 function NASS_Verification_Process(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
-        var isUCRCorrect, ip, isBlackListed, isRequestOriginValid;
+        var isUCRCorrect, ratesCheck, ip, isBlackListed, isRequestOriginValid, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    console.log('\x1b[34m%s\x1b[0m', "------ INCOMING REQUEST at " + req.body.request.url + "  ------");
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 10, , 11]);
                     console.log("NASS Verification Process started.");
-                    if (!(process.env.NASS_SCV_ENABLED !== "true")) return [3 /*break*/, 1];
+                    if (!(process.env.NASS_SCV_ENABLED !== "true")) return [3 /*break*/, 2];
                     console.log("NASS SCV is disabled, skipping verification process.");
                     return [2 /*return*/, next()];
-                case 1:
+                case 2:
                     if (process.env.NASS_UCR_ENABLED === "true") {
                         isUCRCorrect = dir_2["default"].check.ucr(req.body);
                         if (!isUCRCorrect) {
-                            console.log("Something is wrong with the UCR - exiting NASS Verification Process.");
-                            console.log("UCR is not valid, see the following: ", req.body);
-                            return [2 /*return*/, res.status(400).send("Invalid request format.")];
+                            console.log('\x1b[31m%s\x1b[0m', "Invalid UCR.");
+                            return [2 /*return*/, dir_1.software.methods.manageErrorCode({
+                                    status: 400,
+                                    message: "Invalid request format.",
+                                    success: false
+                                }, res)];
                         }
                     }
-                    if (!(process.env.NASS_BLACKLIST_ENABLED === "true")) return [3 /*break*/, 3];
-                    ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+                    if (!(process.env.NASS_RATES_LIMIT_ENABLED === "true")) return [3 /*break*/, 4];
+                    return [4 /*yield*/, dir_2["default"].check.rates(req.body)];
+                case 3:
+                    ratesCheck = _a.sent();
+                    if (!ratesCheck.success) {
+                        console.log('\x1b[31m%s\x1b[0m', "Rate limit exceeded, exiting NASS Verification Process.");
+                        return [2 /*return*/, dir_1.software.methods.manageErrorCode(ratesCheck, res)];
+                    }
+                    _a.label = 4;
+                case 4:
+                    if (!(process.env.NASS_BLACKLIST_ENABLED === "true")) return [3 /*break*/, 6];
+                    ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
                     return [4 /*yield*/, dir_2["default"].check.blacklist(res, ip)];
-                case 2:
+                case 5:
                     isBlackListed = _a.sent();
                     if (!isBlackListed.success) {
                         return [2 /*return*/, dir_1.software.methods.manageErrorCode(isBlackListed, res)];
                     }
-                    _a.label = 3;
-                case 3:
-                    if (!(process.env.NASS_SERVICE_FILTER === "true")) return [3 /*break*/, 5];
+                    _a.label = 6;
+                case 6:
+                    if (!(process.env.NASS_SERVICE_FILTER === "true")) return [3 /*break*/, 8];
                     return [4 /*yield*/, dir_2["default"].check.origin(req.body)];
-                case 4:
+                case 7:
                     isRequestOriginValid = _a.sent();
                     if (!isRequestOriginValid.success) {
                         return [2 /*return*/, dir_1.software.methods.manageErrorCode(isRequestOriginValid, res)];
                     }
-                    _a.label = 5;
-                case 5:
-                    console.log("NASS Verification Process completed successfully.");
+                    _a.label = 8;
+                case 8:
+                    console.log('\x1b[32m%s\x1b[0m', "NASS Verification Process completed successfully.");
                     return [2 /*return*/, next()];
+                case 9: return [3 /*break*/, 11];
+                case 10:
+                    error_1 = _a.sent();
+                    console.error('\x1b[31m%s\x1b[0m', "Unexpected error during NASS Verification Process:", error_1);
+                    return [2 /*return*/, dir_1.software.methods.manageErrorCode({
+                            status: 500,
+                            message: "Internal server error during NASS Verification Process.",
+                            success: false
+                        }, res)];
+                case 11: return [2 /*return*/];
             }
         });
     });

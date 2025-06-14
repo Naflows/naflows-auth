@@ -21,23 +21,22 @@ export async function checkRequestOrigin(
 
 
     if (servicesCollection && servicesToken) {
-        console.log(`Searching for service in the database with:\nIP: ${UCR.client.ip}\nDNS: ${UCR.client.dns}\nService: ${UCR.client.service}`);
+        //console.log(`Searching for service in the database with:\nIP: ${UCR.client.ip}\nDNS: ${UCR.client.dns}\nService: ${UCR.client.service}`);
         // The easiest way to check if a service exists is first to check ip + dns + service.
         const queriedService = await servicesCollection.findOne({
             ip_address: UCR.client.ip,
             dns: UCR.client.dns,
             name: UCR.client.service
         }) as Service | null;
-        console.log("Queried service:", queriedService);
         if (queriedService && queriedService.status === "ACTIVE") {
-            console.log(`Service ${queriedService.name} is active, checking service token...`);
-            console.log(`Token parameters are:\nService ID: ${queriedService.id}\nToken: ${UCR.client.service_token}\nCreated at: ${UCR.client.service_token_birth}`);
+            //console.log(`Service ${queriedService.name} is active, checking service token...`);
+            //console.log(`Token parameters are:\nService ID: ${queriedService.id}\nToken: ${UCR.client.service_token}\nCreated at: ${UCR.client.service_token_birth}`);
             const serviceToken = await servicesToken.findOne({
                 service_id: queriedService.id,
                 token: UCR.client.service_token,
                 created_at : UCR.client.service_token_birth
             }) as NassServiceToken | null;
-            console.log(`The following service token are related to ${queriedService.name}: `, serviceToken)
+            //console.log(`The following service token are related to ${queriedService.name}: `, serviceToken ? serviceToken.id : "No service token found");
             if (
                 serviceToken &&
                 serviceToken.created_at + serviceToken.lifespan < Date.now() && 

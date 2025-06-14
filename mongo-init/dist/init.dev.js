@@ -178,7 +178,7 @@ db.service_tokens.insertOne({
   id: "3",
   service_id: "3",
   token: "test-service-token-inactive",
-  created_at: 1749676800,
+  created_at: new Date().getTime(),
   expires_at: new Date(new Date().getTime() + 1000 * 60 * 60 * 24).getTime(),
   // 24 hours
   lifespan: 1000 * 60 * 60 * 24 * 100,
