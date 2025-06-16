@@ -53,7 +53,7 @@ var validUCR = {
         dns: "local.nass.com",
         service: "Test Service : token is not expired",
         service_token: "test-service-token",
-        service_token_birth: 1749676800
+        service_token_birth: 1750049309
     },
     request: {
         method: "POST",
@@ -109,6 +109,7 @@ test("UCR is invalid (password + token + identifier)", function () { return __aw
                 ucr = validUCR;
                 ucr.user.identifier = "identifier";
                 ucr.user.password = "password";
+                ucr.user.token = "token"; // Invalid combination of credentials
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
@@ -195,7 +196,7 @@ test("Service connection is invalid (incorrect token creation time)", function (
             case 3:
                 error_4 = _a.sent();
                 expect(error_4.response.status).toBe(403);
-                expect(error_4.response.data).toBe("Invalid or expired service token.");
+                expect(error_4.response.data).toBe("Invalid service token.");
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -219,7 +220,7 @@ test("Service connection is invalid (incorrect token)", function () { return __a
             case 3:
                 error_5 = _a.sent();
                 expect(error_5.response.status).toBe(403);
-                expect(error_5.response.data).toBe("Invalid or expired service token.");
+                expect(error_5.response.data).toBe("Invalid service token.");
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -260,7 +261,7 @@ test("Service token is expired (token is not valid anymore)", function () { retu
                 ucr = validUCR;
                 ucr.client.service = "Test Service : token is expired";
                 ucr.client.service_token = "test-service-token-expired"; // Valid token but service token is expired
-                ucr.client.service_token_birth = 123456789; // Token creation time is in the past
+                ucr.client.service_token_birth = 1749962909; // Token creation time is in the past
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
@@ -270,8 +271,8 @@ test("Service token is expired (token is not valid anymore)", function () { retu
                 return [3 /*break*/, 4];
             case 3:
                 error_7 = _a.sent();
-                expect(error_7.response.status).toBe(403);
-                expect(error_7.response.data).toBe("Invalid or expired service token.");
+                expect(error_7.response.status).toBe(409);
+                expect(error_7.response.data).toBe("Conflict between service's token and NASS. Forcing reload. This might take a few seconds.");
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
