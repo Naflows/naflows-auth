@@ -19,7 +19,7 @@ let validUCR: UCRType = {
     dns: "local.nass.com",
     service: "Test Service : token is not expired",
     service_token: "test-service-token",
-    service_token_birth: 1749676800
+    service_token_birth: 1750049309
   },
   request: {
     method: "POST",
@@ -58,6 +58,7 @@ test("UCR is invalid (password + token + identifier)", async () => {
   const ucr = validUCR;
   ucr.user.identifier = "identifier";
   ucr.user.password = "password";
+  ucr.user.token = "token"; // Invalid combination of credentials
 
   try {
     await axios.post(`${app}`, ucr);
@@ -104,7 +105,7 @@ test("Service connection is invalid (incorrect token creation time)", async () =
     await axios.post(`${app}`, ucr);
   } catch (error) {
     expect(error.response.status).toBe(403);
-    expect(error.response.data).toBe("Invalid or expired service token.");
+    expect(error.response.data).toBe("Invalid service token.");
   }
 })
 
@@ -116,7 +117,7 @@ test("Service connection is invalid (incorrect token)", async () => {
     await axios.post(`${app}`, ucr);
   } catch (error) {
     expect(error.response.status).toBe(403);
-    expect(error.response.data).toBe("Invalid or expired service token.");
+    expect(error.response.data).toBe("Invalid service token.");
   }
 })
 
@@ -139,12 +140,12 @@ test("Service token is expired (token is not valid anymore)", async () => {
   const ucr = validUCR;
   ucr.client.service = "Test Service : token is expired";
   ucr.client.service_token = "test-service-token-expired"; // Valid token but service token is expired
-  ucr.client.service_token_birth = 123456789; // Token creation time is in the past
+  ucr.client.service_token_birth = 1749962909; // Token creation time is in the past
   try {
     await axios.post(`${app}`, ucr);
   } catch (error) {
-    expect(error.response.status).toBe(403);
-    expect(error.response.data).toBe("Invalid or expired service token.");
+    expect(error.response.status).toBe(409);
+    expect(error.response.data).toBe("Conflict between service's token and NASS. Forcing reload. This might take a few seconds.");
   }
 });
 

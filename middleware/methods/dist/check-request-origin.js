@@ -40,7 +40,7 @@ exports.checkRequestOrigin = void 0;
 var __1 = require("../..");
 function checkRequestOrigin(UCR) {
     return __awaiter(this, void 0, Promise, function () {
-        var servicesCollection, servicesToken, queriedService, serviceToken;
+        var servicesCollection, servicesToken, queriedService, serviceToken, expiredToken;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -53,7 +53,7 @@ function checkRequestOrigin(UCR) {
                             name: UCR.client.service
                         })];
                 case 1:
-                    queriedService = _a.sent();
+                    queriedService = (_a.sent());
                     if (!(queriedService && queriedService.status === "ACTIVE")) return [3 /*break*/, 3];
                     return [4 /*yield*/, servicesToken.findOne({
                             service_id: queriedService.id,
@@ -61,25 +61,31 @@ function checkRequestOrigin(UCR) {
                             created_at: UCR.client.service_token_birth
                         })];
                 case 2:
-                    serviceToken = _a.sent();
-                    //console.log(`The following service token are related to ${queriedService.name}: `, serviceToken ? serviceToken.id : "No service token found");
-                    if (serviceToken &&
-                        serviceToken.created_at + serviceToken.lifespan < Date.now() &&
-                        (process.env.SERVICE_TOKEN_MAXIMAL_RATES && serviceToken.uses < parseInt(process.env.SERVICE_TOKEN_MAXIMAL_RATES))) {
+                    serviceToken = (_a.sent());
+                    expiredToken = serviceToken
+                        ? serviceToken.created_at + serviceToken.lifespan > Date.now() &&
+                            process.env.SERVICE_TOKEN_MAXIMAL_RATES &&
+                            serviceToken.uses < parseInt(process.env.SERVICE_TOKEN_MAXIMAL_RATES)
+                        : false;
+                    if (serviceToken && !expiredToken) {
                         return [2 /*return*/, {
                                 status: 200,
                                 message: "Service access granted.",
-                                success: true,
-                                data: {
-                                    service: queriedService,
-                                    token: serviceToken
-                                }
+                                success: true
+                            }];
+                    }
+                    else if (expiredToken && serviceToken) {
+                        console.error("\x1b[31m%s\x1b[0m", "Service token " + serviceToken.token + " expired for service " + queriedService.name + ". Forcing reload.");
+                        return [2 /*return*/, {
+                                status: 409,
+                                message: "Conflict between service's token and NASS. Forcing reload. This might take a few seconds.",
+                                success: false
                             }];
                     }
                     else {
                         return [2 /*return*/, {
                                 status: 403,
-                                message: "Invalid or expired service token.",
+                                message: "Invalid service token.",
                                 success: false
                             }];
                     }

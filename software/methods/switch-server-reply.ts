@@ -12,11 +12,14 @@ export async function SwitchServerReply(
         case 403:
             console.error('\x1b[31m%s\x1b[0m',"Forbidden: " + rep.message);
             break;
-        case 500:
-            console.error('\x1b[31m%s\x1b[0m',"Internal Server Error: " + rep.message);
+        case 409:
+            console.error('\x1b[31m%s\x1b[0m',"Conflict: " + rep.message);
             break;
         case 429:
             console.error('\x1b[31m%s\x1b[0m',"Too Many Requests: " + rep.message);
+            break;
+        case 500:
+            console.error('\x1b[31m%s\x1b[0m',"Internal Server Error: " + rep.message);
             break;
     }
     if (!rep.success) {
