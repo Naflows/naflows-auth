@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.crypt = void 0;
+exports.verifyHash = exports.crypt = void 0;
 var crypto = require("crypto");
 function crypt(value) {
     if (!value) {
@@ -16,3 +16,12 @@ function crypt(value) {
     return iterations + ":" + salt + ":" + hash;
 }
 exports.crypt = crypt;
+function verifyHash(value, hash) {
+    var _a = hash.split(':'), iterations = _a[0], salt = _a[1], originalHash = _a[2];
+    var keylen = 64;
+    var digest = 'sha512';
+    // Recompute the hash with the same parameters
+    var computedHash = crypto.pbkdf2Sync(value, salt, parseInt(iterations), keylen, digest).toString('hex');
+    return computedHash === originalHash;
+}
+exports.verifyHash = verifyHash;

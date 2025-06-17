@@ -67,6 +67,86 @@ db.users.insertOne({
     updated_at : new Date().getTime()
 });
 
+db.users.insertOne({
+    id : 2,
+    identifier : "100000:137db0ce6e8b0b238a304614ebc5dc33:64c94524560e67d1e78a96dc67ba92af545d490077fa2e5b13473107f6b7f5e7a6841f89eea8a7cd6ac740969b521f82fb88cd815d6b3f26d96677ef7c224dfe",
+    password : "100000:137db0ce6e8b0b238a304614ebc5dc33:64c94524560e67d1e78a96dc67ba92af545d490077fa2e5b13473107f6b7f5e7a6841f89eea8a7cd6ac740969b521f82fb88cd815d6b3f26d96677ef7c224dfe",
+    email : "dummy@gmail.com",
+    username : "Dummy User Session OK",
+    rights : "USER",
+    created_at : new Date().getTime(),
+    updated_at : new Date().getTime()
+})
+
+db.users.insertOne({
+    id : 3,
+    identifier : "100000:bde933e36fd5ba991a274b3eca227195:8d9cdf2aa5dc7b52ac7d3e6ae6086f3a27f2c53d08827bd9e4cc9534935e906602da9545d5580c22e38905b3c2aaa1b8d86a06542f6379a57409c4c1ae03a838",
+    password : "100000:bde933e36fd5ba991a274b3eca227195:8d9cdf2aa5dc7b52ac7d3e6ae6086f3a27f2c53d08827bd9e4cc9534935e906602da9545d5580c22e38905b3c2aaa1b8d86a06542f6379a57409c4c1ae03a838",
+    email : "dummy@gmail.com",
+    username : "Dummy User Session Expired",
+    rights : "USER",
+    created_at : new Date().getTime(),
+    updated_at : new Date().getTime()
+})
+
+
+db.sessions.insertOne({
+    id: 1,
+    user_id: 2,
+    ip : "1.1.1.2",
+    agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+    device_fingerprint: "fingerprint-1",
+    expires_at: new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours
+    created_at: new Date().getTime(),
+    token_id: "1",
+    last_activity: new Date().getTime(),
+    user_origin: "NASS",
+})
+
+db.sessions.insertOne({
+    id: 2,
+    user_id: 3,
+    ip : "1.1.1.3",
+    agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+    device_fingerprint: "fingerprint-2",
+    expires_at: new Date().getTime() - 1000 * 60 * 60 * 24, // Expired session
+    created_at: new Date().getTime() - 1000 * 60 * 60 * 24, // Created 24 hours ago
+    token_id: "2",
+    last_activity: new Date().getTime() - 1000 * 60 * 60 * 24, // Last activity 24 hours ago
+    user_origin: "NASS",
+});
+
+db.tokens.insertOne({
+    id : 1,
+    token : "test-token",
+    user_id : 2,
+    session_id : 1,
+    rights : ["USER_READ_OWN","USER_EDIT_OWN"],
+    created_at : new Date().getTime(),
+    expires_at : new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours
+    renewable : true,
+    frozen_until : null,
+    frozen_at: null,
+    uses : 0,
+    max_uses : 1000, // Unlimited uses
+});
+
+db.tokens.insertOne({
+    id : 2,
+    token : "test-token-2",
+    user_id : 3,
+    session_id : 2,
+    rights : ["USER_READ_OWN","USER_EDIT_OWN"],
+    created_at : new Date().getTime(),
+    expires_at : new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours
+    renewable : true,
+    frozen_until : null,
+    frozen_at: null,
+    uses : 0,
+    max_uses : 1000, // Unlimited uses
+});
+
+
 
 
 // Dummy data for testing purposes - should be removed in production
