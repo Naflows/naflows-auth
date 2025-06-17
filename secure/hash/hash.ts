@@ -17,3 +17,14 @@ export function crypt(value: string | undefined): string {
     return `${iterations}:${salt}:${hash}`;
 }
 
+export function verifyHash(value: string, hash: string): boolean {
+    const [iterations, salt, originalHash] = hash.split(':');
+    const keylen = 64;
+    const digest = 'sha512';
+
+    // Recompute the hash with the same parameters
+    const computedHash = crypto.pbkdf2Sync(value, salt, parseInt(iterations), keylen, digest).toString('hex');
+    return computedHash === originalHash;
+}
+
+

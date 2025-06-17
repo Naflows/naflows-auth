@@ -1,17 +1,11 @@
-import { crypt } from "./hash/hash";
+import { crypt, verifyHash } from "./hash/hash";
 import { blacklistIP } from "./ip/blacklist";
 
 
 const secure = {
-    check : 0,
-    add : 0,
-    deactivate : 0,
-    block : 0,
     crypt : crypt,
+    verify : verifyHash,
     blacklist : blacklistIP,
-    token : () => {
-        
-    }
 };
 
 export default secure;

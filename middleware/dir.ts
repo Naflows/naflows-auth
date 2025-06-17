@@ -3,6 +3,7 @@ import { NASS_Verification_Process } from "./main";
 import { checkBlacklist } from "./methods/check-blacklist";
 import { checkRequestOrigin } from "./methods/check-request-origin";
 import { checkRates } from "./methods/check-rates";
+import { scv } from "./process/scv";
 
 const middleware = {
     main : NASS_Verification_Process,
@@ -11,6 +12,9 @@ const middleware = {
         blacklist : checkBlacklist,
         origin : checkRequestOrigin,
         rates : checkRates
+    },
+    process : {
+        scv : scv
     }
 }
 
