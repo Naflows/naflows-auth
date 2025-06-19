@@ -9,11 +9,11 @@ let validUCR: UCRType = {
   user: {
     ip : "1.1.1.2",
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-    session_id: "1",
+    session_id: 1,
     token: "test-token",
     device_fingerprint: "fingerprint-1",
     user_origin: "NASS",
-    user_id: "2"
+    user_id: 2
   },
   client: {
     ip: "127.0.0.1",

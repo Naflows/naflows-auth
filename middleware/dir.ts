@@ -5,6 +5,7 @@ import { checkRequestOrigin } from "./methods/scv/check-request-origin";
 import { checkRates } from "./methods/scv/check-rates";
 import { scv } from "./process/scv";
 import { ssv } from "./process/ssv";
+import { sessionRenewal } from "./methods/ssv/session-renewal";
 
 const middleware = {
     main : NASS_Verification_Process,
@@ -13,6 +14,9 @@ const middleware = {
         blacklist : checkBlacklist,
         origin : checkRequestOrigin,
         rates : checkRates
+    },
+    session : {
+        renewal : sessionRenewal
     },
     process : {
         scv : scv,
