@@ -46,7 +46,7 @@ export async function scv(req: Request, res: Response): Promise<ReplyType> {
 
   return {
     status : 200,
-    message: "Successful connection",
+    message: "SSV Process completed successfully.",
     success: true,
   }
 }

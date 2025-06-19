@@ -15,17 +15,30 @@ export async function NASS_Verification_Process(req, res, next) {
         console.log("NASS SCV is disabled, skipping verification process.");
         return next();
       } else {
-        // Executing the first step of the verification process
-        const scv = await middleware.process.scv(req,res);
+        // Executing the Secure Connection Verification Process
+        const scv : ReplyType = await middleware.process.scv(req,res);
 
         if (!scv.success) {
           console.error(
             "\x1b[31m%s\x1b[0m",
-            "NASS Verification Process failed:",
+            "NASS SCV Process failed:",
             scv.message
           );
           return software.methods.manageErrorCode(scv, res);
         }
+
+        // Executing the Secure Session Verification Process
+        const ssv : ReplyType = await middleware.process.ssv(req,res);
+        if (!ssv.success) {
+          console.error(
+            "\x1b[31m%s\x1b[0m",
+            "NASS SSV Process failed:",
+            ssv.message
+          )
+          return software.methods.manageErrorCode(ssv, res);
+        }
+
+
 
         console.log(
           "\x1b[32m%s\x1b[0m",
@@ -37,7 +50,7 @@ export async function NASS_Verification_Process(req, res, next) {
       console.error(
         "\x1b[31m%s\x1b[0m",
         "Unexpected error during NASS Verification Process:",
-        error
+        error, req.body
       );
       return software.methods.manageErrorCode(
         {

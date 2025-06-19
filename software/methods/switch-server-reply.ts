@@ -9,6 +9,9 @@ export async function SwitchServerReply(
     switch (rep.status) {
         case 200:
             break;
+        case 401:
+            console.error('\x1b[31m%s\x1b[0m',"Unauthorized: " + rep.message);
+            break;
         case 403:
             console.error('\x1b[31m%s\x1b[0m',"Forbidden: " + rep.message);
             break;

@@ -9,6 +9,7 @@
 
 */
 
+import { fail } from "assert";
 import UCRType from "../types/.types/ucr.type";
 
 const { test, expect, describe } = require('@jest/globals');
@@ -26,17 +27,19 @@ const dummy1 = {
     token : "test-token",
     identifier : "dummy",
     password : "dummy",
+    user_id : "2"
 }
 
 const dummy2 = {
     identifier : "dummy1",
     password : "dummy1",
     token : "test-token-2",
-    session_id : 2,
+    session_id : "2",
     user_origin : "NASS",
     ip : "1.1.1.3",
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
     device_fingerprint: "fingerprint-2",
+    user_id : "3"
 }
 
 let validUCR: UCRType = {
@@ -46,7 +49,8 @@ let validUCR: UCRType = {
     session_id: "session123",
     token: "token",
     device_fingerprint: "fingerprint",
-    user_origin: "/test/"
+    user_origin: "/test/",
+    user_id : "1"
   },
   client: {
     ip: "127.0.0.1",
@@ -67,138 +71,139 @@ let validUCR: UCRType = {
   }
 };
 
+
+async function post(ucr: any) {
+  const response = await fetch(app, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(ucr)
+  });
+  const data = await response.text();
+  return { status: response.status, data };
+}
+
 describe("User session is valid", () => {
   test("password + identifier", async () => {
-      const ucr = JSON.parse(JSON.stringify(validUCR));
-      ucr.user = { ...dummy1 };
-      delete ucr.user.token;
-      const response = await axios.post(`${app}`, ucr);
-      expect(response.status).toBe(200);
-      expect(response.data).toBe("Successful connection");
-  })
+    const ucr = { ...validUCR, user: { ...dummy1 } };
+    delete ucr.user.token;
+    ucr.request.url = "/test-ssv/user-session-valid/password-identifier";
+    const res = await post(ucr);
+    expect(res.status).toBe(200);
+    expect(res.data).toBe("Successful connection");
+  });
 
   test("token", async () => {
-    const ucr = JSON.parse(JSON.stringify(validUCR));
-    ucr.user = { ...dummy1 };
+    const ucr = { ...validUCR, user: { ...dummy1 } };
     delete ucr.user.password;
     delete ucr.user.identifier;
     ucr.user.token = dummy1.token;
-    const response = await axios.post(`${app}`, ucr);
-    expect(response.status).toBe(200);
-    expect(response.data).toBe("Successful connection");
-  })
-})
-
-describe("User data is invalid", () => {
-  test("token is invalid", async () => {
-    const ucr = JSON.parse(JSON.stringify(validUCR));
-    ucr.user = { ...dummy1 };
-    ucr.user.token = "invalid-token";
-    try {
-      await axios.post(`${app}`, ucr);
-    } catch (error) {
-      expect(error.response.status).toBe(401);
-      expect(error.response.data).toBe("Invalid user credentials.");
-    }
-  })
-
-  test("password is invalid", () => {
-    const ucr = JSON.parse(JSON.stringify(validUCR));
-    ucr.user = { ...dummy1 };
-    ucr.user.password = "invalid-password";
-    try {
-      axios.post(`${app}`, ucr);
-    } catch (error) {
-      expect(error.response.status).toBe(401);
-      expect(error.response.data).toBe("Invalid user credentials.");
-    }
-  })
-
-  test("identifier is invalid", () => {
-    const ucr = JSON.parse(JSON.stringify(validUCR));
-    ucr.user = { ...dummy1 };
-    ucr.user.identifier = "invalid-identifier";
-    try {
-      axios.post(`${app}`, ucr);
-    } catch (error) {
-      expect(error.response.status).toBe(401);
-      expect(error.response.data).toBe("Unknown user credentials.");
-    }
-  })
-
-  test("unknown session", () => {
-    const ucr = JSON.parse(JSON.stringify(validUCR));
-    ucr.user = { ...dummy1 };
-    ucr.user.session_id = "unknown-session";
-    try {
-      axios.post(`${app}`, ucr);
-    } catch (error) {
-      expect(error.response.status).toBe(401);
-      expect(error.response.data).toBe("Unknown user session.");
-    }
-  })
+    ucr.request.url = "/test-ssv/user-session-valid/token";
+    const res = await post(ucr);
+    expect(res.status).toBe(200);
+    expect(res.data).toBe("Successful connection");
+  });
 });
 
-describe("Session data is missing", () => {
+describe("User data is invalid", () => {
+  test("user id does not exist", async () => {
+    const ucr = { ...validUCR, user: { ...dummy1, user_id: "9999" } };
+    delete ucr.user.token;
+    ucr.request.url = "/test-ssv/user-data-invalid/user-id";
+    const res = await post(ucr);
+    expect(res.status).toBe(401);
+    expect(res.data).toBe("Unknown user credentials.");
+  });
+
+  test("token is invalid", async () => {
+    const ucr = { ...validUCR, user: { ...dummy1, token: "invalid-token" } };
+    ucr.request.url = "/test-ssv/user-data-invalid/token";
+    const res = await post(ucr);
+    expect(res.status).toBe(401);
+    expect(res.data).toBe("Invalid user credentials.");
+  });
+
+  test("password is invalid", async () => {
+    const ucr = { ...validUCR, user: { ...dummy1, password: "invalid-password" } };
+    delete ucr.user.token;
+    ucr.request.url = "/test-ssv/user-data-invalid/password";
+    const res = await post(ucr);
+    expect(res.status).toBe(401);
+    expect(res.data).toBe("Invalid user credentials.");
+  });
+
+  test("identifier is invalid", async () => {
+    const ucr = { ...validUCR, user: { ...dummy1, identifier: "invalid-identifier" } };
+    delete ucr.user.token;
+    ucr.request.url = "/test-ssv/user-data-invalid/identifier";
+    const res = await post(ucr);
+    expect(res.status).toBe(401);
+    expect(res.data).toBe("Invalid user credentials.");
+  });
+
+  test("unknown session", async () => {
+    const ucr = { ...validUCR, user: { ...dummy1, session_id: "unknown-session" } };
+    delete ucr.user.token;
+    ucr.request.url = "/test-ssv/user-data-invalid/unknown-session";
+    const res = await post(ucr);
+    expect(res.status).toBe(401);
+    expect(res.data).toBe("Session not found.");
+  });
+});
+
+describe("Session data is missing or wrong", () => {
   test("missing / invalid device fingerprint", async () => {
-    const ucr = JSON.parse(JSON.stringify(validUCR));
-    ucr.user = { ...dummy1 };
-    ucr.user.device_fingerprint = undefined; // Missing device fingerprint
-    try {
-      await axios.post(`${app}`, ucr);
-    } catch (error) {
-      expect(error.response.status).toBe(400);
-      expect(error.response.data).toBe("Invalid request format.");
-    }
+    const ucr = { ...validUCR, user: { ...dummy1, device_fingerprint: "wrong-device-fingerprint" } };
+    delete ucr.user.token;
+    ucr.request.url = "/test-ssv/session-data-invalid/device-fingerprint";
+    const res = await post(ucr);
+    expect(res.status).toBe(401);
+    expect(res.data).toBe("Invalid session informations.");
   });
 
   test("missing / invalid user origin", async () => {
-    const ucr = JSON.parse(JSON.stringify(validUCR));
-    ucr.user = { ...dummy1 };
-    ucr.user.user_origin = "wrong-user-origin"; // Missing user origin
-    try {
-      await axios.post(`${app}`, ucr);
-    } catch (error) {
-      expect(error.response.status).toBe(400);
-      expect(error.response.data).toBe("Invalid request format.");
-    }
+    const ucr = { ...validUCR, user: { ...dummy1, user_origin: "wrong-user-origin" } };
+    delete ucr.user.token;
+    ucr.request.url = "/test-ssv/session-data-invalid/user-origin";
+    const res = await post(ucr);
+    expect(res.status).toBe(401);
+    expect(res.data).toBe("Invalid session informations.");
   });
 
   test("missing / invalid user agent", async () => {
-    const ucr = JSON.parse(JSON.stringify(validUCR));
-    ucr.user = { ...dummy1 };
-    ucr.user.agent = "wrong-user-agent"; // Missing user agent
-    try {
-      await axios.post(`${app}`, ucr);
-    } catch (error) {
-      expect(error.response.status).toBe(400);
-      expect(error.response.data).toBe("Invalid request format.");
-    }
+    const ucr = { ...validUCR, user: { ...dummy1, agent: "wrong-user-agent" } };
+    delete ucr.user.token;
+    ucr.request.url = "/test-ssv/session-data-invalid/user-agent";
+    const res = await post(ucr);
+    expect(res.status).toBe(401);
+    expect(res.data).toBe("Invalid session informations.");
   });
 
   test("missing / invalid user IP", async () => {
-    const ucr = JSON.parse(JSON.stringify(validUCR));
-    ucr.user = { ...dummy1 };
-    ucr.user.ip = "195.135.264.123"; // Missing user IP
-    try {
-      await axios.post(`${app}`, ucr);
-    } catch (error) {
-      expect(error.response.status).toBe(400);
-      expect(error.response.data).toBe("Invalid request format.");
-    }
+    const ucr = { ...validUCR, user: { ...dummy1, ip: "195.135.264.123" } };
+    delete ucr.user.token;
+    ucr.request.url = "/test-ssv/session-data-invalid/user-ip";
+    const res = await post(ucr);
+    expect(res.status).toBe(401);
+    expect(res.data).toBe("Invalid session informations.");
   });
-})
 
+  test("pointing to a wrong session id", async () => {
+    const ucr = { ...validUCR, user: { ...dummy1, session_id: "2" } };
+    delete ucr.user.token;
+    ucr.request.url = "/test-ssv/session-data-invalid/session-id";
+    const res = await post(ucr);
+    expect(res.status).toBe(401);
+    expect(res.data).toBe("Invalid session informations.");
+  });
+});
 
 describe("Session is outdated", () => {
   test("session is outdated", async () => {
-    const ucr = JSON.parse(JSON.stringify(validUCR));
-    ucr.user = { ...dummy2 };
-    try {
-      await axios.post(`${app}`, ucr);
-    } catch (error) {
-      expect(error.response.status).toBe(401);
-      expect(error.response.data).toBe("Session is outdated.");
-    }
+    const ucr = { ...validUCR, user: { ...dummy2 } };
+    delete ucr.user.token;
+    ucr.request.url = "/test-ssv/session-outdated";
+    const res = await post(ucr);
+    expect(res.status).toBe(401);
+    expect(res.data).toBe("Session is outdated.");
   });
-})
+});
