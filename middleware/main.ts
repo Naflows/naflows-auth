@@ -16,7 +16,7 @@ export async function NASS_Verification_Process(req, res, next) {
         return next();
       } else {
         // Executing the Secure Connection Verification Process
-        const scv : ReplyType = await middleware.process.scv(req,res);
+        const scv: ReplyType = await middleware.process.scv(req, res);
 
         if (!scv.success) {
           console.error(
@@ -28,7 +28,7 @@ export async function NASS_Verification_Process(req, res, next) {
         }
 
         // Executing the Secure Session Verification Process
-        const ssv : ReplyType = await middleware.process.ssv(req,res);
+        const ssv: ReplyType = await middleware.process.ssv(req, res);
         if (!ssv.success) {
           console.error(
             "\x1b[31m%s\x1b[0m",
@@ -44,7 +44,23 @@ export async function NASS_Verification_Process(req, res, next) {
           "\x1b[32m%s\x1b[0m",
           "NASS Verification Process completed successfully."
         );
-        return next();
+        if (ssv.data) {
+          // Type guard to check if ssv.data has a token property
+          if ((ssv.data as { token?: string }).token) {
+            (req as any).ssvData = ssv.data;
+          } 
+          if ((ssv.data as { session?: any }).session) {
+            (req as any).ucrData = (ssv.data as { session?: any }).session;
+          }
+
+          console.log(
+            "\x1b[34m%s\x1b[0m",
+            "SSV Data:",
+            (req as any).ssvData
+          );
+        }
+
+        return next(); 
       }
     } catch (error) {
       console.error(

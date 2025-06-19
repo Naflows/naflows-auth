@@ -98,7 +98,7 @@ db.sessions.insertOne({
     device_fingerprint: "fingerprint-1",
     expires_at: new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours
     created_at: new Date().getTime(),
-    token_id: "1",
+    token_id: 1,
     last_activity: new Date().getTime(),
     user_origin: "NASS",
 })
@@ -111,7 +111,7 @@ db.sessions.insertOne({
     device_fingerprint: "fingerprint-2",
     expires_at: new Date().getTime() - 1000 * 60 * 60 * 24, // Expired session
     created_at: new Date().getTime() - 1000 * 60 * 60 * 24, // Created 24 hours ago
-    token_id: "2",
+    token_id: 2,
     last_activity: new Date().getTime() - 1000 * 60 * 60 * 24, // Last activity 24 hours ago
     user_origin: "NASS",
 });
@@ -217,3 +217,4 @@ db.service_tokens.insertOne({
     lifespan: 1000 * 60 * 60 * 24 * 100, // 24 hours
     uses : 0  
 })
+

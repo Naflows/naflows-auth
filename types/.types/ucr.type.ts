@@ -4,8 +4,8 @@ interface UCRType {
         ip : string; // PRE-HASHED
         agent: string; 
 
-        session_id : string;
-        user_id : string;
+        session_id : number;
+        user_id : number;
         token? : string;
 
         identifier? : string; // PRE-HASHED
@@ -23,6 +23,8 @@ interface UCRType {
         service_token_birth: number; // UNIX TIMESTAMP
         service_status?: string; // Idk what to use it for rn 
     };
+
+    data? : any;
 
     request : {
         method: string; // GET, POST, PUT, DELETE, etc.

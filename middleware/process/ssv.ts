@@ -1,8 +1,9 @@
 import { db } from "../..";
 import { ReplyType } from "../../types/.types/reply.type";
-import { User } from "../../types/.types/collections.type";
+import { Tokens, User, UserSession } from "../../types/.types/collections.type";
 import UCRType from "../../types/.types/ucr.type";
 import secure from "../../secure/dir";
+import middleware from "../dir";
 
 // For evident reasons, there are no environment variables to enable / disable the SSV process.
 
@@ -24,76 +25,119 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
   const usersCollection = db.collection("users");
 
   if (sessionsCollection && tokensCollection && usersCollection) {
-    const user = await usersCollection.findOne({
-      id: parseInt(ucr.user.user_id),
-    }) as unknown as User;
-
-
+    const user = (await usersCollection.findOne({
+      id: ucr.user.user_id,
+    })) as unknown as User;
 
     if (user != undefined) {
-        const session = await sessionsCollection.findOne({
-            id : parseInt(ucr.user.session_id)
-        });
-        if (session) {
-            const allInformationsCorrect = session.ip === ucr.user.ip && session.device_fingerprint === ucr.user.device_fingerprint && session.user_origin == ucr.user.user_origin && session.agent === ucr.user.agent && session.user_id == parseInt(ucr.user.user_id);
-            if (allInformationsCorrect) {
-                const isOutdated = session.expires_at < Date.now();
-                if (!isOutdated) {
-                    if (ucr.user.password != undefined && ucr.user.identifier != undefined && ucr.user.token == undefined) {
-                        const isPasswordCorrect = secure.verify(ucr.user.password, user.password);
-                        const isIdentifierCorrect = secure.verify(ucr.user.identifier, user.identifier);
+      const session = await sessionsCollection.findOne({
+        id: ucr.user.session_id,
+      }) as unknown as UserSession;
+      if (session) {
+        const allInformationsCorrect =
+          session.ip === ucr.user.ip &&
+          session.device_fingerprint === ucr.user.device_fingerprint &&
+          session.user_origin == ucr.user.user_origin &&
+          session.agent === ucr.user.agent &&
+          session.user_id == ucr.user.user_id;
+        if (allInformationsCorrect) {
+          const isOutdated = session.expires_at < Date.now();
+          if (!isOutdated) {
+            if (
+              ucr.user.password != undefined &&
+              ucr.user.identifier != undefined &&
+              ucr.user.token == undefined
+            ) {
+              const isPasswordCorrect = secure.verify(
+                ucr.user.password,
+                user.password
+              );
 
-                        if (!isPasswordCorrect || !isIdentifierCorrect) {
-                            return {
-                                status: 401,
-                                message: "Invalid user credentials.",
-                                success: false,
-                            };
-                        } 
-                    } else if (ucr.user.token != undefined && ucr.user.token != null) {
-                      console.log(`Found token in UCR : ${ucr.user.token} <-> ${session.token_id !== undefined && session.token_id !== null ? session.token_id : "no token id"}`);
-                      const token = await tokensCollection.findOne({
-                            id : parseInt(session.token_id)
-                        });
+              const isIdentifierCorrect = secure.verify(
+                ucr.user.identifier,
+                user.identifier
+              );
 
-                        if (!token || token && token.token != ucr.user.token) {
-                            return {
-                                status: 401,
-                                message: "Invalid user credentials.",
-                                success: false,
-                            };
-                        } 
-                    } else {
-                        console.error("\x1b[31m%s\x1b[0m", "CRITICAL NASS ISSUE: UCR validation may be disabled, which is leading to a security risk. Please check your configuration.");
-                        return {
-                            status : 500,
-                            message: "Internal server error. UCR should be valid but no credentials found.",
-                            success : false
-                        }
-                    }
-                } else {
-                    return {
-                        status : 401,
-                        message : "Session is outdated.",
-                        success : false
-                    }
-                }
-
-            } else {
+              if (!isPasswordCorrect || !isIdentifierCorrect) {
                 return {
-                    status : 401,
-                    message : "Invalid session informations.",
-                    success : false
-                }
+                  status: 401,
+                  message: "Invalid user credentials.",
+                  success: false,
+                };
+              }
+            } else if (ucr.user.token != undefined && ucr.user.token != null) {
+              const token = await tokensCollection.findOne({
+                id: session.token_id,
+                token: ucr.user.token,
+              });
+
+
+
+              if (!token || (token && token.token != ucr.user.token)) {
+                return {
+                  status: 401,
+                  message: "Invalid user credentials.",
+                  success: false,
+                };
+              }
+            } else {
+              console.error(
+                "\x1b[31m%s\x1b[0m",
+                "CRITICAL NASS ISSUE: UCR validation may be disabled, which is leading to a security risk. Please check your configuration."
+              );
+              return {
+                status: 500,
+                message:
+                  "Internal server error. UCR should be valid but no credentials found.",
+                success: false,
+              };
+            }
+          } else {
+            const sessionRenewal: ReplyType = await middleware.session.renewal(ucr, { sessionsCollection: sessionsCollection, tokensCollection: tokensCollection }, user, session);
+
+            if (!sessionRenewal.success) {
+              if (sessionRenewal.status === 500) {
+                return {
+                  status: 500,
+                  message: sessionRenewal.message || "Internal server error during session renewal.",
+                  success: false,
+                };
+              } else if (sessionRenewal.status === 401) {
+                return {
+                  status: 401,
+                  message: "Session is outdated.",
+                  success: false,
+                  data: {
+                    token: (sessionRenewal.data as { token?: string }).token
+                  }
+                };
+              }
             }
 
-        } else {
             return {
-                status: 401,
-                message: "Session not found.",
-                success: false,
+              status: 200,
+              message: "Session is renewed.",
+              success: true,
+              data: {
+                token: (sessionRenewal.data as { token?: string }).token,
+                session: (sessionRenewal.data as { session?: string }).session || session.id
+              }
             };
+          }
+        } else {
+          return {
+            status: 401,
+            message: "Invalid session informations.",
+            success: false,
+          };
         }
+      } else {
+        return {
+          status: 401,
+          message: "Session not found.",
+          success: false,
+        };
+      }
     } else {
       return {
         status: 401,
@@ -104,11 +148,9 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
   } else {
     return {
       status: 500,
-      message: `Internal server error. Could not access the database collections (${
-        sessionsCollection ? "" : "sessions"
-      } ${tokensCollection ? "" : "tokens"} ${
-        usersCollection ? "" : "users"
-      }).`,
+      message: `Internal server error. Could not access the database collections (${sessionsCollection ? "" : "sessions"
+        } ${tokensCollection ? "" : "tokens"} ${usersCollection ? "" : "users"
+        }).`,
       success: false,
     };
   }
