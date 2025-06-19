@@ -1,6 +1,6 @@
-import { serve } from "../../public/method/serve";
-import { ReplyType } from "../../types/.types/reply.type";
-import { db } from "../../";
+import { serve } from "../../../public/method/serve";
+import { ReplyType } from "../../../types/.types/reply.type";
+import { db } from "../../..";
 
 export async function checkBlacklist(
     res, ip

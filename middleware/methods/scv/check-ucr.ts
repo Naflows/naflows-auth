@@ -1,4 +1,4 @@
-import UCRType from "../../types/.types/ucr.type";
+import UCRType from "../../../types/.types/ucr.type";
 
 export function isUCRType(obj: any): obj is UCRType {
     function isValidUser(user : any) {

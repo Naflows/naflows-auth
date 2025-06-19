@@ -1,7 +1,7 @@
 import { v4 } from "uuid";
-import { db } from "../..";
-import { ReplyType } from "../../types/.types/reply.type";
-import UCRType from "../../types/.types/ucr.type";
+import { db } from "../../..";
+import { ReplyType } from "../../../types/.types/reply.type";
+import UCRType from "../../../types/.types/ucr.type";
 
 export async function checkRates(UCR: UCRType): Promise<ReplyType> {
   const ratesCollection = db.collection("requests");

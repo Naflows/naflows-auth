@@ -1,9 +1,10 @@
-import { isUCRType } from "./methods/check-ucr";
+import { isUCRType } from "./methods/scv/check-ucr";
 import { NASS_Verification_Process } from "./main";
-import { checkBlacklist } from "./methods/check-blacklist";
-import { checkRequestOrigin } from "./methods/check-request-origin";
-import { checkRates } from "./methods/check-rates";
+import { checkBlacklist } from "./methods/scv/check-blacklist";
+import { checkRequestOrigin } from "./methods/scv/check-request-origin";
+import { checkRates } from "./methods/scv/check-rates";
 import { scv } from "./process/scv";
+import { ssv } from "./process/ssv";
 
 const middleware = {
     main : NASS_Verification_Process,
@@ -14,7 +15,8 @@ const middleware = {
         rates : checkRates
     },
     process : {
-        scv : scv
+        scv : scv,
+        ssv : ssv
     }
 }
 

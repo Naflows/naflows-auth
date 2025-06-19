@@ -1,7 +1,7 @@
-import { db } from "../..";
-import { Service, NassServiceToken } from "../../types/.types/collections.type";
-import { ReplyType } from "../../types/.types/reply.type";
-import UCRType from "../../types/.types/ucr.type";
+import { db } from "../../..";
+import { Service, NassServiceToken } from "../../../types/.types/collections.type";
+import { ReplyType } from "../../../types/.types/reply.type";
+import UCRType from "../../../types/.types/ucr.type";
 
 export async function checkRequestOrigin(UCR: UCRType): Promise<ReplyType> {
   /*
