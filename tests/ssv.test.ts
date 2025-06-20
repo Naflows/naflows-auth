@@ -267,6 +267,59 @@ describe("Session is outdated", () => {
     renewalTokenId = res.data.data.token; // Store the token ID for further tests
   });
 
+  
+
+  test("renew session with invalid token", async () => {
+    const ucr = { ...validUCR, user: { ...dummy2 }, data: {
+      "session-renewal-token": "wrong-renewal-token"
+    } };
+    delete ucr.user.token;
+    ucr.request.url = "/test-ssv/session-renewal/invalid-token";
+    const res = await post(ucr);
+    expect(res.status).toBe(401);
+    expect(res.data).toEqual({
+      success: false,
+      status: 401,
+      message: "Session is outdated.",
+      data: {
+        token: expect.any(String)
+      }
+    });
+    renewalTokenId = res.data.data.token; // Update the token ID for further tests
+  });
+
+
+  test("renew session with valid token but invalid identifier", async () => {
+    const ucr = { ...validUCR, user: { ...dummy2, identifier : "wrong-identifier" }, data: {
+      "session-renewal-token": renewalTokenId
+    } };
+    delete ucr.user.token;
+    ucr.request.url = "/test-ssv/session-renewal";
+    const res = await post(ucr);
+    expect(res.status).toBe(500);
+    expect(res.data).toEqual({
+      success: false,
+      status: 500,
+      message: "Invalid credentials provided."
+    });
+  });
+
+  test("renew session with valid token but invalid password", async () => {
+    const ucr = { ...validUCR, user: { ...dummy2, password : "wrong-password" }, data: {
+      "session-renewal-token": renewalTokenId
+    } };
+    delete ucr.user.token;
+    ucr.request.url = "/test-ssv/session-renewal";
+    const res = await post(ucr);
+    expect(res.status).toBe(500);
+    expect(res.data).toEqual({
+      success: false,
+      status: 500,
+      message: "Invalid credentials provided."
+    });
+  });
+
+
   test("renew session with valid token", async () => {
     const ucr = { ...validUCR, user: { ...dummy2 }, data: {
       "session-renewal-token": renewalTokenId
@@ -305,7 +358,19 @@ describe("Session is outdated", () => {
   });
 
 
-
+  test("session is not outdated anymore", async () => {
+    const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId, token: renewalTokenId } };
+    delete ucr.user.password;
+    delete ucr.user.identifier;
+    ucr.request.url = "/test-ssv/session-not-outdated";
+    const res = await post(ucr);
+    expect(res.status).toBe(200);
+    expect(res.data).toEqual({
+      success: true,
+      status: 200,
+      message: "Successful connection"
+    });
+  });
 });
 
 
