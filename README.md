@@ -9,8 +9,13 @@ The `.env` file contains sensitive parameters that are not to be modified withou
 
 Disabling security tunnels puts the whole system at risk, as it allows unauthenticated access to the service. This should only be done in a controlled environment for testing purposes. Only administrators should have access to the `.env` file, and it should be protected with appropriate permissions.
 
+
+## Project Assets
+The global project assets (schemas, notes, todos, etc) are currently not available, but will be scanned and hosted in the future. For now, you can ask for project management details from the NAFLOWS team.
+
+
 ## Production Notice
 See the following file before production deployment:
 * [`./mongo-init/init.js`](./mongo-init/init.js) - Contains dummy data that can cause security issues if not removed or modified before going live.
 * [`./.env`](./.env) - Contains sensitive environment variables that should be configured correctly for production use.
-* [`./TODO.TODO](./TODO.TODO) - Contains a list of tasks that need to be completed before production deployment.
+* [`./TODO.TODO`](./TODO.TODO) - Contains a list of tasks that need to be completed before production deployment.
