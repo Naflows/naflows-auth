@@ -299,7 +299,7 @@ describe("Session is outdated", () => {
     expect(res.status).toBe(401);
     expect(res.data).toEqual({
       success: false,
-      status: 500,
+      status: 401,
       message: "Invalid credentials provided."
     });
   });
@@ -314,7 +314,7 @@ describe("Session is outdated", () => {
     expect(res.status).toBe(401);
     expect(res.data).toEqual({
       success: false,
-      status: 500,
+      status: 401,
       message: "Invalid credentials provided."
     });
   });
