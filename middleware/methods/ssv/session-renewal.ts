@@ -14,14 +14,15 @@ export async function sessionRenewal(ucr: UCRType, collections: {
   const token = renewalToken
     ? ((await collections.tokensCollection.findOne({
       token: renewalToken,
-      rights : "SESSION_RENEWAL",
+      rights: "SESSION_RENEWAL",
     })) as unknown as Tokens)
     : undefined;
+  const credentialsValidity = secure.verify(ucr.user.password, user.password) &&
+    secure.verify(ucr.user.identifier, user.identifier)
   if (
     token &&
     isTokenValid(token, ucr, session).success &&
-    secure.verify(ucr.user.password, user.password) &&
-    secure.verify(ucr.user.identifier, user.identifier)
+    credentialsValidity
   ) {
     // If there is a renewal token and it is valid, renew the session and the attached token with a new value
     const newSession: UserSession = {
@@ -34,7 +35,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
       ...token,
       expires_at: newSession.expires_at,
       token: crypto.randomBytes(32).toString("hex"), // Generate a new token
-      id : token.renewable ? token.id : crypto.randomBytes(16).toString("hex"),
+      id: token.renewable ? token.id : crypto.randomBytes(16).toString("hex"),
     }
 
     if (token.renewable) {
@@ -76,36 +77,44 @@ export async function sessionRenewal(ucr: UCRType, collections: {
 
 
   } else {
-    // If the session is outdated, delete it and send a new token for renewal (if a token already exists, delete it)
-    await collections.tokensCollection.deleteMany({
-      user_id: ucr.user.user_id,
-      rights: "SESSION_RENEWAL",
-    });
-
-    const newToken: ReplyType = await secure.token.create(user, session, "SESSION_RENEWAL", false, process.env.SESSION_RENEWAL_TOKEN_DEFAULT_USES ? parseInt(process.env.SESSION_RENEWAL_LIFESPAN) : 1);
-
-    if (
-      !newToken.success ||
-      !newToken.data ||
-      (newToken.data && !(newToken.data as { token?: string }).token)
-    ) {
+    if (!credentialsValidity) {
       return {
         status: 500,
-        message: newToken.message,
+        message: "Invalid credentials provided.",
         success: false,
       };
-    }
+    } else {
+      // If the session is outdated, delete it and send a new token for renewal (if a token already exists, delete it)
+      await collections.tokensCollection.deleteMany({
+        user_id: ucr.user.user_id,
+        rights: "SESSION_RENEWAL",
+      });
 
+      const newToken: ReplyType = await secure.token.create(user, session, "SESSION_RENEWAL", false, process.env.SESSION_RENEWAL_TOKEN_DEFAULT_USES ? parseInt(process.env.SESSION_RENEWAL_LIFESPAN) : 1);
 
-
-    return {
-      status: 401,
-      message: "Session is outdated. Please renew your session with the attached token and proper credits.",
-      success: false,
-      data: {
-        token: (newToken.data as { token?: string }).token,
+      if (
+        !newToken.success ||
+        !newToken.data ||
+        (newToken.data && !(newToken.data as { token?: string }).token)
+      ) {
+        return {
+          status: 500,
+          message: newToken.message,
+          success: false,
+        };
       }
-    };
+
+
+
+      return {
+        status: 401,
+        message: "Session is outdated. Please renew your session with the attached token and proper credits.",
+        success: false,
+        data: {
+          token: (newToken.data as { token?: string }).token,
+        }
+      };
+    }
   }
 
 }
