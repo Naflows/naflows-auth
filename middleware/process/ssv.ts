@@ -96,22 +96,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
             const sessionRenewal: ReplyType = await middleware.session.renewal(ucr, { sessionsCollection: sessionsCollection, tokensCollection: tokensCollection }, user, session);
 
             if (!sessionRenewal.success) {
-              if (sessionRenewal.status === 500) {
-                return {
-                  status: 500,
-                  message: sessionRenewal.message || "Internal server error during session renewal.",
-                  success: false,
-                };
-              } else if (sessionRenewal.status === 401) {
-                return {
-                  status: 401,
-                  message: "Session is outdated.",
-                  success: false,
-                  data: {
-                    token: (sessionRenewal.data as { token?: string }).token
-                  }
-                };
-              }
+              return sessionRenewal;
             }
 
             return {

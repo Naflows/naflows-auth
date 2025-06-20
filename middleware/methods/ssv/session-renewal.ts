@@ -90,7 +90,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
         rights: "SESSION_RENEWAL",
       });
 
-      const newToken: ReplyType = await secure.token.create(user, session, "SESSION_RENEWAL", false, process.env.SESSION_RENEWAL_TOKEN_DEFAULT_USES ? parseInt(process.env.SESSION_RENEWAL_LIFESPAN) : 1);
+      const newToken: ReplyType = await secure.token.create(user, session, "SESSION_RENEWAL", false, process.env.SESSION_RENEWAL_TOKEN_DEFAULT_USES ? parseInt(process.env.SESSION_RENEWAL_TOKEN_DEFAULT_USES) : 1);
 
       if (
         !newToken.success ||
@@ -108,7 +108,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
 
       return {
         status: 401,
-        message: "Session is outdated. Please renew your session with the attached token and proper credits.",
+        message: "Session is outdated.",
         success: false,
         data: {
           token: (newToken.data as { token?: string }).token,
