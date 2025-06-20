@@ -337,14 +337,13 @@ describe("Session is outdated", () => {
         session: expect.any(Number)
       }
     });
-    renewalTokenId = res.data.data.token; // Update the token ID for further tests
     sessionId = res.data.data.session; // Store the session ID for further tests
   });
 
 
 
   test("try to renew session after renewal", async () => {
-    const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId, token: renewalTokenId } };
+    const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId} };
     delete ucr.user.password;
     delete ucr.user.identifier;
     ucr.request.url = "/test-ssv/session-connection-after-renewal";
@@ -359,7 +358,7 @@ describe("Session is outdated", () => {
 
 
   test("session is not outdated anymore", async () => {
-    const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId, token: renewalTokenId } };
+    const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId } };
     delete ucr.user.password;
     delete ucr.user.identifier;
     ucr.request.url = "/test-ssv/session-not-outdated";
