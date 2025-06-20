@@ -79,7 +79,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
   } else {
     if (!credentialsValidity) {
       return {
-        status: 500,
+        status: 401,
         message: "Invalid credentials provided.",
         success: false,
       };

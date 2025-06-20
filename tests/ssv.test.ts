@@ -296,7 +296,7 @@ describe("Session is outdated", () => {
     delete ucr.user.token;
     ucr.request.url = "/test-ssv/session-renewal";
     const res = await post(ucr);
-    expect(res.status).toBe(500);
+    expect(res.status).toBe(401);
     expect(res.data).toEqual({
       success: false,
       status: 500,
@@ -311,7 +311,7 @@ describe("Session is outdated", () => {
     delete ucr.user.token;
     ucr.request.url = "/test-ssv/session-renewal";
     const res = await post(ucr);
-    expect(res.status).toBe(500);
+    expect(res.status).toBe(401);
     expect(res.data).toEqual({
       success: false,
       status: 500,
