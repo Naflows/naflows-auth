@@ -12,3 +12,5 @@ Disabling security tunnels puts the whole system at risk, as it allows unauthent
 ## Production Notice
 See the following file before production deployment:
 * [`./mongo-init/init.js`](./mongo-init/init.js) - Contains dummy data that can cause security issues if not removed or modified before going live.
+* [`./.env`](./.env) - Contains sensitive environment variables that should be configured correctly for production use.
+* [`./TODO.TODO](./TODO.TODO) - Contains a list of tasks that need to be completed before production deployment.

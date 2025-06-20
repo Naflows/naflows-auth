@@ -31,25 +31,9 @@ export async function sessionRenewal(ucr: UCRType, collections: {
         process.env.SESSION_RENEWAL_LIFESPAN ? parseInt(process.env.SESSION_RENEWAL_LIFESPAN) : 3600000 // Default to 1 hour
       ),
     };
-    const newToken: Tokens = {
-      ...token,
-      expires_at: newSession.expires_at,
-      token: crypto.randomBytes(32).toString("hex"), // Generate a new token
-      id: token.renewable ? token.id : crypto.randomBytes(16).toString("hex"),
-    }
 
-    if (token.renewable) {
-      await collections.tokensCollection.updateOne(
-        { id: token.id },
-        { $set: newToken }
-      );
-    } else {
-      // If the token is not renewable, delete it
-      await collections.tokensCollection.deleteOne({ id: token.id });
-      // And then, create a new one
-      newSession.token_id = newToken.id;
-      await collections.tokensCollection.insertOne(newToken);
-    }
+
+
 
     const updateResult = await collections.sessionsCollection.updateOne(
       { id: session.id },
@@ -70,7 +54,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
       success: true,
       data: {
         session: newSession.id,
-        token: newToken.token, // Return the same token for further renewals
+        token: token.token, // Return the same token for further renewals
       },
     }
 
