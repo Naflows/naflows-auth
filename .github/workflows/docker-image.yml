@@ -1,0 +1,38 @@
+name: Docker Compose CI
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
+      MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
+      MONGO_URL: ${{ secrets.MONGO_URL }}
+
+    services:
+      docker:
+        image: docker:20.10.16
+        options: --privileged
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Compose
+        run: |
+          docker-compose -f docker-compose.yml up -d --build
+
+      - name: Wait for services to be ready
+        run: sleep 15  # Better to replace with a proper healthcheck or ping
+
+      - name: Check running containers
+        run: docker ps
+
+      - name: Test auth-api endpoint
+        run: |
+          curl --fail http://localhost:3000/health || exit 1
