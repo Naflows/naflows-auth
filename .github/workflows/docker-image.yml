@@ -30,7 +30,7 @@ jobs:
           echo "MONGO_URL=${MONGO_URL}" >> .env
 
       - name: Build and Start containers
-        run: docker compose -f ./.github/workflows/docker-compose.yml up -d --build
+        run: docker compose -f docker-compose.yml up -d --build
 
       - name: Wait for containers to be ready
         run: sleep 20  # Adjust if needed
