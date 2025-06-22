@@ -1,0 +1,50 @@
+name: Docker Compose CI
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    env:
+      MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
+      MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
+      MONGO_URL: ${{ secrets.MONGO_URL }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set up Docker Compose
+        uses: docker/setup-docker-compose@v2
+
+      - name: Create .env file
+        run: |
+          echo "MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}" >> .env
+          echo "MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}" >> .env
+          echo "MONGO_URL=${MONGO_URL}" >> .env
+
+      - name: Build and Start containers
+        run: docker-compose -f docker-compose.yml up -d --build
+
+      - name: Wait for containers to be ready
+        run: sleep 20  # Adjust if needed
+
+      - name: Run Jest tests inside auth-api
+        run: docker exec auth-api npm run test-ssv
+
+      - name: Run basic health check
+        run: |
+          curl -f http://localhost:3000 || exit 1
+          curl -f http://localhost:8081 || exit 1
+
+      - name: Stop containers
+        run: docker-compose -f docker-compose.yml down
