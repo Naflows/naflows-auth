@@ -10,6 +10,7 @@ on:
 
 jobs:
   docker:
+    environment: NASS
     runs-on: ubuntu-latest
     env:
       MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
