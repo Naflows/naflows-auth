@@ -32,8 +32,22 @@ jobs:
       - name: Build and Start containers
         run: docker compose -f docker-compose.yml up -d --build
 
-      - name: Wait for containers to be ready
-        run: sleep 10  # Adjust if needed
+      - name: Wait for API to be ready
+        run: |
+          for i in {1..30}; do
+            if curl -s http://localhost:3000 > /dev/null; then
+              echo "API is up!"
+              break
+            fi
+            echo "Waiting for API..."
+            sleep 1
+          done
+
+      - name: Show running containers
+        run: docker ps -a
+      
+      - name: Show logs of auth-api
+        run: docker logs auth-api
 
       - name: Run basic health check
         run: |
