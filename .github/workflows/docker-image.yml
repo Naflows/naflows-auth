@@ -46,8 +46,8 @@ jobs:
       - name: Show running containers
         run: docker ps -a
       
-      - name: Show logs of auth-api
-        run: docker logs auth-api
+      - name: Show logs of auth-api-1
+        run: docker logs auth-api-1
 
       - name: Run basic health check
         run: |
