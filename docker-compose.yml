@@ -11,7 +11,7 @@ services:
       - "27017"
     volumes:
       - auth-data:/data/db
-      - ./auth.naflows.com/mongo-init:/docker-entrypoint-initdb.d
+      - ./mongo-init:/docker-entrypoint-initdb.d
 
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
