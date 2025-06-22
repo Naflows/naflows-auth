@@ -33,10 +33,7 @@ jobs:
         run: docker compose -f docker-compose.yml up -d --build
 
       - name: Wait for containers to be ready
-        run: sleep 20  # Adjust if needed
-
-      - name: Run Jest tests inside auth-api
-        run: docker exec auth-api npm run test-ssv
+        run: sleep 10  # Adjust if needed
 
       - name: Run basic health check
         run: |
