@@ -30,7 +30,7 @@ services:
           memory: 256M
 
   auth-api:
-    build: ./auth.naflows.com
+    build: ./
     restart: always
     environment:
       - AUTH_API_PORT=3000
@@ -44,7 +44,7 @@ services:
     depends_on:
       - mongo-nass
     volumes:
-      - ./auth.naflows.com:/app
+      - ./:/app
     
     # DEVELOPMENT ONLY
     # REMOVE IN PRODUCTION
