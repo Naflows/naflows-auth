@@ -37,8 +37,8 @@ jobs:
 
       - name: Run basic health check
         run: |
-          curl -f http://localhost:3000 || exit 1
-          curl -f http://localhost:8081 || exit 1
+          curl -f http://0.0.0.0:3000 || exit 1
+          curl -f http://0.0.0.0:8081 || exit 1
 
       - name: Stop containers
         run: docker compose -f docker-compose.yml down
