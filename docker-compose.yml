@@ -1,0 +1,81 @@
+services:
+
+  mongo-nass:
+    image: mongo:latest
+    restart: always
+    container_name: mongo-nass
+    hostname: mongo-nass
+    ports:
+      - "27017:27017"
+    expose:
+      - "27017"
+    volumes:
+      - auth-data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: NASS
+    
+    # DEVELOPMENT ONLY
+    # REMOVE IN PRODUCTION
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 256M
+
+  auth-api:
+    build: ./
+    restart: always
+    environment:
+      - AUTH_API_PORT=3000
+      - MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD
+      - MONGO_URL
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    depends_on:
+      - mongo-nass
+    volumes:
+      - ./:/app
+    
+    # DEVELOPMENT ONLY
+    # REMOVE IN PRODUCTION
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 512M
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    ports:
+      - "8081:8081"
+    expose:
+      - "8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo-nass
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo-nass:27017/
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      #Set password for admin user
+      ME_CONFIG_SITE_ADMIN_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_SITE_ADMIN_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    depends_on:
+      - mongo-nass
+
+volumes:
+  auth-data:
+    driver: local
+  mongo-data:
+    driver: local
+  mongo-express-data:
+    driver: local
