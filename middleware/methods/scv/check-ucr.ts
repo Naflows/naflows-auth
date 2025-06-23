@@ -11,6 +11,7 @@ export function isUCRType(obj: any): obj is UCRType {
             user.user_origin != undefined && 
             user.user_id != undefined &&
             (user.token != undefined || (user.identifier != undefined && user.password != undefined)) &&
+            !(user.token != undefined && (user.identifier != undefined || user.password != undefined)) &&
             typeof user.ip === 'string' &&
             typeof user.agent === 'string' &&
             typeof user.session_id === 'number' &&
@@ -58,11 +59,12 @@ export function isUCRType(obj: any): obj is UCRType {
     const userValid = isValidUser(obj.user);
     const clientValid = isValidClient(obj.client);
     const requestValid = isValidRequest(obj.request);
-    // console.log("UCR validation results:", {
-    //     userValid,
-    //     clientValid,
-    //     requestValid
-    // });
+    console.log("UCR validation results:", {
+        userValid,
+        clientValid,
+        requestValid
+    });
+    console.log("UCR object:", obj);
 
     return (
         userValid &&

@@ -57,7 +57,7 @@ let validUCR: UCRType = {
     dns: "local.nass.com",
     service: "Test Service : token is not expired",
     service_token: "test-service-token",
-    service_token_birth: 1750049309
+    service_token_birth: 1750658147765
   },
   request: {
     method: "POST",
@@ -129,6 +129,8 @@ describe("User data is invalid", () => {
   test("token is invalid", async () => {
     const ucr = { ...validUCR, user: { ...dummy1, token: "invalid-token" } };
     ucr.request.url = "/test-ssv/user-data-invalid/token";
+    delete ucr.user.password;
+    delete ucr.user.identifier;
     const res = await post(ucr);
     expect(res.status).toBe(401);
     expect(res.data).toEqual({
