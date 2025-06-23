@@ -34,28 +34,30 @@ export async function checkRequestOrigin(UCR: UCRType): Promise<ReplyType> {
         created_at: UCR.client.service_token_birth,
       })) as unknown as NassServiceToken | null;
       //console.log(`The following service token are related to ${queriedService.name}: `, serviceToken ? serviceToken.id : "No service token found");
-      const expiredToken = serviceToken
-        ? serviceToken.created_at + serviceToken.lifespan > Date.now() &&
-          process.env.SERVICE_TOKEN_MAXIMAL_RATES &&
-          serviceToken.uses < parseInt(process.env.SERVICE_TOKEN_MAXIMAL_RATES)
-        : false;
-      if (serviceToken && !expiredToken) {
-        return {
-          status: 200,
-          message: "Service access granted.",
-          success: true,
-        };
-      } else if (expiredToken && serviceToken) {
-        console.error(
-          "\x1b[31m%s\x1b[0m",
-          `Service token ${serviceToken.token} expired for service ${queriedService.name}. Forcing reload.`
-        );
-        return {
-          status: 409,
-          message:
-            "Conflict between service's token and NASS. Forcing reload. This might take a few seconds.",
-          success: false,
-        };
+      if (serviceToken) {
+        const expiredToken = serviceToken.created_at + serviceToken.lifespan < Date.now() ||
+          (process.env.SERVICE_TOKEN_MAXIMAL_RATES ?
+          serviceToken.uses > parseInt(process.env.SERVICE_TOKEN_MAXIMAL_RATES) : true);
+        console.log(`Service token ${serviceToken.token} for service ${queriedService.name} is ${
+          expiredToken ? "expired" : "valid"}.`);
+        if (serviceToken && !expiredToken) {
+          return {
+            status: 200,
+            message: "Service access granted.",
+            success: true,
+          };
+        } else if (expiredToken && serviceToken) {
+          console.error(
+            "\x1b[31m%s\x1b[0m",
+            `Service token ${serviceToken.token} expired for service ${queriedService.name}. Forcing reload.`
+          );
+          return {
+            status: 409,
+            message:
+              "Conflict between service's token and NASS. Forcing reload. This might take a few seconds.",
+            success: false,
+          };
+        }
       } else {
         return {
           status: 403,
