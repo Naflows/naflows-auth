@@ -1,5 +1,5 @@
-import { db } from "../..";
-import { ReplyType } from "../../types/.types/reply.type";
+import { db } from "../../..";
+import { ReplyType } from "../../../types/.types/reply.type";
 
 
 export async function updateTokenUse(tokenId: string): Promise<ReplyType> {

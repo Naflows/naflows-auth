@@ -12,6 +12,7 @@ const app = express();
 const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
+const router = express.Router();
 
 
 // Connect to the mongo database
@@ -117,9 +118,13 @@ app.get('/team/add/service', (req, res) => {
     serve("Add service", "form-style.css", "add-service.html", res);
 })
 
+
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`NASS is running on http://localhost:${PORT}`);
 });
 
 export const db = mongoose.connection;
+export const appRouter = router;
