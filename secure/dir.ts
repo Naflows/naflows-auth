@@ -1,8 +1,8 @@
 import { crypt, verifyHash } from "./hash/hash";
 import { blacklistIP } from "./ip/blacklist";
-import { createToken } from "./user-token/new-token";
-import { isTokenValid } from "./user-token/token-valid";
-import { updateTokenUse } from "./user-token/use-update";
+import { createToken } from "./user-token/methods/new-token";
+import { isTokenValid } from "./user-token/methods/token-valid";
+import { updateTokenUse } from "./user-token/methods/use-update";
 
 
 const secure = {

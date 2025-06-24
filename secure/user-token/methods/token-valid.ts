@@ -1,7 +1,7 @@
-import { db } from "../..";
-import { Tokens, UserSession } from "../../types/.types/collections.type";
-import { ReplyType } from "../../types/.types/reply.type";
-import UCRType from "../../types/.types/ucr.type";
+import { db } from "../../..";
+import { Tokens, UserSession } from "../../../types/.types/collections.type";
+import { ReplyType } from "../../../types/.types/reply.type";
+import UCRType from "../../../types/.types/ucr.type";
 
 export function isTokenValid(
   token: Tokens,

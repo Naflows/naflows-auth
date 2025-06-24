@@ -1,6 +1,6 @@
-import { db } from "../..";
-import { TokenRights, Tokens, User, UserSession } from "../../types/.types/collections.type";
-import { ReplyType } from "../../types/.types/reply.type";
+import { db } from "../../..";
+import { TokenRights, Tokens, User, UserSession } from "../../../types/.types/collections.type";
+import { ReplyType } from "../../../types/.types/reply.type";
 import * as crypto from "crypto";
 
 export async function createToken(

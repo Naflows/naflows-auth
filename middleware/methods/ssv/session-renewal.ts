@@ -1,6 +1,6 @@
 import { db } from "../../..";
 import secure from "../../../secure/dir";
-import { isTokenValid } from "../../../secure/user-token/token-valid";
+import { isTokenValid } from "../../../secure/user-token/methods/token-valid";
 import { Tokens, User, UserSession } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import UCRType from "../../../types/.types/ucr.type";
