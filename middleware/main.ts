@@ -7,10 +7,7 @@ export async function NASS_Verification_Process(req, res, next) {
   if (req.body) {
     try {
       console.log("NASS Verification Process started.");
-      console.log(
-        "\x1b[34m%s\x1b[0m",
-        `------ INCOMING REQUEST at ${req.body.request.url}  ------`
-      );
+      console.log("\x1b[34m%s\x1b[0m", `------ INCOMING REQUEST at ${req.body.request.url}  ------`);
       if (process.env.NASS_SCV_ENABLED !== "true") {
         console.log("NASS SCV is disabled, skipping verification process.");
         return next();
@@ -48,7 +45,7 @@ export async function NASS_Verification_Process(req, res, next) {
           // Type guard to check if ssv.data has a token property
           if ((ssv.data as { token?: string }).token) {
             (req as any).ssvData = ssv.data;
-          } 
+          }
           if ((ssv.data as { session?: any }).session) {
             (req as any).ucrData = (ssv.data as { session?: any }).session;
           }
@@ -60,7 +57,7 @@ export async function NASS_Verification_Process(req, res, next) {
           );
         }
 
-        return next(); 
+        return next();
       }
     } catch (error) {
       console.error(
