@@ -62,18 +62,36 @@ export type TokenRights =
   | "USER_EDIT_OWN" // Edit own user data
   | "TOKEN_RENEWAL" // Note : for token renewal, token max use is 1
   | "SESSION_RENEWAL" // Note : for session renewal, token max use is 1
+  | "SESSION_CONFIRMATION" // Confirm a session, used to check if a session is valid
+
+
+  // The following rights are for the NASS Administrative Instances
+  | "NASS_SECURE_CHECK" // Check if a connection is secure and accepted
+  | "NASS_SECURITY_ADD" // Add a new secure connection
+  | "NASS_SECURITY_DEACTIVE" // Deactivate a secure connection
+  | "NASS_VIEW_STRUCTURE" // View the NASS structure
+  | "NASS_TEAM_ADD" // Add a new user to the NASS team
+  | "NASS_TEAM_REVOKE" // Revoke a user from the NASS
+  | "NASS_TEAM_UPDATE" // Update a user in the NASS team
+
+  
   | "SERVICES_VIEW" // View the different NASS services
   | "SERVICES_EDIT" // Edit the different NASS services
   | "SERVICES_CREATE" // Create new NASS services
-  | "SERVICES_DELETE" // Delete NASS services
+  | "SERVICES_DELETE" // Delete NASS services / tokens (may trigger a new service token creation)
+
+
   | "BLACKLIST_VIEW" // View blacklisted IPs
   | "BLACKLIST_EDIT" // Edit blacklisted IPs
   | "BLACKLIST_CREATE" // Create new blacklisted IPs
+
   | "DATA_VIEW" // View database data
   | "DATA_EDIT" // Edit database data
   | "DATA_CREATE" // Create new database data
-  | "DATA_DELETE"; // Delete database data
-export interface Tokens {
+
+  | "LOGS_VIEW"; // View NASS logs
+
+  export interface Tokens {
   id: string;
   token: string;
   user_id: number;
