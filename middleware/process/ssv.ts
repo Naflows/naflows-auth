@@ -143,6 +143,6 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
   return {
     status: 200,
     message: "SSV Process completed successfully.",
-    success: true,
+    success: true
   };
 }

@@ -6,6 +6,7 @@ import { checkRates } from "./methods/scv/check-rates";
 import { scv } from "./process/scv";
 import { ssv } from "./process/ssv";
 import { sessionRenewal } from "./methods/ssv/session-renewal";
+import { stv } from "./process/stv";
 
 const middleware = {
     main : NASS_Verification_Process,
@@ -20,7 +21,8 @@ const middleware = {
     },
     process : {
         scv : scv,
-        ssv : ssv
+        ssv : ssv,
+        stv : stv
     }
 }
 
