@@ -34,7 +34,8 @@ export async function createToken(
             message: "Token created successfully.",
             success: true,
             data: {
-                token : token.token
+                token : token.token,
+                token_id : token.id,
             }
         };
     } catch (error) {
