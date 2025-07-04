@@ -1,7 +1,12 @@
 import UCRType from "../types/.types/ucr.type";
 const { test, expect, describe } = require('@jest/globals');
 
-const app = "http://localhost:3000/test";
+const app = process.env.AUTH_API_URL;
+
+if (!app) {
+    throw new Error("AUTH_API_URL is not set. Please set it in your environment variables.");
+}
+
 
 const dummy1 = {
     ip: "1.1.1.2",
@@ -376,6 +381,7 @@ describe("NASS SSV Tests", () => {
     describe("Session is outdated", () => {
         let renewalTokenId;
         let sessionId;
+        let renewTokenValue;
 
         test("session is outdated", async () => {
             const ucr = { ...validUCR, user: { ...dummy2 } };
@@ -425,7 +431,7 @@ describe("NASS SSV Tests", () => {
                 }
             };
             delete ucr.user.token;
-            ucr.request.url = "/test-ssv/session-renewal";
+            ucr.request.url = "/test-ssv/session-renewal/invalid-identifier";
             const res = await post(ucr);
             expect(res.status).toBe(401);
             expect(res.data).toEqual({
@@ -442,7 +448,7 @@ describe("NASS SSV Tests", () => {
                 }
             };
             delete ucr.user.token;
-            ucr.request.url = "/test-ssv/session-renewal";
+            ucr.request.url = "/test-ssv/session-renewal/invalid-password";
             const res = await post(ucr);
             expect(res.status).toBe(401);
             expect(res.data).toEqual({
@@ -460,7 +466,7 @@ describe("NASS SSV Tests", () => {
                 }
             };
             delete ucr.user.token;
-            ucr.request.url = "/test-ssv/session-renewal";
+            ucr.request.url = "/test-ssv/session-renewal/valid-token";
             const res = await post(ucr);
             expect(res.status).toBe(200);
             expect(res.data).toEqual({
@@ -473,15 +479,30 @@ describe("NASS SSV Tests", () => {
                 }
             });
             sessionId = res.data.data.session; // Store the session ID for further tests
+            renewTokenValue = res.data.data.token; // Store the new token value for further tests
+             
         });
 
-
-
-        test("try to renew session after renewal", async () => {
+        test('try to renew session with the old token', async () => {
             const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId } };
             delete ucr.user.password;
             delete ucr.user.identifier;
-            ucr.request.url = "/test-ssv/session-connection-after-renewal";
+            ucr.request.url = "/test-ssv/session-connection-after-renewal/old-token";
+            const res = await post(ucr);
+            expect(res.status).toBe(401);
+            expect(res.data).toEqual({
+                success: false,
+                status: 401,
+                message : "Invalid user credentials."
+            });
+        });
+
+
+        test("try to renew session after renewal", async () => {
+            const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId, token : renewTokenValue } };
+            delete ucr.user.password;
+            delete ucr.user.identifier;
+            ucr.request.url = "/test-ssv/session-connection-after-renewal/valid-token";
             const res = await post(ucr);
             expect(res.status).toBe(200);
             expect(res.data).toEqual({
@@ -493,7 +514,7 @@ describe("NASS SSV Tests", () => {
 
 
         test("session is not outdated anymore", async () => {
-            const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId } };
+            const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId, token : renewTokenValue } };
             delete ucr.user.password;
             delete ucr.user.identifier;
             ucr.request.url = "/test-ssv/session-not-outdated";

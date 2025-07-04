@@ -49,12 +49,11 @@ export async function sessionRenewal(ucr: UCRType, collections: {
     }
 
     return {
-      status: 200,
+      status: 201,
       message: "Session renewed successfully.",
       success: true,
       data: {
-        session: newSession.id,
-        token: token.token, // Return the same token for further renewals
+        session: newSession.id
       },
     }
 
