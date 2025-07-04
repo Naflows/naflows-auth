@@ -19,6 +19,8 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: NASS
+    logging:
+      driver: none
     
     # DEVELOPMENT ONLY
     # REMOVE IN PRODUCTION
@@ -75,6 +77,9 @@ services:
     depends_on:
       - mongo-nass
 
+    logging:
+      driver: none
+
 
   global-tests:
     build: ./
@@ -89,6 +94,7 @@ services:
     environment:
       - NODE_ENV=test
       - AUTH_API_URL= ${AUTH_API_URL}
+      
 
 volumes:
   auth-data:

@@ -49,6 +49,7 @@ app.use(async (req, res, next) => {
 app.post('/test', (req: Request, res: Response) => {
     const newSessionID = (req as any).newSessionID;
     const newTokenID = (req as any).newTokenID;
+    const retryAfter = (req as any).retry_after;
     const data: ReplyType = {
         status: 200,
         message: "Successful connection",
@@ -62,6 +63,10 @@ app.post('/test', (req: Request, res: Response) => {
     if (newTokenID) {
         data.data = data.data || {};
         data.data['token'] = newTokenID;
+    }
+    if (retryAfter) {
+        data.data = data.data || {};
+        data.data['retry_after'] = retryAfter;
     }
     res.status(200).json(data);
 });
