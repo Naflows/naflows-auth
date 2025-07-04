@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import { blacklistIP } from "./secure/ip/blacklist";
 import middleware from "./middleware/dir";
 import { Request, Response } from 'express';
+import { ReplyType } from "./types/.types/reply.type";
 
 const express = require('express');
 const app = express();
@@ -42,30 +43,27 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use(async (req, res, next) => {
-    middleware.main(req,res,next);
+    middleware.main(req, res, next);
 });
 
 app.post('/test', (req: Request, res: Response) => {
-  const ssvData = (req as any).ssvData;
-    if (!ssvData) {
-        res.status(200).send({
-            status: 200,
-            message: "Successful connection",
-            success: true,
-        });
-    } else {
-        console.log('SSV Data:', ssvData);
-        res.status(200).send({
-            status : 200,
-            message: "Successful connection",
-            success: true,
-            data : {
-                ...ssvData
-            }
-        });
+    const newSessionID = (req as any).newSessionID;
+    const newTokenID = (req as any).newTokenID;
+    const data: ReplyType = {
+        status: 200,
+        message: "Successful connection",
+        success: true,
+    };
+    // I don't like when there are duplicated lines ugh
+    if (newSessionID) {
+        data.data = data.data || {};
+        data.data['session'] = newSessionID;
     }
-
-
+    if (newTokenID) {
+        data.data = data.data || {};
+        data.data['token'] = newTokenID;
+    }
+    res.status(200).json(data);
 });
 app.get('/blacklist', (req, res) => {
     // Serve the blacklist page 
