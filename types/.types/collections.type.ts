@@ -100,7 +100,7 @@ export type TokenRights =
   expires_at: number;
   renewable: boolean;
   frozen_until?: number; // UNIX TIMESTAMP, if the token is frozen, this is the amount of seconds until it can be unfrozen
-  frozen_at?: Date; // If the token is frozen, this is the date when it was frozen,
+  frozen_at?: number; // If the token is frozen, this is the date when it was frozen,
   uses: number; // How many times the token has been use
   max_uses?: number; // How many times the token can be used, if not set, it can be used indefinitely
   rights: TokenRights[]; // Rights of the token, used to determine what the token can do

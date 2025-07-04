@@ -30,6 +30,7 @@ export async function NASS_Verification_Process(req, res, next) {
         if (ssv.data) {
           if ((ssv.data as { session?: any }).session) {
             (req as any).newSessionID = (ssv.data as { session?: any }).session;
+            (req as any).body.user.session_id = (ssv.data as { session?: any }).session;
           }
         }
 
@@ -43,6 +44,9 @@ export async function NASS_Verification_Process(req, res, next) {
         if (stv.data) {
           if ((stv.data as { token?: string }).token) {
             (req as any).newTokenID = (stv.data as any).token;
+          }
+          if ((stv.data as { retry_after? : number }).retry_after) {
+            (req as any).retry_after = (stv.data as { retry_after? : number }).retry_after;
           }
         }
 

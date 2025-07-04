@@ -78,6 +78,7 @@ db.users.insertOne({
     updated_at : new Date().getTime()
 })
 
+
 db.users.insertOne({
     id : 3,
     identifier : "100000:bde933e36fd5ba991a274b3eca227195:8d9cdf2aa5dc7b52ac7d3e6ae6086f3a27f2c53d08827bd9e4cc9534935e906602da9545d5580c22e38905b3c2aaa1b8d86a06542f6379a57409c4c1ae03a838",
@@ -88,6 +89,7 @@ db.users.insertOne({
     created_at : new Date().getTime(),
     updated_at : new Date().getTime()
 })
+
 
 
 db.sessions.insertOne({
@@ -115,6 +117,20 @@ db.sessions.insertOne({
     last_activity: new Date().getTime() - 1000 * 60 * 60 * 24, // Last activity 24 hours ago
     user_origin: "NASS",
 });
+
+db.sessions.insertOne({
+    id : 3,
+    user_id : 2,
+    ip : "5.5.5.5",
+    agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+    device_fingerprint: "fingerprint-3",
+    expires_at: new Date().getTime() + 1000 * 60 * 60 * 10000, // 1000 hours
+    created_at: new Date().getTime(),
+    token_id: 3,
+    last_activity: new Date().getTime(),
+    user_origin: "NASS",
+})
+
 
 db.tokens.insertOne({
     id : 1,
@@ -146,6 +162,20 @@ db.tokens.insertOne({
     max_uses : 1000, // Unlimited uses
 });
 
+db.tokens.insertOne({
+    id : 3,
+    token : "test-token-3-frozen",
+    user_id : 2,
+    session_id : 3,
+    rights : ["USER_READ_OWN","USER_EDIT_OWN"],
+    created_at : new Date().getTime(),
+    expires_at : new Date().getTime() + 1000 * 60 * 60 * 24 * 100, // 100 days
+    renewable : true,
+    frozen_until : 1000*30, // Frozen for 30 seconds
+    frozen_at: Date.now(), // Frozen now
+    uses : 0,
+    max_uses : 1000, // Unlimited uses
+});
 
 
 

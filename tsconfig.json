@@ -2,5 +2,5 @@
      "compilerOptions": {
         "types": ["node"]
       },
-    "include" : ["**/*.ts", "**/*.html", "**/*.css"],
+    "include" : ["**/*.ts", "**/*.html", "**/*.css", "secure/hash/hash.ts"],
 }

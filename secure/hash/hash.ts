@@ -1,5 +1,4 @@
-import * as crypto from 'crypto';
-
+const crypto = require('crypto');
 
 
 export function crypt(value: string | undefined): string {

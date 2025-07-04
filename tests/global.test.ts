@@ -1,6 +1,9 @@
 import UCRType from "../types/.types/ucr.type";
 const { test, expect, describe } = require('@jest/globals');
 
+// Ensure setTimeout is available (for Node.js environments)
+const setTimeoutPromise = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 const app = process.env.AUTH_API_URL;
 
 if (!app) {
@@ -31,6 +34,18 @@ const dummy2 = {
     password: "dummy1",
     user_id: 3
 };
+
+const dummy1_2 = {
+    ip : "5.5.5.5",
+    agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+    device_fingerprint: "fingerprint-3",
+    user_origin: "NASS",
+    session_id: 3,
+    token: "test-token-3-frozen",
+    identifier: "dummy",
+    password: "dummy",
+    user_id: 2
+}
 
 const getValidUCR = (userOverride = {}) => ({
     user: { ...dummy1, ...userOverride },
@@ -529,3 +544,43 @@ describe("NASS SSV Tests", () => {
     });
 })
 
+
+
+describe("NASS STV Tests", () => {
+    let timingBeforeUnfrozen;
+
+    test("token is frozen", async () => {
+        const ucr = getValidUCR({ ...dummy1_2 });
+        ucr.request.url = "/test-stv/token-frozen";
+        delete ucr.user.password;
+        delete ucr.user.identifier;
+        const res = await post(ucr);
+        expect(res.status).toBe(429);
+        expect(res.data).toEqual({
+            success: false,
+            status: 429,
+            message: "Token is frozen.",
+            data : {
+                retry_after: expect.any(Number)
+            }
+        });
+        timingBeforeUnfrozen = res.data.data.retry_after;
+        console.log("\x1b[33m%s\x1b[0m", `Token is frozen for ${timingBeforeUnfrozen} milliseconds.`);
+    });
+
+    test('token is unfrozen after waiting', async () => {
+        const ucr = getValidUCR({ ...dummy1_2 });
+        delete ucr.user.password;
+        delete ucr.user.identifier;
+        await setTimeoutPromise(timingBeforeUnfrozen + 1000); // Wait for the token to be unfrozen
+        delete ucr.user.identifier;
+        ucr.request.url = "/test-stv/token-unfrozen";
+        const res = await post(ucr);
+        expect(res.status).toBe(200);
+        expect(res.data).toEqual({
+            success: true,
+            status: 200,
+            message: "Successful connection"
+        });
+    });
+});

@@ -14,11 +14,11 @@ export default async function renewToken(req: Request, res: Response, ssv: Reply
 }): Promise<ReplyType> {
     if (ssv && ssv.data) {
         // Warning: ssv.data.session =/= req.data.newSessionID!
-        const ssvSessionID = (ssv.data as any).session;
+        const sessionID = (ssv.data as any).session;
         try {
-            if (ssv.status === 201 && ssvSessionID) {
+            if (ssv.status === 201 && sessionID) {
                 const newSession = await collections.sessions.findOne({
-                    id: ssvSessionID
+                    id: sessionID
                 }) as unknown as UserSession;
                 if (newSession) {
                     const currentToken = await collections.tokens.findOne({
