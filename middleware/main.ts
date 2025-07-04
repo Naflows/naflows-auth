@@ -28,27 +28,26 @@ export async function NASS_Verification_Process(req, res, next) {
         }
 
         if (ssv.data) {
-          // Type guard to check if ssv.data has a token property
-          if ((ssv.data as { token?: string }).token) {
-            (req as any).ssvData = ssv.data;
-          }
           if ((ssv.data as { session?: any }).session) {
-            (req as any).ucrData = (ssv.data as { session?: any }).session;
+            (req as any).newSessionID = (ssv.data as { session?: any }).session;
           }
-
-          console.log("\x1b[34m%s\x1b[0m","SSV Data: ",(req as any).ssvData);
         }
 
         // Executing the Secure Token Verification Process
-        const stv : ReplyType = await middleware.process.stv(req, res);
+        const stv : ReplyType = await middleware.process.stv(req, res, ssv);
         if (!stv.success) {
           console.error("\x1b[31m%s\x1b[0m","NASS STV Process failed:",stv.message);
           return software.methods.manageErrorCode(stv, res);
         }
 
-
+        if (stv.data) {
+          if ((stv.data as { token?: string }).token) {
+            (req as any).newTokenID = (stv.data as any).token;
+          }
+        }
 
         console.log("\x1b[32m%s\x1b[0m","NASS Verification Process completed successfully.");
+        console.log("\x1b[34m%s\x1b[0m", `Additional data before processing: \nNew Session ID: ${(req as any).newSessionID || "None"}\nNew Token ID: ${(req as any).newTokenID || "None"}`);
 
 
         return next();
