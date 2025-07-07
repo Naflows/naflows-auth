@@ -24,6 +24,7 @@ const requests = db.getCollection('requests');
 
 
 
+
 // Create indexes for the collections to improve performance and ensure uniqueness where necessary
 db.users.createIndex({ id: 1 }, { unique: true });
 db.users.createIndex({ identifier: 1 }, { unique: true });
@@ -93,7 +94,7 @@ db.users.insertOne({
 
 
 db.sessions.insertOne({
-    id: 1,
+    id: "1",
     user_id: 2,
     ip : "1.1.1.2",
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
@@ -106,7 +107,7 @@ db.sessions.insertOne({
 })
 
 db.sessions.insertOne({
-    id: 2,
+    id: "2",
     user_id: 3,
     ip : "1.1.1.3",
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
@@ -119,7 +120,7 @@ db.sessions.insertOne({
 });
 
 db.sessions.insertOne({
-    id : 3,
+    id : "3",
     user_id : 2,
     ip : "5.5.5.5",
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
@@ -136,7 +137,7 @@ db.tokens.insertOne({
     id : 1,
     token : "test-token",
     user_id : 2,
-    session_id : 1,
+    session_id : "1",
     rights : ["USER_READ_OWN","USER_EDIT_OWN"],
     created_at : new Date().getTime(),
     expires_at : new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours
@@ -151,7 +152,7 @@ db.tokens.insertOne({
     id : 2,
     token : "test-token-2",
     user_id : 3,
-    session_id : 2,
+    session_id : "2",
     rights : ["USER_READ_OWN","USER_EDIT_OWN"],
     created_at : new Date().getTime(),
     expires_at : new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours
@@ -166,7 +167,7 @@ db.tokens.insertOne({
     id : 3,
     token : "test-token-3-frozen",
     user_id : 2,
-    session_id : 3,
+    session_id : "3",
     rights : ["USER_READ_OWN","USER_EDIT_OWN"],
     created_at : new Date().getTime(),
     expires_at : new Date().getTime() + 1000 * 60 * 60 * 24 * 100, // 100 days

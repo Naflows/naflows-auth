@@ -1,3 +1,4 @@
+import { v4 } from "uuid";
 
 
 
@@ -13,7 +14,7 @@ export async function createSession(req, res) {
     try {
         // Here you would typically check the credentials against a database
         // For demonstration, we assume the credentials are valid
-        const sessionId = Math.random().toString(36).substring(2, 15); // Generate a random session ID
+        const sessionId : string = v4();
 
         // Respond with the session ID
         return res.status(201).json({ sessionId });

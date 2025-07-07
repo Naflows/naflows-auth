@@ -16,7 +16,7 @@ const dummy1 = {
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
     device_fingerprint: "fingerprint-1",
     user_origin: "NASS",
-    session_id: 1,
+    session_id: "1",
     token: "test-token",
     identifier: "dummy",
     password: "dummy",
@@ -28,7 +28,7 @@ const dummy2 = {
     agent: dummy1.agent,
     device_fingerprint: "fingerprint-2",
     user_origin: "NASS",
-    session_id: 2,
+    session_id: "2",
     token: "test-token-2",
     identifier: "dummy1",
     password: "dummy1",
@@ -36,19 +36,24 @@ const dummy2 = {
 };
 
 const dummy1_2 = {
-    ip : "5.5.5.5",
+    ip: "5.5.5.5",
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
     device_fingerprint: "fingerprint-3",
     user_origin: "NASS",
-    session_id: 3,
+    session_id: "3",
     token: "test-token-3-frozen",
     identifier: "dummy",
     password: "dummy",
     user_id: 2
 }
 
+
+
 const getValidUCR = (userOverride = {}) => ({
-    user: { ...dummy1, ...userOverride },
+    user: {
+        ...dummy1,
+        ...userOverride
+    },
     client: {
         ip: "127.0.0.1",
         dns: "local.nass.com",
@@ -76,28 +81,41 @@ async function post(ucr) {
     return { status: res.status, data };
 }
 
+let newSessionID = "1";
+
 
 describe("NASS SCV Tests", () => {
+
     test("UCR is valid (token only)", async () => {
-        const ucr = getValidUCR({ identifier: undefined, password: undefined });
+        const ucr = getValidUCR({ identifier: undefined, password: undefined, session_id: newSessionID });
+        ucr.request.url = "/test/token-only";
         const res = await post(ucr);
         expect(res.status).toBe(200);
         expect(res.data).toEqual({
             success: true,
             status: 200,
-            message: "Successful connection"
+            message: "Successful connection",
+            data: {
+                session: expect.any(String) // Expecting a session ID to be returned
+            }
         });
+        newSessionID = res.data.data.session; // Store the new session ID for further tests
     });
 
     test("UCR is valid (identifier + password)", async () => {
-        const ucr = getValidUCR({ token: undefined });
+        const ucr = getValidUCR({ token: undefined, session_id: newSessionID });
+        ucr.request.url = "/test/identifier-password";
         const res = await post(ucr);
         expect(res.status).toBe(200);
         expect(res.data).toEqual({
             success: true,
             status: 200,
-            message: "Successful connection"
+            message: "Successful connection",
+            data: {
+                session: expect.any(String) // Expecting a session ID to be returned
+            }
         });
+        newSessionID = res.data.data.session; // Update the session ID for further tests
     });
 
     test("UCR is invalid (token + identifier + password)", async () => {
@@ -229,7 +247,7 @@ describe("NASS SSV Tests", () => {
 
     describe("User session is valid", () => {
         test("password + identifier", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1 } };
+            const ucr = { ...validUCR, user: { ...dummy1, session_id : newSessionID } };
             delete ucr.user.token;
             ucr.request.url = "/test-ssv/user-session-valid/password-identifier";
             const res = await post(ucr);
@@ -238,11 +256,15 @@ describe("NASS SSV Tests", () => {
                 success: true,
                 status: 200,
                 message: "Successful connection",
+                data : {
+                    session: expect.any(String) // Expecting a session ID to be returned
+                }
             });
+            newSessionID = res.data.data.session; // Update the session ID for further tests
         });
 
         test("token", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1 } };
+            const ucr = { ...validUCR, user: { ...dummy1, session_id : newSessionID } };
             delete ucr.user.password;
             delete ucr.user.identifier;
             ucr.user.token = dummy1.token;
@@ -253,13 +275,17 @@ describe("NASS SSV Tests", () => {
                 success: true,
                 status: 200,
                 message: "Successful connection",
+                data : {
+                    session: expect.any(String) // Expecting a session ID to be returned
+                }
             });
+            newSessionID = res.data.data.session; // Update the session ID for further tests
         });
     });
 
     describe("User data is invalid", () => {
         test("user id does not exist", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1, user_id: 9999 } };
+            const ucr = { ...validUCR, user: { ...dummy1, user_id: 9999, session_id : newSessionID } };
             delete ucr.user.token;
             ucr.request.url = "/test-ssv/user-data-invalid/user-id";
             const res = await post(ucr);
@@ -272,7 +298,7 @@ describe("NASS SSV Tests", () => {
         });
 
         test("token is invalid", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1, token: "invalid-token" } };
+            const ucr = { ...validUCR, user: { ...dummy1, token: "invalid-token", session_id : newSessionID } };
             ucr.request.url = "/test-ssv/user-data-invalid/token";
             delete ucr.user.password;
             delete ucr.user.identifier;
@@ -286,7 +312,7 @@ describe("NASS SSV Tests", () => {
         });
 
         test("password is invalid", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1, password: "invalid-password" } };
+            const ucr = { ...validUCR, user: { ...dummy1, password: "invalid-password", session_id : newSessionID } };
             delete ucr.user.token;
             ucr.request.url = "/test-ssv/user-data-invalid/password";
             const res = await post(ucr);
@@ -299,7 +325,7 @@ describe("NASS SSV Tests", () => {
         });
 
         test("identifier is invalid", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1, identifier: "invalid-identifier" } };
+            const ucr = { ...validUCR, user: { ...dummy1, identifier: "invalid-identifier", session_id : newSessionID } };
             delete ucr.user.token;
             ucr.request.url = "/test-ssv/user-data-invalid/identifier";
             const res = await post(ucr);
@@ -312,7 +338,7 @@ describe("NASS SSV Tests", () => {
         });
 
         test("unknown session", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1, session_id: 50 } };
+            const ucr = { ...validUCR, user: { ...dummy1, session_id: "50" } };
             delete ucr.user.token;
             ucr.request.url = "/test-ssv/user-data-invalid/unknown-session";
             const res = await post(ucr);
@@ -327,7 +353,7 @@ describe("NASS SSV Tests", () => {
 
     describe("Session data is missing or wrong", () => {
         test("missing / invalid device fingerprint", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1, device_fingerprint: "wrong-device-fingerprint" } };
+            const ucr = { ...validUCR, user: { ...dummy1, device_fingerprint: "wrong-device-fingerprint", session_id : newSessionID } };
             delete ucr.user.token;
             ucr.request.url = "/test-ssv/session-data-invalid/device-fingerprint";
             const res = await post(ucr);
@@ -340,7 +366,7 @@ describe("NASS SSV Tests", () => {
         });
 
         test("missing / invalid user origin", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1, user_origin: "wrong-user-origin" } };
+            const ucr = { ...validUCR, user: { ...dummy1, user_origin: "wrong-user-origin", session_id : newSessionID } };
             delete ucr.user.token;
             ucr.request.url = "/test-ssv/session-data-invalid/user-origin";
             const res = await post(ucr);
@@ -353,7 +379,7 @@ describe("NASS SSV Tests", () => {
         });
 
         test("missing / invalid user agent", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1, agent: "wrong-user-agent" } };
+            const ucr = { ...validUCR, user: { ...dummy1, agent: "wrong-user-agent", session_id : newSessionID } };
             delete ucr.user.token;
             ucr.request.url = "/test-ssv/session-data-invalid/user-agent";
             const res = await post(ucr);
@@ -366,7 +392,7 @@ describe("NASS SSV Tests", () => {
         });
 
         test("missing / invalid user IP", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1, ip: "195.135.264.123" } };
+            const ucr = { ...validUCR, user: { ...dummy1, ip: "195.135.264.123", session_id : newSessionID } };
             delete ucr.user.token;
             ucr.request.url = "/test-ssv/session-data-invalid/user-ip";
             const res = await post(ucr);
@@ -379,7 +405,7 @@ describe("NASS SSV Tests", () => {
         });
 
         test("pointing to a wrong session id", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1, session_id: 2 } };
+            const ucr = { ...validUCR, user: { ...dummy1, session_id: "2" } };
             delete ucr.user.token;
 
             ucr.request.url = "/test-ssv/session-data-invalid/session-id";
@@ -490,12 +516,12 @@ describe("NASS SSV Tests", () => {
                 message: "Successful connection",
                 data: {
                     token: expect.any(String),
-                    session: expect.any(Number)
+                    session: expect.any(String)
                 }
             });
             sessionId = res.data.data.session; // Store the session ID for further tests
             renewTokenValue = res.data.data.token; // Store the new token value for further tests
-             
+
         });
 
         test('try to renew session with the old token', async () => {
@@ -508,13 +534,13 @@ describe("NASS SSV Tests", () => {
             expect(res.data).toEqual({
                 success: false,
                 status: 401,
-                message : "Invalid user credentials."
+                message: "Invalid user credentials."
             });
         });
 
 
         test("try to renew session after renewal", async () => {
-            const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId, token : renewTokenValue } };
+            const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId, token: renewTokenValue } };
             delete ucr.user.password;
             delete ucr.user.identifier;
             ucr.request.url = "/test-ssv/session-connection-after-renewal/valid-token";
@@ -523,13 +549,17 @@ describe("NASS SSV Tests", () => {
             expect(res.data).toEqual({
                 success: true,
                 status: 200,
-                message: "Successful connection"
+                message: "Successful connection",
+                data : {
+                    session: expect.any(String)
+                }
             });
+            sessionId = res.data.data.session; // Update the session ID for further tests
         });
 
 
         test("session is not outdated anymore", async () => {
-            const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId, token : renewTokenValue } };
+            const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId, token: renewTokenValue } };
             delete ucr.user.password;
             delete ucr.user.identifier;
             ucr.request.url = "/test-ssv/session-not-outdated";
@@ -538,7 +568,10 @@ describe("NASS SSV Tests", () => {
             expect(res.data).toEqual({
                 success: true,
                 status: 200,
-                message: "Successful connection"
+                message: "Successful connection",
+                data: {
+                    session: expect.any(String)
+                }
             });
         });
     });
@@ -560,27 +593,33 @@ describe("NASS STV Tests", () => {
             success: false,
             status: 429,
             message: "Token is frozen.",
-            data : {
-                retry_after: expect.any(Number)
+            data: {
+                retry_after: expect.any(Number),
+                session : expect.any(String)
             }
         });
         timingBeforeUnfrozen = res.data.data.retry_after;
         console.log("\x1b[33m%s\x1b[0m", `Token is frozen for ${timingBeforeUnfrozen} milliseconds.`);
+        newSessionID = res.data.data.session; // Store the session ID for further tests
     });
 
     test('token is unfrozen after waiting', async () => {
-        const ucr = getValidUCR({ ...dummy1_2 });
+        const ucr = getValidUCR({ ...dummy1_2, session_id : newSessionID });
         delete ucr.user.password;
         delete ucr.user.identifier;
         await setTimeoutPromise(timingBeforeUnfrozen + 1000); // Wait for the token to be unfrozen
-        delete ucr.user.identifier;
         ucr.request.url = "/test-stv/token-unfrozen";
         const res = await post(ucr);
         expect(res.status).toBe(200);
         expect(res.data).toEqual({
             success: true,
             status: 200,
-            message: "Successful connection"
+            message: "Successful connection",
+            data: {
+                session: expect.any(String)
+            }
         });
     });
 });
+
+

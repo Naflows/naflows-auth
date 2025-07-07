@@ -4,6 +4,7 @@ import { Tokens, User, UserSession } from "../../types/.types/collections.type";
 import UCRType from "../../types/.types/ucr.type";
 import secure from "../../secure/dir";
 import middleware from "../dir";
+import { Collection } from "mongoose";
 
 // For evident reasons, there are no environment variables to enable / disable the SSV process.
 
@@ -20,19 +21,19 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
     */
 
   // STEP 1
-  const sessionsCollection = db.collection("sessions");
+  const sessionsCollection = db.collection("sessions") as Collection<UserSession>;
   const tokensCollection = db.collection("tokens");
   const usersCollection = db.collection("users");
 
   if (sessionsCollection && tokensCollection && usersCollection) {
+
     const user = (await usersCollection.findOne({
       id: ucr.user.user_id,
     })) as unknown as User;
-
+    const session = await sessionsCollection.findOne({
+      id: ucr.user.session_id,
+    }) as unknown as UserSession;
     if (user != undefined) {
-      const session = await sessionsCollection.findOne({
-        id: ucr.user.session_id,
-      }) as unknown as UserSession;
       if (session) {
         const allInformationsCorrect =
           session.ip === ucr.user.ip &&
@@ -129,6 +130,24 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
         success: false,
       };
     }
+
+
+    const newSessionID: ReplyType = await secure.session.renew(session.id,{sessionsCollection: sessionsCollection});
+
+    if (!newSessionID.success) {
+      return newSessionID;
+    }
+
+
+
+    return {
+      status: 200,
+      message: "SSV Process completed successfully.",
+      success: true,
+      data : {
+        session: (newSessionID.data as { session?: string }).session
+      }
+    };
   } else {
     return {
       status: 500,
@@ -139,9 +158,6 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
     };
   }
 
-  return {
-    status: 200,
-    message: "SSV Process completed successfully.",
-    success: true
-  };
+
+
 }
