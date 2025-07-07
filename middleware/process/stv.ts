@@ -5,6 +5,7 @@ import { Tokens, User, UserSession } from "../../types/.types/collections.type";
 import { ReplyType } from "../../types/.types/reply.type";
 import UCRType from "../../types/.types/ucr.type";
 import middleware from "../dir";
+import { software } from "../../software/dir";
 
 
 export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<ReplyType> {
@@ -14,9 +15,6 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
     const ucr = req.body as unknown as UCRType;
 
 
-    console.log("\x1b[34m%s\x1b[0m", "------ STV Process started ------");
-    console.log("\x1b[34m%s\x1b[0m", `SSV Data: ${JSON.stringify(ssv)}`);
-    console.log("\x1b[34m%s\x1b[0m", `UCR Data: ${JSON.stringify(ucr)}`);
 
 
     if (process.env.NASS_STV_ENABLED === "true") {
@@ -26,7 +24,12 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                 const tokenRenewal: ReplyType = await middleware.token.renewal(req, res, ssv, { sessions: sessionsCollection, tokens: tokensCollection, users: usersCollection });
                 if (tokenRenewal.success) {
                     console.log("\x1b[32m%s\x1b[0m", "New session token created successfully.");
-                    ucr.user.token = (tokenRenewal.data as any).token || "";
+                    return software.methods.serverReply(
+                        200, "New session token created successfully.",
+                        {
+                            token: (tokenRenewal.data as { token?: string }).token
+                        }
+                    );
                 } else {
                     console.error("\x1b[31m%s\x1b[0m", "Failed to create new session token:", tokenRenewal.message);
                 }
@@ -51,40 +54,37 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                     token.token === ucr.user.token || (ucr.user.password && ucr.user.identifier))
                 ) {
                     if (token.frozen_at + token.frozen_until > Date.now()) {
-                        return {
-                            status: 429,
-                            success: false,
-                            message: "Token is frozen.",
-                            data: {
+                        return software.methods.serverReply(
+                            429,
+                            "Token is frozen.",
+                            {
                                 retry_after: (token.frozen_at + token.frozen_until) - Date.now()
                             }
-                        }
+                        );
                     }
                 } else {
-                    return {
-                        status: 401,
-                        success: false,
-                        message: "Invalid token.",
-                    };
+                    return software.methods.serverReply(
+                        401,
+                        "Invalid token or credentials provided.",
+                    );  
                 }
             }
 
 
 
         } else {
-            return {
-                status: 500,
-                success: false,
-                message: "Internal server error: collections not found.",
-            };
+            return software.methods.serverReply(
+                500,
+                "Internal server error: collections not found.",
+            );
         }
+    } else {
+        console.log("\x1b[33m%s\x1b[0m", "NASS STV is disabled, skipping verification process.");
     }
 
 
-
-    return {
-        status: 200,
-        success: true,
-        message: "STV process completed successfully.",
-    }
+    return software.methods.serverReply(
+        200,
+        "STV Process completed successfully.",
+    );
 }

@@ -5,6 +5,7 @@ import UCRType from "../../types/.types/ucr.type";
 import secure from "../../secure/dir";
 import middleware from "../dir";
 import { Collection } from "mongoose";
+import { software } from "../../software/dir";
 
 // For evident reasons, there are no environment variables to enable / disable the SSV process.
 
@@ -60,11 +61,10 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
               );
 
               if (!isPasswordCorrect || !isIdentifierCorrect) {
-                return {
-                  status: 401,
-                  message: "Invalid user credentials.",
-                  success: false,
-                };
+                return software.methods.serverReply(
+                  401,
+                  "Invalid user credentials.",
+                );
               }
             } else if (ucr.user.token != undefined && ucr.user.token != null) {
               const token = await tokensCollection.findOne({
@@ -75,23 +75,17 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
 
 
               if (!token || (token && token.token != ucr.user.token)) {
-                return {
-                  status: 401,
-                  message: "Invalid user credentials.",
-                  success: false,
-                };
+                return software.methods.serverReply(
+                  401,
+                  "Invalid user credentials.",
+                );
               }
             } else {
               console.error(
                 "\x1b[31m%s\x1b[0m",
                 "CRITICAL NASS ISSUE: UCR validation may be disabled, which is leading to a security risk. Please check your configuration."
               );
-              return {
-                status: 500,
-                message:
-                  "Internal server error. UCR should be valid but no credentials found.",
-                success: false,
-              };
+              return software.methods.serverReply(500, "Internal server error. UCR should be valid but no credentials found.");
             }
           } else {
             const sessionRenewal: ReplyType = await middleware.session.renewal(ucr, { sessionsCollection: sessionsCollection, tokensCollection: tokensCollection }, user, session);
@@ -100,62 +94,36 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
               return sessionRenewal;
             }
 
-            return {
-              status: sessionRenewal.status,
-              message: "Session is renewed.",
-              success: true,
-              data: {
-                session: (sessionRenewal.data as { session?: string }).session || session.id
-              }
-            };
+            return software.methods.serverReply(201, sessionRenewal.status, {
+              session: (sessionRenewal.data as { session?: string }).session || session.id
+            });
           }
         } else {
-          return {
-            status: 401,
-            message: "Invalid session informations.",
-            success: false,
-          };
+          return software.methods.serverReply(401, "Invalid session informations.");
         }
       } else {
-        return {
-          status: 401,
-          message: "Session not found.",
-          success: false,
-        };
+        return software.methods.serverReply(401, "Session not found.");
       }
     } else {
-      return {
-        status: 401,
-        message: "Unknown user credentials.",
-        success: false,
-      };
+      return software.methods.serverReply(401, "Unknown user credentials.");
     }
 
 
-    const newSessionID: ReplyType = await secure.session.renew(session.id,{sessionsCollection: sessionsCollection});
+    const newSessionID: ReplyType = await secure.session.renew(session.id, { sessionsCollection: sessionsCollection });
 
     if (!newSessionID.success) {
       return newSessionID;
     }
 
 
-
-    return {
-      status: 200,
-      message: "SSV Process completed successfully.",
-      success: true,
-      data : {
-        session: (newSessionID.data as { session?: string }).session
-      }
-    };
+    return software.methods.serverReply(200, "SSV Process completed successfully.", {
+      session: (newSessionID.data as { session?: string }).session || session.id
+    });
   } else {
-    return {
-      status: 500,
-      message: `Internal server error. Could not access the database collections (${sessionsCollection ? "" : "sessions"
-        } ${tokensCollection ? "" : "tokens"} ${usersCollection ? "" : "users"
-        }).`,
-      success: false,
-    };
+    return software.methods.serverReply(
+      500,
+      "Internal server error. Could not access the database collections.",
+    );
   }
 
 

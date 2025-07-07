@@ -4,6 +4,7 @@ import { Collection } from "mongoose";
 import { Tokens, User, UserSession } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import secure from "../../../secure/dir";
+import { software } from "../../../software/dir";
 
 
 
@@ -49,32 +50,28 @@ export default async function renewToken(req: Request, res: Response, ssv: Reply
                                 { $set: { token_id: (newToken.data as any).token_id } }
                             );
 
-                            return {
-                                status: 200,
-                                success: true,
-                                message: "New session token created successfully.",
-                                data: {
-                                    token: (newToken.data as any).token || "",
+                            return software.methods.serverReply(
+                                200,
+                                "New session token created successfully.",
+                                {
+                                    token: (newToken.data as any).token || ""
                                 }
-                            }
+                            );
                         }
 
                     }
                 }
             }
         } catch (error) {
-            console.error("\x1b[31m%s\x1b[0m", "Error renewing token:", error);
-            return {
-                status: 500,
-                success: false,
-                message: "An error occurred while renewing the token: " + error.message,
-            }
+            return software.methods.serverReply(
+                500,
+                "An error occurred while renewing the token: " + error.message
+            );
         }
     } else {
-        return {
-            success: true,
-            status: 200,
-            message: "No session renewal required, no data provided.",
-        }
+        return software.methods.serverReply(
+            200,
+            "No session renewal required, no data provided."
+        );
     }
 }

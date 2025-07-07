@@ -8,11 +8,7 @@ export async function scv(req: Request, res: Response): Promise<ReplyType> {
     const isUCRCorrect: boolean = middleware.check.ucr(req.body);
     if (!isUCRCorrect) {
       console.log("\x1b[31m%s\x1b[0m", "Invalid UCR.");
-      return {
-          status: 400,
-          message: "Invalid request format.",
-          success: false,
-        };
+      return software.methods.serverReply(400, "Invalid request format.");
     }
   }
 
@@ -44,9 +40,8 @@ export async function scv(req: Request, res: Response): Promise<ReplyType> {
     }
   }
 
-  return {
-    status : 200,
-    message: "SSV Process completed successfully.",
-    success: true,
-  }
+  return software.methods.serverReply(
+    200,
+    "SCV Process completed successfully.",
+  );
 }
