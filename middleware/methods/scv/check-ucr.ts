@@ -14,7 +14,7 @@ export function isUCRType(obj: any): obj is UCRType {
             !(user.token != undefined && (user.identifier != undefined || user.password != undefined)) &&
             typeof user.ip === 'string' &&
             typeof user.agent === 'string' &&
-            typeof user.session_id === 'number' &&
+            typeof user.session_id === 'string' &&
             typeof user.user_id === 'number' &&
             typeof user.device_fingerprint === 'string' &&
             typeof user.user_origin === 'string' &&

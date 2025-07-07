@@ -38,6 +38,9 @@ export async function NASS_Verification_Process(req, res, next) {
         const stv : ReplyType = await middleware.process.stv(req, res, ssv);
         if (!stv.success) {
           console.error("\x1b[31m%s\x1b[0m","NASS STV Process failed:",stv.message);
+          if (ssv.data && (ssv.data as { session?: any }).session) {
+            stv.data["session"] = (ssv.data as { session?: any }).session;
+          }
           return software.methods.manageErrorCode(stv, res);
         }
 

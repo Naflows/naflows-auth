@@ -45,7 +45,7 @@ export interface User {
 }
 
 export interface UserSession {
-  id: number; // Session ID
+  id: string; // Session ID
   user_id: number; // User ID, the user that owns the session
   created_at: number; // Date when the session was created
   last_activity: number; // Date when the session was last active
@@ -95,7 +95,7 @@ export type TokenRights =
   id: string;
   token: string;
   user_id: number;
-  session_id: number;
+  session_id: string;
   created_at: number;
   expires_at: number;
   renewable: boolean;
