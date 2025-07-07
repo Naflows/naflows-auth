@@ -2,6 +2,7 @@ import { v4 } from "uuid";
 import { db } from "../../..";
 import { ReplyType } from "../../../types/.types/reply.type";
 import UCRType from "../../../types/.types/ucr.type";
+import { software } from "../../../software/dir";
 
 export async function checkRates(UCR: UCRType): Promise<ReplyType> {
   const ratesCollection = db.collection("requests");
@@ -22,11 +23,7 @@ export async function checkRates(UCR: UCRType): Promise<ReplyType> {
         lastRequest: Date.now(),
         firstRequest: Date.now(),
       });
-      return {
-        status: 200,
-        message: "Rate limit not exceeded, request recorded.",
-        success: true,
-      };
+      return software.methods.serverReply(200, "Rate limit not exceeded, request recorded.");
     } else {
       const requestsArray = Array.isArray(reqRates.requests) ? reqRates.requests : [];
       const timeoutSeconds = process.env.BLACKLIST_RATES_TIMEOUT ? parseInt(process.env.BLACKLIST_RATES_TIMEOUT) : 60;
@@ -41,11 +38,7 @@ export async function checkRates(UCR: UCRType): Promise<ReplyType> {
       if (
         lastRequests.length >= (process.env.BLACKLIST_RATES ? parseInt(process.env.BLACKLIST_RATES): 100)
       ) {
-        return {
-          status: 429,
-          message: "Rate limit exceeded. Too many requests.",
-          success: false,
-        };
+        return software.methods.serverReply(429,"Rate limit exceeded. Too many requests.");
       } else {
         await ratesCollection.updateOne(
           { _id: reqRates._id },
@@ -59,18 +52,10 @@ export async function checkRates(UCR: UCRType): Promise<ReplyType> {
             },
           }
         );
-        return {
-            status: 200,
-            message: "Rate limit not exceeded, request recorded.",
-            success: true,
-        }
+        return software.methods.serverReply(200, "Rate limit not exceeded, request recorded.");
       }
     }
   } else {
-    return {
-      status: 500,
-      message: "Internal server error. Rates collection not found.",
-      success: false,
-    };
+    return software.methods.serverReply(500, "Internal server error. Rates collection not found.");
   }
 }

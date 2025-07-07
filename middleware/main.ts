@@ -6,7 +6,6 @@ import middleware from "./dir";
 export async function NASS_Verification_Process(req, res, next) {
   if (req.body) {
     try {
-      console.log("NASS Verification Process started.");
       console.log("\x1b[34m%s\x1b[0m", `------ INCOMING REQUEST at ${req.body.request.url}  ------`);
       if (process.env.NASS_SCV_ENABLED !== "true") {
         console.log("NASS SCV is disabled, skipping verification process.");
@@ -16,14 +15,14 @@ export async function NASS_Verification_Process(req, res, next) {
         const scv: ReplyType = await middleware.process.scv(req, res);
 
         if (!scv.success) {
-          console.error("\x1b[31m%s\x1b[0m","NASS SCV Process failed: ",scv.message);
+          console.error("\x1b[31m%s\x1b[0m",`NASS SCV Process failed: ${scv.message}`);
           return software.methods.manageErrorCode(scv, res);
         }
 
         // Executing the Secure Session Verification Process
         const ssv: ReplyType = await middleware.process.ssv(req, res);
         if (!ssv.success) {
-          console.error("\x1b[31m%s\x1b[0m","NASS SSV Process failed: ",ssv.message);
+          console.error("\x1b[31m%s\x1b[0m",`NASS SSV Process failed: ${ssv.message}`);
           return software.methods.manageErrorCode(ssv, res);
         }
 
@@ -37,7 +36,7 @@ export async function NASS_Verification_Process(req, res, next) {
         // Executing the Secure Token Verification Process
         const stv : ReplyType = await middleware.process.stv(req, res, ssv);
         if (!stv.success) {
-          console.error("\x1b[31m%s\x1b[0m","NASS STV Process failed:",stv.message);
+          console.error("\x1b[31m%s\x1b[0m",`NASS STV Process failed: ${stv.message}`);
           if (ssv.data && (ssv.data as { session?: any }).session) {
             stv.data["session"] = (ssv.data as { session?: any }).session;
           }

@@ -137,6 +137,7 @@ describe("NASS SCV Tests", () => {
     test("UCR is invalid (missing fingerprint)", async () => {
         const ucr = getValidUCR({ device_fingerprint: undefined });
         const res = await post(ucr);
+        ucr.request.url = "/test/missing-fingerprint";
         expect(res.status).toBe(400);
         expect(res.data).toEqual({
             success: false,
@@ -149,6 +150,7 @@ describe("NASS SCV Tests", () => {
         const ucr = getValidUCR();
         ucr.client.ip = "123.123.123.123";
         delete ucr.user.token;
+        ucr.request.url = "/test/wrong-client-ip";
         const res = await post(ucr);
         expect(res.status).toBe(403);
         expect(res.data).toEqual({
@@ -162,6 +164,7 @@ describe("NASS SCV Tests", () => {
         const ucr = getValidUCR();
         ucr.client.service_token_birth = 156321;
         delete ucr.user.token;
+        ucr.request.url = "/test/expired-token-birth-date";
         const res = await post(ucr);
         expect(res.status).toBe(403);
         expect(res.data).toEqual({
@@ -175,6 +178,7 @@ describe("NASS SCV Tests", () => {
         const ucr = getValidUCR();
         delete ucr.user.token;
         ucr.client.service_token = "invalid-token";
+        ucr.request.url = "/test/wrong-token";
         const res = await post(ucr);
         expect(res.status).toBe(403);
         expect(res.data).toEqual({
@@ -187,9 +191,11 @@ describe("NASS SCV Tests", () => {
     test("Service invalid (inactive service)", async () => {
         const ucr = getValidUCR();
         delete ucr.user.token;
+        
         ucr.client.service = "Test Service : expired";
         ucr.client.service_token = "test-service-token-inactive";
         ucr.client.service_token_birth = 1749676800;
+        ucr.request.url = "/test/inactive-service";
         const res = await post(ucr);
         expect(res.status).toBe(403);
         expect(res.data).toEqual({
@@ -206,6 +212,7 @@ describe("NASS SCV Tests", () => {
         ucr.client.service_token = "test-service-token-expired";
         ucr.client.service_token_birth = 1749962909;
         ucr.request.url = "/test/expired-token";
+
         const res = await post(ucr);
         expect(res.status).toBe(409);
         expect(res.data).toEqual({
@@ -497,12 +504,13 @@ describe("NASS SSV Tests", () => {
                 status: 401,
                 message: "Invalid credentials provided."
             });
+            
         });
 
 
         test("renew session with valid token", async () => {
             const ucr = {
-                ...validUCR, user: { ...dummy2 }, data: {
+                ...validUCR, user: { ...dummy2, session_id: "2" }, data: {
                     "session-renewal-token": renewalTokenId
                 }
             };

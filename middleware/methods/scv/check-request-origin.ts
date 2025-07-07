@@ -1,4 +1,5 @@
 import { db } from "../../..";
+import { software } from "../../../software/dir";
 import { Service, NassServiceToken } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import UCRType from "../../../types/.types/ucr.type";
@@ -38,45 +39,24 @@ export async function checkRequestOrigin(UCR: UCRType): Promise<ReplyType> {
         const expiredToken = serviceToken.created_at + serviceToken.lifespan < Date.now() ||
           (process.env.SERVICE_TOKEN_MAXIMAL_RATES ?
           serviceToken.uses > parseInt(process.env.SERVICE_TOKEN_MAXIMAL_RATES) : true);
-        console.log(`Service token ${serviceToken.token} for service ${queriedService.name} is ${
-          expiredToken ? "expired" : "valid"}.`);
+        // console.log(`Service token ${serviceToken.token} for service ${queriedService.name} is ${
+        //   expiredToken ? "expired" : "valid"}.`);
         if (serviceToken && !expiredToken) {
-          return {
-            status: 200,
-            message: "Service access granted.",
-            success: true,
-          };
+          return software.methods.serverReply(200,"Service access granted.");
         } else if (expiredToken && serviceToken) {
           console.error(
             "\x1b[31m%s\x1b[0m",
             `Service token ${serviceToken.token} expired for service ${queriedService.name}. Forcing reload.`
           );
-          return {
-            status: 409,
-            message:
-              "Conflict between service's token and NASS. Forcing reload. This might take a few seconds.",
-            success: false,
-          };
+          return software.methods.serverReply(409,"Conflict between service's token and NASS. Forcing reload. This might take a few seconds.");
         }
       } else {
-        return {
-          status: 403,
-          message: "Invalid service token.",
-          success: false,
-        };
+        return software.methods.serverReply(403,"Invalid service token.");
       }
     } else {
-      return {
-        status: 403,
-        message: "Unauthorized service access.",
-        success: false,
-      };
+      return software.methods.serverReply(403,"Unauthorized service access.");
     }
   } else {
-    return {
-      status: 500,
-      message: "Internal server error. Services collections not found.",
-      success: false,
-    };
+    return software.methods.serverReply(500,"Internal server error. Services collections not found.");
   }
 }

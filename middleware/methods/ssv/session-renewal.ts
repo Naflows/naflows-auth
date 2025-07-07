@@ -1,6 +1,7 @@
 import { db } from "../../..";
 import secure from "../../../secure/dir";
 import { isTokenValid } from "../../../secure/user-token/methods/token-valid";
+import { software } from "../../../software/dir";
 import { Tokens, User, UserSession } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import UCRType from "../../../types/.types/ucr.type";
@@ -41,31 +42,19 @@ export async function sessionRenewal(ucr: UCRType, collections: {
     );
 
     if (updateResult.modifiedCount === 0) {
-      return {
-        status: 500,
-        message: "Failed to renew the session.",
-        success: false,
-      };
+      return software.methods.serverReply(500, "Failed to renew the session.");
     }
 
-    return {
-      status: 201,
-      message: "Session renewed successfully.",
-      success: true,
-      data: {
-        session: newSession.id
-      },
-    }
+    return software.methods.serverReply(201, "Session renewed successfully.", {
+      session: newSession.id,
+    });
+
 
 
 
   } else {
     if (!credentialsValidity) {
-      return {
-        status: 401,
-        message: "Invalid credentials provided.",
-        success: false,
-      };
+      return software.methods.serverReply(401, "Invalid credentials provided.");
     } else {
       // If the session is outdated, delete it and send a new token for renewal (if a token already exists, delete it)
       await collections.tokensCollection.deleteMany({
@@ -80,23 +69,13 @@ export async function sessionRenewal(ucr: UCRType, collections: {
         !newToken.data ||
         (newToken.data && !(newToken.data as { token?: string }).token)
       ) {
-        return {
-          status: 500,
-          message: newToken.message,
-          success: false,
-        };
+        return software.methods.serverReply(500, newToken.message || "Failed to create a new session renewal token.");
       }
 
 
-
-      return {
-        status: 401,
-        message: "Session is outdated.",
-        success: false,
-        data: {
-          token: (newToken.data as { token?: string }).token,
-        }
-      };
+      return software.methods.serverReply(401, "Session is outdated.", {
+        token: (newToken.data as { token?: string }).token,
+      });
     }
   }
 
