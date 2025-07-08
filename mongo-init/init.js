@@ -172,7 +172,7 @@ db.tokens.insertOne({
     created_at : new Date().getTime(),
     expires_at : new Date().getTime() + 1000 * 60 * 60 * 24 * 100, // 100 days
     renewable : true,
-    frozen_until : 1000*30, // Frozen for 30 seconds
+    frozen_until : 1000*45, // Frozen for 30 seconds
     frozen_at: Date.now(), // Frozen now
     uses : 0,
     max_uses : 1000, // Unlimited uses

@@ -224,7 +224,7 @@ describe("NASS SCV Tests", () => {
 
     test("Rate limit exceeded (too many requests)", async () => {
         const rates = process.env.BLACKLIST_RATES ? parseInt(process.env.BLACKLIST_RATES) : 100;
-        const ucr = getValidUCR({ ip: "135.215.3.111" });
+        const ucr = getValidUCR({ ip: "135.215.3.111", session_id : newSessionID });
         ucr.request.url = "/test/too-many-requests";
         delete ucr.user.token;
 
