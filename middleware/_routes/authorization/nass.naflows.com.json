@@ -1,0 +1,102 @@
+{
+    "/secure/check" : {
+        "rights" : ["SERVICES_VIEW"],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR", "DEVELOPER"],
+        "open" : false
+    },
+    "/secure/add" : {
+        "rights" : ["SERVICES_ADD"],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR"],
+        "open" : false
+    },
+    "/secure/deactivate" : {
+        "rights" : ["NASS_SECURITY_DEACTIVATE"],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR"],
+        "open" : false
+    },
+    "/secure/block" : {
+        "rights" : ["BLACKLIST_CREATE"],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR"],
+        "open" : false
+    },
+    "/routes/directory" : {
+        "rights" : ["NASS_VIEW_STRUCTURE"],
+        "method" : "GET",
+        "levels" : ["ADMINISTRATOR", "DEVELOPER"],
+        "open" : false
+    },
+    "/team/user/add" : {
+        "rights" : ["NASS_TEAM_ADD"],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR"],
+        "open" : false
+    },
+    "/team/user/remove" : {
+        "rights" : ["NASS_TEAM_REVOKE"],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR"],
+        "open" : false
+    },
+    "/team/user/update" : {
+        "rights" : ["NASS_TEAM_UPDATE"],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR"],
+        "open" : false
+    },
+    "/forward" : {
+        "rights" : [""],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR", "DEVELOPER", "USER"],
+        "open" : true
+    },
+
+
+    "/logs/get" : {
+        "rights" : ["NASS_LOGS_VIEW"],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR", "DEVELOPER"],
+        "open" : false
+    },
+    "/logs/add" : {
+        "rights" : ["DATA_MANIPULATION"],
+        "method" : "POST",
+        "levels" : [],
+        "open" : false
+    },
+
+
+    "/token/build/user" : {
+        "rights" : ["USER_EDIT_OWN"],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR", "USER"],
+        "open" : false
+    },
+    "/token/build/service" : {
+        "rights" : ["SERVICES_EDIT"],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR", "DEVELOPER"],
+        "open" : false
+    },
+    "/token/kill" : {
+        "rights" : ["DATA_EDIT"],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR", "DEVELOPER"],
+        "open" : false
+    },
+    "/token/check/availability" : {
+        "rights" : ["USER_READ_OWN"],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR", "DEVELOPER","USER"],
+        "open" : false
+    },
+    "/token/check/rights" : {
+        "rights" : ["DATA_VIEW"],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR", "DEVELOPER"],
+        "open" : false
+    }
+}

@@ -89,6 +89,8 @@ export type TokenRights =
   | "DATA_EDIT" // Edit database data
   | "DATA_CREATE" // Create new database data
 
+  | "NASS_LOGS_VIEW" // View NASS logs
+
   | "LOGS_VIEW"; // View NASS logs
 
   export interface Tokens {
