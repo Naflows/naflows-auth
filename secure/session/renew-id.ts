@@ -1,20 +1,24 @@
 import { Collection } from "mongoose";
-import { UserSession } from "../../types/.types/collections.type";
+import { Tokens, UserSession } from "../../types/.types/collections.type";
 import { ReplyType } from "../../types/.types/reply.type";
 import { v4 } from "uuid";
+import { software } from "../../software/dir";
 
 
 export default async function renewSessionId(sessionID : string, collections : {
-    sessionsCollection: Collection<UserSession>;
+    sessionsCollection: Collection<UserSession>,
+    tokensCollection: Collection<Tokens>, 
 }) : Promise<ReplyType> {
     const session = await collections.sessionsCollection.findOne({ id: sessionID }) as UserSession;
     if (!session) {
-        return {
-            status: 404,
-            success: false,
-            message: "Session not found.",
-        };
+        return software.methods.serverReply(404,"Session not found.");
     } 
+
+    const token = await collections.tokensCollection.findOne({ session_id: session.id }) as Tokens;
+
+    if (!token) {
+        return software.methods.serverReply(404, "No token associated with this session.");
+    }
 
     const newSessionID = v4(); // Generate a new session ID
     const updatedSession: UserSession = {
@@ -26,21 +30,16 @@ export default async function renewSessionId(sessionID : string, collections : {
         { id: sessionID },
         { $set: updatedSession }
     );
+    const updateToken = await collections.tokensCollection.updateOne(
+        { id: token.id },
+        { $set: { session_id: newSessionID, updated_at: Date.now() } }
+    );
 
-    if (updateResult.modifiedCount === 0) {
-        return {
-            status: 500,
-            message: "Failed to renew the session.",
-            success: false,
-        };
+    if (updateResult.modifiedCount === 0 || updateToken.modifiedCount === 0) {
+        return software.methods.serverReply(500, "Failed to renew the session.");
     }
 
-    return {
-        status: 200,
-        message: "Session renewed successfully.",
-        success: true,
-        data: {
-            session: updatedSession.id
-        },
-    };
+    return software.methods.serverReply(200, "Session renewed successfully with code 200.", {
+        session: updatedSession.id
+    });
 }

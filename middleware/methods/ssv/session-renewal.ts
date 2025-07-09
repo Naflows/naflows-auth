@@ -45,7 +45,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
       return software.methods.serverReply(500, "Failed to renew the session.");
     }
 
-    return software.methods.serverReply(201, "Session renewed successfully.", {
+    return software.methods.serverReply(201, "Session renewed successfully with code 201.", {
       session: newSession.id,
     });
 
