@@ -18,7 +18,7 @@ export function returnReplyType(code, message, data?): ReplyType {
             : `\x1b[31mError (${r.status}) - ${r.message}\x1b[0m\n`
     );
     if (data) {
-        process.stdout.write(`Data: ${JSON.stringify(data)}\n`);
+        process.stdout.write(`\x1b[90mData: ${JSON.stringify(data)}\x1b[0m\n`);
     }
     return r;
 }

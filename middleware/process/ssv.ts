@@ -67,7 +67,6 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
                 );
               }
             } else if (ucr.user.token != undefined && ucr.user.token != null) {
-              console.log(`Searching for token: ${ucr.user.token} for user: ${user.id} and session: ${session.id}`);
               const token = await tokensCollection.findOne({
                 id: session.token_id,
                 token: ucr.user.token,

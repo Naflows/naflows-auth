@@ -26,7 +26,7 @@ export async function SwitchServerReply(
             break;
     }
     if (!rep.success) {
-        console.log('\x1b[31m%s\x1b[0m',`Exiting NASS connection with status ${rep.status} and message: ${rep.message}\nAdditional data: ${JSON.stringify(rep.data)}`);
+        console.log('\x1b[31m%s\x1b[0m',`Exiting NASS connection with status ${rep.status} and message: ${rep.message}\n\x1b[90mAdditional data: ${JSON.stringify(rep.data)}`);
         return res.status(rep.status).send(rep);
     }
 }
