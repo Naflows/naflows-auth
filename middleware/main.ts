@@ -56,7 +56,7 @@ export async function NASS_Verification_Process(req, res, next) {
         }
 
         console.log("\x1b[32m%s\x1b[0m","NASS Verification Process completed successfully.");
-        console.log("\x1b[34m%s\x1b[0m", `Additional data before processing: \nNew Session ID: ${(req as any).newSessionID || "None"}\nNew Token ID: ${(req as any).newTokenID || "None"}`);
+        console.log(`\x1b[90mAdditional data before processing: \n\x1b[90mNew Session ID: ${(req as any).newSessionID || "None"}\n\x1b[90mNew Token ID: ${(req as any).newTokenID || "None"}\n\x1b[90mRetry After: ${(req as any).retry_after || "None"}\n\x1b[90mToken: ${(req as any).token || "None"} \x1b[0m`);
 
 
         return next();

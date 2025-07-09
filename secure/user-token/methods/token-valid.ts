@@ -1,4 +1,5 @@
 import { db } from "../../..";
+import { software } from "../../../software/dir";
 import { Tokens, UserSession } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import UCRType from "../../../types/.types/ucr.type";
@@ -15,23 +16,11 @@ export function isTokenValid(
     const tokenUsesValid = token.uses < token.max_uses;
 
     if (sessionValid && userValid && tokenValid && tokenUsesValid) {
-        return {
-            status: 200,
-            message: "Token is valid.",
-            success: true,
-        } 
+      return software.methods.serverReply(200, "Token is valid.");
     } else {
-        return {
-            status: 401,
-            message: "Token is outdated or invalid.",
-            success: false,
-        }
+        return software.methods.serverReply(401, "Token is outdated or invalid.");
     }
   } else {
-    return {
-      status: 404,
-      message: "Token not found.",
-      success: false,
-    };
+    return software.methods.serverReply(404, "Token not found.");
   }
 }
