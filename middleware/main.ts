@@ -50,6 +50,9 @@ export async function NASS_Verification_Process(req, res, next) {
           if ((stv.data as { retry_after? : number }).retry_after) {
             (req as any).retry_after = (stv.data as { retry_after? : number }).retry_after;
           }
+          if ((stv.data as { token?: string }).token) {
+            (req as any).token = (stv.data as { token?: string }).token;
+          }
         }
 
         console.log("\x1b[32m%s\x1b[0m","NASS Verification Process completed successfully.");

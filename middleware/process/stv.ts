@@ -34,44 +34,59 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                     console.error("\x1b[31m%s\x1b[0m", "Failed to create new session token:", tokenRenewal.message);
                 }
                 return tokenRenewal;
-            }
+            } else {
+                const sessionID = ucr.user.session_id;
+                const session = await sessionsCollection.findOne({ id: sessionID }) as unknown as UserSession;
+                if (session) {
+                    const tokenID = session.token_id;
+                    const token = await tokensCollection.findOne({ id: tokenID }) as unknown as Tokens;
 
 
-            const sessionID = ucr.user.session_id;
-            const session = await sessionsCollection.findOne({ id: sessionID }) as unknown as UserSession;
-            if (session) {
-                const tokenID = session.token_id;
-                const token = await tokensCollection.findOne({ id: tokenID }) as unknown as Tokens;
-
-
-                // Then, if there are no renewal / renewal has been done correctly, we check if the token is valid for session | check if identifiers are valid
-
-                // If the session is valid, we check if the token is not frozen
-
-                // TODO: BRAINSTORM ABOUT IF ITS A GOOD IDEA TO HAVE EITHER TOKEN OR PASSWORD AND IDENTIFIER
-                if (token && (
-                    // Checks if the token is valid for the session
-                    token.token === ucr.user.token || (ucr.user.password && ucr.user.identifier))
-                ) {
-                    if (token.frozen_at + token.frozen_until > Date.now()) {
-                        return software.methods.serverReply(
-                            429,
-                            "Token is frozen.",
-                            {
-                                retry_after: (token.frozen_at + token.frozen_until) - Date.now()
+                    // TODO: BRAINSTORM ABOUT IF ITS A GOOD IDEA TO HAVE EITHER TOKEN OR PASSWORD AND IDENTIFIER
+                    if (token && (
+                        // Checks if the token is valid for the session
+                        token.token === ucr.user.token || (ucr.user.password && ucr.user.identifier))
+                    ) {
+                        if (token.frozen_at + token.frozen_until > Date.now()) {
+                            return software.methods.serverReply(
+                                429,
+                                "Token is frozen.",
+                                {
+                                    retry_after: (token.frozen_at + token.frozen_until) - Date.now()
+                                }
+                            );
+                        } else {
+                            const t = await secure.token.updateUse(token.id);
+                            if (!t.success) {
+                                return software.methods.serverReply(
+                                    500,
+                                    "Failed to update token use: " + t.message,
+                                );
                             }
+
+
+                            return software.methods.serverReply(
+                                200,
+                                "STV Process completed successfully.",
+                                {
+                                    token: (t.data as { token?: string }).token
+                                }
+                            );
+                        }
+                    } else {
+                        return software.methods.serverReply(
+                            401,
+                            "Invalid token or credentials provided.",
                         );
                     }
+
                 } else {
                     return software.methods.serverReply(
-                        401,
-                        "Invalid token or credentials provided.",
-                    );  
+                        404,
+                        "Session not found.",
+                    );
                 }
             }
-
-
-
         } else {
             return software.methods.serverReply(
                 500,
@@ -81,10 +96,4 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
     } else {
         console.log("\x1b[33m%s\x1b[0m", "NASS STV is disabled, skipping verification process.");
     }
-
-
-    return software.methods.serverReply(
-        200,
-        "STV Process completed successfully.",
-    );
 }

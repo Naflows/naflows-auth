@@ -23,7 +23,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
 
   // STEP 1
   const sessionsCollection = db.collection("sessions") as Collection<UserSession>;
-  const tokensCollection = db.collection("tokens");
+  const tokensCollection = db.collection("tokens") as Collection<Tokens>;
   const usersCollection = db.collection("users");
 
   if (sessionsCollection && tokensCollection && usersCollection) {
@@ -67,14 +67,20 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
                 );
               }
             } else if (ucr.user.token != undefined && ucr.user.token != null) {
+              console.log(`Searching for token: ${ucr.user.token} for user: ${user.id} and session: ${session.id}`);
               const token = await tokensCollection.findOne({
                 id: session.token_id,
                 token: ucr.user.token,
+                session_id: session.id,
               });
 
 
 
               if (!token || (token && token.token != ucr.user.token)) {
+                console.error(
+                  "\x1b[31m%s\x1b[0m",
+                  "Invalid token provided for user session."
+                );
                 return software.methods.serverReply(
                   401,
                   "Invalid user credentials.",
@@ -93,10 +99,6 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
             if (!sessionRenewal.success) {
               return sessionRenewal;
             }
-
-            return software.methods.serverReply(201, sessionRenewal.status, {
-              session: (sessionRenewal.data as { session?: string }).session || session.id
-            });
           }
         } else {
           return software.methods.serverReply(401, "Invalid session informations.");
@@ -109,7 +111,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
     }
 
 
-    const newSessionID: ReplyType = await secure.session.renew(session.id, { sessionsCollection: sessionsCollection });
+    const newSessionID: ReplyType = await secure.session.renew(session.id, { sessionsCollection: sessionsCollection, tokensCollection: tokensCollection });
 
     if (!newSessionID.success) {
       return newSessionID;
