@@ -101,7 +101,7 @@ db.sessions.insertOne({
     device_fingerprint: "fingerprint-1",
     expires_at: new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours
     created_at: new Date().getTime(),
-    token_id: 1,
+    token_id: "1",
     last_activity: new Date().getTime(),
     user_origin: "NASS",
 })
@@ -114,7 +114,7 @@ db.sessions.insertOne({
     device_fingerprint: "fingerprint-2",
     expires_at: new Date().getTime() - 1000 * 60 * 60 * 24, // Expired session
     created_at: new Date().getTime() - 1000 * 60 * 60 * 24, // Created 24 hours ago
-    token_id: 2,
+    token_id: "2",
     last_activity: new Date().getTime() - 1000 * 60 * 60 * 24, // Last activity 24 hours ago
     user_origin: "NASS",
 });
@@ -127,14 +127,14 @@ db.sessions.insertOne({
     device_fingerprint: "fingerprint-3",
     expires_at: new Date().getTime() + 1000 * 60 * 60 * 10000, // 1000 hours
     created_at: new Date().getTime(),
-    token_id: 3,
+    token_id: "3",
     last_activity: new Date().getTime(),
     user_origin: "NASS",
 })
 
 
 db.tokens.insertOne({
-    id : 1,
+    id : "1",
     token : "test-token",
     user_id : 2,
     session_id : "1",
@@ -149,7 +149,7 @@ db.tokens.insertOne({
 });
 
 db.tokens.insertOne({
-    id : 2,
+    id : "2",
     token : "test-token-2",
     user_id : 3,
     session_id : "2",
@@ -164,7 +164,7 @@ db.tokens.insertOne({
 });
 
 db.tokens.insertOne({
-    id : 3,
+    id : "3",
     token : "test-token-3-frozen",
     user_id : 2,
     session_id : "3",
@@ -172,7 +172,7 @@ db.tokens.insertOne({
     created_at : new Date().getTime(),
     expires_at : new Date().getTime() + 1000 * 60 * 60 * 24 * 100, // 100 days
     renewable : true,
-    frozen_until : 1000*45, // Frozen for 30 seconds
+    frozen_until : 0, // Frozen for 30 seconds
     frozen_at: Date.now(), // Frozen now
     uses : 0,
     max_uses : 1000, // Unlimited uses
