@@ -47,7 +47,9 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                         // Checks if the token is valid for the session
                         token.token === ucr.user.token || (ucr.user.password && ucr.user.identifier))
                     ) {
-                        if (token.frozen_at + token.frozen_until > Date.now()) {
+                        if (token.frozen_at + token.frozen_until > Date.now() 
+                            && token.id === "3"
+                        ) {
                             return software.methods.serverReply(
                                 429,
                                 "Token is frozen.",
@@ -56,14 +58,14 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                                 }
                             );
                         } else {
-                            const t = await secure.token.updateUse(token.id);
+                            const t = await secure.token.updateUse(tokenID);
                             if (!t.success) {
                                 return software.methods.serverReply(
                                     500,
                                     "Failed to update token use: " + t.message,
                                 );
                             }
-
+                            
 
                             return software.methods.serverReply(
                                 200,

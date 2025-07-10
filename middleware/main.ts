@@ -43,6 +43,7 @@ export async function NASS_Verification_Process(req, res, next) {
           return software.methods.manageErrorCode(stv, res);
         }
 
+
         if (stv.data) {
           if ((stv.data as { token?: string }).token) {
             (req as any).newTokenID = (stv.data as any).token;

@@ -603,10 +603,33 @@ describe("NASS SSV Tests", () => {
 describe("NASS STV Tests", () => {
     let timingBeforeUnfrozen;
 
-    test("token is frozen", async () => {
+
+
+
+    test("token is not frozen", async () => {
         const ucr = getValidUCR({ ...dummy1_2 });
+        ucr.request.url = "/test-stv/token-not-frozen";
+        delete ucr.user.password; 
+        delete ucr.user.identifier; 
+        const res = await post(ucr);
+        expect(res.status).toBe(200);
+        expect(res.data).toEqual({
+            success: true,
+            status: 200,
+            message: "Successful connection",
+            data: {
+                token: expect.any(String), // Expecting a token to be returned
+                session: expect.any(String), // Expecting a session ID to be returned
+            }
+        });
+        newSessionID = res.data.data.session; // Update the session ID for further tests
+        newTokenValue = res.data.data.token; // Update the token value for further tests
+    });
+
+    test("token is frozen", async () => {
+        const ucr = getValidUCR({ ...dummy1_2, token: newTokenValue, session_id: newSessionID });
         ucr.request.url = "/test-stv/token-frozen";
-        delete ucr.user.password;
+        delete ucr.user.password; 
         delete ucr.user.identifier;
         const res = await post(ucr);
         expect(res.status).toBe(429);
@@ -615,21 +638,23 @@ describe("NASS STV Tests", () => {
             status: 429,
             message: "Token is frozen.",
             data: {
-                retry_after: expect.any(Number),
-                session : expect.any(String),
+                session: expect.any(String), // Expecting a session ID to be returned
+                retry_after: expect.any(Number) // Expecting a retry_after value
             }
         });
-        timingBeforeUnfrozen = res.data.data.retry_after;
-        console.log("\x1b[33m%s\x1b[0m", `Token is frozen for ${timingBeforeUnfrozen} milliseconds.`);
-        newSessionID = res.data.data.session; // Store the session ID for further tests
+        newSessionID = res.data.data.session; // Update the session ID for further tests
+        timingBeforeUnfrozen = res.data.data.retry_after; // Store the retry_after value for further tests
     });
 
-    test('token is unfrozen after waiting', async () => {
-        const ucr = getValidUCR({ ...dummy1_2, session_id : newSessionID });
-        delete ucr.user.password;
+    test("token is frozen, but unfrozen after a delay", async () => {
+        const ucr = getValidUCR({ ...dummy1_2, token: newTokenValue, session_id: newSessionID });
+        ucr.request.url = "/test-stv/token-frozen-unfrozen";
+        delete ucr.user.password; 
         delete ucr.user.identifier;
-        await setTimeoutPromise(timingBeforeUnfrozen + 1000); // Wait for the token to be unfrozen
-        ucr.request.url = "/test-stv/token-unfrozen";
+        
+        // Wait for the token to be unfrozen
+        await setTimeoutPromise(timingBeforeUnfrozen + 1000); // Adding 1 second buffer
+
         const res = await post(ucr);
         expect(res.status).toBe(200);
         expect(res.data).toEqual({
@@ -637,10 +662,12 @@ describe("NASS STV Tests", () => {
             status: 200,
             message: "Successful connection",
             data: {
-                session: expect.any(String),
-                token: expect.any(String) // Expecting a token to be returned
+                token: expect.any(String), // Expecting a token to be returned
+                session: expect.any(String), // Expecting a session ID to be returned
             }
         });
+        newSessionID = res.data.data.session; // Update the session ID for further tests
+        newTokenValue = res.data.data.token; // Update the token value for further tests
     });
 });
 
