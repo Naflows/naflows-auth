@@ -20,16 +20,19 @@ export async function createToken(
             user_id: user.id,
             session_id: session.id,
             created_at: Date.now(),
-            expires_at: Date.now() + (renewable ? 0 : parseInt(process.env.SESSION_TOKEN_DURATION || "3600000")), // Default to 1 hour if not set
+            expires_at: Date.now() + (parseInt(process.env.SESSION_TOKEN_DURATION || "3600000")), // Default to 1 hour if not set
             renewable: renewable,
             uses: 0,
-            max_uses: max_uses || 1, // Default to 1 use if not specified
+            max_uses: max_uses || parseInt(process.env.STV_MAXIMAL_USE_RATES), // Default to 1 use if not specified
             rights: [rights],
+            enabled: true, // Token is enabled by default
+            supertest : true,
         };
 
         // Save the token to the database
         const tokensCollection = db.collection("tokens") as Collection<Tokens>;
         await tokensCollection.insertOne(token);
+
 
         return software.methods.serverReply(
             201, "Token created successfully.", 

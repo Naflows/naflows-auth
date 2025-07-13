@@ -1,3 +1,4 @@
+import { Collection } from "mongoose";
 import { db } from "../../..";
 import secure from "../../../secure/dir";
 import { isTokenValid } from "../../../secure/user-token/methods/token-valid";
@@ -8,8 +9,8 @@ import UCRType from "../../../types/.types/ucr.type";
 import * as crypto from "crypto";
 
 export async function sessionRenewal(ucr: UCRType, collections: {
-  sessionsCollection: any;
-  tokensCollection: any;
+  sessionsCollection: Collection<UserSession>;
+  tokensCollection: Collection<Tokens>;
 }, user: User, session: UserSession): Promise<ReplyType> {
   const renewalToken = ucr.data ? ucr.data["session-renewal-token"] : undefined;
   const token = renewalToken
@@ -33,17 +34,30 @@ export async function sessionRenewal(ucr: UCRType, collections: {
       ),
     };
 
+    console.log(`Renewing session ${session.id} with new session ID ${newSession.id} and user ID ${user.id}. Associated token is ${token.id} (${token.token}) with rights ${token.rights.join(", ")}.`);
 
-
-
+    const updateToken = await collections.tokensCollection.updateOne(
+      { id: session.token_id },
+      { $set: { session_id: newSession.id, updated_at: Date.now() } }
+    )
     const updateResult = await collections.sessionsCollection.updateOne(
       { id: session.id },
       { $set: newSession }
     );
 
-    if (updateResult.modifiedCount === 0) {
+
+
+
+
+    if (updateResult.modifiedCount === 0 || updateToken.modifiedCount === 0) {
       return software.methods.serverReply(500, "Failed to renew the session.");
     }
+
+    await collections.tokensCollection.deleteMany({
+      user_id: ucr.user.user_id,
+      rights: "SESSION_RENEWAL",
+    });
+
 
     return software.methods.serverReply(201, "Session renewed successfully with code 201.", {
       session: newSession.id,
