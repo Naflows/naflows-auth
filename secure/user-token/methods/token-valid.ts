@@ -18,6 +18,8 @@ export function isTokenValid(
     if (sessionValid && userValid && tokenValid && tokenUsesValid) {
       return software.methods.serverReply(200, "Token is valid.");
     } else {
+        console.log("\x1b[33m%s\x1b[0m", `Token validation failed:
+        Session Valid: ${sessionValid}, User Valid: ${userValid}, Token Valid: ${tokenValid}, Token Uses Valid: ${tokenUsesValid}`);
         return software.methods.serverReply(401, "Token is outdated or invalid.");
     }
   } else {

@@ -26,10 +26,12 @@ export async function NASS_Verification_Process(req, res, next) {
           return software.methods.manageErrorCode(ssv, res);
         }
 
+        let newSessionID: string | undefined;
         if (ssv.data) {
           if ((ssv.data as { session?: any }).session) {
             (req as any).newSessionID = (ssv.data as { session?: any }).session;
             (req as any).body.user.session_id = (ssv.data as { session?: any }).session;
+            newSessionID = (ssv.data as { session?: any }).session;
           }
         }
 
@@ -37,8 +39,11 @@ export async function NASS_Verification_Process(req, res, next) {
         const stv : ReplyType = await middleware.process.stv(req, res, ssv);
         if (!stv.success) {
           console.error("\x1b[31m%s\x1b[0m",`NASS STV Process failed: ${stv.message}`);
-          if (ssv.data && (ssv.data as { session?: any }).session) {
-            stv.data["session"] = (ssv.data as { session?: any }).session;
+          if (!stv.data || !stv.data["session"]) {
+            stv.data = stv.data || {};
+          }
+          if (newSessionID) {
+            stv.data["session"] = newSessionID;
           }
           return software.methods.manageErrorCode(stv, res);
         }

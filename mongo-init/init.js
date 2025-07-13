@@ -145,6 +145,7 @@ db.tokens.insertOne({
     frozen_until : null,
     frozen_at: null,
     uses : 0,
+    enabled : true,
     max_uses : 1000, // Unlimited uses
 });
 
@@ -160,6 +161,7 @@ db.tokens.insertOne({
     frozen_until : null,
     frozen_at: null,
     uses : 0,
+    enabled : true,
     max_uses : 1000, // Unlimited uses
 });
 
@@ -169,13 +171,15 @@ db.tokens.insertOne({
     user_id : 2,
     session_id : "3",
     rights : ["USER_READ_OWN","USER_EDIT_OWN"],
-    created_at : new Date().getTime(),
-    expires_at : new Date().getTime() + 1000 * 60 * 60 * 24 * 100, // 100 days
+    created_at : new Date().getTime() - 10,
+    expires_at : new Date().getTime() - 5, 
     renewable : true,
     frozen_until : 0, // Frozen for 30 seconds
     frozen_at: Date.now(), // Frozen now
     uses : 0,
+    enabled : true,
     max_uses : 1000, // Unlimited uses
+    supertest : true,
 });
 
 

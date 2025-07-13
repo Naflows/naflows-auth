@@ -93,7 +93,7 @@ export type TokenRights =
 
   | "LOGS_VIEW"; // View NASS logs
 
-  export interface Tokens {
+export interface Tokens {
   id: string;
   token: string;
   user_id: number;
@@ -101,6 +101,8 @@ export type TokenRights =
   created_at: number;
   expires_at: number;
   renewable: boolean;
+  supertest?: boolean; // If the token is a supertest token, it can be used for testing purposes
+  enabled: boolean; // Whether the token is enabled or not, if not, it cannot be used
   frozen_until?: number; // UNIX TIMESTAMP, if the token is frozen, this is the amount of seconds until it can be unfrozen
   frozen_at?: number; // If the token is frozen, this is the date when it was frozen,
   uses: number; // How many times the token has been use

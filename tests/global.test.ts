@@ -558,6 +558,7 @@ describe("NASS SSV Tests", () => {
 
         test("try to renew session after renewal", async () => {
             const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId, token: renewTokenValue } };
+            console.log(`Sending token renewal request with session ID: ${sessionId} and token: ${renewTokenValue}`);
             delete ucr.user.password;
             delete ucr.user.identifier;
             ucr.request.url = "/test-ssv/session-connection-after-renewal/valid-token";
@@ -602,12 +603,98 @@ describe("NASS SSV Tests", () => {
 
 describe("NASS STV Tests", () => {
     let timingBeforeUnfrozen;
+    let tokenRenewalValue;
 
-
-
-
-    test("token is not frozen", async () => {
+    test("token is expired", async () => {
         const ucr = getValidUCR({ ...dummy1_2 });
+        ucr.request.url = "/test-stv/token-expired";
+        delete ucr.user.password;
+        delete ucr.user.identifier;
+        const res = await post(ucr);
+        expect(res.status).toBe(401);
+        expect(res.data).toEqual({
+            success: false,
+            status: 401,
+            message: "Token is expired or has reached its maximum uses. Please log in again.",
+            data: {
+                token: expect.any(String),
+                session: expect.any(String)
+            }
+        });
+        tokenRenewalValue = res.data.data.token;
+        newSessionID = res.data.data.session; 
+    }) 
+
+    test('renew token with wrong token renewal', async () => {
+        const ucr = {
+            ...getValidUCR({ ...dummy1_2, session_id: newSessionID }),
+            data: {
+                "renewal-token": "invalid-renewal-token"
+            }
+        };
+        ucr.request.url = "/test-stv/renew-token-invalid";
+        delete ucr.user.token;
+        const res = await post(ucr);
+        expect(res.status).toBe(401);
+        expect(res.data).toEqual({
+            success: false,
+            status: 401,
+            message: "Renewal token is invalid or not provided.",
+            data: {
+                session: expect.any(String)
+            }
+        });
+        newSessionID = res.data.data.session; // Update the session ID for further tests
+    });
+
+    test('renew token with invalid credentials', async () => {
+        console.log(`Sending token renewal request with session ID: ${newSessionID} and token: ${tokenRenewalValue}`);
+        const ucr = {
+            ...getValidUCR({ ...dummy1_2, session_id: newSessionID }),
+            data: {
+                "renewal-token": tokenRenewalValue
+            }
+        };
+        ucr.request.url = "/test-stv/renew-token-invalid-credentials";
+        delete ucr.user.token;
+        ucr.user.identifier = "invalid-identifier";
+        const res = await post(ucr);
+        expect(res.status).toBe(401);
+        expect(res.data).toEqual({
+            success: false,
+            status: 401,
+            message: "Invalid user credentials."
+        });
+    });
+
+
+    test('renew token with valid credentials', async () => {
+        const ucr = {
+            ...getValidUCR({ ...dummy1_2, session_id: newSessionID }),
+            data: {
+                "renewal-token": tokenRenewalValue
+            }
+        };
+        ucr.request.url = "/test-stv/renew-token-valid";
+        delete ucr.user.token;
+        const res = await post(ucr);
+        expect(res.status).toBe(200);
+        expect(res.data).toEqual({
+            success: true,
+            status: 200,
+            message: "Successful connection",
+            data: {
+                token: expect.any(String), // Expecting a new token to be returned
+                session: expect.any(String) // Expecting a new session ID to be returned
+            }
+        });
+        newSessionID = res.data.data.session; // Update the session ID for further tests
+        newTokenValue = res.data.data.token; // Update the token value for further tests
+    });
+
+ 
+    test("token is not frozen", async () => {
+        const ucr = getValidUCR({ ...dummy1_2, token: newTokenValue, session_id: newSessionID });
         ucr.request.url = "/test-stv/token-not-frozen";
         delete ucr.user.password; 
         delete ucr.user.identifier; 

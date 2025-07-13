@@ -67,6 +67,10 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
                 );
               }
             } else if (ucr.user.token != undefined && ucr.user.token != null) {
+              console.log(
+                "\x1b[32m%s\x1b[0m",
+                `Token provided: ${ucr.user.token} for tokenID ${session.token_id} and session ID ${session.id}`
+              );
               const token = await tokensCollection.findOne({
                 id: session.token_id,
                 token: ucr.user.token,

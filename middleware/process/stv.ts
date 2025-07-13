@@ -35,20 +35,35 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                 }
                 return tokenRenewal;
             } else {
-                const sessionID = ucr.user.session_id;
+                const sessionID = ssv.data ? (ssv.data as { session?: string }).session : ucr.user.session_id;
                 const session = await sessionsCollection.findOne({ id: sessionID }) as unknown as UserSession;
                 if (session) {
                     const tokenID = session.token_id;
                     const token = await tokensCollection.findOne({ id: tokenID }) as unknown as Tokens;
 
 
+
+
                     // TODO: BRAINSTORM ABOUT IF ITS A GOOD IDEA TO HAVE EITHER TOKEN OR PASSWORD AND IDENTIFIER
                     if (token && (
                         // Checks if the token is valid for the session
-                        token.token === ucr.user.token || (ucr.user.password && ucr.user.identifier))
+                        (token.token === ucr.user.token && token.enabled) || (ucr.user.password && ucr.user.identifier))
                     ) {
-                        if (token.frozen_at + token.frozen_until > Date.now() 
-                            && token.id === "3"
+
+                        if (
+                            token.uses >= token.max_uses || token.expires_at < Date.now()
+                            || (!token.enabled && ucr.data && ucr.data["renewal-token"])
+                        ) {
+                            console.log(`Triggered because:\ntoken.uses: ${token.uses} >= token.max_uses: ${token.max_uses}\ntoken.expires_at: ${token.expires_at} < Date.now(): ${Date.now()}\ntoken.enabled: ${token.enabled} && ucr.data["renewal-token"]: ${!!ucr.data && !!ucr.data["renewal-token"]}`);
+                            const renewalTokenValue = ucr.data ? ucr.data["renewal-token"] : undefined;
+
+                            const isTokenNotExpired: ReplyType = await middleware.token.ucrRenewal(token, ucr, session, { sessionsCollection: sessionsCollection, tokensCollection: tokensCollection, usersCollection: usersCollection });
+                            return isTokenNotExpired;
+                        }
+
+
+                        if (token.frozen_at + token.frozen_until > Date.now()
+                            && token.supertest
                         ) {
                             return software.methods.serverReply(
                                 429,
@@ -57,24 +72,26 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                                     retry_after: (token.frozen_at + token.frozen_until) - Date.now()
                                 }
                             );
-                        } else {
-                            const t = await secure.token.updateUse(tokenID);
-                            if (!t.success) {
-                                return software.methods.serverReply(
-                                    500,
-                                    "Failed to update token use: " + t.message,
-                                );
-                            }
-                            
+                        }
 
+
+                        const t = await secure.token.updateUse(token.id);
+                        if (!t.success) {
                             return software.methods.serverReply(
-                                200,
-                                "STV Process completed successfully.",
-                                {
-                                    token: (t.data as { token?: string }).token
-                                }
+                                500,
+                                "Failed to update token use: " + t.message,
                             );
                         }
+
+
+                        return software.methods.serverReply(
+                            200,
+                            "STV Process completed successfully.",
+                            {
+                                token: (t.data as { token?: string }).token
+                            }
+                        );
+
                     } else {
                         return software.methods.serverReply(
                             401,
