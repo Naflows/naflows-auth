@@ -115,7 +115,7 @@ export async function checkRenewalViaUCR(
         }
 
 
-        const renewalToken: ReplyType = await secure.token.create(user, session, "TOKEN_RENEWAL", false, 1);
+        const renewalToken: ReplyType = await secure.token.create(user, session, ["TOKEN_RENEWAL"], false, 1);
         return software.methods.serverReply(
             401,
             "Token is expired or has reached its maximum uses. Please log in again.",
