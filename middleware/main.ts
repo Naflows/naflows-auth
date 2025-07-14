@@ -6,7 +6,7 @@ import middleware from "./dir";
 export async function NASS_Verification_Process(req, res, next) {
   if (req.body) {
     try {
-      console.log("\x1b[34m%s\x1b[0m", `------ INCOMING REQUEST at ${req.body.request.url}  ------`);
+      console.log("\x1b[34m%s\x1b[0m", `------ INCOMING REQUEST at ${req.body.request.url} (${req.body.data && req.body.data["customRequestURL"] ? req.body.data["customRequestURL"] : "No custom request URL provided" })  ------`);
       if (process.env.NASS_SCV_ENABLED !== "true") {
         console.log("NASS SCV is disabled, skipping verification process.");
         return next();

@@ -8,7 +8,7 @@ import * as crypto from "crypto";
 export async function createToken(
     user : User, 
     session : UserSession,
-    rights : TokenRights,
+    rights : TokenRights[],
     renewable : boolean,
     max_uses : number 
 ) : Promise<ReplyType> {
@@ -24,7 +24,7 @@ export async function createToken(
             renewable: renewable,
             uses: 0,
             max_uses: max_uses || parseInt(process.env.STV_MAXIMAL_USE_RATES), // Default to 1 use if not specified
-            rights: [rights],
+            rights: rights,
             enabled: true, // Token is enabled by default
             supertest : true,
         };

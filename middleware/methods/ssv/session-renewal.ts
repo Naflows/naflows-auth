@@ -34,7 +34,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
       ),
     };
 
-    console.log(`Renewing session ${session.id} with new session ID ${newSession.id} and user ID ${user.id}. Associated token is ${token.id} (${token.token}) with rights ${token.rights.join(", ")}.`);
+    console.log(`Renewing session ${session.id} with new session ID ${newSession.id} and user ID ${user.id}. Associated token is ${token.id} (${token.token}) with rights ${token.rights}.`);
 
     const updateToken = await collections.tokensCollection.updateOne(
       { id: session.token_id },

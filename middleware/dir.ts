@@ -9,6 +9,7 @@ import { sessionRenewal } from "./methods/ssv/session-renewal";
 import { stv } from "./process/stv";
 import renewToken from "./methods/stv/renew-token";
 import { checkRenewalViaUCR } from "./methods/stv/renewal.via-ucr";
+import { checkTokenRights } from "./methods/stv/check-rights";
 
 const middleware = {
     main : NASS_Verification_Process,
@@ -23,7 +24,8 @@ const middleware = {
     },
     token : {
         renewal : renewToken,
-        ucrRenewal : checkRenewalViaUCR
+        ucrRenewal : checkRenewalViaUCR,
+        rights : checkTokenRights
     },
     process : {
         scv : scv,

@@ -49,6 +49,7 @@ export async function updateTokenUse(tokenId: string): Promise<ReplyType> {
         }
         return software.methods.serverReply(200, "Token use updated successfully.", {
             token: newValue,
+            retry_after : ts,
         });
     } catch (error) {
         return software.methods.serverReply(

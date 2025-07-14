@@ -74,6 +74,12 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                             );
                         }
 
+                        const checkRights = await middleware.token.rights(token,ucr);
+                        if (!checkRights.success) {
+                            return checkRights;
+                        }
+
+
 
                         const t = await secure.token.updateUse(token.id);
                         if (!t.success) {
@@ -88,7 +94,8 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                             200,
                             "STV Process completed successfully.",
                             {
-                                token: (t.data as { token?: string }).token
+                                token: (t.data as { token?: string }).token,
+                                retry_after : (t.data as { retry_after?: number }).retry_after || 0,
                             }
                         );
 
