@@ -1,5 +1,5 @@
 import { Collection, DeleteResult } from "mongoose";
-import { Tokens, User, UserSession } from "../../../types/.types/collections.type";
+import { TokenRights, Tokens, User, UserSession } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import UCRType from "../../../types/.types/ucr.type";
 import { software } from "../../../software/dir";
@@ -77,7 +77,7 @@ export async function checkRenewalViaUCR(
         }
 
         const newToken: ReplyType = await secure.token.create(
-            user, session, token.rights[0], false, token.max_uses
+            user, session, token.rights, false, token.max_uses
         );
         const sessionChange = await collections.sessionsCollection.updateOne(
             { id: session.id },

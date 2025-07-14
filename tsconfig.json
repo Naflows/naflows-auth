@@ -1,6 +1,8 @@
 {
-     "compilerOptions": {
-        "types": ["node"]
-      },
-    "include" : ["**/*.ts", "**/*.html", "**/*.css", "secure/hash/hash.ts"],
+  "compilerOptions": {
+    "types": ["node"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  },
+  "include": ["**/*.ts", "**/*.html", "**/*.css", "secure/hash/hash.ts"]
 }
