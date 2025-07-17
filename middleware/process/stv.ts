@@ -47,7 +47,7 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                     // TODO: BRAINSTORM ABOUT IF ITS A GOOD IDEA TO HAVE EITHER TOKEN OR PASSWORD AND IDENTIFIER
                     if (token && (
                         // Checks if the token is valid for the session
-                        (token.token === ucr.user.token && token.enabled) || (ucr.user.password && ucr.user.identifier))
+                        (ucr.user.token && secure.verify(ucr.user.token, token.token) && token.enabled) || (ucr.user.password && ucr.user.identifier))
                     ) {
 
                         if (

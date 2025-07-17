@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 
 export function crypt(value: string | undefined): string {
@@ -16,6 +16,14 @@ export function crypt(value: string | undefined): string {
     return `${iterations}:${salt}:${hash}`;
 }
 
+export function hashID(value: string): string {
+    if (!value) {
+        throw new Error('Value must be defined for hashing');
+    }
+    
+    return crypto.createHash('sha256').update(value).digest('hex');
+}
+
 export function verifyHash(value: string, hash: string): boolean {
     const [iterations, salt, originalHash] = hash.split(':');
     const keylen = 64;
@@ -27,3 +35,9 @@ export function verifyHash(value: string, hash: string): boolean {
 }
 
 
+console.log(hashID("1"))
+console.log(hashID("2"))
+console.log(hashID("3"))
+console.log(hashID("test-token"))
+console.log(hashID("test-token-2"))
+console.log(hashID("test-token-3-frozen"))

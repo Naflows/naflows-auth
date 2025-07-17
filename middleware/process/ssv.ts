@@ -31,6 +31,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
     const user = (await usersCollection.findOne({
       id: ucr.user.user_id,
     })) as unknown as User;
+    
     const session = await sessionsCollection.findOne({
       id: ucr.user.session_id,
     }) as unknown as UserSession;
@@ -73,13 +74,12 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
               );
               const token = await tokensCollection.findOne({
                 id: session.token_id,
-                token: ucr.user.token,
                 session_id: session.id,
+                user_id : user.id
               });
 
 
-
-              if (!token || (token && token.token != ucr.user.token)) {
+              if (!token || (token && ucr.user.token && !secure.verify(ucr.user.token, token.token))) {
                 console.error(
                   "\x1b[31m%s\x1b[0m",
                   "Invalid token provided for user session."

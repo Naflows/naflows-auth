@@ -4,12 +4,14 @@ import { ReplyType } from "../../../types/.types/reply.type";
 import { software } from "../../../software/dir";
 import { Collection } from "mongoose";
 import { Tokens } from "../../../types/.types/collections.type";
+import secure from "../../dir";
+import * as crypto from "crypto";
 
 
 export async function updateTokenUse(tokenId: string): Promise<ReplyType> {
     try {
         const tokensCollection = db.collection("tokens") as Collection<Tokens>;
-        const newValue = v4();
+        const newValue = crypto.randomUUID();
 
 
         const MIN = parseInt(process.env.STV_MINIMAL_TIMEOUT_MIN);
@@ -34,11 +36,12 @@ export async function updateTokenUse(tokenId: string): Promise<ReplyType> {
 
         console.log(`Renewing token ${tokenId} => ${newValue} with session ID ${token.session_id} and user ID ${token.user_id} with timeout ${timeout} seconds.`);
 
+
         const updateResult = await tokensCollection.updateOne(
             { id: tokenId },
             {
                 $inc: { uses: 1 }, // Increment the use count
-                $set: { updated_at: Date.now(), token: newValue, frozen_at: Date.now(), frozen_until: ts} // Update the timestamp
+                $set: { updated_at: Date.now(), token: secure.crypt(newValue), frozen_at: Date.now(), frozen_until: ts} // Update the timestamp
             }
         );
 
