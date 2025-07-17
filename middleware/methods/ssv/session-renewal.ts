@@ -15,6 +15,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
   const renewalToken = ucr.data ? ucr.data["session-renewal-token"] : undefined;
   const token = renewalToken
     ? ((await collections.tokensCollection.findOne({
+      // DO NOT CHANGE: THE TOKEN VALUE IS NOT CRYPTED BY INTENTION
       token: renewalToken,
       rights: "SESSION_RENEWAL",
     })) as unknown as Tokens)

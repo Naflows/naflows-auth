@@ -94,50 +94,50 @@ db.users.insertOne({
 
 
 db.sessions.insertOne({
-    id: "1",
+    id: "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
     user_id: 2,
     ip : "1.1.1.2",
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
     device_fingerprint: "fingerprint-1",
     expires_at: new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours
     created_at: new Date().getTime(),
-    token_id: "1",
+    token_id: "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
     last_activity: new Date().getTime(),
     user_origin: "NASS",
 })
 
 db.sessions.insertOne({
-    id: "2",
+    id: "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
     user_id: 3,
     ip : "1.1.1.3",
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
     device_fingerprint: "fingerprint-2",
     expires_at: new Date().getTime() - 1000 * 60 * 60 * 24, // Expired session
     created_at: new Date().getTime() - 1000 * 60 * 60 * 24, // Created 24 hours ago
-    token_id: "2",
+    token_id: "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
     last_activity: new Date().getTime() - 1000 * 60 * 60 * 24, // Last activity 24 hours ago
     user_origin: "NASS",
 });
 
 db.sessions.insertOne({
-    id : "3",
+    id : "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
     user_id : 2,
     ip : "5.5.5.5",
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
     device_fingerprint: "fingerprint-3",
     expires_at: new Date().getTime() + 1000 * 60 * 60 * 10000, // 1000 hours
     created_at: new Date().getTime(),
-    token_id: "3",
+    token_id: "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
     last_activity: new Date().getTime(),
     user_origin: "NASS",
 })
 
 
 db.tokens.insertOne({
-    id : "1",
+    id : "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
     token : "100000:78f3190a46b65297fc09746096c41f3e:d4315b094991b076800d174f1c5f6caff167999b93837a3c2b24097190c0828a1afbdbb5fd8c4d05e4446838e0374f934c41bb73dad6ed26846650252914e299",
     user_id : 2,
-    session_id : "1",
+    session_id : "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
     rights : ["USER_READ_OWN","USER_EDIT_OWN"],
     created_at : new Date().getTime(),
     expires_at : new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours
@@ -150,10 +150,10 @@ db.tokens.insertOne({
 });
 
 db.tokens.insertOne({
-    id : "2",
+    id : "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
     token : "100000:30d90e3400f273e7878002b8109b8429:ea813c082f49336693f4d40b8cef124d511a11922f7525bc8effb096969d8a67055baf108893457ba7317f835dace357aba19191af7b90a71b715e1e6c2d62e7",
     user_id : 3,
-    session_id : "3",
+    session_id : "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
     rights : ["USER_READ_OWN","USER_EDIT_OWN"],
     created_at : new Date().getTime(),
     expires_at : new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours
@@ -166,10 +166,10 @@ db.tokens.insertOne({
 });
 
 db.tokens.insertOne({
-    id : "3",
+    id : "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
     token : "100000:f0d5f25a65c22f6007ebebe206746c02:8ddf11c1cfecad25c5bf63dbf31c3ceb9b860bd6bd3bc61facf7a1d8c424a5c3c47324c2f6467b578b832584bba538a1e5d66afea2ebba41ccfd54bee0af61aa",
     user_id : 2,
-    session_id : "3",
+    session_id : "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
     rights : ["USER_READ_OWN","USER_EDIT_OWN"],
     created_at : new Date().getTime() - 10,
     expires_at : new Date().getTime() - 5, 

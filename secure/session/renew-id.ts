@@ -3,6 +3,7 @@ import { Tokens, UserSession } from "../../types/.types/collections.type";
 import { ReplyType } from "../../types/.types/reply.type";
 import { v4 } from "uuid";
 import { software } from "../../software/dir";
+import secure from "../dir";
 
 
 export default async function renewSessionId(sessionID : string, collections : {
@@ -26,21 +27,22 @@ export default async function renewSessionId(sessionID : string, collections : {
     }
 
     const newSessionID = v4(); // Generate a new session ID
+    const newSessionIDHash = secure.hash(newSessionID);
     const updatedSession: UserSession = {
         ...session,
-        id: newSessionID,
+        id: newSessionIDHash,
         expires_at: Date.now() + (process.env.SESSION_LIFESPAN ? parseInt(process.env.SESSION_LIFESPAN) : 3600000) // Default to 1 hour
     };
 
 
     const updateToken = await collections.tokensCollection.updateOne(
         { id: token.id },
-        { $set: { session_id: newSessionID, updated_at: Date.now() } }
+        { $set: { session_id: newSessionIDHash, updated_at: Date.now() } }
     );
     if (renewalToken) {
         await collections.tokensCollection.updateOne(
             { id: renewalToken.id },
-            { $set: { session_id: newSessionID, updated_at: Date.now() } }
+            { $set: { session_id: newSessionIDHash, updated_at: Date.now() } }
         );
     }
     const updateResult = await collections.sessionsCollection.updateOne(
@@ -54,6 +56,6 @@ export default async function renewSessionId(sessionID : string, collections : {
     }
 
     return software.methods.serverReply(200, "Session renewed successfully with code 200.", {
-        session: updatedSession.id
+        session: newSessionID
     });
 }
