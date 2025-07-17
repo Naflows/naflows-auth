@@ -15,7 +15,7 @@ export function isUCRType(obj: any): obj is UCRType {
             typeof user.ip === 'string' &&
             typeof user.agent === 'string' &&
             typeof user.session_id === 'string' &&
-            typeof user.user_id === 'number' &&
+            typeof user.user_id === 'string' &&
             typeof user.device_fingerprint === 'string' &&
             typeof user.user_origin === 'string' &&
             (typeof user.token === 'string' || (typeof user.identifier === 'string' && typeof user.password === 'string'))

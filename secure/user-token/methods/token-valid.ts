@@ -3,6 +3,7 @@ import { software } from "../../../software/dir";
 import { Tokens, UserSession } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import UCRType from "../../../types/.types/ucr.type";
+import secure from "../../dir";
 
 export function isTokenValid(
   token: Tokens,
@@ -11,7 +12,7 @@ export function isTokenValid(
 ): ReplyType {
   if (token) {
     const sessionValid = token.session_id == session.id;
-    const userValid = token.user_id == ucr.user.user_id;
+    const userValid = token.user_id == secure.hash(ucr.user.user_id);
     const tokenValid = token.expires_at > Date.now();
     const tokenUsesValid = token.uses < token.max_uses;
 

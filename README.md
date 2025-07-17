@@ -24,3 +24,4 @@ See the following file before production deployment:
 * [`./.env`](./.env) - Contains sensitive environment variables that should be configured correctly for production use.
 * [`./TODO.TODO`](./TODO.TODO) - Contains a list of tasks that need to be completed before production deployment.
 * [`stv.ts`](./middleware/process/stv.ts) - The line `token.id === "3"` is a temporary condition to test the frozen token feature. This should be removed or modified before production deployment. It is made to exclude the other tokens from being frozen, and make the tests work.
+* [`ssv.ts`](./middleware/process/ssv.ts) - The variable `allInformationsCorrect` are to be compared with the **hashed values** in the database. This can be done later. 

@@ -23,7 +23,7 @@ export interface Requests {
 }
 
 export interface User {
-  id: number; // User ID
+  id: string; // User ID
   identifier: string; // PRE-HASHED identifier, a secure way of connecting set before the user is created
   password: string; // PRE-HASHED password, a secure way of connecting set before the user is created
   email: string; // User email, used for notifications and password recovery
@@ -46,7 +46,7 @@ export interface User {
 
 export interface UserSession {
   id: string; // Session ID
-  user_id: number; // User ID, the user that owns the session
+  user_id: string; // User ID, the user that owns the session
   created_at: number; // Date when the session was created
   last_activity: number; // Date when the session was last active
   expires_at: number; // Date when the session expires, if not set, it never expires
@@ -96,7 +96,7 @@ export type TokenRights =
 export interface Tokens {
   id: string;
   token: string;
-  user_id: number;
+  user_id: string;
   session_id: string;
   created_at: number;
   expires_at: number;
