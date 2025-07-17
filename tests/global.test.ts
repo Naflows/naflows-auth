@@ -20,7 +20,7 @@ const dummy1 = {
     token: "test-token",
     identifier: "dummy",
     password: "dummy",
-    user_id: 2
+    user_id: "2"
 };
 
 const dummy2 = {
@@ -32,7 +32,7 @@ const dummy2 = {
     token: "test-token-2",
     identifier: "dummy1",
     password: "dummy1",
-    user_id: 3
+    user_id: "3"
 };
 
 const dummy1_2 = {
@@ -44,7 +44,7 @@ const dummy1_2 = {
     token: "test-token-3-frozen",
     identifier: "dummy",
     password: "dummy",
-    user_id: 2
+    user_id: "2"
 }
 
 
@@ -306,7 +306,7 @@ describe("NASS SSV Tests", () => {
 
     describe("User data is invalid", () => {
         test("user id does not exist", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1, user_id: 9999, session_id: newSessionID } };
+            const ucr = { ...validUCR, user: { ...dummy1, user_id: "9999", session_id: newSessionID } };
             delete ucr.user.token;
             ucr.data["customRequestURL"] = "/test-ssv/user-data-invalid/user-id";
             const res = await post(ucr);

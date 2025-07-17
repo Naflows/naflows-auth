@@ -3,6 +3,7 @@ import { db } from "../../..";
 import { software } from "../../../software/dir";
 import { Tokens, User } from "../../../types/.types/collections.type";
 import UCRType from "../../../types/.types/ucr.type";
+import secure from "../../../secure/dir";
 
 
 
@@ -23,7 +24,7 @@ export async function checkTokenRights(token: Tokens, ucr: UCRType) {
 
         if (!routes[requestRoute].open) {
             const usersCollection = db.collection("users") as Collection<User>;
-            const user = await usersCollection.findOne({ id: ucr.user.user_id }) as unknown as User;
+            const user = await usersCollection.findOne({ id: secure.hash(ucr.user.user_id) }) as unknown as User;
             if (!user) {
                 return software.methods.serverReply(404, "User not found.");
             }

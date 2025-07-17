@@ -5,7 +5,7 @@ interface UCRType {
         agent: string; 
 
         session_id : string;
-        user_id : number;
+        user_id : string;
         token? : string;
 
         identifier? : string; // PRE-HASHED

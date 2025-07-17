@@ -29,7 +29,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
   if (sessionsCollection && tokensCollection && usersCollection) {
 
     const user = (await usersCollection.findOne({
-      id: ucr.user.user_id,
+      id: secure.hash(ucr.user.user_id),
     })) as unknown as User;
     
     const session = await sessionsCollection.findOne({
@@ -37,12 +37,13 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
     }) as unknown as UserSession;
     if (user != undefined) {
       if (session) {
+
         const allInformationsCorrect =
           session.ip === ucr.user.ip &&
           session.device_fingerprint === ucr.user.device_fingerprint &&
           session.user_origin == ucr.user.user_origin &&
           session.agent === ucr.user.agent &&
-          session.user_id == ucr.user.user_id;
+          session.user_id == secure.hash(ucr.user.user_id);
         if (allInformationsCorrect) {
           const isOutdated = session.expires_at < Date.now();
           if (!isOutdated) {

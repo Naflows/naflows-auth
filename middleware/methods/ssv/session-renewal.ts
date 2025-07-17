@@ -55,7 +55,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
     }
 
     await collections.tokensCollection.deleteMany({
-      user_id: ucr.user.user_id,
+      user_id: secure.hash(ucr.user.user_id),
       rights: ["SESSION_RENEWAL"],
     });
 
@@ -73,7 +73,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
     } else {
       // If the session is outdated, delete it and send a new token for renewal (if a token already exists, delete it)
       await collections.tokensCollection.deleteMany({
-        user_id: ucr.user.user_id,
+        user_id: secure.hash(ucr.user.user_id),
         rights: ["SESSION_RENEWAL"],
       });
 
