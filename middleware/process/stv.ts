@@ -36,10 +36,11 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                 return tokenRenewal;
             } else {
                 const sessionID = ssv.data ? (ssv.data as { session?: string }).session : ucr.user.session_id;
-                const session = await sessionsCollection.findOne({ id: sessionID }) as unknown as UserSession;
+                const session = await sessionsCollection.findOne({ id: secure.hash(sessionID) }) as unknown as UserSession;
                 if (session) {
+                    // The token ID is queried directly FROM the session that has been recovered in the database, so its ID is already hashed.
                     const tokenID = session.token_id;
-                    const token = await tokensCollection.findOne({ id: tokenID }) as unknown as Tokens;
+                    const token = await tokensCollection.findOne({ id:tokenID }) as unknown as Tokens;
 
 
 

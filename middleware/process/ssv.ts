@@ -33,7 +33,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
     })) as unknown as User;
     
     const session = await sessionsCollection.findOne({
-      id: ucr.user.session_id,
+      id: secure.hash(ucr.user.session_id),
     }) as unknown as UserSession;
     if (user != undefined) {
       if (session) {
@@ -73,6 +73,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
                 `Token provided: ${ucr.user.token} for tokenID ${session.token_id} and session ID ${session.id}`
               );
               const token = await tokensCollection.findOne({
+                // `session` is already queried from the database, so its ID and the token ID are already hashed.
                 id: session.token_id,
                 session_id: session.id,
                 user_id : user.id
