@@ -135,7 +135,7 @@ db.sessions.insertOne({
 
 db.tokens.insertOne({
     id : "1",
-    token : "test-token",
+    token : "100000:78f3190a46b65297fc09746096c41f3e:d4315b094991b076800d174f1c5f6caff167999b93837a3c2b24097190c0828a1afbdbb5fd8c4d05e4446838e0374f934c41bb73dad6ed26846650252914e299",
     user_id : 2,
     session_id : "1",
     rights : ["USER_READ_OWN","USER_EDIT_OWN"],
@@ -151,9 +151,9 @@ db.tokens.insertOne({
 
 db.tokens.insertOne({
     id : "2",
-    token : "test-token-2",
+    token : "100000:30d90e3400f273e7878002b8109b8429:ea813c082f49336693f4d40b8cef124d511a11922f7525bc8effb096969d8a67055baf108893457ba7317f835dace357aba19191af7b90a71b715e1e6c2d62e7",
     user_id : 3,
-    session_id : "2",
+    session_id : "3",
     rights : ["USER_READ_OWN","USER_EDIT_OWN"],
     created_at : new Date().getTime(),
     expires_at : new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours
@@ -167,7 +167,7 @@ db.tokens.insertOne({
 
 db.tokens.insertOne({
     id : "3",
-    token : "test-token-3-frozen",
+    token : "100000:f0d5f25a65c22f6007ebebe206746c02:8ddf11c1cfecad25c5bf63dbf31c3ceb9b860bd6bd3bc61facf7a1d8c424a5c3c47324c2f6467b578b832584bba538a1e5d66afea2ebba41ccfd54bee0af61aa",
     user_id : 2,
     session_id : "3",
     rights : ["USER_READ_OWN","USER_EDIT_OWN"],

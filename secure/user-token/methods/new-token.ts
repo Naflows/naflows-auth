@@ -4,6 +4,7 @@ import { software } from "../../../software/dir";
 import { TokenRights, Tokens, User, UserSession } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import * as crypto from "crypto";
+import secure from "../../dir";
 
 export async function createToken(
     user : User, 
@@ -14,9 +15,10 @@ export async function createToken(
 ) : Promise<ReplyType> {
 
     try {
+        const t = crypto.randomUUID();
         const token: Tokens = {
             id: crypto.randomUUID(),
-            token: crypto.randomUUID(), // Generate a secure random token
+            token: rights.length === 1 && (rights[0] === "SESSION_RENEWAL" || rights[0] === "TOKEN_RENEWAL") ? t : secure.crypt(t), // Generate a secure random token
             user_id: user.id,
             session_id: session.id,
             created_at: Date.now(),
@@ -37,7 +39,7 @@ export async function createToken(
         return software.methods.serverReply(
             201, "Token created successfully.", 
             {
-            token: token.token,
+            token: t,
             token_id: token.id,
         });
     } catch (error) {
