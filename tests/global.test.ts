@@ -810,9 +810,9 @@ describe("NASS STV Tests", () => {
         newSessionID = res.data.data.session; 
     });
 
-    test('accessing an existing route with wrong user rights', async () => {
+    test('accessing an existing route with wrong user rights & token', async () => {
         const ucr = getValidUCR({ ...dummy1_2, token: newTokenValue, session_id: newSessionID });
-        ucr.data["customRequestURL"] = "/test-stv/existing-route-wrong-user-rights";
+        ucr.data["customRequestURL"] = "/test-stv/existing-route-wrong-user-rights/token";
         ucr.request.url = "/test/user";
         delete ucr.user.password;
         delete ucr.user.identifier;
@@ -829,6 +829,29 @@ describe("NASS STV Tests", () => {
         });
         newSessionID = res.data.data.session; 
     })
+
+    test('accessing an existing route with wrong user rights & identifier/password', async () => {
+        const ucr = getValidUCR({ ...dummy1_2, session_id: newSessionID });
+        ucr.data["customRequestURL"] = "/test-stv/existing-route-wrong-user-rights/identifier-password";
+        ucr.request.url = "/test/user";
+        delete ucr.user.token;
+
+        console.log(`Sending UCR ${JSON.stringify(ucr)}`);
+
+        const res = await post(ucr);
+        expect(res.status).toBe(403);
+        expect(res.data).toEqual({
+            success: false,
+            status: 403,
+            message: "Insufficient rights to access this route.",
+            data: {
+                session: expect.any(String),
+            }
+        });
+        newSessionID = res.data.data.session; 
+    })
+
+    
 
     
     test('accessing an existing route with correct rights', async () => {
