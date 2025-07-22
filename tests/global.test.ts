@@ -854,12 +854,13 @@ describe("NASS STV Tests", () => {
     
 
     
-    test('accessing an existing route with correct rights', async () => {
+    test('accessing an existing route with correct rights & token', async () => {
         const ucr = getValidUCR({ ...dummy1_2, token: newTokenValue, session_id: newSessionID });
-        ucr.data["customRequestURL"] = "/test-stv/existing-route-correct-rights";
+        ucr.data["customRequestURL"] = "/test-stv/existing-route-correct-rights/token";
         ucr.request.url = "/token/build/user";
         delete ucr.user.password;
         delete ucr.user.identifier;
+
 
         const res = await post(ucr);
         expect(res.status).toBe(200);
@@ -878,6 +879,30 @@ describe("NASS STV Tests", () => {
         timingBeforeUnfrozen = res.data.data.retry_after; 
 
     })
+
+    test('accessing an existing route with correct rights & identifier/password', async () => {
+        const ucr = getValidUCR({ ...dummy1_2, session_id: newSessionID });
+        ucr.data["customRequestURL"] = "/test-stv/existing-route-correct-rights-identifier-password";
+        ucr.request.url = "/token/build/user";
+        delete ucr.user.token;
+        await setTimeoutPromise(1000 + timingBeforeUnfrozen);
+
+        const res = await post(ucr);
+        expect(res.status).toBe(200);
+        expect(res.data).toEqual({
+            success: true,
+            status: 200,
+            message: "Successful connection",
+            data: {
+                session: expect.any(String),
+                token: expect.any(String),
+                retry_after: expect.any(Number)
+            }
+        });
+        newSessionID = res.data.data.session; 
+        newTokenValue = res.data.data.token; 
+        timingBeforeUnfrozen = res.data.data.retry_after; 
+    });
 });
 
 
