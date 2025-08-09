@@ -1,12 +1,12 @@
-![NAFLOWS Logo](./public/logo.png)
 
+<img width="1440" height="358" alt="nass-header" src="https://github.com/user-attachments/assets/e33829b9-935c-457e-9cc0-4ddecc2cfdb1" />
 
-# IMPORTANT
+# Important notice
 THIS PROJECT IS UNDER ACTIVE DEVELOPMENT AND IS NOT STABLE NOR READY. 
 
-## About `auth.naflows.com`
 Please view the [first page](https://github.com/Naflows/naflows-auth/wiki/Getting-started-with-naflows%E2%80%90auth) of the wiki for more informations about this project.
 
+<br/>
 
 ## Objectives
 As for now, the NASS has completed it's first step: a basic authentication system based on a 4-layers security:
@@ -24,5 +24,5 @@ Now, the NASS has to be extended to allow the following features:
 * **Service management**: Allow services to manage their own registrations, including updating service information and managing service tokens. Any user can register a service and manage it by themselves. The API key, also considered as a "service token", is used to authenticate the service with the NASS and is meant to be the sold product.
 
 
-
+<br/>
 <img width="1440" height="1024" alt="Desktop - 1" src="https://github.com/user-attachments/assets/82a73283-a16b-4908-ad1d-d8ae254d0bc0" />
