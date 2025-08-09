@@ -35,9 +35,4 @@ export function verifyHash(value: string, hash: string): boolean {
 }
 
 
-console.log(hashID("1"))
-console.log(hashID("2"))
-console.log(hashID("3"))
-console.log(hashID("test-token"))
-console.log(hashID("test-token-2"))
-console.log(hashID("test-token-3-frozen"))
+console.log(crypt("123456789"))

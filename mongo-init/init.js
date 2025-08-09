@@ -59,7 +59,7 @@ db.requests.createIndex({ ip: 1 });
 // See the .env file in the root directory of the naflows-system repository for the unhashed password
 db.users.insertOne({
     id : "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
-    identifier : "100000:bb27678ee563cd25c9dd1ada61c35dfe:6d4e898c7ff538f3e812ef214aaacc047b5cadb651468cd8fdf90e5f00923aa84b9870bb37d73b2c5ccd6d2a0f713d884fc2111e55cdae59d26820d97edbb738",
+    identifier : "100000:5f8276315cd858dd7b755af7940eb0fc:0ff3b1bd9fe26230fd178cdd91c4125ebded532c77f7c12e93d334b42f5bfda52dfbefd67f895a2afd6270c5edc78923a8e7b04d30db68cb6ae268a825a17c55",
     password : "100000:2c81db81a7fef7d38788dfd20e07b7bd:964121f6ee65a9e0a70764956de9b5d054cf268124ecefe72f27b64af92aec15476a4a9393da274d6c557c6ae4b6192d7ff56b0a51e626969d1274ed8f92a1be",
     email : "administration@naflows.com",
     username : "NAFLOWS",
