@@ -22,9 +22,14 @@ const waitForServer = async (url: string, timeout = 20000) => {
 };
 
 module.exports = async () => {
-    const appUrl = process.env.AUTH_API_URL || "http://localhost:3000/test";
-    if (!appUrl) {
-        throw new Error("AUTH_API_URL is not set. Please set it in your environment variables.");
+    if (process.env.ENABLE_TEST_MODE !== 'true') {
+        console.log('Test mode is disabled. Skipping setup.');
+        return;
+    } else {
+        const appUrl = process.env.AUTH_API_URL || "http://localhost:3000/test";
+        if (!appUrl) {
+            throw new Error("AUTH_API_URL is not set. Please set it in your environment variables.");
+        }
+        await waitForServer(appUrl);
     }
-    await waitForServer(appUrl);
 };

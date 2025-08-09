@@ -43,7 +43,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use(async (req, res, next) => {
-    middleware.main(req, res, next);
+    // Check if  the request path contains "/client"
+    if (req.path.startsWith('/client')) {
+        // Continue 
+        next();
+    } else { 
+        middleware.main(req, res, next);
+    }
 });
 
 app.post('/test', (req: Request, res: Response) => {
@@ -83,7 +89,7 @@ app.get('/blacklist', (req, res) => {
     });
 });
 
-app.get('/', (req, res) => {
+app.get('/client', (req, res) => {
     res.send('Welcome to the Auth API');
 });
 
@@ -125,6 +131,7 @@ app.post('/team/add/service/post', async (req, res) => {
 app.get('/team/add/service', (req, res) => {
     serve("Add service", "form-style.css", "add-service.html", res);
 })
+
 
 
 
