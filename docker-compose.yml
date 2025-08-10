@@ -5,6 +5,7 @@ services:
   mongo-nass:
     image: mongo:latest
     restart: always
+    profiles: ["mongo-nass"]
     container_name: mongo-nass
     hostname: mongo-nass
     ports:
@@ -36,6 +37,7 @@ services:
   auth-api:
     build: ./
     restart: always
+    profiles: ["auth-api"]
     container_name: auth-api-1
     environment:
       - AUTH_API_PORT=3000
@@ -58,9 +60,12 @@ services:
         limits:
           cpus: '1.5'
           memory: 512M
+
+        
   mongo-express:
     image: mongo-express
     container_name: mongo-express
+    profiles: ["mongo-express"]
     ports:
       - "8081:8081"
     expose:
@@ -83,7 +88,8 @@ services:
 
   global-tests:
     build: ./
-    command: npm test
+    profiles: ["test-global"]
+    command: npm run test-global
     depends_on:
       - auth-api
       - mongo-nass
