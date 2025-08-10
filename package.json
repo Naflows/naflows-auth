@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test-scv": "jest scv.test.ts --runInBand --no-cache",
-    "test-ssv": "jest ssv.test.ts --runInBand --no-cache",
-    "test": "jest global.test.ts --runInBand --no-cache --verbose"
+    "test-global": "jest global.test.ts --runInBand --no-cache --verbose"
   },
   "author": "",
   "license": "ISC",
