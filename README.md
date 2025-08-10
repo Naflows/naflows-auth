@@ -28,4 +28,4 @@ Now, the NASS has to be extended to allow the following features:
 
 
 <br/>
-<img width="1440" height="1024" alt="Desktop - 1" src="https://github.com/user-attachments/assets/82a73283-a16b-4908-ad1d-d8ae254d0bc0" />
+<img width="1440" height="1024" alt="Desktop - 1" src="https://github.com/user-attachments/assets/dbc6b96a-b647-4f00-a687-5b5b499f383d" />
