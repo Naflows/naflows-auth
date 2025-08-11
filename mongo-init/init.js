@@ -224,6 +224,18 @@ db.services.insertOne({
     service_token : "3"
 })
 
+db.services.insertOne({
+    id : "test_aim_id",
+    name : "Contracts Service",
+    ip_address : "127.0.0.1",
+    dns : "contracts.nass.com",
+    description : "This is a test service for the NASS.",
+    created_at : new Date().getTime(),
+    created_by : "NASS",
+    status : "ACTIVE",
+    service_token : "contracts_service_token"
+})
+
 
 db.service_tokens.insertOne({
     id : "1",
@@ -253,3 +265,11 @@ db.service_tokens.insertOne({
     uses : 0  
 })
 
+db.service_tokens.insertOne({
+    id : "contracts_service_token",
+    service_id : "test_aim_id",
+    token : "contracts_service_token",
+    created_at : new Date().getTime(),
+    lifespan: 1000 * 60 * 60 * 24 * 100, // 24 hours
+    uses : 0
+})

@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test-global": "jest global.test.ts --runInBand --no-cache --verbose"
+    "test-global": "jest global.test.ts --runInBand --no-cache --verbose",
+    "test-contracts": "jest contracts.test.ts --runInBand --no-cache --verbose"
   },
   "author": "",
   "license": "ISC",

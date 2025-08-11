@@ -1,3 +1,4 @@
+import { issueContract } from "./contract/issuing";
 import { crypt, hashID, verifyHash } from "./hash/hash";
 import { blacklistIP } from "./ip/blacklist";
 import { getSession } from "./session/get";
@@ -19,6 +20,9 @@ const secure = {
     },
     session : {
         renew : renewSessionId
+    },
+    contract : {
+        create : issueContract
     }
 };
 

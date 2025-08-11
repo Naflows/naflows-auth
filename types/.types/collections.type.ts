@@ -74,7 +74,7 @@ export type TokenRights =
   | "NASS_TEAM_REVOKE" // Revoke a user from the NASS
   | "NASS_TEAM_UPDATE" // Update a user in the NASS team
 
-  
+
   | "SERVICES_VIEW" // View the different NASS services
   | "SERVICES_EDIT" // Edit the different NASS services
   | "SERVICES_CREATE" // Create new NASS services
@@ -122,30 +122,52 @@ export interface Service {
   service_token: string; // Service token, a secure way of connecting to the service, optional
 }
 
+export enum CONTRACTED {
+  API = "API",
+  USER = "USER"
+}
+export enum CONTRACTOR {
+  API = "API",
+  NASS = "NASS"
+}
+export enum CONTRACT_TYPE {
+  ISSUED_REQUEST = "ISSUED_REQUEST",
+  TOKEN_RENEWAL = "TOKEN_RENEWAL",
+  USER_AUTHENTIFICATION = "USER_AUTHENTIFICATION",
+  DATA_MANIPULATION = "DATA_MANIPULATION",
+  USER_MANAGEMENT = "USER_MANAGEMENT",
+  SERVICE_MANAGEMENT = "SERVICE_MANAGEMENT",
+  BLACKLIST_MANAGEMENT = "BLACKLIST_MANAGEMENT",
+  REQUESTS_MANAGEMENT = "REQUESTS_MANAGEMENT",
+  SERVICE_CONNECTION = "SERVICE_CONNECTION"
+}
 export interface CentralContracts {
-  id: string;
-  issued_at: Date; // Date when the contract was issued
-  issued_by: string; // Origin of the contract, usually the service that issued it
-  completed_at?: Date; // Date when the contract was completed, optional
-  completed: boolean;
-  service: string; // Destination service of the contract, usually the service that is being contracted
-  type:
-    | "ISSUED_REQUEST"
-    | "TOKEN_RENEWAL"
-    | "USER_AUTHENTIFICATION"
-    | "DATA_MANIPULATION"
-    | "USER_MANAGEMENT"
-    | "SERVICE_MANAGEMENT"
-    | "BLACKLIST_MANAGEMENT"
-    | "REQUESTS_MANAGEMENT"
-    | "SERVICE_CONNECTION";
-  req: string; // JSON stringified request, the request that was made to the service
-  res?: string; // JSON stringified response, the response that was received from the service
-  routes: string[]; // Concerned API(s) routes, the routes that were used in the request
-  forced: boolean; // Whether the contract was forced or not, true means the NASS is the one that forced the contract
-  linked_contract: string; // Each time a contract is created, a second is created for the other service, this is the ID of that contract
-  contract_type: "ISSUED" | "RECEIVED"; // Whether the contract is issued or received
-  ending_reason?: "COMPLETED" | "CANCELED" | "EXPIRED" | "FORCED"; // The reason why the contract ended, if it ended
+  my_type: "ISSUER" | "RECEIVER";
+  id: string,
+
+  signature: {
+    contracted: CONTRACTED,
+    contractor: CONTRACTOR,
+    contractor_id: string,
+    associated_contract: string,
+    api_key: string | null,
+  },
+  details: {
+    route: string,
+    user: User | null, // User that is associated with the contract, if any
+    session: UserSession | null, // Session that is associated with the contract, if any
+    contract_type: CONTRACT_TYPE
+  },
+  status: {
+    active: boolean,
+    force_action: boolean, // Meaning the contracted has no choice but to execute the action (e.g. for token removal by administrator of any API)
+    ending_reason: "COMPLETED" | "CANCELED" | "EXPIRED" | "FORCED" | null
+  },
+  time: {
+    issued_at: number,
+    completed_at: number | null
+    modified_at: number | null
+  }
 }
 
 // This service token type is only available in the NASS itself
