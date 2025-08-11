@@ -100,7 +100,21 @@ services:
     environment:
       - NODE_ENV=test
       - AUTH_API_URL= ${AUTH_API_URL}
-      
+
+  contracts-tests:
+    build: ./
+    profiles: ["test-contracts"]
+    command: npm run test-contracts
+    depends_on:
+      - auth-api
+      - mongo-nass
+      - mongo-express
+    volumes:
+      - ./:/app
+      - auth-data:/app/data
+    environment:
+      - NODE_ENV=test
+      - CONTRACTS_API_URL= ${CONTRACTS_API_URL}
 
 volumes:
   auth-data:

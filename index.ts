@@ -43,14 +43,36 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use(async (req, res, next) => {
+    console.log(`Request received at ${req.path}`);
     // Check if  the request path contains "/client"
-    if (req.path.startsWith('/client')) {
+    if (req.path.startsWith('/client') || req.path.startsWith('/contract-debug')) {
         // Continue 
         next();
-    } else { 
+    } else {
         middleware.main(req, res, next);
     }
 });
+
+app.post('/contract-debug/generate', async (req, res) => {
+    try {
+        const { aim_id, aim_type, type, forced, details } = req.body;
+        const result  : ReplyType = await secure.contract.create(
+            aim_id,
+            aim_type,
+            type,
+            forced,
+            details
+        );
+        res.status(result.status).json(result.data);
+    } catch (error) {
+        console.error("Error generating contract:", error);
+        res.status(500).json({
+            success: false,
+            status: 500,
+            message: "Internal Server Error"
+        });
+    }
+})
 
 app.post('/test', (req: Request, res: Response) => {
     const newSessionID = (req as any).newSessionID;
@@ -92,6 +114,7 @@ app.get('/blacklist', (req, res) => {
 app.get('/client', (req, res) => {
     res.send('Welcome to the Auth API');
 });
+
 
 
 /*

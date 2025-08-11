@@ -23,9 +23,9 @@ const waitForServer = async (url: string, timeout = 20000) => {
 
 module.exports = async () => {
 
-    const appUrl = process.env.AUTH_API_URL || "http://localhost:3000/test";
+    const appUrl = process.env.AUTH_API_URL || process.env.CONTRACTS_API_URL;
     if (!appUrl) {
-        throw new Error("AUTH_API_URL is not set. Please set it in your environment variables.");
+        throw new Error("Test URL is not set. Please set it in your environment variables.");
     }
     await waitForServer(appUrl);
 
