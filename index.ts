@@ -63,7 +63,7 @@ app.post('/contract-debug/generate', async (req, res) => {
             forced,
             details
         );
-        res.status(result.status).json(result.data);
+        res.status(result.status).json((result.data as {received:Object}).received);
     } catch (error) {
         console.error("Error generating contract:", error);
         res.status(500).json({

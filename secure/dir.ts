@@ -1,7 +1,11 @@
-import { issueContract } from "./contract/issuing";
+import { executeContract } from "./contract/core/execute.contract";
+import { getContractByID } from "./contract/core/get.contract";
+import { issueContract } from "./contract/core/issuing.contract";
+import { outdateContract } from "./contract/core/oudate.contract";
+import { updateContract } from "./contract/core/update.contract";
+import { isContractValid } from "./contract/core/validate.contract";
 import { crypt, hashID, verifyHash } from "./hash/hash";
 import { blacklistIP } from "./ip/blacklist";
-import { getSession } from "./session/get";
 import renewSessionId from "./session/renew-id";
 import { createToken } from "./user-token/methods/new-token";
 import { isTokenValid } from "./user-token/methods/token-valid";
@@ -22,7 +26,12 @@ const secure = {
         renew : renewSessionId
     },
     contract : {
-        create : issueContract
+        create : issueContract,
+        get : getContractByID,
+        execute : executeContract,
+        isValid : isContractValid,
+        oudate : outdateContract,
+        update : updateContract
     }
 };
 

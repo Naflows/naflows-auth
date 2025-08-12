@@ -131,7 +131,6 @@ export enum CONTRACTOR {
   NASS = "NASS"
 }
 export enum CONTRACT_TYPE {
-  ISSUED_REQUEST = "ISSUED_REQUEST",
   TOKEN_RENEWAL = "TOKEN_RENEWAL",
   USER_AUTHENTIFICATION = "USER_AUTHENTIFICATION",
   DATA_MANIPULATION = "DATA_MANIPULATION",
@@ -140,6 +139,12 @@ export enum CONTRACT_TYPE {
   BLACKLIST_MANAGEMENT = "BLACKLIST_MANAGEMENT",
   REQUESTS_MANAGEMENT = "REQUESTS_MANAGEMENT",
   SERVICE_CONNECTION = "SERVICE_CONNECTION"
+}
+export enum CONTRACT_ENDING_REASON {
+  COMPLETED = "COMPLETED",
+  CANCELED = "CANCELED",
+  EXPIRED = "EXPIRED",
+  FORCED = "FORCED"
 }
 export interface CentralContracts {
   my_type: "ISSUER" | "RECEIVER";
@@ -161,7 +166,7 @@ export interface CentralContracts {
   status: {
     active: boolean,
     force_action: boolean, // Meaning the contracted has no choice but to execute the action (e.g. for token removal by administrator of any API)
-    ending_reason: "COMPLETED" | "CANCELED" | "EXPIRED" | "FORCED" | null
+    ending_reason: CONTRACT_ENDING_REASON | null
   },
   time: {
     issued_at: number,

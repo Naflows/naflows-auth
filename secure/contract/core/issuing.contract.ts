@@ -1,8 +1,8 @@
 import { v4 } from "uuid";
-import { CentralContracts, CONTRACT_TYPE, CONTRACTED, CONTRACTOR, Service, ServiceToken, User, UserSession } from "../../types/.types/collections.type";
-import { db } from "../..";
+import { CentralContracts, CONTRACT_TYPE, CONTRACTED, CONTRACTOR, Service, ServiceToken, User, UserSession } from "../../../types/.types/collections.type";
+import { db } from "../../..";
 import { Collection } from "mongoose";
-import { ReplyType } from "../../types/.types/reply.type";
+import { ReplyType } from "../../../types/.types/reply.type";
 import crypto from "crypto";
 
 export async function issueContract(
