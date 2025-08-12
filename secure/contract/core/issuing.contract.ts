@@ -4,6 +4,7 @@ import { db } from "../../..";
 import { Collection } from "mongoose";
 import { ReplyType } from "../../../types/.types/reply.type";
 import crypto from "crypto";
+import secure from "../../dir";
 
 export async function issueContract(
     aim_id: string, // The ID of the concerned API or user,
@@ -60,14 +61,14 @@ export async function issueContract(
     // The built contract is made from the issuer;
     contract = {
         my_type: "ISSUER",
-        id: contractID,
+        id: secure.crypt(contractID),
 
         signature: {
             contracted: aim_type,
             contractor: CONTRACTOR.NASS,
             contractor_id: "<nass_global_network>",
             associated_contract: "<associated_contract_id>",
-            api_key: APIToken.token ? APIToken.token : null,
+            api_key: APIToken.token ? secure.crypt(APIToken.token) : null,
         },
         details: {
             route: details?.route || null,

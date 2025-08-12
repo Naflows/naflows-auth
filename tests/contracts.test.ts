@@ -2,13 +2,13 @@ const { test, expect, describe } = require('@jest/globals');
 
 
 const app = process.env.CONTRACTS_API_URL;
-console.log("CONTRACTS_API_URL:", app);
 if (!app) {
   throw new Error("CONTRACTS_API_URL is not set. Please set it in your environment variables.");
 }
 
 
-describe("Basic features", () => {
+describe("Core functions", () => {
+
   test("Contract issuance", async () => {
     const res = await fetch(app + "generate", {
       method: "POST",
