@@ -44,7 +44,10 @@ db.services.createIndex({ ip_address: 1 });
 db.services.createIndex({ service_token: 1 }, { unique: true });
 
 db.nass_contracts.createIndex({ id: 1 }, { unique: true });
-db.nass_contracts.createIndex({ service: 1 });
+db.nass_contracts.createIndex({ "signature.contractor_id": 1 });
+db.nass_contracts.createIndex({ "status.active": 1 });
+db.nass_contracts.createIndex({ "status.associated_contract ": 1 });
+
 
 db.blacklist.createIndex({ id: 1 }, { unique: true });
 db.blacklist.createIndex({ ip: 1 }, { unique: true });
