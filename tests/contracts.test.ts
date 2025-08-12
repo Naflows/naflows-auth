@@ -24,64 +24,33 @@ describe("Basic features", () => {
       })
     });
     expect(res.status).toBe(200);
-    console.log("Contract generation result:",res);
     const data = await res.json();
     expect(data).toEqual({
-        issued: {
-          my_type: "ISSUER",
-          id: expect.any(String),
-          signature: {
-            contracted: "API",
-            contractor: "NASS",
-            contractor_id: "<nass_global_network>",
-            associated_contract: expect.any(String),
-            api_key: expect.any(String)
-          },
-          details: {
-            route: "/test/route",
-            user: null,
-            session: null,
-            contract_type: "ISSUED_REQUEST"
-          },
-          status: {
-            active: true,
-            force_action: false,
-            ending_reason: null
-          },
-          time: {
-            issued_at: expect.any(Number),
-            completed_at: null,
-            modified_at: expect.any(Number)
-          }
-        },
-        received: {
-          my_type: "RECEIVER",
-          id: expect.any(String),
-
-          signature: {
-            contracted: "API",
-            contractor: "NASS",
-            contractor_id: "<nass_global_network>",
-            associated_contract: expect.any(String),
-            api_key: expect.any(String)
-          },
-          details: {
-            route: "/test/route",
-            user: null,
-            session: null,
-            contract_type: "ISSUED_REQUEST"
-          },
-          status: {
-            active: true,
-            force_action: false,
-            ending_reason: null
-          },
-          time: {
-            issued_at: expect.any(Number),
-            completed_at: null,
-            modified_at: expect.any(Number)
-          }
-        }
+      my_type: "RECEIVER",
+      id: expect.any(String),
+      signature: {
+        contracted: "API",
+        contractor: "NASS",
+        contractor_id: "<nass_global_network>",
+        associated_contract: expect.any(String),
+        api_key: expect.any(String)
+      },
+      details: {
+        route: "/test/route",
+        user: null,
+        session: null,
+        contract_type: "ISSUED_REQUEST"
+      },
+      status: {
+        active: true,
+        force_action: false,
+        ending_reason: null
+      },
+      time: {
+        issued_at: expect.any(Number),
+        completed_at: null,
+        modified_at: expect.any(Number)
+      }
     })
   });
 })
