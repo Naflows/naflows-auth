@@ -1,0 +1,19 @@
+@import "../../../public/root/variables.scss";
+
+
+a {
+    display: flex;
+    flex-direction: row;
+    color : $_2k25-text;
+    text-decoration: none;
+    align-items: center;
+    gap: 10px;
+    svg * {
+        fill: $_2k25-text;
+    }
+    p {
+        margin:0;
+        padding: 0;
+        font-size: 20px;
+    }
+}
