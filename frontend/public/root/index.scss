@@ -1,0 +1,182 @@
+@import "./variables.scss";
+
+body {
+  * { font-family: "Nunito", sans-serif; }
+  background-color: $_2k25-background-hue;
+  color : $_2k25-text;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  h1 {
+    text-transform: uppercase;
+    font-size: 20px;
+  }
+}
+
+
+
+
+.panel {
+    padding: 50px 50px;
+    background-color : $_2k25-background-hue-darker;
+    display:flex;
+    gap: 20px;
+    flex-direction: column;
+    border-radius: 20px;
+    height: fit-content;
+    .panel-header {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 10px;
+        h2, h1 {
+            margin: 0;
+            padding: 0;
+        }
+        h2 {
+            font-size: 15px;
+        }
+    }
+
+    &.panel-image-only {
+        padding: 20px 50px;
+    }
+    .panel-links {
+        display:flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        .inputs-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            label {
+                font-size: 15px;
+            }
+            input {
+                border-radius: 10px;
+                padding: 10px 20px;
+                background-color: $_2k25-background-hue-40;
+                border:none;
+                outline: none;
+                color : $Color;
+                outline : 2px solid transparent;
+                &::placeholder {
+                    color: $_2k25-background-hue-10;
+                }
+                &:focus {
+                    outline : 2px solid $_2k25-darker;
+                }
+            }
+            .identifier-input {
+                display: flex;
+                gap: 5px;
+                input {
+                    width: 15px;
+                }
+            }
+
+            &.two-columns {
+                flex-direction: row;
+                .inputs-container {
+                    flex: 1;
+                    &:not(:last-child) {
+                        margin-right: 20px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+/* ------------------------------- */
+.primary-button {
+    padding: 10px 15px;
+    border-radius: 10px;
+    background-color: $_2k25-text;
+    border:none;
+    cursor: pointer;
+    color: $_2k25-background-hue;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg, svg * {
+        width: 20px;
+        height: 20px;
+        fill: $_2k25-background-hue;
+    }
+}
+
+.secondary-button {
+    background-color: transparent;
+    border:none;
+    font-weight: bold;
+    color: $_2k25-text;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    svg {
+        width: 20px;
+        height: 20px;
+        fill: $_2k25-text;
+    }
+}
+
+.visibility-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    svg * {
+        fill: $_2k25-text !important;
+    }
+}
+
+
+
+
+/* ------------------------------- */
+.row-20 {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.col-20 {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.width-35 {
+    min-width: 35vw;
+}
+
+.height-100 {
+    height:100% !important;
+}
+
+
+.text-size-20 {
+    font-size: 20px;
+}
