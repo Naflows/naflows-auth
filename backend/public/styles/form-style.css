@@ -1,0 +1,144 @@
+body {
+    * {
+        font-family: "Nunito Sans", sans-serif;
+    }
+    * p {
+        margin: 0;
+    }
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    background-color: #3E4DED;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.nass-form {
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 30px;
+}
+
+.nass-form .content {
+    display: flex;
+    gap: 50px;
+}
+
+.nass-form .content .form-inputs-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+
+.nass-form.nass-form--add-service .content {
+    flex-direction: row;
+}
+
+.nass-form .content .form-inputs-container input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.nass-form .content .form-inputs-container input:focus {
+    border-color: #3E4DED;
+    outline: none;
+}
+
+.nass-form .content .form-inputs-container input.error {
+    border-color: #ed583e;
+}
+
+.nass-form .content .form-inputs-container select {
+    width: calc(100%);
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+
+
+
+.naflows-form-container {
+    position: absolute;
+    width: 60%;
+    max-height: 80%;
+    height: fit-content;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    gap: 50px;
+    background-color: rgba(245, 245, 245, 0.5);
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.naflows-form-container .form-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.naflows-form-container .form-header h1 {
+    font-size: 30px;
+    font-weight: bold;
+    color: #3E4DED;
+    font-family: "Nunito Sans", sans-serif;
+    margin:0;
+}
+
+.naflows-form-container .description {
+    display: flex   ;
+    flex-direction: column;
+    align-items: start;
+}
+
+.naflows-form-container .logo-container svg {
+    height: 50px;
+}
+
+.alert {
+    border-width: 2px;
+    border-style: solid;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-weight: bold;
+
+}
+
+.alert.error {
+    color : #ed583e;
+    border-color: #ed583e;
+    background-color: rgba(237, 88, 62,0.25);
+}
+
+.alert.info {
+    color : #3E4DED;
+    border-color: #3E4DED;
+    background-color: rgba(62, 77, 237,0.25);
+}
+
+.alert.warning {
+    color : #ED9B3E;
+    border-color: #ED9B3E;
+    background-color: rgba(237, 155, 62,0.25);
+}
