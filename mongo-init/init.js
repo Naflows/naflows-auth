@@ -58,14 +58,14 @@ db.requests.createIndex({ id: 1 }, { unique: true });
 db.requests.createIndex({ associated_service: 1 });
 db.requests.createIndex({ ip: 1 });
 
-
+db.service_tokens.createIndex({ token: 1 }, { unique: true });
 
 
 // See the .env file in the root directory of the naflows-system repository for the unhashed password
 db.users.insertOne({
     id : "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
-    identifier : "100000:5f8276315cd858dd7b755af7940eb0fc:0ff3b1bd9fe26230fd178cdd91c4125ebded532c77f7c12e93d334b42f5bfda52dfbefd67f895a2afd6270c5edc78923a8e7b04d30db68cb6ae268a825a17c55",
-    password : "100000:2c81db81a7fef7d38788dfd20e07b7bd:964121f6ee65a9e0a70764956de9b5d054cf268124ecefe72f27b64af92aec15476a4a9393da274d6c557c6ae4b6192d7ff56b0a51e626969d1274ed8f92a1be",
+    identifier : "100000:8ae7a11eb6919690bf6b81c0fab32804:d03e7cea89287a3b8e4bdcff25a002f58bdb78032941ff693aa751f16306acc6123782a1a136d2198cf2fd9ccce2a5bd56d0515abac8a3d11fb304e8915e82e0",
+    password : "100000:5ee1efc5ad26b93e2cd51ceeedc18451:c986c5f6a979289c7da5146868b6832198835f656eb3c9683d597fa781ae64b2bd9684db0cfff6a64fcd630a2a46fbece8858f4ad9eccb394844e591a8cb35d8",
     email : "administration@naflows.com",
     username : "NAFLOWS",
     rights : "SUPER_ADMIN",
@@ -78,7 +78,6 @@ db.users.insertOne({
     identifier : "100000:137db0ce6e8b0b238a304614ebc5dc33:64c94524560e67d1e78a96dc67ba92af545d490077fa2e5b13473107f6b7f5e7a6841f89eea8a7cd6ac740969b521f82fb88cd815d6b3f26d96677ef7c224dfe",
     password : "100000:137db0ce6e8b0b238a304614ebc5dc33:64c94524560e67d1e78a96dc67ba92af545d490077fa2e5b13473107f6b7f5e7a6841f89eea8a7cd6ac740969b521f82fb88cd815d6b3f26d96677ef7c224dfe",
     email : "dummy@gmail.com",
-    username : "Dummy User Session OK",
     rights : "USER",
     created_at : new Date().getTime(),
     updated_at : new Date().getTime()

@@ -5,6 +5,8 @@ import { Collection } from "mongoose";
 import { ReplyType } from "../../../types/.types/reply.type";
 import crypto from "crypto";
 import secure from "../../global/dir";
+import { software } from "../../../software/dir";
+import { getService } from "../../services/get-service";
 
 export async function issueContract(
     aim_id: string, // The ID of the concerned API or user,
@@ -31,26 +33,16 @@ export async function issueContract(
         console.log(`Looking for API with ID: ${aim_id}`);
 
         if (!serviceToken || !services) {
-            return {
-                success: false,
-                status: 500,
-                message: "Internal Server Error: Service token collection not found."
-            }
+            return software.methods.serverReply(500, "Internal Server Error: Service token or API collection not found.");
         }
 
         APIToken = await serviceToken.findOne({
             service_id: aim_id
         });
-        API = await services.findOne({
-            id: aim_id
-        });
+        API = ((await getService(aim_id)).data) as Service;
 
         if (!API || !APIToken) {
-            return {
-                success: false,
-                status: 404,
-                message: "API not found."
-            }
+            return software.methods.serverReply(404, "API or Service token not found.");
         }
 
         console.log("Service token and API existence check complete.");
@@ -115,22 +107,12 @@ export async function issueContract(
         delete (contract as any)._id;
         delete (contract2 as any)._id;
 
-        return {
-            success: true,
-            status: 200,
-            message: "Contract issued successfully.",
-            data: {
-                issued: contract,
-                received: contract2
-            }
-        };
+        return software.methods.serverReply(200, "Contract issued successfully.", {
+            received: contract2
+        });
     } catch (error) {
         console.error("Error inserting contracts:", error);
-        return {
-            success: false,
-            status: 500,
-            message: "Internal Server Error: Failed to issue contract."
-        };
+        return software.methods.serverReply(500, "Internal Server Error: Failed to issue contract.");
     }
 
 

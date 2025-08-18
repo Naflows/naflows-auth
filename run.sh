@@ -6,6 +6,7 @@ RESET_ENVIRONMENT=$2
 
 if [ "$RESET_ENVIRONMENT" = "true" ]; then
     rm -rf ./backend/auth-data
+    docker volume rm $(docker volume ls -q)
     docker system prune -a -f --volumes
 fi
 

@@ -10,7 +10,7 @@ if (!app) {
 describe("Core functions", () => {
 
   test("Contract issuance", async () => {
-    const res = await fetch(app + "generate", {
+    const res = await fetch(app + "/contract-debug/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -53,4 +53,53 @@ describe("Core functions", () => {
       }
     })
   });
+
+  test("Service building : working", async() => {
+    const res = await fetch(app + "/client/build/service", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: "1",
+        identifier: "123456789",
+        password: "W8JdVoy30xEa1hZ5aDVQ",
+        details: {
+          name: "Pookie Wookie Dookie",
+          description: "Le Pookie Wookie Dookie est un service incroyable",
+          ip_address: "3.5.1.1",
+          dns: "test.service.naflows",
+          settings: {
+            rates : 100
+          },
+          storagePlan : {
+            plan : "FREE",
+            type : "LOCAL",
+            size : 32
+          }
+        }
+      })
+    });
+
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data).toEqual({
+      _id : expect.any(String),
+       id : expect.any(String),
+       name : "Pookie Wookie Dookie",
+       description : "Le Pookie Wookie Dookie est un service incroyable",
+       created_by : "1",
+       dns : "test.service.naflows",
+       settings : {
+         rates : 100
+       },
+       storage : {
+           plan : "FREE",
+           type : "LOCAL",
+           size : 32
+       },
+       ip_address : "3.5.1.1",
+       status: "INACTIVE",
+       created_at: expect.any(Number),
+       service_token : expect.any(String)
+    });
+  })
 })

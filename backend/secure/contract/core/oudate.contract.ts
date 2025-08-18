@@ -1,3 +1,4 @@
+import { software } from "../../../software/dir";
 import { CentralContracts, CONTRACT_ENDING_REASON } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import secure from "../../global/dir";
@@ -7,11 +8,7 @@ export async function outdateContract(id : string, reason : CONTRACT_ENDING_REAS
     const contract : CentralContracts = (await secure.contract.get(id)).data as CentralContracts;
 
     if (!contract) {
-        return {
-            status: 404,
-            message: "Contract not found.",
-            success: false
-        };
+        return software.methods.serverReply(404, "Contract not found.");
     }
 
     // Update the contract 
@@ -22,9 +19,5 @@ export async function outdateContract(id : string, reason : CONTRACT_ENDING_REAS
 
     await secure.contract.update(id, contract);
 
-    return {
-        status: 200,
-        message: "Contract updated successfully.",
-        success: true
-    };
+    return software.methods.serverReply(200, "Contract updated successfully.");
 }

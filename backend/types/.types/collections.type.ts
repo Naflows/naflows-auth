@@ -117,6 +117,9 @@ export interface ServiceStoragePlan {
   type: "LOCAL" | "CLOUD";
   size: 32 | 128 | 512 | 1024; // in GB
 }
+export interface ServiceSettings {
+  rates : 100 | 500 | 1000 | 10000;
+}
 export interface Service {
   id: string; // Service ID
   name: string; // Service name, used for display purposes
@@ -125,10 +128,10 @@ export interface Service {
   created_by: string; // User ID of the user who created the service
   status: "ACTIVE" | "INACTIVE" | "DEPRECATED"; // Service status, ACTIVE means the service is running, INACTIVE means the service is not running, DEPRECATED means the service is no longer supported
   dns: string; // DNS of the service, used to identify the service
-  ip_address: string; // IP address of the service, optional
-  service_token: string; // Service token, a secure way of connecting to the service, optional
+  ip_address: string; // IP address of the service
+  service_token: string; // Service token, a secure way of connecting to the service
   storage: ServiceStoragePlan;
-
+  settings : ServiceSettings
 }
 
 export enum CONTRACTED {
@@ -193,12 +196,12 @@ export interface NassServiceToken {
   created_at: number; // Date when the token was created
   expires_at: number; // Date when the token expires, if not set, it never expires
   lifespan: number; // How long the token is valid for, in seconds, if not set, it never expires
-  uses: number; // How many times the token has been used
+  creation_method : "AUTO" | "MANUAL";
 }
 
 // This service token type is only available for the NASS services, which are aware of their token but not the death of it
 export interface ServiceToken {
   id: string;
   token: string; // The service token, a secure way of connecting to the service
-  created_at: Date; // Date when the token was created
+  created_at: number; // Date when the token was created
 }
