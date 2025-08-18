@@ -3,55 +3,20 @@ require('dotenv').config();
 import { serve } from "./public/method/serve";
 import secure from "./secure/dir";
 import mongoose from 'mongoose';
-import { blacklistIP } from "./secure/ip/blacklist";
 import middleware from "./middleware/dir";
 import { Request, Response } from 'express';
 import { ReplyType } from "./types/.types/reply.type";
+import { connectToDatabase } from "./init/mongo-connect";
+import { useApp } from "./init/app-use";
 
 const express = require('express');
 const app = express();
-const fs = require('fs');
-const path = require('path');
 const bodyParser = require('body-parser');
 const router = express.Router();
 
 
-// Connect to the mongo database
-const mongoURI = process.env.MONGO_URL || `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/nass?authSource=admin`;
-console.log("Connecting to MongoDB at:", mongoURI);
-// Authenticate and connect to MongoDB
-if (!process.env.MONGO_INITDB_ROOT_USERNAME || !process.env.MONGO_INITDB_ROOT_PASSWORD) {
-    console.error('MongoDB credentials are not set in environment variables');
-    process.exit(1);
-}
-mongoose.connect(mongoURI);
-
-mongoose.connection.on('error', (err: Error) => {
-    console.error(`MongoDB connection error: ${err}`);
-});
-
-// Confirm successful connection
-mongoose.connection.once('open', () => {
-    console.log('Connected to MongoDB');
-});
-
-
-
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-
-
-app.use(async (req, res, next) => {
-    console.log(`Request received at ${req.path}`);
-    // Check if  the request path contains "/client"
-    if (req.path.startsWith('/client') || req.path.startsWith('/contract-debug')) {
-        // Continue 
-        next();
-    } else {
-        middleware.main(req, res, next);
-    }
-});
+connectToDatabase();
+useApp(app);
 
 app.post('/contract-debug/generate', async (req, res) => {
     try {
@@ -103,13 +68,7 @@ app.post('/test', (req: Request, res: Response) => {
     }
     res.status(200).json(data);
 });
-app.get('/blacklist', (req, res) => {
-    // Serve the blacklist page 
-    serve("IP Blacklisted", "blacklist.css", "blacklist.html", res, {
-        "blacklist_date": new Date().toISOString(),
-        "blacklist_reason": "No reason provided",
-    });
-});
+
 
 app.get('/client', (req, res) => {
     res.send('Welcome to the Auth API');
