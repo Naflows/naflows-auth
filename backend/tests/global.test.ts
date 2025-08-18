@@ -57,7 +57,7 @@ const getValidUCR = (userOverride = {}) => ({
     client: {
         ip: "127.0.0.1",
         dns: "local.nass.com",
-        service: "Test Service : token is not expired",
+        service: "1",
         service_token: "test-service-token",
         service_token_birth: 1750658147765
     },
@@ -200,7 +200,7 @@ describe("NASS SCV Tests", () => {
         const ucr = getValidUCR();
         delete ucr.user.token;
 
-        ucr.client.service = "Test Service : expired";
+        ucr.client.service = "3";
         ucr.client.service_token = "test-service-token-inactive";
         ucr.client.service_token_birth = 1749676800;
         ucr.data["customRequestURL"] = "/test/inactive-service";
@@ -216,7 +216,7 @@ describe("NASS SCV Tests", () => {
     test("Service token expired", async () => {
         const ucr = getValidUCR();
         delete ucr.user.token;
-        ucr.client.service = "Test Service : token is expired";
+        ucr.client.service = "2";
         ucr.client.service_token = "test-service-token-expired";
         ucr.client.service_token_birth = 1749962909;
         ucr.data["customRequestURL"] = "/test/expired-token";

@@ -114,7 +114,8 @@ services:
       - "3005:3005"
     expose:
       - "3005"
-    
+  
+     
     # DEVELOPMENT ONLY
     # REMOVE IN PRODUCTION
     deploy:
@@ -122,6 +123,7 @@ services:
         limits:
           cpus: '1.5'
           memory: 512M
+        
 
 
   global-tests:

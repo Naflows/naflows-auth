@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 import { serve } from "./public/method/serve";
-import secure from "./secure/dir";
+import secure from "./secure/global/dir";
 import mongoose from 'mongoose';
 import middleware from "./middleware/dir";
 import { Request, Response } from 'express';

@@ -1,8 +1,8 @@
 import { Collection } from "mongoose";
-import { db } from "../../..";
-import { software } from "../../../software/dir";
-import { TokenRights, Tokens, User, UserSession } from "../../../types/.types/collections.type";
-import { ReplyType } from "../../../types/.types/reply.type";
+import { db } from "../../../..";
+import { software } from "../../../../software/dir";
+import { TokenRights, Tokens, User, UserSession } from "../../../../types/.types/collections.type";
+import { ReplyType } from "../../../../types/.types/reply.type";
 import * as crypto from "crypto";
 import secure from "../../dir";
 

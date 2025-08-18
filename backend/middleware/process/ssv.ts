@@ -2,7 +2,7 @@ import { db } from "../..";
 import { ReplyType } from "../../types/.types/reply.type";
 import { Tokens, User, UserSession } from "../../types/.types/collections.type";
 import UCRType from "../../types/.types/ucr.type";
-import secure from "../../secure/dir";
+import secure from "../../secure/global/dir";
 import middleware from "../dir";
 import { Collection } from "mongoose";
 import { software } from "../../software/dir";
@@ -37,7 +37,6 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
     }) as unknown as UserSession;
     if (user != undefined) {
       if (session) {
-
         const allInformationsCorrect =
           session.ip === ucr.user.ip &&
           session.device_fingerprint === ucr.user.device_fingerprint &&

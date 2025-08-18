@@ -4,7 +4,7 @@ import { db } from "../../..";
 import { Collection } from "mongoose";
 import { ReplyType } from "../../../types/.types/reply.type";
 import crypto from "crypto";
-import secure from "../../dir";
+import secure from "../../global/dir";
 
 export async function issueContract(
     aim_id: string, // The ID of the concerned API or user,
