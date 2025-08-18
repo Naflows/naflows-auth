@@ -1,6 +1,6 @@
 import { Collection } from "mongoose";
 import { db } from "../..";
-import secure from "../../secure/dir";
+import secure from "../../secure/global/dir";
 import { Tokens, User, UserSession } from "../../types/.types/collections.type";
 import { ReplyType } from "../../types/.types/reply.type";
 import UCRType from "../../types/.types/ucr.type";

@@ -1,8 +1,8 @@
 import { Collection } from "mongoose";
-import { Tokens, UserSession } from "../../types/.types/collections.type";
-import { ReplyType } from "../../types/.types/reply.type";
+import { Tokens, UserSession } from "../../../types/.types/collections.type";
+import { ReplyType } from "../../../types/.types/reply.type";
 import { v4 } from "uuid";
-import { software } from "../../software/dir";
+import { software } from "../../../software/dir";
 import secure from "../dir";
 
 

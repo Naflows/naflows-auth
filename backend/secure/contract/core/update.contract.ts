@@ -1,7 +1,7 @@
 import { db } from "../../..";
 import { CentralContracts } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
-import secure from "../../dir";
+import secure from "../../global/dir";
 
 
 export async function updateContract(id: string, contract: CentralContracts): Promise<ReplyType> {

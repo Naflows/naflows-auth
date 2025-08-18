@@ -3,7 +3,7 @@
 import { Collection } from "mongoose";
 import { TokenRights, Tokens, User, UserSession } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
-import secure from "../../../secure/dir";
+import secure from "../../../secure/global/dir";
 import { software } from "../../../software/dir";
 
 

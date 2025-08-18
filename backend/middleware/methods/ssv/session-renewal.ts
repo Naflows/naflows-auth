@@ -1,7 +1,7 @@
 import { Collection } from "mongoose";
 import { db } from "../../..";
-import secure from "../../../secure/dir";
-import { isTokenValid } from "../../../secure/user-token/methods/token-valid";
+import secure from "../../../secure/global/dir";
+import { isTokenValid } from "../../../secure/global/user-token/methods/token-valid";
 import { software } from "../../../software/dir";
 import { Tokens, User, UserSession } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";

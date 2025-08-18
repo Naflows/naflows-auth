@@ -1,6 +1,6 @@
 import { CentralContracts, CONTRACT_ENDING_REASON } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
-import secure from "../../dir";
+import secure from "../../global/dir";
 
 
 export async function isContractValid(id : string) : Promise<boolean> {

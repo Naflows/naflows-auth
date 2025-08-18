@@ -1,9 +1,9 @@
 import { v4 } from "uuid";
-import { db } from "../../..";
-import { ReplyType } from "../../../types/.types/reply.type";
-import { software } from "../../../software/dir";
+import { db } from "../../../..";
+import { ReplyType } from "../../../../types/.types/reply.type";
+import { software } from "../../../../software/dir";
 import { Collection } from "mongoose";
-import { Tokens } from "../../../types/.types/collections.type";
+import { Tokens } from "../../../../types/.types/collections.type";
 import secure from "../../dir";
 import * as crypto from "crypto";
 

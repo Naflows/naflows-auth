@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { serve } from '../../public/method/serve';
+import { serve } from '../../../public/method/serve';
 
 
 export async function blacklistIP(mongoose, req : Request, res : Response, reason : string) {

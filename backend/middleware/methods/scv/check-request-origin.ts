@@ -24,7 +24,7 @@ export async function checkRequestOrigin(UCR: UCRType): Promise<ReplyType> {
     const queriedService = (await servicesCollection.findOne({
       ip_address: UCR.client.ip,
       dns: UCR.client.dns,
-      name: UCR.client.service,
+      id: UCR.client.service,
     })) as unknown as Service | null;
     if (queriedService && queriedService.status === "ACTIVE") {
       //console.log(`Service ${queriedService.name} is active, checking service token...`);

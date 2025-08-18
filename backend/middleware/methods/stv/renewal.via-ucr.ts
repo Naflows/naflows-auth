@@ -3,7 +3,7 @@ import { TokenRights, Tokens, User, UserSession } from "../../../types/.types/co
 import { ReplyType } from "../../../types/.types/reply.type";
 import UCRType from "../../../types/.types/ucr.type";
 import { software } from "../../../software/dir";
-import secure from "../../../secure/dir";
+import secure from "../../../secure/global/dir";
 import middleware from "../../dir";
 
 

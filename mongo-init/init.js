@@ -55,7 +55,9 @@ db.blacklist.createIndex({ ip: 1 }, { unique: true });
 db.logs.createIndex({ id: 1 }, { unique: true });
 
 db.requests.createIndex({ id: 1 }, { unique: true });
+db.requests.createIndex({ associated_service: 1 });
 db.requests.createIndex({ ip: 1 });
+
 
 
 

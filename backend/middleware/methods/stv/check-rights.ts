@@ -3,7 +3,7 @@ import { db } from "../../..";
 import { software } from "../../../software/dir";
 import { Tokens, User } from "../../../types/.types/collections.type";
 import UCRType from "../../../types/.types/ucr.type";
-import secure from "../../../secure/dir";
+import secure from "../../../secure/global/dir";
 
 
 

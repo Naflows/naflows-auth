@@ -4,5 +4,5 @@
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "include": ["**/*.ts", "**/*.html", "**/*.css", "secure/hash/hash.ts"]
+  "include": ["**/*.ts", "**/*.html", "**/*.css", "secure/global/hash/hash.ts"]
 }

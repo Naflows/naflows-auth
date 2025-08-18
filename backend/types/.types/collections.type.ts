@@ -6,20 +6,22 @@ export interface Blacklist {
   userAgent: string;
   reason: string;
   date: Date;
+  associated_service?: string;
 }
 
 // Requests are related to counting the number of requests made by a user or an IP address
 // to the NASS services, this is used for rate limiting and abuse detection
+export interface UserRequest {
+    last_requests: Array<number>; // Timestamp of the request
+    request_number : number;
+    ip: string;
+    userAgent: string;
+}
 export interface Requests {
-  ip: string;
-  userAgent: string;
-  requests: Array<{
-    date: number; // Timestamp of the request
-    request: UCRType;
-  }>;
-  lastRequest: number;
-  firstRequest: number;
+  requests: Array<UserRequest>;
   device_fingerprint: string; // Device fingerprint of the user, used for security purposes
+  associated_service : string;
+  associated_service_key : string;
 }
 
 export interface User {
@@ -110,16 +112,23 @@ export interface Tokens {
   rights: TokenRights[]; // Rights of the token, used to determine what the token can do
 }
 
+export interface ServiceStoragePlan {
+  plan : "FREE" | "PRO" | "ENTERPRISE";
+  type: "LOCAL" | "CLOUD";
+  size: 32 | 128 | 512 | 1024; // in GB
+}
 export interface Service {
   id: string; // Service ID
   name: string; // Service name, used for display purposes
   description?: string; // Service description, optional
-  created_at: Date; // Date when the service was created
+  created_at: number; // Date when the service was created
   created_by: string; // User ID of the user who created the service
   status: "ACTIVE" | "INACTIVE" | "DEPRECATED"; // Service status, ACTIVE means the service is running, INACTIVE means the service is not running, DEPRECATED means the service is no longer supported
   dns: string; // DNS of the service, used to identify the service
   ip_address: string; // IP address of the service, optional
   service_token: string; // Service token, a secure way of connecting to the service, optional
+  storage: ServiceStoragePlan;
+
 }
 
 export enum CONTRACTED {

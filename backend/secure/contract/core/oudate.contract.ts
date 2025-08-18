@@ -1,6 +1,6 @@
 import { CentralContracts, CONTRACT_ENDING_REASON } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
-import secure from "../../dir";
+import secure from "../../global/dir";
 
 
 export async function outdateContract(id : string, reason : CONTRACT_ENDING_REASON | CONTRACT_ENDING_REASON.FORCED) {
