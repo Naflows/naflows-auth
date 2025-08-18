@@ -8,6 +8,7 @@ import { Request, Response } from 'express';
 import { ReplyType } from "./types/.types/reply.type";
 import { connectToDatabase } from "./init/mongo-connect";
 import { useApp } from "./init/app-use";
+import { services } from "./secure/services/dir";
 
 const express = require('express');
 const app = express();
@@ -37,6 +38,20 @@ app.post('/contract-debug/generate', async (req, res) => {
             message: "Internal Server Error"
         });
     }
+})
+
+
+app.post('/client/build/service', async (req:  Request, res: Response) => {
+    const { userId, password, identifier, details } = req.body;
+    const builtService : ReplyType = await services.service.build(
+        userId, password, identifier, details
+    );
+
+    if (!builtService.success) {
+        return res.status(builtService.status).json(builtService);
+    }
+
+    res.status(200).json(builtService.data);
 })
 
 app.post('/test', (req: Request, res: Response) => {

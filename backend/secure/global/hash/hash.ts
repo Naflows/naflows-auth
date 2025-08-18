@@ -34,5 +34,3 @@ export function verifyHash(value: string, hash: string): boolean {
     return computedHash === originalHash;
 }
 
-
-console.log(crypt("123456789"))
