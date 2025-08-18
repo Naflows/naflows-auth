@@ -62,6 +62,12 @@ const LoginForm = () => {
           type={viewPassword ? "text" : "password"}
           placeholder="Enter your password"
         />
+        <button
+          className="icon-button"
+          onClick={() => setViewPassword((prev) => !prev)}
+        >
+          {viewPassword ? "Hide" : "Show"} Password
+        </button>
       </div>
       <button
         className="primary-button text-size-20"
