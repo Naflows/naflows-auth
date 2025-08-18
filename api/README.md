@@ -11,3 +11,10 @@ This API is designed to simulate real API responses and behaviors in order to te
 The NAFLOWS Model is the workflow model of the NASS, designed to allow user to build their own API with the NASS as a base. 
 
 The central contracts are built alongside with the dummy API to provide a seamless integration and testing experience, and ensure they both work together effectively.
+
+---------------
+
+As said, the design of the way the dummy API interacts with the NAFLOWS Model has to be carefully considered to ensure compatibility and ease of use:
+* Received data should be readable and writable by any language
+* The API should be able to be written in any programming language
+* The API should be able to save data at least temporarily (for API key saving, NASS contracts, etc)
