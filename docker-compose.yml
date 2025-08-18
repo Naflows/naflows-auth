@@ -36,7 +36,7 @@ services:
 
   auth-api:
     build: 
-      context: ./
+      context: ./backend
       dockerfile: Dockerfile
     restart: always
     profiles: ["auth-api"]
@@ -53,8 +53,8 @@ services:
     depends_on:
       - mongo-nass
     volumes:
-      - ./backend:/app
-    
+      - ./backend:/app/backend
+
     # DEVELOPMENT ONLY
     # REMOVE IN PRODUCTION
     deploy:
@@ -63,7 +63,23 @@ services:
           cpus: '1.5'
           memory: 512M
 
-        
+  nass-frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    profiles: ["frontend"]
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    environment:
+      - NODE_ENV=development
+      - API_URL=${API_URL}
+    depends_on:
+      - auth-api
+    volumes:
+      - ./frontend:/app/frontend
+
   mongo-express:
     image: mongo-express
     container_name: mongo-express
@@ -109,7 +125,9 @@ services:
 
 
   global-tests:
-    build: ./
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
     profiles: ["test-global"]
     command: npm run test-global
     depends_on:
@@ -117,14 +135,13 @@ services:
       - mongo-nass
       - mongo-express
     volumes:
-      - ./backend:/app
-      - ./backend/auth-data:/app/data
+      - ./backend:/app/backend
     environment:
       - NODE_ENV=test
       - AUTH_API_URL=${AUTH_API_URL}
 
   contracts-tests:
-    build: ./
+    build: ./backend
     profiles: ["test-contracts"]
     command: npm run test-contracts
     depends_on:
@@ -132,8 +149,7 @@ services:
       - mongo-nass
       - mongo-express
     volumes:
-      - ./backend:/app
-      - ./backend/auth-data:/app/data
+      - ./backend:/app/backend
     environment:
       - NODE_ENV=test
       - CONTRACTS_API_URL=${CONTRACTS_API_URL}

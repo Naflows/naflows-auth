@@ -12,6 +12,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
   sessionsCollection: Collection<UserSession>;
   tokensCollection: Collection<Tokens>;
 }, user: User, session: UserSession): Promise<ReplyType> {
+  console.log(`Trying to renew session ${JSON.stringify(session)} for user ${JSON.stringify(user)} with UCR ${JSON.stringify(ucr)}`);
   const renewalToken = ucr.data ? ucr.data["session-renewal-token"] : undefined;
   const token = renewalToken
     ? ((await collections.tokensCollection.findOne({

@@ -102,7 +102,7 @@ db.sessions.insertOne({
     ip : "1.1.1.2",
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
     device_fingerprint: "fingerprint-1",
-    expires_at: new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours
+    expires_at: new Date().getTime() + 1000 * 60 * 60 * 24 * 10000, // 24 hours
     created_at: new Date().getTime(),
     token_id: "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
     last_activity: new Date().getTime(),

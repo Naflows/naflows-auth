@@ -45,7 +45,8 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
           session.agent === ucr.user.agent &&
           session.user_id == secure.hash(ucr.user.user_id);
         if (allInformationsCorrect) {
-          const isOutdated = session.expires_at < Date.now();
+          const isOutdated = session.expires_at < new Date().getTime();
+          console.log(`Session is ${isOutdated ? "outdated" : "valid"}`);
           if (!isOutdated) {
             if (
               ucr.user.password != undefined &&
