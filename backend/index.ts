@@ -41,10 +41,11 @@ app.post('/contract-debug/generate', async (req, res) => {
 })
 
 
+
 app.post('/client/build/service', async (req:  Request, res: Response) => {
-    const { userId, password, identifier, details } = req.body;
+    const { userID, password, identifier, details } = req.body;
     const builtService : ReplyType = await services.service.build(
-        userId, password, identifier, details
+        userID, password, identifier, details
     );
 
     if (!builtService.success) {
@@ -52,6 +53,18 @@ app.post('/client/build/service', async (req:  Request, res: Response) => {
     }
 
     res.status(200).json(builtService.data);
+})
+
+app.post('/contract-debug/get-api-key', async (req, res) => {
+    const { userID, serviceID, password, identifier } = req.body;
+    console.log(req.body)
+    const token = await services.token.get(userID, serviceID, password, identifier)
+    res.status(token.status).json(token);
+})
+app.post('/contract-debug/validate-token', async (req,res) => {
+    const { serviceID, token, creation_date } = req.body;
+    const t : boolean = await services.token.check(serviceID, token, creation_date)
+    res.status(t ? 200 : 403).json(t);
 })
 
 app.post('/test', (req: Request, res: Response) => {
