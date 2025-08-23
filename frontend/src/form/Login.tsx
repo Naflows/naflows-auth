@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 
 const LoginForm = () => {
@@ -23,7 +24,6 @@ const LoginForm = () => {
                 let followingInput: HTMLInputElement | null = null;
 
                 const key = e.key;
-                console.log("Key pressed:", key);
 
                 if (key === "Backspace" || key === "0") {
                   if (input.value.length === 0) {
@@ -66,13 +66,17 @@ const LoginForm = () => {
           className="icon-button"
           onClick={() => setViewPassword((prev) => !prev)}
         >
-          {viewPassword ? "Hide" : "Show"} Password
         </button>
       </div>
       <button
         className="primary-button text-size-20"
         type="submit"
-        onSubmit={() => {}}
+        onSubmit={async () => {
+          const login = await axios.post(process.env.AUTH_API_URL_DEV, {
+            identifier: "dummy",
+            password: "dummy"
+          });
+        }}
       >
         Log in
       </button>

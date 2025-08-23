@@ -564,7 +564,6 @@ describe("NASS SSV Tests", () => {
 
         test("try to renew session after renewal", async () => {
             const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId, token: renewTokenValue } };
-            console.log(`Sending token renewal request with session ID: ${sessionId} and token: ${renewTokenValue}`);
             delete ucr.user.password;
             delete ucr.user.identifier;
             ucr.data["customRequestURL"] = "/test-ssv/session-connection-after-renewal/valid-token";
@@ -586,7 +585,6 @@ describe("NASS SSV Tests", () => {
 
 
         test("session is not outdated anymore", async () => {
-            console.log(`Sending token renewal request with session ID: ${sessionId} and token: ${renewTokenValue}`);
             const ucr = { ...validUCR, user: { ...dummy2, session_id: sessionId, token: renewTokenValue } };
             delete ucr.user.password;
             delete ucr.user.identifier;
@@ -656,7 +654,6 @@ describe("NASS STV Tests", () => {
     });
 
     test('renew token with invalid credentials', async () => {
-        console.log(`Sending token renewal request with session ID: ${newSessionID} and token: ${tokenRenewalValue}`);
         const ucr = {
             ...getValidUCR({ ...dummy1_2, session_id: newSessionID }),
             data: {
@@ -835,8 +832,6 @@ describe("NASS STV Tests", () => {
         ucr.data["customRequestURL"] = "/test-stv/existing-route-wrong-user-rights/identifier-password";
         ucr.request.url = "/test/user";
         delete ucr.user.token;
-
-        console.log(`Sending UCR ${JSON.stringify(ucr)}`);
 
         const res = await post(ucr);
         expect(res.status).toBe(403);
