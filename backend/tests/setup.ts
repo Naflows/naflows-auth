@@ -9,11 +9,11 @@ const waitForServer = async (url: string, timeout = 20000) => {
     while (tries < maxTries) {
         try {
             await fetch(url);
-            console.log(`✅ Server is up at ${url}`);
+            console.log(`SERVER IS UP AT ${url}.`);
             return;
         } catch (err) {
             tries++;
-            console.log(`⏳ Waiting for server at ${url}... (${tries}/${maxTries})`);
+            console.log(`WAITING FOR SERVER AT ${url}... (${(tries * 100) / maxTries}%).`);
             await new Promise((res) => setTimeout(res, interval));
         }
     }

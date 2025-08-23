@@ -57,7 +57,6 @@ app.post('/client/build/service', async (req:  Request, res: Response) => {
 
 app.post('/contract-debug/get-api-key', async (req, res) => {
     const { userID, serviceID, password, identifier } = req.body;
-    console.log(req.body)
     const token = await services.token.get(userID, serviceID, password, identifier)
     res.status(token.status).json(token);
 })
@@ -113,7 +112,6 @@ app.get('/client', (req, res) => {
 app.post('/team/add/service/post', async (req, res) => {
     // Handle the request to add a service that comes from a form
     const body = req.body;
-    console.log('Received request to add service:', body);
     if (body.db_username != process.env.MONGO_INITDB_ROOT_USERNAME || body.db_password != process.env.MONGO_INITDB_ROOT_PASSWORD) {
         await secure.blacklist(mongoose, req, res, "Invalid MongoDB credentials provided when trying to add a new session to the NASS.");
     } else {
@@ -129,7 +127,6 @@ app.post('/team/add/service/post', async (req, res) => {
         ) {
             await secure.blacklist(mongoose, req, res, "Invalid user credentials provided when trying to add a new service to the NASS.");
         } else {
-            console.log(`Service added: ${body.name} - ${body.description}`);
             // Add connection and service token
             return res.status(200).send(`Service ${body.name} added successfully`);
         }
@@ -141,6 +138,7 @@ app.post('/team/add/service/post', async (req, res) => {
 app.get('/team/add/service', (req, res) => {
     serve("Add service", "form-style.css", "add-service.html", res);
 })
+
 
 
 
