@@ -1,9 +1,3 @@
-import { executeContract } from "../contract/core/execute.contract";
-import { getContractByID } from "../contract/core/get.contract";
-import { issueContract } from "../contract/core/issuing.contract";
-import { outdateContract } from "../contract/core/oudate.contract";
-import { updateContract } from "../contract/core/update.contract";
-import { isContractValid } from "../contract/core/validate.contract";
 import { crypt, hashID, verifyHash } from "./hash/hash";
 import { blacklistIP } from "./ip/blacklist";
 import renewSessionId from "./session/renew-id";
@@ -28,14 +22,6 @@ const secure = {
     },
     session : {
         renew : renewSessionId
-    },
-    contract : {
-        create : issueContract,
-        get : getContractByID,
-        execute : executeContract,
-        isValid : isContractValid,
-        oudate : outdateContract,
-        update : updateContract
     }
 };
 

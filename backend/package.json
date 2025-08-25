@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test-global": "jest global.test.ts --runInBand --no-cache --verbose",
-    "test-contracts": "jest contracts.test.ts --runInBand --no-cache --verbose"
+    "test-services": "jest services.test.ts --runInBand --no-cache --verbose"
   },
   "author": "",
   "license": "ISC",

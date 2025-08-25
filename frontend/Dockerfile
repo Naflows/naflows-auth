@@ -1,6 +1,7 @@
 # BUILD FRONTEND FOR PRODUCTION
 FROM node:alpine AS build-stage
 WORKDIR /app/frontend
+
 COPY . .
 RUN npm install
 EXPOSE 8080

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 
 const LoginForm = () => {
@@ -71,12 +70,7 @@ const LoginForm = () => {
       <button
         className="primary-button text-size-20"
         type="submit"
-        onSubmit={async () => {
-          const login = await axios.post(process.env.AUTH_API_URL_DEV, {
-            identifier: "dummy",
-            password: "dummy"
-          });
-        }}
+        
       >
         Log in
       </button>
