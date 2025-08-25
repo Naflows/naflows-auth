@@ -19,27 +19,6 @@ const router = express.Router();
 connectToDatabase();
 useApp(app);
 
-app.post('/contract-debug/generate', async (req, res) => {
-    try {
-        const { aim_id, aim_type, type, forced, details } = req.body;
-        const result  : ReplyType = await secure.contract.create(
-            aim_id,
-            aim_type,
-            type,
-            forced,
-            details
-        );
-        res.status(result.status).json((result.data as {received:Object}).received);
-    } catch (error) {
-        console.error("Error generating contract:", error);
-        res.status(500).json({
-            success: false,
-            status: 500,
-            message: "Internal Server Error"
-        });
-    }
-})
-
 
 
 app.post('/client/build/service', async (req:  Request, res: Response) => {
