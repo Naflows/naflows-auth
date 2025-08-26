@@ -72,8 +72,8 @@ const getValidUCR = (userOverride = {}) => ({
     data: {}
 });
 
-async function post(ucr) {
-    const res = await fetch(app, {
+async function post(ucr, link = app) {
+    const res = await fetch(link, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(ucr)
@@ -901,3 +901,37 @@ describe("NASS STV Tests", () => {
 });
 
 
+
+async function postToLogin(userID, password, identifier) {
+    const res = await fetch("http://auth-api-1:3000/client/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userID, password, identifier })
+    });
+    return res;
+}
+
+
+describe("User Connection Tests", () => {
+    test('User login failed (wrong password)', async () => {
+        const res = await postToLogin("1", "wrong-password", "123456789");
+        expect(res.status).toBe(401);
+    })
+
+    test('User login failed (wrong user id)', async () => {
+        const res = await postToLogin("wrong-id", "W8JdVoy30xEa1hZ5aDVQ", "123456789");
+        expect(res.status).toBe(401);
+    })
+
+    test('User login failed (wrong identifier)', async () => {
+        const res = await postToLogin("1", "W8JdVoy30xEa1hZ5aDVQ", "wrong-identifier");
+        expect(res.status).toBe(401);
+    })
+
+    test('User login successful', async () => {
+        const res = await postToLogin("1", "W8JdVoy30xEa1hZ5aDVQ", "123456789");
+        expect(res.status).toBe(200);
+    })
+
+
+})
