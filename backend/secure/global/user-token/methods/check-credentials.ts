@@ -6,13 +6,12 @@ import secure from "../../dir";
 
 
 
-export async function checkUserCredentials(userID: string, password: string, identifier : string) : Promise<boolean> {
+export async function checkUserCredentials(userID: string | null, password: string, identifier : string) : Promise<boolean> {
     const userCollection : Collection<User> = db.collection("users");
     if (!userCollection) throw new Error("Internal Server Error: Failed to connect to the database.");
 
-    const user = await userCollection.findOne({ id: secure.hash(userID) });
-
-
+    const user: User = await userCollection.findOne({ id: secure.hash(userID) });
+  
 
     if (!user || user == undefined || user == null) return false;
 

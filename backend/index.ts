@@ -10,11 +10,12 @@ import { connectToDatabase } from "./init/mongo-connect";
 import { useApp } from "./init/app-use";
 import { services } from "./secure/services/dir";
 
+
+
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const router = express.Router();
-
 
 connectToDatabase();
 useApp(app);
@@ -80,7 +81,15 @@ app.get('/client', (req, res) => {
     res.send('Welcome to the Auth API');
 });
 
-
+app.post('/client/login', async (req, res) => {
+    const { userID, password, identifier } = req.body;
+    const ok : boolean = await secure.user.credentials(userID, password, identifier);
+    if (ok) {
+        res.status(200).send("Login successful");
+    } else {
+        res.status(401).send("Login failed");
+    }
+});
 
 /*
 

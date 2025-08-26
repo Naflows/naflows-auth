@@ -37,7 +37,7 @@ function App() {
                 : "Create an account"}
             </h1>
           </div>
-          <form>{formType === "login" ? <LoginForm /> : <RegisterForm />}</form>
+          <div className="form">{formType === "login" ? <LoginForm /> : <RegisterForm />}</div>
           <div className="panel-footer">
             <button
               className="secondary-button text-size-20"
