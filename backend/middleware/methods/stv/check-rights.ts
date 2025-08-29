@@ -35,7 +35,7 @@ export async function checkTokenRights(token: Tokens, ucr: UCRType) {
 
 
             const areUserRightsValid = routes[requestRoute].levels.some(level =>
-                user.rights.includes(level)
+                user.services[ucr.client.service].rights.includes(level)
             );
 
             if (!areUserRightsValid || !areRightsValid) {

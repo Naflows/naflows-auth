@@ -32,7 +32,13 @@ export interface User {
   created_at: Date; // Date when the user was created
   last_login: Date; // Date when the user last logged in
   last_update: Date; // Date when the user was last updated
-  rights: Array<"ADMINISTRATOR" | "DEVELOPER" | "USER">;
+  services: {
+    [key: number]: {
+      rights: Array<"ADMINISTRATOR" | "DEVELOPER" | "USER">;
+      joined_at : number;
+      active : boolean;
+    };
+  };
   username: string; // Username, used for display purposes
   first_name?: string; // First name of the user, optional
   last_name?: string; // Last name of the user, optional
@@ -65,6 +71,7 @@ export type TokenRights =
   | "TOKEN_RENEWAL" // Note : for token renewal, token max use is 1
   | "SESSION_RENEWAL" // Note : for session renewal, token max use is 1
   | "SESSION_CONFIRMATION" // Confirm a session, used to check if a session is valid
+  | "API_REGISTRATION" // Register a user in an API
 
 
   // The following rights are for the NASS Administrative Instances
@@ -104,6 +111,9 @@ export interface Tokens {
   expires_at: number;
   renewable: boolean;
   supertest?: boolean; // If the token is a supertest token, it can be used for testing purposes
+  data? : {
+    apiIDForRegistration? : string;
+  };
   enabled: boolean; // Whether the token is enabled or not, if not, it cannot be used
   frozen_until?: number; // UNIX TIMESTAMP, if the token is frozen, this is the amount of seconds until it can be unfrozen
   frozen_at?: number; // If the token is frozen, this is the date when it was frozen,
@@ -197,6 +207,7 @@ export interface NassServiceToken {
   expires_at: number; // Date when the token expires, if not set, it never expires
   lifespan: number; // How long the token is valid for, in seconds, if not set, it never expires
   creation_method : "AUTO" | "MANUAL";
+  uses : number
 }
 
 // This service token type is only available for the NASS services, which are aware of their token but not the death of it
