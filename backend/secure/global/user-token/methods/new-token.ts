@@ -11,7 +11,8 @@ export async function createToken(
     session : UserSession,
     rights : TokenRights[],
     renewable : boolean,
-    max_uses : number 
+    max_uses : number ,
+    data : object | null = null
 ) : Promise<ReplyType> {
 
     try {
@@ -29,6 +30,7 @@ export async function createToken(
             rights: rights,
             enabled: true, // Token is enabled by default
             supertest : true,
+            data : data
         };
 
         // Save the token to the database

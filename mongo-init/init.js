@@ -68,7 +68,13 @@ db.users.insertOne({
     password : "100000:5ee1efc5ad26b93e2cd51ceeedc18451:c986c5f6a979289c7da5146868b6832198835f656eb3c9683d597fa781ae64b2bd9684db0cfff6a64fcd630a2a46fbece8858f4ad9eccb394844e591a8cb35d8",
     email : "administration@naflows.com",
     username : "NAFLOWS",
-    rights : "SUPER_ADMIN",
+    services : {
+        1 : {
+            rights : ["ADMINISTRATOR"],
+            joined_at: new Date().getTime(),
+            active : true
+        }
+    },
     created_at : new Date().getTime(),
     updated_at : new Date().getTime()
 });
@@ -78,7 +84,13 @@ db.users.insertOne({
     identifier : "100000:137db0ce6e8b0b238a304614ebc5dc33:64c94524560e67d1e78a96dc67ba92af545d490077fa2e5b13473107f6b7f5e7a6841f89eea8a7cd6ac740969b521f82fb88cd815d6b3f26d96677ef7c224dfe",
     password : "100000:137db0ce6e8b0b238a304614ebc5dc33:64c94524560e67d1e78a96dc67ba92af545d490077fa2e5b13473107f6b7f5e7a6841f89eea8a7cd6ac740969b521f82fb88cd815d6b3f26d96677ef7c224dfe",
     email : "dummy@gmail.com",
-    rights : "USER",
+    services : {
+        1 : {
+            rights : ["USER"],
+            joined_at: new Date().getTime(),
+            active: true
+        }
+    },
     created_at : new Date().getTime(),
     updated_at : new Date().getTime()
 })
@@ -90,7 +102,13 @@ db.users.insertOne({
     password : "100000:bde933e36fd5ba991a274b3eca227195:8d9cdf2aa5dc7b52ac7d3e6ae6086f3a27f2c53d08827bd9e4cc9534935e906602da9545d5580c22e38905b3c2aaa1b8d86a06542f6379a57409c4c1ae03a838",
     email : "dummy@gmail.com",
     username : "Dummy User Session Expired",
-    rights : "USER",
+    services : {
+        1 : {
+            rights : ["USER"],
+            joined_at: new Date().getTime(),
+            active : true
+        }
+    },
     created_at : new Date().getTime(),
     updated_at : new Date().getTime()
 })

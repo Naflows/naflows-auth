@@ -42,6 +42,8 @@ export async function checkRequestOrigin(UCR: UCRType): Promise<ReplyType> {
         // console.log(`Service token ${serviceToken.token} for service ${queriedService.name} is ${
         //   expiredToken ? "expired" : "valid"}.`);
         if (serviceToken && !expiredToken) {
+          serviceToken.uses++;
+          await servicesToken.updateOne({ id: serviceToken.id }, { $set: { uses: serviceToken.uses } });
           return software.methods.serverReply(200,"Service access granted.");
         } else if (expiredToken && serviceToken) {
           console.error(

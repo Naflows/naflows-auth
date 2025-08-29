@@ -24,7 +24,11 @@ interface UCRType {
         service_status?: string; // Idk what to use it for rn 
     };
 
-    data? : any;
+    data? : {
+        tokens? : {
+            serviceRegistration? : string;
+        };
+    };
 
     request : {
         method: string; // GET, POST, PUT, DELETE, etc.
