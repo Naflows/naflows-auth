@@ -9,7 +9,7 @@ export function useApp(app) {
     app.use(cors());
     app.use(async (req, res, next) => {        
         // Check if  the request path contains "/client"
-        if (req.path.startsWith('/client') || req.path.startsWith('/contract-debug')) {
+        if (req.path.startsWith('/client') || req.path.startsWith('/public') || req.path.startsWith('/contract-debug')) {
             // Continue 
             next();
         } else {
