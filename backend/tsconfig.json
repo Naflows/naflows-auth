@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
     "types": ["node"],
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "include": ["**/*.ts", "**/*.html", "**/*.css", "secure/global/hash/hash.ts"]
+  "include": ["**/*.ts", "**/*.html", "**/*.css", "secure/global/hash/hash.ts", "software/mailing/send-email.ts"]
 }

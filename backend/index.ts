@@ -9,7 +9,7 @@ import { ReplyType } from "./types/.types/reply.type";
 import { connectToDatabase } from "./init/mongo-connect";
 import { useApp } from "./init/app-use";
 import { services } from "./secure/services/dir";
-
+import path from "path";
 
 
 const express = require('express');
@@ -84,6 +84,7 @@ app.get('/client', (req, res) => {
 app.post('/client/login', async (req, res) => {
     const { userID, password, identifier } = req.body;
     const ok : boolean = await secure.user.credentials(userID, password, identifier);
+
     if (ok) {
         res.status(200).send("Login successful");
     } else {
@@ -128,6 +129,10 @@ app.get('/team/add/service', (req, res) => {
 })
 
 
+
+app.get('/public/resources/mailing/pattern/custom-code.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'resources', 'mailing', 'pattern', 'custom-code.html'));
+});
 
 
 

@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+
+.mail__body {
+  font-family: "Nunito", sans-serif;
+  margin: auto;
+  width: 50%;
+  background-color: #212b91ff;
+  padding: 50px;
+  border-radius: 50px;
+  color: #4cffc9ff;
+}
+
+.links {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+a {
+  color: #4cffc9ff;
+  transition: 0.3s;
+  &:hover {
+    color: rgb(43, 185, 143);
+  }
+}
+
+p {
+  margin: 0;
+}
+
+pre {
+  font-size: 30px;
+  width: fit-content;
+  text-align: center;
+  padding: 5px 10px;
+  background-color: #141d79ff;
+  border-radius: 15px;
+  margin: 0;
+}
+
+.mail__body {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 20px;
+}
+
+.mail__body img {
+  height: 100px;
+  width: fit-content;
+}
+
+.code-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mail__body__content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 50px;
+  width: 100%;
+}
+
+footer .footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
