@@ -103,6 +103,8 @@ services:
     logging:
       driver: none
 
+
+
   dummy-api:
     build: 
       context: ./api
@@ -163,4 +165,5 @@ volumes:
     driver: local
   mongo-express-data:
     driver: local
-
+  captcha-data:
+    driver: local

@@ -1,14 +1,16 @@
 @import "./variables.scss";
 
 body {
-  * { font-family: "IBM Plex Mono", sans-serif; }
+  * {
+    font-family: "Nunito", monospace;
+  }
   background-color: $_2k25-background-hue;
-  color : $_2k25-text;
-  display:flex;
-  align-items: center;
+  color: $_2k25-text;
+  display: flex;
   justify-content: center;
   width: 100%;
   height: 100vh;
+  overflow-x: hidden;
   overflow: hidden;
   h1 {
     text-transform: uppercase;
@@ -16,168 +18,344 @@ body {
   }
 }
 
-
-
-
-.panel {
-    padding: 50px 50px;
-    background-color : $_2k25-background-hue-darker;
-    display:flex;
-    gap: 20px;
-    flex-direction: column;
-    border-radius: 20px;
-    height: fit-content;
-    .panel-header {
-        display: flex;
-        flex-direction: column;
-        align-items: start;
-        gap: 10px;
-        h2, h1 {
-            margin: 0;
-            padding: 0;
-        }
-        h2 {
-            font-size: 15px;
-        }
-    }
-
-    &.panel-image-only {
-        padding: 20px 50px;
-    }
-    .panel-links {
-        display:flex;
-        flex-direction: column;
-        gap: 2px;
-    }
-
-
-    .form {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        .inputs-container {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            label {
-                font-size: 15px;
-            }
-            input {
-                border-radius: 10px;
-                padding: 10px 20px;
-                background-color: $_2k25-background-hue-40;
-                border:none;
-                outline: none;
-                color : $Color;
-                outline : 2px solid transparent;
-                &::placeholder {
-                    color: $_2k25-background-hue-10;
-                }
-                &:focus {
-                    outline : 2px solid $_2k25-darker;
-                }
-            }
-            .identifier-input {
-                display: flex;
-                gap: 5px;
-                input {
-                    width: 15px;
-                }
-            }
-
-            &.two-columns {
-                flex-direction: row;
-                .inputs-container {
-                    flex: 1;
-                    &:not(:last-child) {
-                        margin-right: 20px;
-                    }
-                }
-            }
-
-        }
-    }
+.global__nass__form {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.panel {
+  padding: 50px 50px;
+  background-color: $_2k25-background-hue-darker;
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  border-radius: 20px;
+  align-items: start;
+  height: fit-content;
+  .panel-header {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+    h2,
+    h1 {
+      margin: 0;
+      padding: 0;
+    }
+    h2 {
+      font-size: 15px;
+    }
+  }
 
-input[type=number] {
-    -moz-appearance:textfield; /* Firefox */
+  &.panel-image-only {
+    padding: 20px 50px;
+  }
+  .panel-links {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    .two-columns {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      row-gap: 20px;
+      column-gap: 20px;
+      .inputs-container {
+        flex: 1;
+      }
+    }
+    .global__input {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      position: relative;
+      label {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        transition: all 0.2s;
+        z-index: 5;
+        background-color: $_2k25-background-hue-darker;
+        padding: 2px 10px;
+        width: fit-content;
+        border-radius: 10px;
+      }
+
+      &:hover,
+      &:focus-within,
+      &:focus,
+      &.filled {
+        label {
+          top: -10px;
+          left: 10px;
+          font-size: 13px;
+        }
+      }
+
+      input {
+        border-radius: 10px;
+        padding: 10px 20px;
+        background-color: $_2k25-background-hue-darker;
+        border: 2px solid $_2k25-background-hue-40;
+        outline: none;
+        color: $Color;
+        outline: 2px solid transparent;
+        position: relative;
+        /* Remove the input number type arrows */
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        &::placeholder {
+          color: $_2k25-background-hue-10;
+        }
+        &:focus {
+          outline: 2px solid $_2k25-darker;
+        }
+      }
+      .identifier-input {
+        display: flex;
+        gap: 5px;
+        input {
+          width: 15px;
+        }
+      }
+    }
+  }
+  .panel-footer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    button {
+        font-size: 15px;
+    }
+  }
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid $_2k25-text;
+    border-radius: 3px;
+    margin-right: 5px;
+    cursor: pointer;
+    background: transparent;
+    position: relative;
+    vertical-align: middle;
+}
+
+input[type="checkbox"]:checked {
+    background: $_2k25-text;
+}
+
+input[type="checkbox"]:checked::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 8px;
+    height: 8px;
+    background: $_2k25-background-hue;
+    border-radius: 2px;
+}
+
+input[type="checkbox"]::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 8px;
+    height: 8px;
+    background: transparent;
+    border-radius: 2px;
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked:after {
+    background-color: $_2k25-text;
+}
+
+.global__terms__and__conditions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        a {
+            color: $_2k25-text;
+            text-decoration: underline;
+            &:hover {
+                color: $_2k25-darker;
+            }
+        }
+    }
 }
 
 /* ------------------------------- */
 .primary-button {
-    padding: 10px 15px;
-    border-radius: 10px;
-    background-color: $_2k25-text;
-    border:none;
-    cursor: pointer;
-    color: $_2k25-background-hue;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  padding: 10px 15px;
+  border-radius: 10px;
+  background-color: $_2k25-text;
+  border: none;
+  cursor: pointer;
+  color: $_2k25-background-hue;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+  svg,
+  svg * {
+    width: 20px;
+    height: 20px;
+    fill: $_2k25-background-hue;
+  }
+
+  &:hover {
+    background-color: $_2k25-darker;
+    color : $_2k25-background-hue-darker;
+  }
+}
+
+.tertiary-button {
+  padding: 10px 15px;
+  border-radius: 10px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: $_2k25-text;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+  width: fit-content;
+  svg,
+  svg * {
+    width: 20px;
+    height: 20px;
+    fill: $_2k25-text;
+  }
+
+  &.global__link {
+    padding: 0;
+  }
+
+  &:hover {
+    color: $_2k25-darker;
     svg, svg * {
-        width: 20px;
-        height: 20px;
-        fill: $_2k25-background-hue;
+      fill: $_2k25-darker;
     }
+  }
+}
+
+@keyframes loader {
+  0% {
+    transform: translateX(-200px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(100% + 200px + 110px));
+  }
+}
+
+.naflows__button__loader {
+  background-color: red;
+  width: 100%;
+  height: 10px;
+  border-radius: 50px;
+  background-color: $_2k25-darker;
+  padding: 5px;
+  overflow: hidden;
+  .naflows__button__loader__content {
+    background-color: $_2k25-background-hue;
+    width: 200px;
+    height: 100%;
+    border-radius: 50px;
+    animation: loader 2s infinite;
+  }
 }
 
 .secondary-button {
-    background-color: transparent;
-    border:none;
-    font-weight: bold;
-    color: $_2k25-text;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    svg {
-        width: 20px;
-        height: 20px;
-        fill: $_2k25-text;
-    }
+  background-color: transparent;
+  border: none;
+  font-weight: bold;
+  color: $_2k25-text;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: $_2k25-text;
+  }
 }
 
 .visibility-toggle {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    svg * {
-        fill: $_2k25-text !important;
-    }
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  svg * {
+    fill: $_2k25-text !important;
+  }
 }
-
-
-
 
 /* ------------------------------- */
 .row-20 {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 }
 
 .col-20 {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .width-35 {
-    min-width: 35vw;
+  min-width: 35vw;
+  max-width: 35vw;
 }
 
 .height-100 {
-    height:100% !important;
+  height: 100% !important;
 }
 
-
 .text-size-20 {
-    font-size: 20px;
+  font-size: 20px;
 }
