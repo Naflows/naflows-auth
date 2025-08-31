@@ -11,7 +11,7 @@ export function Link({
         <a
         href="https://naflows.com"
         rel="noopener noreferrer"
-        className="naflows-link"
+        className="naflows-link tertiary-button global__link"
         >
             <p>
                 {text}

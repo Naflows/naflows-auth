@@ -1,49 +1,63 @@
+import Input from "../global/components/Input";
+
 const RegisterForm = () => {
   return (
     <>
       <div className="inputs-container two-columns">
         <div className="inputs-container">
-          <label htmlFor="firstName" className="text-size-20">
-            First Name
-          </label>
-          <input
+          <Input
+            label="First Name"
             type="text"
-            id="firstName"
-            placeholder="Enter your first name"
-            className="text-size-20"
+            name="firstName"
+            required
+            maxLength={100}
           />
         </div>
         <div className="inputs-container">
-          <label htmlFor="lastName" className="text-size-20">
-            Last Name
-          </label>
-          <input
+          <Input
+            label="Last Name"
             type="text"
-            id="lastName"
-            placeholder="Enter your last name"
-            className="text-size-20"
+            name="lastName"
+            required
+            maxLength={100}
           />
         </div>
       </div>
       <div className="inputs-container">
-        <label htmlFor="email" className="text-size-20">
-          Email
-        </label>
-        <input
+        <Input
+          label="Email"
           type="email"
-          id="email"
-          placeholder="Enter your email"
-          className="text-size-20"
+          name="email"
+          required
+          maxLength={100}
         />
-        <label htmlFor="password" className="text-size-20">
-          Password
-        </label>
-        <input
+      </div>
+      <div className="inputs-container">
+        <Input
+          label="Password"
           type="password"
-          id="password"
-          placeholder="Enter your password"
-          className="text-size-20"
+          name="password"
+          required
+          maxLength={100}
         />
+      </div>
+      <div className="inputs-container">
+        <Input
+          label="Confirm Password"
+          type="password"
+          name="confirmPassword"
+          required
+          maxLength={100}
+        />
+      </div>
+
+      <div className="global__terms__and__conditions">
+        <label>
+          <input type="checkbox" required />I agree to <a href="https://naflows.com/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="https://naflows.com/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+        </label>
+        <label>
+          <input type="checkbox" required />I want to receive email updates & promotions
+        </label>
       </div>
 
       <button
