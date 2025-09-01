@@ -22,7 +22,7 @@ const LoginForm = () => {
             label="Customer ID"
             type="text"
             name="customerID"
-            required
+            required={true}
             maxLength={100}
           />
         </div>
@@ -31,7 +31,7 @@ const LoginForm = () => {
             label="Identifier"
             type="number"
             name="identifier"
-            required
+            required={true}
             maxLength={9}
           />
         </div>
@@ -41,7 +41,7 @@ const LoginForm = () => {
           label="Password"
           type="password"
           name="password"
-          required
+            required={true}
           maxLength={100}
         />
       </div>

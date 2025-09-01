@@ -50,9 +50,9 @@ console.log("SMTP Pass:", process.env.SMTP_PASS);
 
 (async () => {
   const s = await mailing.send(
-    "eadjjawn@gmail.com",
-    "Your « Naflows » verification code",
-    (await mailing.patterns.customCode("503514", dummyUser,"Naflows"))
+    "mougel.david.pro@gmail.com",
+    " « Naflows » account verification ",
+    (await mailing.patterns.customLink("503514", dummyUser,"Naflows"))
   );
   console.log(s);
 })();

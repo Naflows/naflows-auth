@@ -66,10 +66,10 @@ db.users.insertOne({
     id : "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
     identifier : "100000:8ae7a11eb6919690bf6b81c0fab32804:d03e7cea89287a3b8e4bdcff25a002f58bdb78032941ff693aa751f16306acc6123782a1a136d2198cf2fd9ccce2a5bd56d0515abac8a3d11fb304e8915e82e0",
     password : "100000:5ee1efc5ad26b93e2cd51ceeedc18451:c986c5f6a979289c7da5146868b6832198835f656eb3c9683d597fa781ae64b2bd9684db0cfff6a64fcd630a2a46fbece8858f4ad9eccb394844e591a8cb35d8",
-    email : "administration@naflows.com",
-    username : "NAFLOWS",
-    first_name : "NAFLOWS",
-    last_name : "ADMIN",
+    email : "mougel.david.pro@gmail.com",
+    username : "Naflouille",
+    first_name : "David",
+    last_name : "Mougel",
     services : {
         1 : {
             rights : ["ADMINISTRATOR"],

@@ -6,5 +6,5 @@
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "include": ["**/*.ts", "**/*.html", "**/*.css", "secure/global/hash/hash.ts", "software/mailing/send-email.ts"]
+  "include": ["**/*.ts", "**/*.html", "**/*.css", "secure/global/hash/hash.ts", "software/mailing/send-email.ts","software/mailing/pattern/custom-link.ts"]
 }

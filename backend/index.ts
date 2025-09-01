@@ -128,6 +128,15 @@ app.get('/public/resources/mailing/pattern/custom-code.html', (req, res) => {
 });
 
 
+app.get('/client/account/confirm', (req, res) => {
+    const token = req.query.value;
+    const tokenID = req.query.token;
+    console.log(`Received token: ${token}, tokenID: ${tokenID}`);
+
+    // TODO: RENEW TOKEN
+});
+
+
 
 
 const PORT = process.env.PORT || 3000;

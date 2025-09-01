@@ -45,7 +45,6 @@ export default async function logUserIn(req: Request, res: Response) {
 
             const _service : Service = s.data as Service;
 
-            const newCode = _service.name.replace(' ','') + Math.floor(100000 + Math.random() * 900000).toString();
 
             const data : ReplyType = await secure.session.create(
                 user.user_id,
@@ -62,9 +61,7 @@ export default async function logUserIn(req: Request, res: Response) {
             }
 
             const tokenData : ReplyType = await secure.token.create(
-                _user, session, ["SESSION_CONFIRMATION"], false, 1, {
-                    code : newCode
-                }
+                _user, session, ["SESSION_CONFIRMATION"], false, 1
             );
 
             const token : Tokens = tokenData.data as Tokens;
@@ -75,8 +72,8 @@ export default async function logUserIn(req: Request, res: Response) {
 
             const emailSent = await mailing.send(
                 _user.email,
-                "Session Confirmation",
-                (await mailing.patterns.customCode(newCode, _user, _service.name))
+                `Account confirmation needed for ${_service.name}`,
+                (await mailing.patterns.customLink(`${process.env.SELF_API_URL}/client/account/confirm?token=${token.id}&value=${token.token}`, _user, _service.name))
             );
 
             if (!emailSent) {
@@ -84,8 +81,10 @@ export default async function logUserIn(req: Request, res: Response) {
             }
 
 
-            // Send a cookie containing the session ID, and token value
-            res.cookie("session_id", session.id, { httpOnly: true });
+            res.cookie("session", JSON.stringify({
+                session_id : session.id,
+                active : false
+            }), { httpOnly: true });
             res.cookie("token", token.id, { httpOnly: true });
             res.status(401).send("An email has been sent with the confirmation code. You will be redirected to the confirmation page in a few moments.");
         }

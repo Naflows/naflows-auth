@@ -1,6 +1,6 @@
 import sendEmail from "./methods/send-email";
 import transporter from "./nodemailer.config";
-import customCodePattern from "./pattern/custom-code";
+import customLinkPattern from "./pattern/custom-link";
 
 
 
@@ -10,7 +10,7 @@ const mailing = {
     },
 
     patterns : {
-        customCode : customCodePattern
+        customLink : customLinkPattern
     },
     
     send : sendEmail

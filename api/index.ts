@@ -24,6 +24,8 @@ app.get('/', (req, res) => {
 });
 
 
+
+
 app.post('/send-login-request', async (req, res) => {
     const { user_id, password, identifier } = req.body;
 
@@ -45,7 +47,11 @@ app.post('/send-login-request', async (req, res) => {
             }
         });
 
-        res.status(f.status).json(f.data);
+        res
+            .status(f.status)
+            .set(f.headers['set-cookie'] ? { 'Set-Cookie': f.headers['set-cookie'] } : {})
+            .json(f.data);
+
     } catch (error: any) {
         res.status(error?.response?.status || 500).json({
             error: error?.response?.data || 'Internal Server Error'
