@@ -1,5 +1,6 @@
 import { crypt, hashID, verifyHash } from "./hash/hash";
 import { blacklistIP } from "./ip/blacklist";
+import { createSession } from "./session/create";
 import findSessionByConnection from "./session/findByConnection";
 import getSession from "./session/get";
 import renewSessionId from "./session/renew-id";
@@ -31,7 +32,8 @@ const secure = {
     session : {
         renew : renewSessionId,
         get : getSession,
-        find : findSessionByConnection
+        find : findSessionByConnection,
+        create : createSession
     }
 };
 

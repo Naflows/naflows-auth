@@ -68,6 +68,8 @@ db.users.insertOne({
     password : "100000:5ee1efc5ad26b93e2cd51ceeedc18451:c986c5f6a979289c7da5146868b6832198835f656eb3c9683d597fa781ae64b2bd9684db0cfff6a64fcd630a2a46fbece8858f4ad9eccb394844e591a8cb35d8",
     email : "administration@naflows.com",
     username : "NAFLOWS",
+    first_name : "NAFLOWS",
+    last_name : "ADMIN",
     services : {
         1 : {
             rights : ["ADMINISTRATOR"],
@@ -126,6 +128,8 @@ db.sessions.insertOne({
     token_id: "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
     last_activity: new Date().getTime(),
     user_origin: "NASS",
+    active : true,
+    supertest : true
 })
 
 db.sessions.insertOne({
@@ -139,6 +143,8 @@ db.sessions.insertOne({
     token_id: "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
     last_activity: new Date().getTime() - 1000 * 60 * 60 * 24, // Last activity 24 hours ago
     user_origin: "NASS",
+    active : true,
+    supertest : true
 });
 
 db.sessions.insertOne({
@@ -152,8 +158,9 @@ db.sessions.insertOne({
     token_id: "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
     last_activity: new Date().getTime(),
     user_origin: "NASS",
+    active : true,
+    supertest : true
 })
-
 
 db.tokens.insertOne({
     id : "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",

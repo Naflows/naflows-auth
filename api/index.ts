@@ -3,11 +3,19 @@ import cors from 'cors';
 require('dotenv').config();
 
 const express = require('express');
+const fingerprint = require('express-fingerprint');
 const router = express.Router();
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(fingerprint({
+    parameters: [
+        fingerprint.useragent,
+        fingerprint.acceptHeaders,
+        fingerprint.geoip
+    ]
+}));
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -26,7 +34,8 @@ app.post('/send-login-request', async (req, res) => {
                 password,
                 identifier,
                 user_ip: req.ip,
-                agent : req.headers['user-agent']
+                agent : req.headers['user-agent'],
+                fingerprint : req.fingerprint
             },
             service : {
                 ip : "dummy-api", // TODO : Get real IP

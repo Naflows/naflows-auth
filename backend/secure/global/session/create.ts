@@ -1,26 +1,44 @@
 import { v4 } from "uuid";
+import { db } from "../../..";
+import { Tokens, User } from "../../../types/.types/collections.type";
+import secure from "../dir";
+import { ReplyType } from "../../../types/.types/reply.type";
+import { software } from "../../../software/dir";
 
 
 
-export async function createSession(req, res) {
-    const body = req.body;
+export async function createSession(
+    user: User,
+    device_fingerprint: string,
+    user_agent: string,
+    ip : string,
+    service_id: string,
+) : Promise<ReplyType> {
+    const sessions = db.collection('sessions');
 
-    // Validate the request body
-    if (!body || !body.username || !body.password) {
-        return res.status(400).send('Invalid request body');
+
+
+    const session = {
+        id : v4(),
+        user_id : user.id,
+        created_at : new Date().getTime(),
+        last_activity : new Date().getTime(),
+        expires_at : process.env.SESSION_RENEWAL_LIFESPAN,
+        token_id : "",
+        ip : ip,
+        agent : user_agent,
+        service_id : service_id,
+        active : false,
+        device_fingerprint : device_fingerprint,
+        user_origin : service_id,
     }
 
-    // Simulate session creation logic
-    try {
-        // Here you would typically check the credentials against a database
-        // For demonstration, we assume the credentials are valid
-        const sessionId : string = v4();
+    const t = await sessions.insertOne(session);
 
-        // Respond with the session ID
-        return res.status(201).json({ sessionId });
-    } catch (error) {
-        console.error('Error creating session:', error);
-        return res.status(500).send('Internal server error');
+    if (!t.acknowledged) {
+        return software.methods.serverReply(500, "Failed to create session.");
     }
+
+    return software.methods.serverReply(201, "Session created successfully.", session);
 }
 

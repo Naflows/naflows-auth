@@ -43,6 +43,17 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
           session.user_origin == ucr.user.user_origin &&
           session.agent === ucr.user.agent &&
           session.user_id == secure.hash(ucr.user.user_id);
+
+
+        if (!session.active) {
+          return software.methods.serverReply(401, "Session is not active - please log in again.");
+        }
+
+        if (session.service_id !== ucr.client.service && (session.supertest == null || session.supertest === false)
+        ) {
+          return software.methods.serverReply(401, "This session cannot be used with the current client.");
+        }
+
         if (allInformationsCorrect) {
           const isOutdated = session.expires_at < new Date().getTime();
           console.log(`Session is ${isOutdated ? "outdated" : "valid"}`);

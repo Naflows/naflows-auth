@@ -1,12 +1,21 @@
 import { useState } from "react";
 import Input from "../global/components/Input";
 import axios from "axios";
+import Alert from "../global/error-alert/Alert";
+import { manageLogin } from "../scripts/login";
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState({
+    code: 0,
+    message: "",
+    closeAlert: true,
+  });
 
   return (
     <>
+      <Alert alert={alert} setAlert={setAlert} />
+
       <div className="inputs-container two-columns">
         <div className="inputs-container two-rows global__input">
           <Input
@@ -39,34 +48,7 @@ const LoginForm = () => {
       <button
         className="primary-button text-size-20"
         onClick={async () => {
-          setLoading(true);
-
-          const customerID = document.querySelector(
-            'input[name="customerID"]'
-          ) as HTMLInputElement;
-          const identifier = document.querySelector(
-            'input[name="identifier"]'
-          ) as HTMLInputElement;
-          const password = document.querySelector(
-            'input[name="password"]'
-          ) as HTMLInputElement;
-
-          const response = await axios.post(
-            `${process.env.DUMMY_API_URL_DEV}/send-login-request`,
-            {
-              user_id: customerID.value,
-              identifier: identifier.value,
-              password: password.value,
-            },
-            {
-              headers: {
-                "Content-Type": "application/json"
-              }
-            }
-          );
-          console.log(response);
-      
-          setLoading(false);
+          await manageLogin(setLoading, setAlert);
         }}
       >
         <span

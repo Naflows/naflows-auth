@@ -61,8 +61,11 @@ export interface UserSession {
   token_id: string; // Token ID, the token that is used to authenticate the session
   ip: string; // IP address of the user, used for security purposes
   agent: string; // User agent of the user, used for security purposes
+  service_id : string; 
+  active : boolean;
   device_fingerprint: string; // Device fingerprint of the user, used for security purposes
-  user_origin: string; // Origin of the user, used for security purposes
+  user_origin: string; // Origin of the user, used for security purposes,
+  supertest?:  boolean;
 }
 
 export type TokenRights =
