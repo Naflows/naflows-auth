@@ -1,7 +1,7 @@
 import { Collection } from "mongoose";
-import { db } from "../../../..";
-import { Tokens } from "../../../../types/.types/collections.type";
-import secure from "../../dir";
+import { db } from "../../..";
+import { Tokens } from "../../../types/.types/collections.type";
+import secure from "../dir";
 
 
 export default async function getToken(id : string) : Promise<Tokens> {

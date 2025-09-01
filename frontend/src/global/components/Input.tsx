@@ -19,6 +19,7 @@ const Input = ({ label, type, name, required, maxLength }: InputProps) => {
         className="text-size-20"
         type={type}
         name={name}
+        id={name}
         onInput={(el) => {
           const value = el.currentTarget.value;
           if (value.replace(' ','') !== '') {

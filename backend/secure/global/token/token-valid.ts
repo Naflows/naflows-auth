@@ -1,9 +1,9 @@
-import { db } from "../../../..";
-import { software } from "../../../../software/dir";
-import { Tokens, UserSession } from "../../../../types/.types/collections.type";
-import { ReplyType } from "../../../../types/.types/reply.type";
-import UCRType from "../../../../types/.types/ucr.type";
-import secure from "../../dir";
+import { db } from "../../..";
+import { software } from "../../../software/dir";
+import { Tokens, UserSession } from "../../../types/.types/collections.type";
+import { ReplyType } from "../../../types/.types/reply.type";
+import UCRType from "../../../types/.types/ucr.type";
+import secure from "../dir";
 
 export function isTokenValid(
   token: Tokens,

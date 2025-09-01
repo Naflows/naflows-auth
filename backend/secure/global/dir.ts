@@ -1,13 +1,15 @@
 import { crypt, hashID, verifyHash } from "./hash/hash";
 import { blacklistIP } from "./ip/blacklist";
+import findSessionByConnection from "./session/findByConnection";
 import getSession from "./session/get";
 import renewSessionId from "./session/renew-id";
-import { checkUserCredentials } from "./user-token/methods/check-credentials";
-import { createToken } from "./user-token/methods/new-token";
-import { isTokenValid } from "./user-token/methods/token-valid";
-import { updateTokenUse } from "./user-token/methods/use-update";
-import getToken from "./user-token/token/get";
-import getUser from "./user-token/user/get";
+import getToken from "./token/get";
+import { createToken } from "./token/new-token";
+import { isTokenValid } from "./token/token-valid";
+import { updateTokenUse } from "./token/use-update";
+import { checkUserCredentials } from "./user/checkCredentials";
+import getUser from "./user/get";
+import logUserIn from "./user/login";
 
 
 const secure = {
@@ -23,11 +25,13 @@ const secure = {
     },
     user: {
         credentials : checkUserCredentials,
-        get : getUser
+        get : getUser,
+        login : logUserIn
     },
     session : {
         renew : renewSessionId,
-        get : getSession
+        get : getSession,
+        find : findSessionByConnection
     }
 };
 

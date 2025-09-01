@@ -82,14 +82,7 @@ app.get('/client', (req, res) => {
 });
 
 app.post('/client/login', async (req, res) => {
-    const { userID, password, identifier } = req.body;
-    const ok : boolean = await secure.user.credentials(userID, password, identifier);
-
-    if (ok) {
-        res.status(200).send("Login successful");
-    } else {
-        res.status(401).send("Login failed");
-    }
+    await secure.user.login(req,res);
 });
 
 /*

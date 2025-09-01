@@ -1,8 +1,8 @@
 import { Collection } from "mongoose";
-import { User } from "../../../../types/.types/collections.type";
-import { db } from "../../../..";
-import { software } from "../../../../software/dir";
-import secure from "../../dir";
+import { User } from "../../../types/.types/collections.type";
+import { db } from "../../..";
+import secure from "../dir";
+
 
 
 

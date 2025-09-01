@@ -259,6 +259,9 @@ db.services.insertOne({
 })
 
 
+
+
+
 db.service_tokens.insertOne({
     id : "1",
     service_id : "1",
@@ -293,5 +296,29 @@ db.service_tokens.insertOne({
     token : "contracts_service_token",
     created_at : new Date().getTime(),
     lifespan: 1000 * 60 * 60 * 24 * 100, // 24 hours
+    uses : 0
+})
+
+
+/* -------------------------------- */
+db.services.insertOne({
+    id : "naflows_backend",
+    name : "Naflows Backend Structure",
+    ip_address : "dummy-api", 
+    dns : "nass.naflows.com",
+    description : "The Naflows Backend Structure for secure API communication.",
+    created_at : new Date().getTime(),
+    created_by : "NASS",
+    status : "ACTIVE",
+    service_token : "naflows_backend_token"
+})
+
+
+db.service_tokens.insertOne({
+    id : "naflows_backend_token",
+    service_id : "naflows_backend",
+    token : "naflows_backend_token",
+    created_at : new Date("2025-09-01").getTime(),
+    lifespan: 1000 * 60 * 60 * 24 * 1000000000000000000, // Infinite
     uses : 0
 })

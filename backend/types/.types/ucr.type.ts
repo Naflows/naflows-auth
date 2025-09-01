@@ -17,7 +17,6 @@ interface UCRType {
 
     client : {
         ip: string; // PRE-HASHED
-        dns: string;
         service: string;
         service_token: string; // PRE-HASHED
         service_token_birth: number; // UNIX TIMESTAMP

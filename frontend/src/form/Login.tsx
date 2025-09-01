@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Input from "../global/components/Input";
-
+import axios from "axios";
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
@@ -40,28 +40,49 @@ const LoginForm = () => {
         className="primary-button text-size-20"
         onClick={async () => {
           setLoading(true);
-          const response = await fetch("http://localhost:3000/client/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
+
+          const customerID = document.querySelector(
+            'input[name="customerID"]'
+          ) as HTMLInputElement;
+          const identifier = document.querySelector(
+            'input[name="identifier"]'
+          ) as HTMLInputElement;
+          const password = document.querySelector(
+            'input[name="password"]'
+          ) as HTMLInputElement;
+
+          const response = await axios.post(
+            `${process.env.DUMMY_API_URL_DEV}/send-login-request`,
+            {
+              user_id: customerID.value,
+              identifier: identifier.value,
+              password: password.value,
             },
-            body: JSON.stringify({
-              identifier: "123456789",
-              password: "W8JdVoy30xEa1hZ5aDVQ",
-              userID: "1",
-            }),
-          });
+            {
+              headers: {
+                "Content-Type": "application/json"
+              }
+            }
+          );
           console.log(response);
+      
           setLoading(false);
         }}
       >
-        <span style={{
-          display: loading ? "none" : "block"
-        }}>Log in</span>
+        <span
+          style={{
+            display: loading ? "none" : "block",
+          }}
+        >
+          Log in
+        </span>
 
-        <div className="naflows__button__loader" style={{
-          display: loading ? "block" : "none"
-        }}>
+        <div
+          className="naflows__button__loader"
+          style={{
+            display: loading ? "block" : "none",
+          }}
+        >
           <div className="naflows__button__loader__content"></div>
         </div>
       </button>

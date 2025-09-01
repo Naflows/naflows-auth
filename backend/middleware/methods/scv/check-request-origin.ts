@@ -23,7 +23,6 @@ export async function checkRequestOrigin(UCR: UCRType): Promise<ReplyType> {
     // The easiest way to check if a service exists is first to check ip + dns + service.
     const queriedService = (await servicesCollection.findOne({
       ip_address: UCR.client.ip,
-      dns: UCR.client.dns,
       id: UCR.client.service,
     })) as unknown as Service | null;
     if (queriedService && queriedService.status === "ACTIVE") {

@@ -1,5 +1,4 @@
 import NAFLOWS_LOGO from "../public/assets/naflows-green.svg";
-import { Link } from "./global/components/Link";
 import "../public/root/index.scss";
 import LoginForm from "./form/Login";
 import { useEffect, useState } from "react";
@@ -24,7 +23,6 @@ function App() {
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const form = queryParams.get("form");
-    alert(form);
     if (form === "login" || form === "register") {
       setFormType(form as "login" | "register");
     } else {

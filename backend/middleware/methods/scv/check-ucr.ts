@@ -26,12 +26,10 @@ export function isUCRType(obj: any): obj is UCRType {
         return (
             client != undefined &&
             client.ip != undefined &&
-            client.dns != undefined &&
             client.service != undefined &&
             client.service_token != undefined &&
             client.service_token_birth != undefined &&
             typeof client.ip === 'string' &&
-            typeof client.dns === 'string' &&
             typeof client.service === 'string' &&
             typeof client.service_token === 'string' &&
             typeof client.service_token_birth === 'number' &&
