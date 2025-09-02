@@ -8,9 +8,10 @@ import { ReplyType } from '../../../types/.types/reply.type';
 import { Session } from 'inspector/promises';
 import mailing from '../../../software/mailing/dir';
 import { software } from '../../../software/dir';
+import { db } from '../../..';
 
 export default async function logUserIn(req: Request, res: Response) {
-    
+
     const serviceOk = await middleware.process.scv(req, res);
 
     if (!serviceOk) {
@@ -28,7 +29,7 @@ export default async function logUserIn(req: Request, res: Response) {
     }
 
     const credentialsOk: boolean = await secure.user.credentials(user.user_id, user.password, user.identifier);
-    const _user : User = await secure.user.get(user.user_id);
+    const _user: User = await secure.user.get(user.user_id);
 
     const associatedSession = await secure.session.find(
         _user.id,
@@ -40,24 +41,47 @@ export default async function logUserIn(req: Request, res: Response) {
 
 
     if (credentialsOk) {
-        if (associatedSession && associatedSession.active) {
-            const token = await secure.token.get(associatedSession.token_id);
-            return software.methods.serverReply(200, "Login successful", {
-                session: associatedSession,
-                token : token.token
-            });
+        if (associatedSession) {
+            if (associatedSession.active) {
+                const token = await secure.token.get(associatedSession.token_id);
+
+                const RT = await middleware.token.renewal(
+                    req, res, {
+                    success: true,
+                    status: 201,
+                    message: "",
+                    data: {
+                        session: associatedSession.id
+                    }
+                },
+                    {
+                        sessions: db.collection("sessions"),
+                        tokens: db.collection("tokens"),
+                        users: db.collection("users")
+                    }
+                )
+
+                if (!RT.success) return software.methods.serverReply(500, "Failed to renew token.");
+
+                return software.methods.serverReply(200, "Login successful", {
+                    session: associatedSession.id,
+                    token: (RT.data as any)?.token
+                });
+            } else {
+                return software.methods.serverReply(401, "Login failed - session is not active");
+            }
         } else {
 
-            const s : ReplyType = await services.service.get(service.service) as ReplyType;
+            const s: ReplyType = await services.service.get(service.service) as ReplyType;
 
             if (!s.success) {
                 return software.methods.serverReply(404, "Unable to find the service you are looking for. Are you sure it exists?");
             }
 
-            const _service : Service = s.data as Service;
+            const _service: Service = s.data as Service;
 
 
-            const data : ReplyType = await secure.session.create(
+            const data: ReplyType = await secure.session.create(
                 _user,
                 user.device_fingerprint,
                 user.agent,
@@ -65,20 +89,20 @@ export default async function logUserIn(req: Request, res: Response) {
                 _service.id
             );
 
-            const session : UserSession = data.data as UserSession;
+            const session: UserSession = data.data as UserSession;
 
             if (!data.success || !session) {
                 return software.methods.serverReply(401, "Failed creating the session, please try again.");
             }
 
-            const tokenData : ReplyType = await secure.token.create(
+            const tokenData: ReplyType = await secure.token.create(
                 _user, session, ["SESSION_CONFIRMATION"], false, 1, null, 60 * 10 * 1000
             );
 
 
 
             const token = tokenData.data as {
-                token : string, token_id : string
+                token: string, token_id: string
             };
 
 
@@ -99,11 +123,11 @@ export default async function logUserIn(req: Request, res: Response) {
 
 
             res.cookie("session", JSON.stringify({
-                session_id : session.id,
+                session_id: session.id,
             }), { httpOnly: true });
             res.cookie("token", JSON.stringify({
-                token : token.token,
-                token_id : token.token_id
+                token: token.token,
+                token_id: token.token_id
             }), { httpOnly: true });
 
             return software.methods.serverReply(401, "An email has been sent with the confirmation code. You will be redirected to the confirmation page in a few moments.");

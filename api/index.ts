@@ -47,6 +47,7 @@ app.post('/send-login-request', async (req, res) => {
             }
         });
 
+        console.log("Setting cookies with the following headers:", f.headers['set-cookie']);
         res
             .status(f.status)
             .set(f.headers['set-cookie'] ? { 'Set-Cookie': f.headers['set-cookie'] } : {})

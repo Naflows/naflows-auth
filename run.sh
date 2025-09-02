@@ -8,10 +8,10 @@ if [ "$RESET_ENVIRONMENT" = "true" ]; then
     rm -rf ./backend/auth-data
     docker volume rm $(docker volume ls -q)
     docker system prune -a -f --volumes
+    COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down -v
+else
+    COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down
 fi
-
-COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down -v
-
 
 if [ "$TEST_PARAMETER" = "no-test" ]; then
     COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,dummy-api" docker compose up -d

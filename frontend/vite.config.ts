@@ -13,7 +13,7 @@ export default defineConfig({
 
   define: {
     'process.env': {
-      'DUMMY_API_URL_DEV': "http://localhost:3005"
+      'DUMMY_API_URL_DEV': "http://192.168.1.111:3005"
     }
   }
 })

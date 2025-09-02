@@ -38,6 +38,7 @@ export async function createToken(
         const tokensCollection = db.collection("tokens") as Collection<Tokens>;
         await tokensCollection.insertOne(token);
 
+        
 
         return software.methods.serverReply(
             201, "Token created successfully.", 
