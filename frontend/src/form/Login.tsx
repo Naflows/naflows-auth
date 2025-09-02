@@ -7,8 +7,9 @@ import { manageLogin } from "../scripts/login";
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({
-    code: 0,
+    status: 0,
     message: "",
+    success : false,
     closeAlert: true,
   });
 

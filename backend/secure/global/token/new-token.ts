@@ -12,7 +12,8 @@ export async function createToken(
     rights : TokenRights[],
     renewable : boolean,
     max_uses : number ,
-    data : object | null = null
+    data : object | null = null,
+    expires_in : number = parseInt(process.env.SESSION_TOKEN_DURATION || "3600000")
 ) : Promise<ReplyType> {
 
     try {
@@ -23,7 +24,7 @@ export async function createToken(
             user_id: user.id,
             session_id: session.id,
             created_at: Date.now(),
-            expires_at: Date.now() + (parseInt(process.env.SESSION_TOKEN_DURATION || "3600000")), // Default to 1 hour if not set
+            expires_at: Date.now() + expires_in, // Default to 1 hour if not set
             renewable: renewable,
             uses: 0,
             max_uses: max_uses || parseInt(process.env.STV_MAXIMAL_USE_RATES), // Default to 1 use if not specified

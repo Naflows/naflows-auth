@@ -1,9 +1,12 @@
 import { crypt, hashID, verifyHash } from "./hash/hash";
 import { blacklistIP } from "./ip/blacklist";
+import confirmSession from "./session/confirmSession";
 import { createSession } from "./session/create";
 import findSessionByConnection from "./session/findByConnection";
 import getSession from "./session/get";
 import renewSessionId from "./session/renew-id";
+import { updateSession } from "./session/update";
+import deleteToken from "./token/delete";
 import getToken from "./token/get";
 import { createToken } from "./token/new-token";
 import { isTokenValid } from "./token/token-valid";
@@ -22,7 +25,8 @@ const secure = {
         valid : isTokenValid,
         create : createToken,
         updateUse : updateTokenUse,
-        get : getToken
+        get : getToken,
+        delete : deleteToken
     },
     user: {
         credentials : checkUserCredentials,
@@ -33,7 +37,9 @@ const secure = {
         renew : renewSessionId,
         get : getSession,
         find : findSessionByConnection,
-        create : createSession
+        create : createSession,
+        confirm : confirmSession,
+        update : updateSession
     }
 };
 

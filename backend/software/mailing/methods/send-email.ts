@@ -1,10 +1,13 @@
 import mailing from "../dir";
 
 
-async function sendEmail(to, subject, content) {
+async function sendEmail(by = process.env.SMTP_USER, to, subject, content) {
   try {
     const info = await mailing.config.transporter.sendMail({
-      from: process.env.SMTP_USER,
+      from: {
+        name : by,
+        address: process.env.SMTP_USER
+      },
       to: to,
       subject: subject,
       html: content

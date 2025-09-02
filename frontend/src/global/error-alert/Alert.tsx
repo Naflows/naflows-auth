@@ -2,8 +2,9 @@ import "../../../public/root/error-alert.scss";
 
 interface AlertProps {
   alert: {
-    code: number;
-    message: string;
+    success : boolean;
+    status : number;
+    message : string;
     closeAlert: boolean;
   };
   setAlert: (alert: AlertProps["alert"]) => void;
@@ -43,7 +44,7 @@ const Alert = ({ alert, setAlert }: AlertProps) => {
             />
           </svg>
 
-          <strong>Error {alert.code}</strong>
+          <strong>{alert.success ? "" : `Error ${alert.status}`}</strong>
         </div>
         <p>{alert.message}</p>
         <button

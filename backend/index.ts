@@ -82,7 +82,8 @@ app.get('/client', (req, res) => {
 });
 
 app.post('/client/login', async (req, res) => {
-    await secure.user.login(req,res);
+   const lR : ReplyType = await secure.user.login(req,res);
+   res.status(lR.status).json(lR);
 });
 
 /*
@@ -128,12 +129,14 @@ app.get('/public/resources/mailing/pattern/custom-code.html', (req, res) => {
 });
 
 
-app.get('/client/account/confirm', (req, res) => {
-    const token = req.query.value;
-    const tokenID = req.query.token;
-    console.log(`Received token: ${token}, tokenID: ${tokenID}`);
+app.get('/client/account/confirm', async (req, res) => {
+    const token = req.query.tokenvalue;
+    const tokenID = req.query.tokenid;
 
-    // TODO: RENEW TOKEN
+    console.log(token, tokenID);
+    const c = await secure.session.confirm(token as string, tokenID as string);
+
+    res.status(c.status).json(c);
 });
 
 

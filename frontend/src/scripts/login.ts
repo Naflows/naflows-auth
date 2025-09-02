@@ -5,7 +5,7 @@ import axios from "axios";
 
 export async function manageLogin(
     setLoading: (loading: boolean) => void,
-    setAlert: (alert: { code: number; message: string; closeAlert: boolean }) => void
+    setAlert: (alert: { status : number; message: string; success : boolean; closeAlert: boolean }) => void
 ) {
     setLoading(true);
 
@@ -36,20 +36,28 @@ export async function manageLogin(
         console.log(response);
         if (response.status !== 200) {
             setAlert({
-                code: response.status,
+                status: response.data.status,
                 message:
-                    response.data.error ||
+                    response.data.message ||
                     "Something went wrong. If the issue persists, please contact support.",
+                success: response.data.success,
                 closeAlert: false,
             });
         }
     } catch (error: unknown) {
         console.error(error);
+        const data = (error as AxiosError).response?.data as {
+            error : {
+                status: number;
+                message: string;
+            }
+        };
         setAlert({
-            code: (error as AxiosError)?.response?.status || 500,
+            status: data?.error.status || 500,
             message:
-                ((error as AxiosError)?.response?.data as { error?: string })?.error ||
+                data?.error.message ||
                 "Something went wrong. If the issue persists, please contact support.",
+            success: false,
             closeAlert: false,
         });
     } finally {

@@ -7,8 +7,10 @@ import middleware from '../../../middleware/dir';
 import { ReplyType } from '../../../types/.types/reply.type';
 import { Session } from 'inspector/promises';
 import mailing from '../../../software/mailing/dir';
+import { software } from '../../../software/dir';
 
 export default async function logUserIn(req: Request, res: Response) {
+    
     const serviceOk = await middleware.process.scv(req, res);
 
     if (!serviceOk) {
@@ -20,6 +22,11 @@ export default async function logUserIn(req: Request, res: Response) {
         user,
         service
     } = req.body;
+
+    if (user.id == "" || user.password == "" || user.identifier == "") {
+        return software.methods.serverReply(400, "Missing user credentials");
+    }
+
     const credentialsOk: boolean = await secure.user.credentials(user.user_id, user.password, user.identifier);
     const _user : User = await secure.user.get(user.user_id);
 
@@ -33,21 +40,25 @@ export default async function logUserIn(req: Request, res: Response) {
 
 
     if (credentialsOk) {
-        if (associatedSession) {
-            res.status(200).send("Login successful");
+        if (associatedSession && associatedSession.active) {
+            const token = await secure.token.get(associatedSession.token_id);
+            return software.methods.serverReply(200, "Login successful", {
+                session: associatedSession,
+                token : token.token
+            });
         } else {
 
             const s : ReplyType = await services.service.get(service.service) as ReplyType;
 
             if (!s.success) {
-                return res.status(404).send(`Unable to find the service you are looking for. Are you sure it exists?`);
+                return software.methods.serverReply(404, "Unable to find the service you are looking for. Are you sure it exists?");
             }
 
             const _service : Service = s.data as Service;
 
 
             const data : ReplyType = await secure.session.create(
-                user.user_id,
+                _user,
                 user.device_fingerprint,
                 user.agent,
                 user.ip,
@@ -57,38 +68,47 @@ export default async function logUserIn(req: Request, res: Response) {
             const session : UserSession = data.data as UserSession;
 
             if (!data.success || !session) {
-                return res.status(401).send("Failed creating the session, please try again.");
+                return software.methods.serverReply(401, "Failed creating the session, please try again.");
             }
 
             const tokenData : ReplyType = await secure.token.create(
-                _user, session, ["SESSION_CONFIRMATION"], false, 1
+                _user, session, ["SESSION_CONFIRMATION"], false, 1, null, 60 * 10 * 1000
             );
 
-            const token : Tokens = tokenData.data as Tokens;
+
+
+            const token = tokenData.data as {
+                token : string, token_id : string
+            };
+
 
             if (!tokenData.success || !token) {
-                return res.status(401).send("Login failed - token creation failed");
+                return software.methods.serverReply(401, "Login failed - token creation failed");
             }
 
             const emailSent = await mailing.send(
+                _service.name,
                 _user.email,
                 `Account confirmation needed for ${_service.name}`,
-                (await mailing.patterns.customLink(`${process.env.SELF_API_URL}/client/account/confirm?token=${token.id}&value=${token.token}`, _user, _service.name))
+                (await mailing.patterns.customLink(`${process.env.SELF_API_URL}/client/account/confirm?tokenid=${token.token_id}&tokenvalue=${token.token}`, _user, _service.name))
             );
 
             if (!emailSent) {
-                return res.status(500).send("Failed to send confirmation email.");
+                return software.methods.serverReply(500, "Failed to send confirmation email.");
             }
 
 
             res.cookie("session", JSON.stringify({
                 session_id : session.id,
-                active : false
             }), { httpOnly: true });
-            res.cookie("token", token.id, { httpOnly: true });
-            res.status(401).send("An email has been sent with the confirmation code. You will be redirected to the confirmation page in a few moments.");
+            res.cookie("token", JSON.stringify({
+                token : token.token,
+                token_id : token.token_id
+            }), { httpOnly: true });
+
+            return software.methods.serverReply(401, "An email has been sent with the confirmation code. You will be redirected to the confirmation page in a few moments.");
         }
     } else {
-        res.status(401).send("Login failed - invalid credentials");
+        return software.methods.serverReply(401, "Login failed - invalid credentials");
     }
 }
