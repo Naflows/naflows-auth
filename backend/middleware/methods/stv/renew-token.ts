@@ -47,7 +47,7 @@ export default async function renewToken(req: Request, res: Response, ssv: Reply
                             // Update the session with the new token ID
                             await collections.sessions.updateOne(
                                 { id: newSession.id },
-                                { $set: { token_id: (newToken.data as any).token_id } }
+                                { $set: { token_id: secure.hash((newToken.data as any).token_id) } }
                             );
 
                             return software.methods.serverReply(

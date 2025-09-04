@@ -6,8 +6,8 @@ import { UserSession } from "../../../types/.types/collections.type";
 
 
 
-export default async function getSession(sessionID : string) : Promise<UserSession | null> {
+export default async function getSession(sessionID : string, hash : boolean = false) : Promise<UserSession | null> {
     const sessionsCollection = db.collection("sessions") as Collection<UserSession>;
-    const session = await sessionsCollection.findOne({ id: (sessionID) }) as UserSession;
+    const session = await sessionsCollection.findOne({ id: hash ? secure.hash(sessionID) : sessionID }) as UserSession;
     return session;
 }

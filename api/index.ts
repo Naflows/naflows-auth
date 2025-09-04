@@ -23,6 +23,21 @@ app.get('/', (req, res) => {
     res.send('Hello from Dummy API');
 });
 
+app.post('/get-user-info', async (req, res) => {
+    const cookies = req.headers.cookie || '';
+    try {
+        const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/get-user-info`, {}, {
+            headers: {
+                Cookie: cookies
+            }
+        });
+        res.status(f.status).json(f.data);
+    } catch (error: any) {
+        res.status(error?.response?.status || 500).json({
+            error: error?.response?.data || 'Internal Server Error'
+        });
+    }
+});
 
 
 

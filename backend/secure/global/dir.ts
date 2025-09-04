@@ -11,8 +11,9 @@ import getToken from "./token/get";
 import { createToken } from "./token/new-token";
 import { isTokenValid } from "./token/token-valid";
 import { updateTokenUse } from "./token/use-update";
-import { checkUserCredentials } from "./user/checkCredentials";
+import { checkUserCredentials } from "./user/check-credentials";
 import getUser from "./user/get";
+import { hiddenLogin } from "./user/hidden-login";
 import logUserIn from "./user/login";
 
 
@@ -31,7 +32,8 @@ const secure = {
     user: {
         credentials : checkUserCredentials,
         get : getUser,
-        login : logUserIn
+        login : logUserIn,
+        hiddenLogin : hiddenLogin
     },
     session : {
         renew : renewSessionId,

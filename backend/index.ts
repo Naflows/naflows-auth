@@ -146,6 +146,25 @@ app.get('/client/account/confirm', async (req, res) => {
 });
 
 
+app.post('/client/account/data' , async (req, res) => {
+    const cookies = req.headers.cookie || '';
+    // noSensitive requires 2FA if enabled TODO
+    const noSensitive = req.body.noSensitive || false;
+
+    if (noSensitive) {
+        const secureLogin = (await secure.user.hiddenLogin(cookies));
+        
+    
+
+
+
+    } else if (noSensitive === false) {
+        const secureLogin = (await secure.user.login(req, res));
+    } else {
+        return res.status(400).json({status: 400, message: "Bad Request: 'noSensitive' must be a boolean.", success: false});
+    }
+})
+
 
 
 const PORT = process.env.PORT || 3000;
