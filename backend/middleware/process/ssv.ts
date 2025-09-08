@@ -28,12 +28,15 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
 
   if (sessionsCollection && tokensCollection && usersCollection) {
 
+
+    console.log("\x1b[33m%s\x1b[0m", "Starting SSV process...");
+    console.log("Looking for user with ID:", ucr.user.user_id, "and session ID:", ucr.user.session_id);
     const user = (await usersCollection.findOne({
-      id: secure.hash(ucr.user.user_id),
+      id: ucr.user.user_id,
     })) as unknown as User;
     
     const session = await sessionsCollection.findOne({
-      id: secure.hash(ucr.user.session_id),
+      id: ucr.user.session_id
     }) as unknown as UserSession;
     if (user != undefined) {
       if (session) {
@@ -73,6 +76,8 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
                 user.identifier
               );
 
+              
+
               if (!isPasswordCorrect || !isIdentifierCorrect) {
                 return software.methods.serverReply(
                   401,
@@ -86,9 +91,8 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
               );
               const token = await tokensCollection.findOne({
                 // `session` is already queried from the database, so its ID and the token ID are already hashed.
-                id: session.token_id,
-                session_id: session.id,
-                user_id : user.id
+                session_id: secure.hash(session.id),
+                user_id : secure.hash(user.id)
               });
 
 

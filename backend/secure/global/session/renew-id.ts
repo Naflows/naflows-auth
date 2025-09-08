@@ -15,10 +15,10 @@ export default async function renewSessionId(sessionID : string, collections : {
         return software.methods.serverReply(404,"Session not found.");
     } 
 
-    const token = await collections.tokensCollection.findOne({ session_id: session.id }) as Tokens;
+    const token = await collections.tokensCollection.findOne({ session_id: secure.hash(session.id) }) as Tokens;
     const renewalToken = await collections.tokensCollection.findOne({
-        user_id: session.user_id,
-        session_id: session.id,
+        user_id: secure.hash(session.user_id),
+        session_id: secure.hash(session.id),
         rights: "TOKEN_RENEWAL"
     }) as Tokens;
 
@@ -30,11 +30,12 @@ export default async function renewSessionId(sessionID : string, collections : {
     const newSessionIDHash = secure.hash(newSessionID);
     const updatedSession: UserSession = {
         ...session,
-        id: newSessionIDHash,
+        id: newSessionID,
         expires_at: Date.now() + (process.env.SESSION_LIFESPAN ? parseInt(process.env.SESSION_LIFESPAN) : 3600000) // Default to 1 hour
     };
 
 
+    
     const updateToken = await collections.tokensCollection.updateOne(
         { id: token.id },
         { $set: { session_id: newSessionIDHash, updated_at: Date.now() } }
@@ -52,6 +53,7 @@ export default async function renewSessionId(sessionID : string, collections : {
 
 
     if (updateResult.modifiedCount === 0 || updateToken.modifiedCount === 0) {
+        console.error("Precisely one of the two updates failed: ", { session : updatedSession, token : token });
         return software.methods.serverReply(500, "Failed to renew the session.");
     }
 

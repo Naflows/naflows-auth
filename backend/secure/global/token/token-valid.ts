@@ -11,7 +11,7 @@ export function isTokenValid(
   session: UserSession
 ): ReplyType {
   if (token) {
-    const sessionValid = token.session_id == session.id;
+    const sessionValid = token.session_id == secure.hash(session.id);
     const userValid = token.user_id == secure.hash(ucr.user.user_id);
     const tokenValid = token.expires_at > Date.now();
     const tokenUsesValid = token.uses < token.max_uses;

@@ -8,7 +8,7 @@ export async function updateSession(sessionID : string, session : UserSession) :
     const sessions = db.collection("sessions");
     const result = await sessions.updateOne({ id: sessionID }, { $set: session });
     if (result.modifiedCount === 0) {
-        return software.methods.serverReply(404, "Session not found");
+        return software.methods.serverReply(404, "Session not found.");
     }
     return software.methods.serverReply(200, "Session updated successfully");
 }

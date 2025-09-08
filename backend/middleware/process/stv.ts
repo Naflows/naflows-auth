@@ -35,17 +35,20 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                 }
                 return tokenRenewal;
             } else {
+                console.log("\x1b[33m%s\x1b[0m", "No new session issued, proceeding with existing session.");
+                
                 const sessionID = ssv.data ? (ssv.data as { session?: string }).session : ucr.user.session_id;
-                const session = await sessionsCollection.findOne({ id: secure.hash(sessionID) }) as unknown as UserSession;
+                console.log(`SessionID = ${(ssv.data as { session?: string }).session} | ucr.user.session_id = ${ucr.user.session_id}`);
+                const session = await sessionsCollection.findOne({ id:sessionID }) as unknown as UserSession;
                 if (session) {
                     // The token ID is queried directly FROM the session that has been recovered in the database, so its ID is already hashed.
                     const tokenID = session.token_id;
-                    const token = await tokensCollection.findOne({ id:tokenID }) as unknown as Tokens;
+                    const token = await secure.token.get(tokenID, true);
 
 
+                    console.log(`TokenID = ${tokenID}`);
+                    console.log("Token found:", token);
 
-
-                    // TODO: BRAINSTORM ABOUT IF ITS A GOOD IDEA TO HAVE EITHER TOKEN OR PASSWORD AND IDENTIFIER
                     if (token && (
                         // Checks if the token is valid for the session
                         (ucr.user.token && secure.verify(ucr.user.token, token.token) && token.enabled) || (ucr.user.password && ucr.user.identifier))

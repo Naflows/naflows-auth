@@ -18,11 +18,14 @@ export async function createToken(
 
     try {
         const t = crypto.randomUUID();
+        const tID : string = crypto.randomUUID();
+        const encryptedTokenValue = secure.crypt(t);
+        const hashedTokenID  = secure.hash(t);
         const token: Tokens = {
-            id: crypto.randomUUID(),
-            token: rights.length === 1 && (rights[0] === "SESSION_RENEWAL" || rights[0] === "TOKEN_RENEWAL") ? t : secure.crypt(t), // Generate a secure random token
-            user_id: user.id,
-            session_id: session.id,
+            id: hashedTokenID,
+            token: rights.length === 1 && (rights[0] === "SESSION_RENEWAL" || rights[0] === "TOKEN_RENEWAL") ? t : encryptedTokenValue, // Generate a secure random token
+            user_id: secure.hash(user.id),
+            session_id: secure.hash(session.id),
             created_at: Date.now(),
             expires_at: Date.now() + expires_in, // Default to 1 hour if not set
             renewable: renewable,

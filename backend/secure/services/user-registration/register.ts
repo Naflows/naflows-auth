@@ -38,7 +38,7 @@ export default async function registerUserInAPI(userID : string, apiID : string,
 
             const usersCollection = db.collection('users');
             const userDoc = await usersCollection.updateOne(
-                { id: secure.hash(userID) },
+                { id: userID },
                 { $set: { "services.$[elem].active": true, "services.$[elem].joined_at": new Date().getTime(), "services.$[elem].rights" : ["USER"] } },
                 { arrayFilters: [{ "elem.id": secure.hash(apiID) }] }
             );

@@ -31,6 +31,8 @@ export async function sessionRenewal(ucr: UCRType, collections: {
     // If there is a renewal token and it is valid, renew the session and the attached token with a new value
     const newSession: UserSession = {
       ...session,
+      id : crypto.randomUUID(),
+      last_activity: Date.now(),
       expires_at: Date.now() + (
         process.env.SESSION_RENEWAL_LIFESPAN ? parseInt(process.env.SESSION_RENEWAL_LIFESPAN) : 3600000 // Default to 1 hour
       ),
@@ -38,8 +40,13 @@ export async function sessionRenewal(ucr: UCRType, collections: {
 
     console.log(`Renewing session ${session.id} with new session ID ${newSession.id} and user ID ${user.id}. Associated token is ${token.id} (${token.token}) with rights ${token.rights}.`);
 
+
+    const t : Tokens = await secure.token.get(session.token_id, true);
+    if (!t) {
+      return software.methods.serverReply(404, "No token associated with this session.");
+    }
     const updateToken = await collections.tokensCollection.updateOne(
-      { id: session.token_id },
+      { id: t.id },
       { $set: { session_id: newSession.id, updated_at: Date.now() } }
     )
     const updateResult = await collections.sessionsCollection.updateOne(
@@ -56,7 +63,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
     }
 
     await collections.tokensCollection.deleteMany({
-      user_id: secure.hash(ucr.user.user_id),
+      user_id: ucr.user.user_id,
       rights: ["SESSION_RENEWAL"],
     });
 

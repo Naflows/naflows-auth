@@ -10,7 +10,7 @@ export async function checkUserCredentials(userID: string | null, password: stri
     const userCollection : Collection<User> = db.collection("users");
     if (!userCollection) throw new Error("Internal Server Error: Failed to connect to the database.");
 
-    const user: User = await userCollection.findOne({ id: secure.hash(userID) });
+    const user: User = await userCollection.findOne({ id: userID });
   
 
     if (!user || user == undefined || user == null) return false;

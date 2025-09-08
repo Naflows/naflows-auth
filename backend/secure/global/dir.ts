@@ -1,3 +1,4 @@
+import renewToken from "../../middleware/methods/stv/renew-token";
 import { crypt, hashID, verifyHash } from "./hash/hash";
 import { blacklistIP } from "./ip/blacklist";
 import confirmSession from "./session/confirmSession";
@@ -9,6 +10,7 @@ import { updateSession } from "./session/update";
 import deleteToken from "./token/delete";
 import getToken from "./token/get";
 import { createToken } from "./token/new-token";
+import updateToken from "./token/renew-token";
 import { isTokenValid } from "./token/token-valid";
 import { updateTokenUse } from "./token/use-update";
 import { checkUserCredentials } from "./user/check-credentials";
@@ -27,7 +29,8 @@ const secure = {
         create : createToken,
         updateUse : updateTokenUse,
         get : getToken,
-        delete : deleteToken
+        delete : deleteToken,
+        renew : updateToken
     },
     user: {
         credentials : checkUserCredentials,

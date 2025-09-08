@@ -17,9 +17,8 @@ export async function createSession(
     const sessions = db.collection('sessions');
 
 
-
     const session = {
-        id : v4(),
+        id : crypto.randomUUID(),
         user_id : user.id,
         created_at : new Date().getTime(),
         last_activity : new Date().getTime(),

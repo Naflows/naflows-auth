@@ -42,30 +42,35 @@ export default async function logUserIn(req: Request, res: Response) {
 
     if (credentialsOk) {
         if (associatedSession) {
-            if (associatedSession.active) {
+            if (associatedSession.active && (associatedSession.expires_at > Date.now())) {
                 const token = await secure.token.get(associatedSession.token_id);
 
-                const RT = await middleware.token.renewal(
-                    req, res, {
-                    success: true,
-                    status: 201,
-                    message: "",
-                    data: {
-                        session: associatedSession.id
-                    }
-                },
-                    {
-                        sessions: db.collection("sessions"),
-                        tokens: db.collection("tokens"),
-                        users: db.collection("users")
-                    }
-                )
+                const newSessionID : ReplyType = await secure.session.renew(associatedSession.id, {
+                    sessionsCollection: db.collection("sessions"),
+                    tokensCollection: db.collection("tokens")
+                });
 
-                if (!RT.success) return software.methods.serverReply(500, "Failed to renew token.");
+                if (!newSessionID.success || !(newSessionID.data as any)?.session) return software.methods.serverReply(500, "Failed to renew session.");
+
+                const newTokenID : ReplyType = await secure.token.renew(
+                    token.id,
+                    _user.id,
+                    (newSessionID.data as any)?.session
+                );
+
+                if (!newTokenID.success || !(newTokenID.data as any)?.token) return software.methods.serverReply(500, "Failed to renew token.");
+
+                res.cookie("session", JSON.stringify({
+                    session_id: (newSessionID.data as any)?.session.id,
+                }), { httpOnly: true });
+                res.cookie("token", JSON.stringify({
+                    token: (newTokenID.data as any)?.token,
+                }), { httpOnly: true });
+
 
                 return software.methods.serverReply(200, "Login successful", {
                     session: associatedSession.id,
-                    token: (RT.data as any)?.token
+                    token: (newTokenID.data as any)?.token
                 });
             } else {
                 return software.methods.serverReply(401, "Login failed - session is not active");
