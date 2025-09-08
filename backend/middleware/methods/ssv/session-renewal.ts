@@ -41,14 +41,12 @@ export async function sessionRenewal(ucr: UCRType, collections: {
     console.log(`Renewing session ${session.id} with new session ID ${newSession.id} and user ID ${user.id}. Associated token is ${token.id} (${token.token}) with rights ${token.rights}.`);
 
 
-    const t : Tokens = await secure.token.get(session.token_id, true);
-    if (!t) {
-      return software.methods.serverReply(404, "No token associated with this session.");
-    }
-    const updateToken = await collections.tokensCollection.updateOne(
-      { id: t.id },
-      { $set: { session_id: newSession.id, updated_at: Date.now() } }
+
+    const updateToken = await collections.tokensCollection.updateMany(
+      { id: token.id },
+      { $set: { session_id: secure.hash(newSession.id), updated_at: Date.now() } }
     )
+    console.log("Update token result:", updateToken);
     const updateResult = await collections.sessionsCollection.updateOne(
       { id: session.id },
       { $set: newSession }

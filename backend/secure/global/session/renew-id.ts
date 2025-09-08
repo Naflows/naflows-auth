@@ -10,8 +10,10 @@ export default async function renewSessionId(sessionID : string, collections : {
     sessionsCollection: Collection<UserSession>,
     tokensCollection: Collection<Tokens>, 
 }) : Promise<ReplyType> {
-    const session = await collections.sessionsCollection.findOne({ id: sessionID }) as UserSession;
+    console.log("Renewing session ID for session:", sessionID);
+    const session = await secure.session.get(sessionID);
     if (!session) {
+        console.error("\x1b[31m%s\x1b[0m", "Session not found at renew-id.");
         return software.methods.serverReply(404,"Session not found.");
     } 
 
@@ -36,8 +38,8 @@ export default async function renewSessionId(sessionID : string, collections : {
 
 
     
-    const updateToken = await collections.tokensCollection.updateOne(
-        { id: token.id },
+    const updateToken = await collections.tokensCollection.updateMany(
+        { session_id: secure.hash(session.id) },
         { $set: { session_id: newSessionIDHash, updated_at: Date.now() } }
     );
     if (renewalToken) {

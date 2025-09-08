@@ -12,6 +12,7 @@ import getToken from "./token/get";
 import { createToken } from "./token/new-token";
 import updateToken from "./token/renew-token";
 import { isTokenValid } from "./token/token-valid";
+import { updateWholeToken } from "./token/update";
 import { updateTokenUse } from "./token/use-update";
 import { checkUserCredentials } from "./user/check-credentials";
 import getUser from "./user/get";
@@ -30,7 +31,8 @@ const secure = {
         updateUse : updateTokenUse,
         get : getToken,
         delete : deleteToken,
-        renew : updateToken
+        renew : updateToken,
+        update : updateWholeToken
     },
     user: {
         credentials : checkUserCredentials,

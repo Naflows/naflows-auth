@@ -42,6 +42,7 @@ export async function updateTokenUse(tokenId: string): Promise<ReplyType> {
             {
                 $inc: { uses: 1 }, // Increment the use count
                 $set: { updated_at: Date.now(), token: secure.crypt(newValue), frozen_at: Date.now(), frozen_until: ts} // Update the timestamp
+                
             }
         );
 

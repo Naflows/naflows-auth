@@ -17,7 +17,7 @@ const dummy1 = {
     device_fingerprint: "fingerprint-1",
     user_origin: "NASS",
     session_id: "1",
-    token: "1",
+    token: "test-token",
     identifier: "dummy",
     password: "dummy",
     user_id: "2"
@@ -29,7 +29,7 @@ const dummy2 = {
     device_fingerprint: "fingerprint-2",
     user_origin: "NASS",
     session_id: "2",
-    token: "2",
+    token: "test-token-2",
     identifier: "dummy1",
     password: "dummy1",
     user_id: "3"
@@ -41,7 +41,7 @@ const dummy1_2 = {
     device_fingerprint: "fingerprint-3",
     user_origin: "NASS",
     session_id: "3",
-    token: "3",
+    token: "test-token-3-frozen",
     identifier: "dummy",
     password: "dummy",
     user_id: "2"

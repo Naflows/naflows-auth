@@ -76,7 +76,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
                 user.identifier
               );
 
-              
+
 
               if (!isPasswordCorrect || !isIdentifierCorrect) {
                 return software.methods.serverReply(
@@ -89,14 +89,20 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
                 "\x1b[32m%s\x1b[0m",
                 `Token provided: ${ucr.user.token} for tokenID ${session.token_id} and session ID ${session.id}`
               );
-              const token = await tokensCollection.findOne({
-                // `session` is already queried from the database, so its ID and the token ID are already hashed.
-                session_id: secure.hash(session.id),
-                user_id : secure.hash(user.id)
-              });
+
+              const token = await secure.token.get(session.token_id, true);
+              console.log(">>> ", token);
+              
 
 
-              if (!token || (token && ucr.user.token && !secure.verify(ucr.user.token, token.token))) {
+              if (!token || (token && ucr.user.token && !secure.verify(ucr.user.token, token.token)) || token.user_id !== secure.hash(user.id) || token.session_id !== secure.hash(ucr.user.session_id) || !token.enabled) {
+                console.log(`Error details:
+                Token exists: ${!!token}
+                Token verification: ${token && ucr.user.token ? secure.verify(ucr.user.token, token.token) : "N/A"}
+                Token user ID match: ${token ? token.user_id === secure.hash(user.id) : "N/A"}
+                Token session ID match: ${token ? token.session_id === secure.hash(ucr.user.session_id) : "N/A"} (expected ${secure.hash(ucr.user.session_id)})
+                Token enabled: ${token ? token.enabled : "N/A"}
+                `);
                 console.error(
                   "\x1b[31m%s\x1b[0m",
                   "Invalid token provided for user session."
@@ -116,8 +122,16 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
           } else {
             const sessionRenewal: ReplyType = await middleware.session.renewal(ucr, { sessionsCollection: sessionsCollection, tokensCollection: tokensCollection }, user, session);
 
-            if (!sessionRenewal.success) {
+            if (!sessionRenewal.success || !sessionRenewal.data || !(sessionRenewal.data as { session?: string }).session) {
               return sessionRenewal;
+            } else {
+              console.log("\x1b[32m%s\x1b[0m", "Session renewed successfully during SSV process -- proceeding.");
+              
+              session.id = (sessionRenewal.data as { session?: string }).session || session.id;
+              session.last_activity = Date.now();
+
+
+
             }
           }
         } else {

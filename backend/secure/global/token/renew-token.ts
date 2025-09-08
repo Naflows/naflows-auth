@@ -37,6 +37,7 @@ export default async function updateToken(
 
     const session = await sessions.findOne({ id: sessionID }) as UserSession;
     if (!session) {
+        console.error("\x1b[31m%s\x1b[0m", "Session not found at renew-token.");
         return software.methods.serverReply(404, "Session not found.");
     }
 
@@ -49,18 +50,20 @@ export default async function updateToken(
     // Update session
     const updateSession = await sessions.updateOne(
         { id: sessionID },
-        { $set: { updated_at: Date.now(), token_id: newTokenID } }
+        { $set: { updated_at: Date.now(), token_id: hashedTokenID } }
     );
 
     // Update token
     const updateToken = await tokens.updateOne(
-        { id: hashedTokenID },
+        { id: tokenValue },
         { $set: {
                 id: newTokenID,
                 token: encryptedTokenValue,
                 session_id : sessionID,
         } }
     );
+
+
 
     if (updateSession.modifiedCount === 0 || updateToken.modifiedCount === 0) {
         return software.methods.serverReply(500, "Failed to renew token.");

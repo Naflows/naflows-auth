@@ -15,7 +15,11 @@ export async function confirmSession(tokenValue: string, tokenID: string): Promi
     
     const associatedSession: UserSession = await secure.session.get(token.session_id, true);
 
-    if (!associatedSession) return software.methods.serverReply(404, "Session not found.");
+
+    if (!associatedSession) {
+        console.error("\x1b[31m%s\x1b[0m", "Session not found at confirmSession.");
+        return software.methods.serverReply(404, "Session not found.");
+    }
 
 
     const tokenValueIsValid = secure.verify(tokenValue, token.token);

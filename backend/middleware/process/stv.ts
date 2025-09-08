@@ -39,7 +39,7 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                 
                 const sessionID = ssv.data ? (ssv.data as { session?: string }).session : ucr.user.session_id;
                 console.log(`SessionID = ${(ssv.data as { session?: string }).session} | ucr.user.session_id = ${ucr.user.session_id}`);
-                const session = await sessionsCollection.findOne({ id:sessionID }) as unknown as UserSession;
+                const session = await secure.session.get(sessionID);
                 if (session) {
                     // The token ID is queried directly FROM the session that has been recovered in the database, so its ID is already hashed.
                     const tokenID = session.token_id;
@@ -91,7 +91,7 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                                 500,
                                 "Failed to update token use: " + t.message,
                             );
-                        }
+                        } 
 
 
                         return software.methods.serverReply(
@@ -111,6 +111,7 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                     }
 
                 } else {
+                    console.error("\x1b[31m%s\x1b[0m", "Session not found in STV process.");
                     return software.methods.serverReply(
                         404,
                         "Session not found.",

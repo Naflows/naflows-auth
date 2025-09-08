@@ -37,6 +37,7 @@ db.tokens.createIndex({ id: 1 }, { unique: true });
 db.tokens.createIndex({ user_id: 1 });
 db.tokens.createIndex({ expires_at: 1 });
 db.tokens.createIndex({ frozen_until: 1 });
+db.tokens.createIndex({ session_id: 1 });
 
 
 db.services.createIndex({ id: 1 }, { unique: true });
