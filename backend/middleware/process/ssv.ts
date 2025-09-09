@@ -95,7 +95,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
               
 
 
-              if (!token || (token && ucr.user.token && !secure.verify(ucr.user.token, token.token)) || token.user_id !== secure.hash(user.id) || token.session_id !== secure.hash(ucr.user.session_id) || !token.enabled) {
+              if (!token || (token && ucr.user.token && !secure.verify(ucr.user.token, token.token)) || token.user_id !== secure.hash(user.id) || !token.enabled) {
                 console.log(`Error details:
                 Token exists: ${!!token}
                 Token verification: ${token && ucr.user.token ? secure.verify(ucr.user.token, token.token) : "N/A"}
