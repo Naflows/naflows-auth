@@ -81,7 +81,7 @@ export async function checkRenewalViaUCR(
         );
         const sessionChange = await collections.sessionsCollection.updateOne(
             { id: session.id },
-            { $set: { token_id: (newToken.data as { token_id?: string })?.token_id } }
+            { $set: { token_id: secure.hash((newToken.data as { token_id?: string })?.token_id) } }
         );
 
         if (!newToken.success) {

@@ -92,7 +92,9 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
 
               const token = await secure.token.get(session.token_id, true);
               console.log(">>> ", token);
-              
+              // Log all tokens
+              const allTokens = await tokensCollection.find({ user_id: secure.hash(user.id) }).toArray() as unknown as Tokens[];
+              console.log("All tokens for user:", allTokens);
 
 
               if (!token || (token && ucr.user.token && !secure.verify(ucr.user.token, token.token)) || token.user_id !== secure.hash(user.id) || !token.enabled) {
