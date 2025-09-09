@@ -56,8 +56,8 @@ export async function checkRenewalViaUCR(
 
         // Delete the old token
         const changes: DeleteResult = await collections.tokensCollection.deleteOne({ 
-            session_id: session.id,
-            user_id: user.id
+            session_id: secure.hash(session.id),
+            user_id: secure.hash(user.id)
          });
         if (changes.deletedCount === 0) {
             return software.methods.serverReply(
@@ -72,7 +72,7 @@ export async function checkRenewalViaUCR(
         if (!renewalToken) {
             return software.methods.serverReply(
                 500,
-                "Failed to delete the old token."
+                "Failed to delete the renewal token."
             );
         }
 
@@ -88,12 +88,7 @@ export async function checkRenewalViaUCR(
             return newToken;
         }
 
-        if (changes.deletedCount === 0) {
-            return software.methods.serverReply(
-                500,
-                "Failed to delete the old token."
-            );
-        }
+
 
         return software.methods.serverReply(
             200, "Token renewed successfully.",
