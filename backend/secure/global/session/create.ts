@@ -4,7 +4,7 @@ import { Tokens, User } from "../../../types/.types/collections.type";
 import secure from "../dir";
 import { ReplyType } from "../../../types/.types/reply.type";
 import { software } from "../../../software/dir";
-
+import crypto from "crypto";
 
 
 export async function createSession(
@@ -27,7 +27,7 @@ export async function createSession(
         ip : ip,
         agent : user_agent,
         service_id : service_id,
-        active : false,
+        active : process.env.DEV_SKIP_SESSION_CONFIRMATION === "true" ? true : false,
         device_fingerprint : device_fingerprint,
         user_origin : service_id,
     }

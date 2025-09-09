@@ -45,7 +45,7 @@ export async function confirmSession(tokenValue: string, tokenID: string): Promi
     if (!dT.success) return software.methods.serverReply(500, "Failed to delete the used token.");
 
    // Create a new token for this session
-   const user : User = await secure.user.get(associatedSession.user_id, false);
+   const user : User = await secure.user.get(associatedSession.user_id, true);
     if (!user) return software.methods.serverReply(404, "User not found.");
 
 
@@ -54,8 +54,9 @@ export async function confirmSession(tokenValue: string, tokenID: string): Promi
    if (!newToken.success) return software.methods.serverReply(500, "Failed to create a new token.");
 
    // Associate the new token with the session
-   associatedSession.token_id = (newToken.data as any).token_id;
+   associatedSession.token_id = secure.hash((newToken.data as any).token_id);
 
+   // Update the session in the database
    const uR : ReplyType = await secure.session.update(associatedSession.id, associatedSession);
     if (!uR.success) return software.methods.serverReply(500, "Failed to update session.");
 

@@ -14,15 +14,15 @@ else
 fi
 
 if [ "$TEST_PARAMETER" = "no-test" ]; then
-    COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,dummy-api" docker compose up -d
+    COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,dummy-api" docker-compose up --build -d
 
 else
     if [ "$TEST_PARAMETER" = "global" ]; then
-        COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-global,dummy-api" docker compose up -d
+        COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-global,dummy-api" docker-compose up --build -d
     elif [ "$TEST_PARAMETER" = "contracts" ]; then
-        COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-services,dummy-api" docker compose up -d
+        COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-services,dummy-api" docker-compose up --build -d
     elif [ "$TEST_PARAMETER" = "all" ]; then
-        COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-services,test-global,dummy-api" docker compose up -d
+        COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-services,test-global,dummy-api" docker-compose up --build -d
     else
         echo "Unknown test parameter. Please use 'no-test' or 'run-test'."
         bash

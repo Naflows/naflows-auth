@@ -83,7 +83,7 @@ app.get('/client', (req, res) => {
 
 app.post('/client/login', async (req, res) => {
    const lR : ReplyType = await secure.user.login(req,res);
-   if (lR.status === 200) {
+   if (lR.status === 200 && lR.data) {
     const data = lR.data as { session : string; token : string };
     // Send cookie of session and token
     res.cookie("session", JSON.stringify(data.session), { httpOnly: true });

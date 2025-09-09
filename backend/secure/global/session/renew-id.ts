@@ -1,10 +1,9 @@
 import { Collection } from "mongoose";
 import { Tokens, UserSession } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
-import { v4 } from "uuid";
 import { software } from "../../../software/dir";
 import secure from "../dir";
-
+import crypto from "crypto";
 
 export default async function renewSessionId(sessionID : string, collections : {
     sessionsCollection: Collection<UserSession>,
@@ -28,7 +27,7 @@ export default async function renewSessionId(sessionID : string, collections : {
         return software.methods.serverReply(404, "No token associated with this session.");
     }
 
-    const newSessionID = v4(); // Generate a new session ID
+    const newSessionID = crypto.randomUUID(); // Generate a new session ID
     const newSessionIDHash = secure.hash(newSessionID);
     const updatedSession: UserSession = {
         ...session,

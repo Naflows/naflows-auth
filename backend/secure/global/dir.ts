@@ -17,7 +17,7 @@ import { updateTokenUse } from "./token/use-update";
 import { checkUserCredentials } from "./user/check-credentials";
 import getUser from "./user/get";
 import { hiddenLogin } from "./user/hidden-login";
-import logUserIn from "./user/login";
+import logUserIn from "./user/login/index";
 
 
 const secure = {

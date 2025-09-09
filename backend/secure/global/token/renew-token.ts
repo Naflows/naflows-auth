@@ -6,36 +6,34 @@ import { ReplyType } from "../../../types/.types/reply.type";
 import secure from "../../../secure/global/dir";
 import { software } from "../../../software/dir";
 import { db } from "../../..";
-import { v4 } from "uuid";
-
+import crypto from "crypto";
 
 
 export default async function updateToken(
     tokenID: string, userID: string, sessionID: string,
 ): Promise<ReplyType> {
     const tokens = db.collection("tokens") as Collection<Tokens>;
-    const users = db.collection("users") as Collection<User>;
     const sessions = db.collection("sessions") as Collection<UserSession>;
 
-    const token = await secure.token.get(tokenID);
+    const token = await secure.token.get(tokenID, false);
     if (!token) {
         return software.methods.serverReply(404, "Token not found, please renew session.");
     }
 
-    if (token.session_id !== sessionID) {
+    if (token.session_id !== secure.hash(sessionID)) {
         return software.methods.serverReply(403, "Token does not belong to this session.");
     }
 
-    if (token.user_id !== userID) {
+    if (token.user_id !== secure.hash(userID)) {
         return software.methods.serverReply(403, "Token does not belong to this user.");
     }
 
-    const user = await users.findOne({ id: userID }) as User;
+    const user = await secure.user.get(userID, false);
     if (!user) {
         return software.methods.serverReply(404, "User not found.");
     }
 
-    const session = await sessions.findOne({ id: sessionID }) as UserSession;
+    const session = await secure.session.get(sessionID, false);
     if (!session) {
         console.error("\x1b[31m%s\x1b[0m", "Session not found at renew-token.");
         return software.methods.serverReply(404, "Session not found.");
@@ -45,7 +43,7 @@ export default async function updateToken(
     // Generate a random secure value for the token
     const tokenValue = crypto.randomUUID();
     const encryptedTokenValue = secure.crypt(tokenValue);
-    const hashedTokenID  = secure.hash(tokenValue);
+    const hashedTokenID = secure.hash(tokenValue);
 
     // Update session
     const updateSession = await sessions.updateOne(
@@ -55,17 +53,20 @@ export default async function updateToken(
 
     // Update token
     const updateToken = await tokens.updateOne(
-        { id: tokenValue },
-        { $set: {
+        { id: tokenID },
+        {
+            $set: {
                 id: newTokenID,
                 token: encryptedTokenValue,
-                session_id : sessionID,
-        } }
+                session_id: secure.hash(session.id),
+            }
+        }
     );
 
 
 
     if (updateSession.modifiedCount === 0 || updateToken.modifiedCount === 0) {
+        console.error("Precisely one of the two updates failed: ", { session: session, token: token });
         return software.methods.serverReply(500, "Failed to renew token.");
     }
 

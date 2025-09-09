@@ -1,0 +1,40 @@
+import { db } from "../../../../..";
+import { software } from "../../../../../software/dir";
+import { User, UserSession } from "../../../../../types/.types/collections.type";
+import { ReplyType } from "../../../../../types/.types/reply.type";
+import secure from "../../../dir";
+
+
+
+export async function acceptLogin(
+    _user: User, associatedSession: UserSession
+) {
+    const token = await secure.token.get(associatedSession.token_id, true);
+
+    if (!token) {
+        return software.methods.serverReply(500, "Token associated with the session not found.");
+    }
+
+    const newSessionID: ReplyType = await secure.session.renew(associatedSession.id, {
+        sessionsCollection: db.collection("sessions"),
+        tokensCollection: db.collection("tokens")
+    });
+
+    if (!newSessionID.success || !(newSessionID.data as any)?.session) return software.methods.serverReply(500, "Failed to renew session.");
+
+    const newTokenID: ReplyType = await secure.token.renew(
+        token.id,
+        _user.id,
+        (newSessionID.data as any)?.session
+    );
+
+    if (!newTokenID.success || !(newTokenID.data as any)?.token) return software.methods.serverReply(newTokenID.status, newTokenID.message);
+
+
+
+
+    return software.methods.serverReply(200, "Login successful", {
+        session: (newSessionID.data as any)?.session,
+        token: (newTokenID.data as any)?.token
+    });
+}
