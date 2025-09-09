@@ -43,11 +43,11 @@ export default async function updateToken(
     // Generate a random secure value for the token
     const tokenValue = crypto.randomUUID();
     const encryptedTokenValue = secure.crypt(tokenValue);
-    const hashedTokenID = secure.hash(tokenValue);
+    const hashedTokenID = secure.hash(newTokenID);
 
     // Update session
     const updateSession = await sessions.updateOne(
-        { id: sessionID },
+        { id: session.id },
         { $set: { updated_at: Date.now(), token_id: hashedTokenID } }
     );
 
