@@ -21,7 +21,7 @@ export async function checkRenewalViaUCR(
 ): Promise<ReplyType> {
 
     console.log("\x1b[33m%s\x1b[0m", "Token is expired or has reached its maximum uses. Attempting to renew via UCR...");
-    const user: User = await collections.usersCollection.findOne({ id: session.user_id }) as unknown as User;
+    const user: User = await secure.user.get(session.user_id, true);
     if (!user) {
         return software.methods.serverReply(
             404,
