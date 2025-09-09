@@ -25,7 +25,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
     secure.verify(ucr.user.identifier, user.identifier)
   if (
     token &&
-    isTokenValid(token, ucr, session).success &&
+    isTokenValid(token, session, ucr.user.user_id).success &&
     credentialsValidity
   ) {
     // If there is a renewal token and it is valid, renew the session and the attached token with a new value

@@ -84,10 +84,11 @@ app.get('/client', (req, res) => {
 app.post('/client/login', async (req, res) => {
    const lR : ReplyType = await secure.user.login(req,res);
    if (lR.status === 200 && lR.data) {
-    const data = lR.data as { session : string; token : string };
+    const data = lR.data as { session : string; token : string, user_id : string };
     // Send cookie of session and token
     res.cookie("session", JSON.stringify(data.session), { httpOnly: true });
     res.cookie("token", JSON.stringify(data.token), { httpOnly: true });
+    res.cookie("uid", JSON.stringify(data.user_id), { httpOnly: true });
    }
    res.status(lR.status).json(lR);
 });
@@ -147,15 +148,11 @@ app.get('/client/account/confirm', async (req, res) => {
 
 
 app.post('/client/account/data' , async (req, res) => {
-    const cookies = req.headers.cookie || '';
-    // noSensitive requires 2FA if enabled TODO
     const noSensitive = req.body.noSensitive || false;
-
-    if (noSensitive) {
-        const secureLogin = (await secure.user.hiddenLogin(cookies));
-        
     
 
+    if (noSensitive) {
+        
 
 
     } else if (noSensitive === false) {

@@ -25,11 +25,22 @@ app.get('/', (req, res) => {
 
 app.post('/get-user-info', async (req, res) => {
     const cookies = req.headers.cookie || '';
+
+
+    
+
     try {
-        const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/get-user-info`, {}, {
-            headers: {
-                Cookie: cookies
-            }
+        const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/account/data`, {
+            user : {
+                ip : req.ip,
+                agent : req.headers['user-agent'],
+                fingerprint : req.fingerprint,
+                user_origin : "naflows_backend",
+                session_id : JSON.parse(cookies.split('session=')[1] || '{}').session_id || null,
+                token : JSON.parse(cookies.split('token=')[1] || '{}').token || null,
+                user_id : JSON.parse(cookies.split('uid=')[1] || '{}').user_id || null,
+            },
+
         });
         res.status(f.status).json(f.data);
     } catch (error: any) {
@@ -39,7 +50,10 @@ app.post('/get-user-info', async (req, res) => {
     }
 });
 
-
+// THIS IS A PIPE USED LATER TO COMMUNICATE WITH NASS
+// THIS PIPE IS TO BE USED BY ANY SERVICE THAT NEEDS TO AUTHENTICATE A USER
+// IT WILL FORWARD THE REQUEST TO NASS AND RETURN THE RESPONSE
+// IT WILL ALSO SET THE COOKIES RECEIVED FROM NASS
 
 app.post('/send-login-request', async (req, res) => {
     const { user_id, password, identifier } = req.body;
@@ -67,12 +81,16 @@ app.post('/send-login-request', async (req, res) => {
         // Get session and token from f.data
         const session = f.data.session;
         const token = f.data.token;
+        const uid = f.data.user_id;
 
         res.cookie("session", JSON.stringify({
             session_id: session
         }), { httpOnly: true });
         res.cookie("token", JSON.stringify({
             token: token
+        }), { httpOnly: true });
+        res.cookie("uid", JSON.stringify({
+            uid: uid
         }), { httpOnly: true });
 
         console.log("Login response from NASS:", f.data);

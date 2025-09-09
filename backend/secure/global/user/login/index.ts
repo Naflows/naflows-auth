@@ -12,13 +12,15 @@ import { db } from '../../../..';
 import { acceptLogin } from './modules/accept-login';
 import { manageNewSession } from './modules/manage-new-session';
 
-export default async function logUserIn(req: Request, res: Response) {
+export default async function logUserIn(req: Request, res: Response) : Promise<ReplyType> {
 
     const serviceOk = await middleware.process.scv(req, res);
 
     if (!serviceOk) {
         return res.status(403).send("Unauthorized service access.");
     }
+
+
 
 
     const {

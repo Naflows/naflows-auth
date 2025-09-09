@@ -42,7 +42,7 @@ export async function checkRenewalViaUCR(
                 "Renewal token is invalid or not provided."
             );
         }
-        const isTokenValid: ReplyType = secure.token.valid(t, ucr, session);
+        const isTokenValid: ReplyType = secure.token.valid(t, session, ucr.user.user_id);
         if (!isTokenValid.success) {
             return isTokenValid;
         }

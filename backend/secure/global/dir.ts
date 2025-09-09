@@ -16,8 +16,9 @@ import { updateWholeToken } from "./token/update";
 import { updateTokenUse } from "./token/use-update";
 import { checkUserCredentials } from "./user/check-credentials";
 import getUser from "./user/get";
-import { hiddenLogin } from "./user/hidden-login";
 import logUserIn from "./user/login/index";
+import { hiddenLogin } from "./user/login/hidden-login";
+import { isSessionValid } from "./session/valid";
 
 
 const secure = {
@@ -46,7 +47,8 @@ const secure = {
         find : findSessionByConnection,
         create : createSession,
         confirm : confirmSession,
-        update : updateSession
+        update : updateSession,
+        valid : isSessionValid
     }
 };
 
