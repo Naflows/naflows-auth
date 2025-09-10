@@ -4,10 +4,12 @@ require('dotenv').config();
 
 const express = require('express');
 const fingerprint = require('express-fingerprint');
+const cookieParser = require('cookie-parser');
 const router = express.Router();
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 app.use(fingerprint({
     parameters: [
@@ -23,31 +25,39 @@ app.get('/', (req, res) => {
     res.send('Hello from Dummy API');
 });
 
-app.post('/get-user-info', async (req, res) => {
+function getCookieValue(cookies: string, name: string): string | null {
+  const match = cookies.match(new RegExp(`${name}=([^;]+)`));
+  return match ? match[1] : null;
+}
+
+app.get('/get-user-info', async (req, res) => {
     const cookies = req.headers.cookie || '';
 
 
-    
+    const sessionID = getCookieValue(cookies, 'session');
+    const token = getCookieValue(cookies, 'token');
+    const uid = getCookieValue(cookies, 'uid');
+    console.log("Cookies received:", { sessionID, token, uid });
 
-    try {
-        const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/account/data`, {
-            user : {
-                ip : req.ip,
-                agent : req.headers['user-agent'],
-                fingerprint : req.fingerprint,
-                user_origin : "naflows_backend",
-                session_id : JSON.parse(cookies.split('session=')[1] || '{}').session_id || null,
-                token : JSON.parse(cookies.split('token=')[1] || '{}').token || null,
-                user_id : JSON.parse(cookies.split('uid=')[1] || '{}').user_id || null,
-            },
+    // try {
+    //     const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/account/data`, {
+    //         user : {
+    //             ip : req.ip,
+    //             agent : req.headers['user-agent'],
+    //             fingerprint : req.fingerprint,
+    //             user_origin : "naflows_backend",
+    //             session_id : JSON.parse(cookies.split('session=')[1] || '{}').session_id || null,
+    //             token : JSON.parse(cookies.split('token=')[1] || '{}').token || null,
+    //             user_id : JSON.parse(cookies.split('uid=')[1] || '{}').user_id || null,
+    //         },
 
-        });
-        res.status(f.status).json(f.data);
-    } catch (error: any) {
-        res.status(error?.response?.status || 500).json({
-            error: error?.response?.data || 'Internal Server Error'
-        });
-    }
+    //     });
+    //     res.status(f.status).json(f.data);
+    // } catch (error: any) {
+    //     res.status(error?.response?.status || 500).json({
+    //         error: error?.response?.data || 'Internal Server Error'
+    //     });
+    // }
 });
 
 // THIS IS A PIPE USED LATER TO COMMUNICATE WITH NASS
@@ -58,7 +68,7 @@ app.post('/get-user-info', async (req, res) => {
 app.post('/send-login-request', async (req, res) => {
     const { user_id, password, identifier } = req.body;
 
-    
+
 
     try {
         const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/login`, {
@@ -79,19 +89,13 @@ app.post('/send-login-request', async (req, res) => {
         });
 
         // Get session and token from f.data
-        const session = f.data.session;
-        const token = f.data.token;
-        const uid = f.data.user_id;
+        const session = f.data.data.session;
+        const token = f.data.data.token;
+        const uid = f.data.data.user_id;
 
-        res.cookie("session", JSON.stringify({
-            session_id: session
-        }), { httpOnly: true });
-        res.cookie("token", JSON.stringify({
-            token: token
-        }), { httpOnly: true });
-        res.cookie("uid", JSON.stringify({
-            uid: uid
-        }), { httpOnly: true });
+        res.cookie("session", session, { httpOnly: true });
+        res.cookie("token", token, { httpOnly: true });
+        res.cookie("uid", uid, { httpOnly: true });
 
         console.log("Login response from NASS:", f.data);
         res.status(f.status).json(f.data);
