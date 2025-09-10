@@ -31,7 +31,8 @@ export async function manageLogin(
                 headers: {
                     "Content-Type": "application/json",
                 },
-            }
+                withCredentials: true,
+            },
         );
         console.log(response);
         if (response.status !== 200) {

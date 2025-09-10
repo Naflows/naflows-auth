@@ -10,7 +10,10 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:8080',// Dev
+    credentials: true
+}));
 app.use(fingerprint({
     parameters: [
         fingerprint.useragent,
@@ -32,7 +35,7 @@ function getCookieValue(cookies: string, name: string): string | null {
 
 app.get('/get-user-info', async (req, res) => {
     const cookies = req.headers.cookie || '';
-
+    console.log("Received cookies:", cookies);
 
     const sessionID = getCookieValue(cookies, 'session');
     const token = getCookieValue(cookies, 'token');
@@ -91,11 +94,11 @@ app.post('/send-login-request', async (req, res) => {
         // Get session and token from f.data
         const session = f.data.data.session;
         const token = f.data.data.token;
-        const uid = f.data.data.user_id;
+        const uid = f.data.data.user;
 
-        res.cookie("session", session, { httpOnly: true });
-        res.cookie("token", token, { httpOnly: true });
-        res.cookie("uid", uid, { httpOnly: true });
+        res.cookie("session", session, { httpOnly: true, secure : true, sameSite : 'None' });
+        res.cookie("token", token, { httpOnly: true, secure : true, sameSite : 'None' });
+        res.cookie("uid", uid, { httpOnly: true, secure : true, sameSite : 'None' });
 
         console.log("Login response from NASS:", f.data);
         res.status(f.status).json(f.data);

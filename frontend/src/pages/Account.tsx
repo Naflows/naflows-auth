@@ -4,13 +4,16 @@ import { useEffect } from "react";
 
 const Account = () => {
     useEffect(() => {
-        const res = axios.get(`${process.env.DUMMY_API_URL_DEV}/get-user-info`, {
-            withCredentials: true,
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        console.log(res);
+        const fetchData = async () => {
+            const res = await axios.get(`${process.env.DUMMY_API_URL_DEV}/get-user-info`, {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            console.log(res)
+        };
+        fetchData();
 
         
     }, [])
