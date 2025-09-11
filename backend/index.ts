@@ -81,17 +81,6 @@ app.get('/client', (req, res) => {
     res.send('Welcome to the Auth API');
 });
 
-app.post('/client/login', async (req, res) => {
-   const lR : ReplyType = await secure.user.login(req,res);
-   if (lR.status === 200 && lR.data) {
-    const data = lR.data as { session : string; token : string, user_id : string };
-    // Send cookie of session and token
-    res.cookie("session", JSON.stringify(data.session), { httpOnly: true });
-    res.cookie("token", JSON.stringify(data.token), { httpOnly: true });
-    res.cookie("uid", JSON.stringify(data.user_id), { httpOnly: true });
-   }
-   res.status(lR.status).json(lR);
-});
 
 /*
 
@@ -146,20 +135,26 @@ app.get('/client/account/confirm', async (req, res) => {
     res.status(c.status).json(c);
 });
 
+app.post('/client/login', async (req, res) => {
+   const lR : ReplyType = await secure.user.login(req,res);
+   if (lR.status === 200 && lR.data) {
+    const data = lR.data as { session : string; token : string, user_id : string };
+    // Send cookie of session and token
+    console.log("Setting cookies:", data);
+    res.cookie("session", JSON.stringify(data.session), { httpOnly: true });
+    res.cookie("token", JSON.stringify(data.token), { httpOnly: true });
+    res.cookie("uid", JSON.stringify(data.user_id), { httpOnly: true });
+   }
+   res.status(lR.status).json(lR);
+});
 
-app.post('/client/account/data' , async (req, res) => {
+
+
+app.post('/client/secure/data' , async (req, res) => {
     const noSensitive = req.body.noSensitive || false;
     
 
-    if (noSensitive) {
-        
-
-
-    } else if (noSensitive === false) {
-        const secureLogin = (await secure.user.login(req, res));
-    } else {
-        return res.status(400).json({status: 400, message: "Bad Request: 'noSensitive' must be a boolean.", success: false});
-    }
+   res.status(200).send("Sending data.......");
 })
 
 

@@ -35,6 +35,10 @@ export default async function logUserIn(req: Request, res: Response) : Promise<R
     const credentialsOk: boolean = await secure.user.credentials(user.user_id, user.password, user.identifier);
     const _user: User = await secure.user.get(user.user_id, false);
 
+    if (!_user) {
+        return software.methods.serverReply(404, "User not found when attempting to log in.");
+    }
+
     const associatedSession = await secure.session.find(
         _user.id,
         user.ip,

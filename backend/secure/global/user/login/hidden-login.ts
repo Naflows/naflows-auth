@@ -16,10 +16,18 @@ export async function hiddenLogin(req : Request, res : Response) : Promise<Reply
     }
 
     // Verify all parameters: user, session, token 
-    
-    const token : Tokens = await secure.token.get(req.body.token, false);
-    const session : UserSession = await secure.session.get(req.body.session_id, false);
-    const user : User = await secure.user.get(req.body.user_id, false);
+    const tokenValue = req.body.user.token;
+    const session_id = req.body.user.session_id;
+    const uid = req.body.user.user_id;
+
+    console.log("Hidden Login Attempt:", { tokenValue, session_id, uid });
+    if (!tokenValue || !session_id || !uid) {
+        return software.methods.serverReply(400, "Bad Request: Missing parameters.");
+    }
+
+    const token : Tokens = await secure.token.get(tokenValue, false);
+    const session : UserSession = await secure.session.get(session_id, false);
+    const user : User = await secure.user.get(uid, false);
 
 
     if (!token || !session || !user) {
@@ -29,7 +37,7 @@ export async function hiddenLogin(req : Request, res : Response) : Promise<Reply
         return software.methods.serverReply(401, "Invalid token, session or user.");
     }
 
-    if (!secure.session.valid(token, session, req.body.user_id).success || !secure.token.valid(token, session, req.body.user_id).success) {
+    if (!secure.session.valid(token, session, user.id).success || !secure.token.valid(token, session, user.id).success) {
         return software.methods.serverReply(401, "Invalid token or session.");
     }
 

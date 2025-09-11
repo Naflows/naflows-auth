@@ -72,7 +72,8 @@ export async function manageNewSession(
     if (process.env.DEV_SKIP_SESSION_CONFIRMATION === "true") {
         return software.methods.serverReply(200, "Login successful", {
             session: session.id,
-            token: token.token
+            token: token.token,
+            user_id: _user.id
         });
     } else {
         const emailSent = await mailing.send(

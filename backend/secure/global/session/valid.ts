@@ -5,10 +5,10 @@ import secure from "../dir";
 
 
 
-export async function isSessionValid(token: Tokens,session : UserSession, user_id: string) : ReplyType {
-    const tokenValid = token.id == secure.hash(session.id);
+export function isSessionValid(token: Tokens,session : UserSession, user_id: string) : ReplyType {
+    const tokenValid = token.session_id == secure.hash(session.id);
     const userValid = token.user_id == secure.hash(user_id);
-    const sessionValid = session.expires_at > Date.now();
+    const sessionValid = session.created_at + session.expires_at > new Date().getTime();
     const sessionActive = session.active;
     
     if (tokenValid && userValid && sessionValid && sessionActive) {

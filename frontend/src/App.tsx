@@ -39,7 +39,7 @@ function App() {
   return (
     <>
       <div className="col-20 global__nass__form">
-        <div className="panel width-35">
+        <div className="panel">
           <img
             src={NAFLOWS_LOGO}
             alt="Naflows Logo"

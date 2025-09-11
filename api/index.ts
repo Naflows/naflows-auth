@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 });
 
 function getCookieValue(cookies: string, name: string): string | null {
-  const match = cookies.match(new RegExp(`${name}=([^;]+)`));
+const match = cookies.match(new RegExp(`(?:^|; )${name}=([^;]+)`));
   return match ? match[1] : null;
 }
 
@@ -42,25 +42,26 @@ app.get('/get-user-info', async (req, res) => {
     const uid = getCookieValue(cookies, 'uid');
     console.log("Cookies received:", { sessionID, token, uid });
 
-    // try {
-    //     const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/account/data`, {
-    //         user : {
-    //             ip : req.ip,
-    //             agent : req.headers['user-agent'],
-    //             fingerprint : req.fingerprint,
-    //             user_origin : "naflows_backend",
-    //             session_id : JSON.parse(cookies.split('session=')[1] || '{}').session_id || null,
-    //             token : JSON.parse(cookies.split('token=')[1] || '{}').token || null,
-    //             user_id : JSON.parse(cookies.split('uid=')[1] || '{}').user_id || null,
-    //         },
+    try {
+        const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/data`, {
+            user : {
+                ip : req.ip,
+                agent : req.headers['user-agent'],
+                fingerprint : req.fingerprint,
+                user_origin : "naflows_backend",
+                session_id : sessionID || null,
+                token : token || null,
+                user_id : uid || null,
+            },
 
-    //     });
-    //     res.status(f.status).json(f.data);
-    // } catch (error: any) {
-    //     res.status(error?.response?.status || 500).json({
-    //         error: error?.response?.data || 'Internal Server Error'
-    //     });
-    // }
+        });
+        res.status(f.status).json(f.data);
+    } catch (error: any) {
+        console.log("Error fetching user info:", error?.response?.data || error.message);
+        res.status(error?.response?.status || 500).json({
+            error: error?.response?.data || 'Internal Server Error'
+        });
+    }
 });
 
 // THIS IS A PIPE USED LATER TO COMMUNICATE WITH NASS
@@ -94,7 +95,7 @@ app.post('/send-login-request', async (req, res) => {
         // Get session and token from f.data
         const session = f.data.data.session;
         const token = f.data.data.token;
-        const uid = f.data.data.user;
+        const uid = f.data.data.user_id;
 
         res.cookie("session", session, { httpOnly: true, secure : true, sameSite : 'None' });
         res.cookie("token", token, { httpOnly: true, secure : true, sameSite : 'None' });

@@ -12,7 +12,7 @@ export function useApp(app) {
         // Check if  the request path contains "/client"
         if (req.path.startsWith('/client') || req.path.startsWith('/public') || req.path.startsWith('/contract-debug')) {
             // Continue 
-            if (req.path.startsWith('/client/account')) {
+            if (req.path.startsWith('/client/secure')) {
                 const secureLogin = (await secure.user.hiddenLogin(req, res));
                 if (!secureLogin.success) {
                     return res.status(secureLogin.status).json(secureLogin);
