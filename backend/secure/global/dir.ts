@@ -19,6 +19,7 @@ import getUser from "./user/get";
 import logUserIn from "./user/login/index";
 import { hiddenLogin } from "./user/login/hidden-login";
 import { isSessionValid } from "./session/valid";
+import { updateUser } from "./user/update";
 
 
 const secure = {
@@ -39,7 +40,8 @@ const secure = {
         credentials : checkUserCredentials,
         get : getUser,
         login : logUserIn,
-        hiddenLogin : hiddenLogin
+        hiddenLogin : hiddenLogin,
+        update : updateUser
     },
     session : {
         renew : renewSessionId,

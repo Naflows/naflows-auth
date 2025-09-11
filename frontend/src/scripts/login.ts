@@ -44,6 +44,8 @@ export async function manageLogin(
                 success: response.data.success,
                 closeAlert: false,
             });
+        } else {
+            window.location.href = "/account";
         }
     } catch (error: unknown) {
         console.error(error);

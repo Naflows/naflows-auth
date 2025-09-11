@@ -1,0 +1,44 @@
+@import "../variables.scss";
+
+@keyframes loader {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes backgroundLoader {
+  0% {
+    background-color: $_2k25-background-hue;
+  }
+  50% {
+    background-color: $_2k25-background-hue-40;
+  }
+  100% {
+    background-color: $_2k25-background-hue;
+  }
+}
+
+.naflows__button__loader {
+  width: calc(100% - 10px);
+  height: 10px;
+  border-radius: 50px;
+  padding: 5px;
+  overflow: hidden;
+  position: relative;
+  animation: backgroundLoader 2s infinite;
+  .naflows__button__loader__content {
+    background-color: $_2k25-text;
+    width: 200px;
+    height: 50%;
+    position: absolute;
+    top: 0;
+    left: -100px;
+    bottom: 0;
+    margin: auto;
+    border-radius: 50px;
+    animation: loader 2s infinite;
+  }
+}

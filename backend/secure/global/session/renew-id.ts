@@ -32,7 +32,8 @@ export default async function renewSessionId(sessionID : string, collections : {
     const updatedSession: UserSession = {
         ...session,
         id: newSessionID,
-        expires_at: Date.now() + (process.env.SESSION_LIFESPAN ? parseInt(process.env.SESSION_LIFESPAN) : 3600000) // Default to 1 hour
+        expires_at: Date.now() + (process.env.SESSION_LIFESPAN ? parseInt(process.env.SESSION_LIFESPAN) : 3600000),
+        last_activity: Date.now()
     };
 
 

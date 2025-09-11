@@ -71,6 +71,14 @@ db.users.insertOne({
     username : "Naflouille",
     first_name : "David",
     last_name : "Mougel",
+    country : "FR",
+    language : "en",
+    postal_code : "75000",
+    address : "Naflows Street",
+    phone_number : "0123456789",
+    phone_verified : true,
+    email_verified : true,
+    profile_picture : "https://avatars.githubusercontent.com/u/188961317?s=400&u=d2b087040380d0a38c83fa26469d1bc919d0bf74&v=4",
     services : {
         "naflows_backend" : {
             rights : ["ADMINISTRATOR"],
@@ -79,7 +87,9 @@ db.users.insertOne({
         }
     },
     created_at : new Date().getTime(),
-    updated_at : new Date().getTime()
+    last_update : new Date().getTime(),
+    last_login : new Date().getTime(),
+    birthdate : new Date("1990-01-01").getTime()
 });
 
 db.users.insertOne({

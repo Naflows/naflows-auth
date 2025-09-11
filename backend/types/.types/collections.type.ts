@@ -29,9 +29,9 @@ export interface User {
   identifier: string; // PRE-HASHED identifier, a secure way of connecting set before the user is created
   password: string; // PRE-HASHED password, a secure way of connecting set before the user is created
   email: string; // User email, used for notifications and password recovery
-  created_at: Date; // Date when the user was created
-  last_login: Date; // Date when the user last logged in
-  last_update: Date; // Date when the user was last updated
+  created_at: number; // Date when the user was created
+  last_login: number; // Date when the user last logged in
+  last_update: number; // Date when the user was last updated
   services: {
     [key: number]: {
       rights: Array<"ADMINISTRATOR" | "DEVELOPER" | "USER">;
@@ -46,10 +46,11 @@ export interface User {
   country?: string; // Country of the user, optional
   language?: string; // Language of the user, optional
   postal_code?: string; // Postal code of the user, optional
-  adress?: string; // Address of the user, optional
+  address?: string; // Address of the user, optional
   phone_number?: string; // Phone number of the user, optional
   phone_verified?: boolean; // Whether the user's phone number is verified, optional
   email_verified?: boolean; // Whether the user's email is verified, optional
+  birthdate?: Date; // Birthdate of the user, optional
 }
 
 export interface UserSession {

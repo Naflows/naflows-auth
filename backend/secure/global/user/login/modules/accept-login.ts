@@ -30,7 +30,13 @@ export async function acceptLogin(
 
     if (!newTokenID.success || !(newTokenID.data as any)?.token) return software.methods.serverReply(newTokenID.status, newTokenID.message);
 
-
+    // Update user informations
+    _user.last_login = new Date().getTime();
+    _user.last_update = new Date().getTime();
+    const updateUserResult: ReplyType = await secure.user.update(_user.id, _user);
+    if (!updateUserResult.success) {
+        console.error("\x1b[31m%s\x1b[0m", "Failed to update user last login time after accepting login.");
+    }
 
 
     return software.methods.serverReply(200, "Login successful", {

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Input from "../global/components/Input";
-import axios from "axios";
 import Alert from "../global/error-alert/Alert";
 import { manageLogin } from "../scripts/login";
+import Loader from "../global/components/Loader";
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
@@ -60,14 +60,7 @@ const LoginForm = () => {
           Log in
         </span>
 
-        <div
-          className="naflows__button__loader"
-          style={{
-            display: loading ? "block" : "none",
-          }}
-        >
-          <div className="naflows__button__loader__content"></div>
-        </div>
+        <Loader loading={loading} />
       </button>
     </>
   );

@@ -11,7 +11,7 @@ import { useApp } from "./init/app-use";
 import { services } from "./secure/services/dir";
 import path from "path";
 import { software } from "./software/dir";
-import { Service } from "./types/.types/collections.type";
+import { Service, User } from "./types/.types/collections.type";
 
 
 const express = require('express');
@@ -152,19 +152,20 @@ app.post('/client/login', async (req, res) => {
 
 
 
-app.post('/client/secure/data', async (req, res) => {
-
+const  manageConnection = async (req,res) : Promise<User> => {
     const userID = req.middleware.data.user_id;
     if (!userID) {
-        return software.methods.serverReply(401, "Unauthorized: No user ID in middleware data.");
+        res.status(401).json(software.methods.serverReply(401, "Unauthorized: No user ID in middleware data."));
     }
-
     const user = await secure.user.get(userID, false);
     if (!user) {
-        return software.methods.serverReply(404, "User not found.");
+        res.status(404).json(software.methods.serverReply(404, "User not found."));
     }
 
-    // Get services informations
+    return user;
+}
+app.post('/client/secure/data/services', async (req, res) => {
+    const user = await manageConnection(req,res);
     const userServices = user.services || [];
     const sentServices = await Promise.all(
         Object.keys(userServices).map(async (key) => {
@@ -189,12 +190,25 @@ app.post('/client/secure/data', async (req, res) => {
 
     const validServices = sentServices.filter(service => service !== null);
 
+    res.status(200).json({
+        status: 200,
+        message: "Secure data access granted",
+        success: true,
+        data: {
+            middleware: req.middleware.data,
+            services: validServices,
+        }
+    });
+});
 
+app.post('/client/secure/data/user', async (req, res) => {
+
+    const user = await manageConnection(req,res);
+    
     // Remove sensitive information
     delete user.password;
-    delete user.identifier;
-    delete user.id;
     delete user.services;
+    delete user.identifier;
 
     res.status(200).json({
         status: 200,
@@ -202,8 +216,7 @@ app.post('/client/secure/data', async (req, res) => {
         success: true,
         data: {
             middleware: req.middleware.data,
-            user: user,
-            services: sentServices,
+            user: user
         }
     })
 })

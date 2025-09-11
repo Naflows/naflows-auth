@@ -48,43 +48,67 @@ function sendCookies(res, data) {
     res.cookie("uid", uid, { httpOnly: true, secure: true, sameSite: 'None' });
 }
 
-app.get('/get-user-info', async (req, res) => {
-
-    console.log("\x1b[31m%s\x1b[0m", "--- New request to /get-user-info ---");
-
+function getCookies(req) {
     const cookies = req.headers.cookie || '';
-
     const sessionID = getCookieValue(cookies, 'session');
     const token = getCookieValue(cookies, 'token');
     const uid = getCookieValue(cookies, 'uid');
     console.log("'\x1b[33m%s\x1b[0m'", "Cookies received: " + JSON.stringify({ sessionID, token, uid }));
 
-    try {
-        const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/data`, {
-            user: {
-                ip: req.ip,
-                agent: req.headers['user-agent'],
-                fingerprint: req.fingerprint,
-                user_origin: "naflows_backend",
-                session_id: sessionID || null,
-                token: token || null,
-                user_id: uid || null,
-            },
-        });
+    return { sessionID, token, uid };
+}
 
 
-        console.log("'\x1b[33m%s\x1b[0m'", "User info response from NASS: " + JSON.stringify(f.data));
-        sendCookies(res, f.data);
+app.get('/get-user-info/services', async (req, res) => {
+    const cookies = req.headers.cookie || '';
 
-        delete f.data.data.middleware;
+    const { sessionID, token, uid } = getCookies(req);
 
-        res.status(f.status).json(f.data);
-    } catch (error: any) {
-        console.log("Error fetching user info:", error?.response?.data || error.message);
-        res.status(error?.response?.status || 500).json({
-            error: error?.response?.data || 'Internal Server Error'
-        });
-    }
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/data/services`, {
+        user: {
+            ip: req.ip,
+            agent: req.headers['user-agent'],
+            fingerprint: req.fingerprint,
+            user_origin: "naflows_backend",
+            session_id: sessionID || null,
+            token: token || null,
+            user_id: uid || null,
+        },
+    });
+
+
+    sendCookies(res, f.data);
+
+    delete f.data.data.middleware;
+
+    res.status(f.status).json(f.data);
+
+});
+
+app.get('/get-user-info/user', async (req, res) => {
+    const cookies = req.headers.cookie || '';
+
+    const { sessionID, token, uid } = getCookies(req);
+
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/data/user`, {
+        user: {
+            ip: req.ip,
+            agent: req.headers['user-agent'],
+            fingerprint: req.fingerprint,
+            user_origin: "naflows_backend",
+            session_id: sessionID || null,
+            token: token || null,
+            user_id: uid || null,
+        },
+    });
+
+
+    sendCookies(res, f.data);
+
+    delete f.data.data.middleware;
+
+    res.status(f.status).json(f.data);
+
 });
 
 // THIS IS A PIPE USED LATER TO COMMUNICATE WITH NASS
@@ -125,7 +149,7 @@ app.post('/send-login-request', async (req, res) => {
         res.cookie("uid", uid, { httpOnly: true, secure: true, sameSite: 'None' });
 
         console.log("'\x1b[33m%s\x1b[0m'", "Cookies set from login response: " + JSON.stringify({ session, token, uid }));
-        
+
         res.status(f.status).json(f.data);
 
 
