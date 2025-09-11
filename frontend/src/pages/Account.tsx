@@ -1,6 +1,7 @@
 // ...existing code...
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "../../public/root/index.scss";
 
 const Account = () => {
   const [fetchDataValue, setFetchDataValue] = useState(null);
@@ -22,10 +23,12 @@ const Account = () => {
     fetchData();
   }, []);
 
-  return <div>
-    <h1>Account Page</h1>
-    <pre>{JSON.stringify(fetchDataValue, null, 2)}</pre>
-  </div>;
+  return (
+    <div>
+      <h1>Account Page</h1>
+      <pre>{JSON.stringify(fetchDataValue, null, 2)}</pre>
+    </div>
+  );
 };
 
 export default Account;

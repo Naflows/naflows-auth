@@ -10,6 +10,8 @@ import { connectToDatabase } from "./init/mongo-connect";
 import { useApp } from "./init/app-use";
 import { services } from "./secure/services/dir";
 import path from "path";
+import { software } from "./software/dir";
+import { Service } from "./types/.types/collections.type";
 
 
 const express = require('express');
@@ -22,9 +24,9 @@ useApp(app);
 
 
 
-app.post('/client/build/service', async (req:  Request, res: Response) => {
+app.post('/client/build/service', async (req: Request, res: Response) => {
     const { userID, password, identifier, details } = req.body;
-    const builtService : ReplyType = await services.service.build(
+    const builtService: ReplyType = await services.service.build(
         userID, password, identifier, details
     );
 
@@ -40,9 +42,9 @@ app.post('/contract-debug/get-api-key', async (req, res) => {
     const token = await services.token.get(userID, serviceID, password, identifier)
     res.status(token.status).json(token);
 })
-app.post('/contract-debug/validate-token', async (req,res) => {
+app.post('/contract-debug/validate-token', async (req, res) => {
     const { serviceID, token, creation_date } = req.body;
-    const t : boolean = await services.token.check(serviceID, token, creation_date)
+    const t: boolean = await services.token.check(serviceID, token, creation_date)
     res.status(t ? 200 : 403).json(t);
 })
 
@@ -136,27 +138,74 @@ app.get('/client/account/confirm', async (req, res) => {
 });
 
 app.post('/client/login', async (req, res) => {
-   const lR : ReplyType = await secure.user.login(req,res);
-   if (lR.status === 200 && lR.data) {
-    const data = lR.data as { session : string; token : string, user_id : string };
-    // Send cookie of session and token
-    console.log("Setting cookies:", data);
-    res.cookie("session", JSON.stringify(data.session), { httpOnly: true });
-    res.cookie("token", JSON.stringify(data.token), { httpOnly: true });
-    res.cookie("uid", JSON.stringify(data.user_id), { httpOnly: true });
-   }
-   res.status(lR.status).json(lR);
+    const lR: ReplyType = await secure.user.login(req, res);
+    if (lR.status === 200 && lR.data) {
+        const data = lR.data as { session: string; token: string, user_id: string };
+        // Send cookie of session and token
+        console.log("Setting cookies:", data);
+        res.cookie("session", JSON.stringify(data.session), { httpOnly: true });
+        res.cookie("token", JSON.stringify(data.token), { httpOnly: true });
+        res.cookie("uid", JSON.stringify(data.user_id), { httpOnly: true });
+    }
+    res.status(lR.status).json(lR);
 });
 
 
 
-app.post('/client/secure/data' , async (req, res) => {    
-   res.status(200).json({
-    status: 200,
-    message: "Secure data access granted",
-    success: true,
-    data: req.middleware.data
-   })
+app.post('/client/secure/data', async (req, res) => {
+
+    const userID = req.middleware.data.user_id;
+    if (!userID) {
+        return software.methods.serverReply(401, "Unauthorized: No user ID in middleware data.");
+    }
+
+    const user = await secure.user.get(userID, false);
+    if (!user) {
+        return software.methods.serverReply(404, "User not found.");
+    }
+
+    // Get services informations
+    const userServices = user.services || [];
+    const sentServices = await Promise.all(
+        Object.keys(userServices).map(async (key) => {
+            const serviceRt: ReplyType = await services.service.get(key);
+            const service: Service = serviceRt.data as Service;
+            if (service) {
+                console.log("Pushing service to sentServices:", service.name);
+                return {
+                    name: service.name,
+                    id: service.id,
+                    description: service.description,
+                    domain: service.dns,
+                    active: service.status,
+                    user_role: userServices[key].rights,
+                    joined_at: userServices[key].joined_at,
+                    user_active: userServices[key].active,
+                };
+            }
+            return null; // Return null for invalid services
+        })
+    );
+
+    const validServices = sentServices.filter(service => service !== null);
+
+
+    // Remove sensitive information
+    delete user.password;
+    delete user.identifier;
+    delete user.id;
+    delete user.services;
+
+    res.status(200).json({
+        status: 200,
+        message: "Secure data access granted",
+        success: true,
+        data: {
+            middleware: req.middleware.data,
+            user: user,
+            services: sentServices,
+        }
+    })
 })
 
 

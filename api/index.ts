@@ -39,9 +39,9 @@ function getCookieValue(cookies: string, name: string): string | null {
 // Setting cookies: { token: undefined, session: undefined, uid: undefined }
 
 function sendCookies(res, data) {
-    const token = data.data.token;
-    const session = data.data.session;
-    const uid = data.data.user_id;
+    const token = data.data.middleware.token;
+    const session = data.data.middleware.session;
+    const uid = data.data.middleware.user_id;
     console.log("Setting cookies:", { token, session, uid });
     res.cookie("token", token, { httpOnly: true, secure: true, sameSite: 'None' });
     res.cookie("session", session, { httpOnly: true, secure: true, sameSite: 'None' });
@@ -75,6 +75,8 @@ app.get('/get-user-info', async (req, res) => {
 
         console.log("'\x1b[33m%s\x1b[0m'", "User info response from NASS: " + JSON.stringify(f.data));
         sendCookies(res, f.data);
+
+        delete f.data.data.middleware;
 
         res.status(f.status).json(f.data);
     } catch (error: any) {

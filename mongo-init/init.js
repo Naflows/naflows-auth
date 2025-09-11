@@ -72,7 +72,7 @@ db.users.insertOne({
     first_name : "David",
     last_name : "Mougel",
     services : {
-        1 : {
+        "naflows_backend" : {
             rights : ["ADMINISTRATOR"],
             joined_at: new Date().getTime(),
             active : true

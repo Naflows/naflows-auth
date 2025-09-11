@@ -8,21 +8,28 @@ body {
   color: $_2k25-text;
   display: flex;
   justify-content: center;
-  width: 100%;
-  height: 100vh;
+
   overflow-x: hidden;
   overflow: hidden;
   h1 {
     text-transform: uppercase;
     font-size: 20px;
   }
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+
+  #root {
+    width: 100%;
+  }
 }
 
 .global__nass__form {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .panel {
@@ -140,7 +147,7 @@ body {
     justify-content: center;
 
     button {
-        font-size: 15px;
+      font-size: 15px;
     }
   }
 }
@@ -150,72 +157,72 @@ input[type="number"] {
 }
 
 input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
-    border: 2px solid $_2k25-text;
-    border-radius: 3px;
-    margin-right: 5px;
-    cursor: pointer;
-    background: transparent;
-    position: relative;
-    vertical-align: middle;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid $_2k25-text;
+  border-radius: 3px;
+  margin-right: 5px;
+  cursor: pointer;
+  background: transparent;
+  position: relative;
+  vertical-align: middle;
 }
 
 input[type="checkbox"]:checked {
-    background: $_2k25-text;
+  background: $_2k25-text;
 }
 
 input[type="checkbox"]:checked::after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 8px;
-    height: 8px;
-    background: $_2k25-background-hue;
-    border-radius: 2px;
+  content: "";
+  display: block;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  background: $_2k25-background-hue;
+  border-radius: 2px;
 }
 
 input[type="checkbox"]::after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 8px;
-    height: 8px;
-    background: transparent;
-    border-radius: 2px;
+  content: "";
+  display: block;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 8px;
+  height: 8px;
+  background: transparent;
+  border-radius: 2px;
 }
 
 input[type="checkbox"] {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 input[type="checkbox"]:checked:after {
-    background-color: $_2k25-text;
+  background-color: $_2k25-text;
 }
 
 .global__terms__and__conditions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  label {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 5px;
-    label {
-        display: flex;
-        align-items: center;
-        gap: 5px;
 
-        a {
-            color: $_2k25-text;
-            text-decoration: underline;
-            &:hover {
-                color: $_2k25-darker;
-            }
-        }
+    a {
+      color: $_2k25-text;
+      text-decoration: underline;
+      &:hover {
+        color: $_2k25-darker;
+      }
     }
+  }
 }
 
 /* ------------------------------- */
@@ -240,7 +247,7 @@ input[type="checkbox"]:checked:after {
 
   &:hover {
     background-color: $_2k25-darker;
-    color : $_2k25-background-hue-darker;
+    color: $_2k25-background-hue-darker;
   }
 }
 
@@ -271,7 +278,8 @@ input[type="checkbox"]:checked:after {
 
   &:hover {
     color: $_2k25-darker;
-    svg, svg * {
+    svg,
+    svg * {
       fill: $_2k25-darker;
     }
   }
@@ -365,7 +373,6 @@ input[type="checkbox"]:checked:after {
   font-size: 20px;
 }
 
-
 @media screen and (max-width: 600px) {
   body {
     margin: 0;
@@ -376,5 +383,4 @@ input[type="checkbox"]:checked:after {
   :root {
     width: 100%;
   }
-  
 }
