@@ -36,6 +36,6 @@ export async function acceptLogin(
     return software.methods.serverReply(200, "Login successful", {
         session: (newSessionID.data as any)?.session,
         token: (newTokenID.data as any)?.token,
-        user : _user.id,
+        user_id : _user.id,
     });
 }

@@ -29,32 +29,53 @@ app.get('/', (req, res) => {
 });
 
 function getCookieValue(cookies: string, name: string): string | null {
-const match = cookies.match(new RegExp(`(?:^|; )${name}=([^;]+)`));
-  return match ? match[1] : null;
+    const match = cookies.match(new RegExp(`(?:^|; )${name}=([^;]+)`));
+    return match ? match[1] : null;
+}
+
+// 'User info response from NASS: {"status":200,"message":"Secure data access granted","success":true,"data":{"session":"42b2bc07-5341-4743-9595-9180bde8631d","token":"63d8b340-3ce3-46a9-b457-098bfa903ac2","user_id":"1"}}'
+
+
+// Setting cookies: { token: undefined, session: undefined, uid: undefined }
+
+function sendCookies(res, data) {
+    const token = data.data.token;
+    const session = data.data.session;
+    const uid = data.data.user_id;
+    console.log("Setting cookies:", { token, session, uid });
+    res.cookie("token", token, { httpOnly: true, secure: true, sameSite: 'None' });
+    res.cookie("session", session, { httpOnly: true, secure: true, sameSite: 'None' });
+    res.cookie("uid", uid, { httpOnly: true, secure: true, sameSite: 'None' });
 }
 
 app.get('/get-user-info', async (req, res) => {
+
+    console.log("\x1b[31m%s\x1b[0m", "--- New request to /get-user-info ---");
+
     const cookies = req.headers.cookie || '';
-    console.log("Received cookies:", cookies);
 
     const sessionID = getCookieValue(cookies, 'session');
     const token = getCookieValue(cookies, 'token');
     const uid = getCookieValue(cookies, 'uid');
-    console.log("Cookies received:", { sessionID, token, uid });
+    console.log("'\x1b[33m%s\x1b[0m'", "Cookies received: " + JSON.stringify({ sessionID, token, uid }));
 
     try {
         const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/data`, {
-            user : {
-                ip : req.ip,
-                agent : req.headers['user-agent'],
-                fingerprint : req.fingerprint,
-                user_origin : "naflows_backend",
-                session_id : sessionID || null,
-                token : token || null,
-                user_id : uid || null,
+            user: {
+                ip: req.ip,
+                agent: req.headers['user-agent'],
+                fingerprint: req.fingerprint,
+                user_origin: "naflows_backend",
+                session_id: sessionID || null,
+                token: token || null,
+                user_id: uid || null,
             },
-
         });
+
+
+        console.log("'\x1b[33m%s\x1b[0m'", "User info response from NASS: " + JSON.stringify(f.data));
+        sendCookies(res, f.data);
+
         res.status(f.status).json(f.data);
     } catch (error: any) {
         console.log("Error fetching user info:", error?.response?.data || error.message);
@@ -97,11 +118,12 @@ app.post('/send-login-request', async (req, res) => {
         const token = f.data.data.token;
         const uid = f.data.data.user_id;
 
-        res.cookie("session", session, { httpOnly: true, secure : true, sameSite : 'None' });
-        res.cookie("token", token, { httpOnly: true, secure : true, sameSite : 'None' });
-        res.cookie("uid", uid, { httpOnly: true, secure : true, sameSite : 'None' });
+        res.cookie("session", session, { httpOnly: true, secure: true, sameSite: 'None' });
+        res.cookie("token", token, { httpOnly: true, secure: true, sameSite: 'None' });
+        res.cookie("uid", uid, { httpOnly: true, secure: true, sameSite: 'None' });
 
-        console.log("Login response from NASS:", f.data);
+        console.log("'\x1b[33m%s\x1b[0m'", "Cookies set from login response: " + JSON.stringify({ session, token, uid }));
+        
         res.status(f.status).json(f.data);
 
 

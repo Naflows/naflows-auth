@@ -150,11 +150,13 @@ app.post('/client/login', async (req, res) => {
 
 
 
-app.post('/client/secure/data' , async (req, res) => {
-    const noSensitive = req.body.noSensitive || false;
-    
-
-   res.status(200).send("Sending data.......");
+app.post('/client/secure/data' , async (req, res) => {    
+   res.status(200).json({
+    status: 200,
+    message: "Secure data access granted",
+    success: true,
+    data: req.middleware.data
+   })
 })
 
 

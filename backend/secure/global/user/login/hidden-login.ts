@@ -25,8 +25,8 @@ export async function hiddenLogin(req : Request, res : Response) : Promise<Reply
         return software.methods.serverReply(400, "Bad Request: Missing parameters.");
     }
 
-    const token : Tokens = await secure.token.get(tokenValue, false);
     const session : UserSession = await secure.session.get(session_id, false);
+    const token : Tokens = await secure.token.get(session.token_id, true);
     const user : User = await secure.user.get(uid, false);
 
 
