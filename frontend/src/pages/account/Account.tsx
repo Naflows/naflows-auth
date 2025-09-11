@@ -1,17 +1,22 @@
 // ...existing code...
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import axios from "axios";
 import "../../../public/root/index.scss";
+import "../../../public/root/pages/account/index.scss";
 import Loader from "../../global/components/Loader";
 import AccountUserBody from "./sub-components/UserBody";
 import type { UserBodyProps } from "../../types/UserBodyProps";
-import '../../../public/root/pages/account/index.scss';
+import "../../../public/root/pages/account/index.scss";
 import type { ServicesBodyProps } from "../../types/ServicesBodyProps";
+import AccountHeader from "./account-header/AccountHeader";
 
 const Account = () => {
-  const [userFetch, setUserFetch] = useState<UserBodyProps | undefined>(undefined);
+  const [userFetch, setUserFetch] = useState<UserBodyProps | undefined>(
+    undefined
+  );
   const [servicesFetch, setServicesFetch] = useState<ServicesBodyProps[]>([]);
-
+  const [scrollLevel, setScrollLevel] = useState<number>(0);
+  const ref = useRef<HTMLDivElement>(null);
 
   const [successfulFetch, setSuccessfulFetch] = useState<boolean>(false);
   const fetchData = async (type: string) => {
@@ -28,14 +33,15 @@ const Account = () => {
     return res;
   };
 
-
-
   useEffect(() => {
     const fetch = async () => {
       try {
         const userRes = await fetchData("user");
         const servicesRes = await fetchData("services");
-        if (userRes.data.success === false || servicesRes.data.success === false) {
+        if (
+          userRes.data.success === false ||
+          servicesRes.data.success === false
+        ) {
           // Handle error (e.g., redirect to login)
           window.location.href = "/login";
           return;
@@ -57,21 +63,39 @@ const Account = () => {
     }
   }, [userFetch, servicesFetch]);
 
-  return (
-    <div className="nass__page account-page">
-      <div
-        className="nass__account__page"
-        style={{
-          display: successfulFetch ? "block" : "none",
-        }}
-      >
+  useEffect(() => {
+    const handleScroll = () => {
+      const position = window.pageYOffset;
+      setScrollLevel(position);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
-        <AccountUserBody userData={userFetch} />
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [scrollLevel]);
 
-        <pre>{JSON.stringify(userFetch, null, 2)}</pre>
-        <pre>{JSON.stringify(servicesFetch, null, 2)}</pre>
-      </div>
+  useEffect(() => {
+    const header = document.querySelector(
+      ".nass__account__page__header"
+    ) as HTMLElement;
+    if (header !== null) {
+      if (scrollLevel > 50) {
+        header.classList.add("scrolled");
+      } else {
+        header.classList.remove("scrolled");
+      }
+    }
+  }, [scrollLevel]);
 
+
+
+
+
+
+
+  if (userFetch === undefined || successfulFetch === false) {
+    return (
       <div
         className="nass__page__loader"
         style={{
@@ -81,8 +105,25 @@ const Account = () => {
         <h3>Loading account informations</h3>
         <Loader loading={!userFetch} />
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="nass__page account-page">
+        <div
+          className="nass__account__page"
+          style={{
+            display: successfulFetch ? "block" : "none",
+          }}
+        >
+          <AccountHeader userFetch={userFetch} ref={ref} />
+          <AccountUserBody userData={userFetch} />
+
+          <pre>{JSON.stringify(userFetch, null, 2)}</pre>
+          <pre>{JSON.stringify(servicesFetch, null, 2)}</pre>
+        </div>
+      </div>
+    );
+  }
 };
 
 export default Account;

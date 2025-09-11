@@ -46,6 +46,8 @@ export interface User {
   country?: string; // Country of the user, optional
   language?: string; // Language of the user, optional
   postal_code?: string; // Postal code of the user, optional
+  address_complement?: string; // Address complement of the user, optional
+  city?: string; // City of the user, optional
   address?: string; // Address of the user, optional
   phone_number?: string; // Phone number of the user, optional
   phone_verified?: boolean; // Whether the user's phone number is verified, optional

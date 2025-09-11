@@ -1,13 +1,16 @@
 @import "../../../variables.scss";
 
 .nass__account__page_user__body {
-  .user__body__header {
-    .profile-picture {
-      padding: 5px;
-      background-color: $_2k25-background-hue-darker;
-      border-radius: 50%;
-      width: 75px;
-      height: 75px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  .user__body__section {
+    background-color: $_2k25-background-hue-darker;
+    padding: 20px 30px;
+    border-radius: 20px;
+    width: fit-content;
+    .body__section__title {
+        text-transform: uppercase;
     }
   }
 }

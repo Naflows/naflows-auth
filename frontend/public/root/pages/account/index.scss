@@ -1,3 +1,185 @@
+@import "../../variables.scss";
+
 body {
-    overflow-y: auto;
+  overflow-y: auto;
+}
+
+:root {
+  --nass-page-width: 65%;
+  --header-height: 100px;
+}
+
+.nass__page {
+  width: var(--nass-page-width) !important;
+}
+.nass__page .nass__account__page {
+  display: flex !important;
+  flex-direction: column;
+  gap: 20px;
+  width: fit-content;
+  justify-content: start;
+  width: 100%;
+  position: relative;
+  padding-top: calc(var(--header-height) + 80px);
+  .nass__account__page__header {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: start;
+    padding: 20px 50px;
+    background-color: $_2k25-background-hue-darker;
+    border-radius: 0 0 20px 20px;
+    width: calc(var(--nass-page-width) - 100px );
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 10;
+    transition: 0.3s;
+    height: var(--header-height);
+
+    &.scrolled {
+      top: 10px;
+      width: calc(var(--nass-page-width) - 200px);
+      background-color: $_2k25-background-hue-transparent;
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+
+      .header__tabs {
+        .tabs {
+          .header__tab {
+            &.active {
+              background-color: $_2k25-background-hue-50-transparent;
+            }
+            &:not(.active):hover {
+              background-color: $_2k25-background-hue-50-transparent;
+            }
+          }
+        }
+      }
+
+      .user__header__visual__access {
+        border-color: transparent !important;
+        &:hover {
+          background-color: $_2k25-background-hue-50-transparent !important;
+        }
+      }
+    }
+
+    .header__tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: start;
+      img {
+        height: 50px;
+        width: auto;
+      }
+      .tabs {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        align-items: center;
+
+        .header__tab {
+          cursor: pointer;
+          padding: 5px 10px;
+          border-radius: 10px;
+          transition: 0.3s;
+          font-size: 20px;
+          height: fit-content;
+          text-align: center;
+
+          &.active,
+          &:hover {
+            background-color: $_2k25-background-hue;
+            color: $_2k25-text;
+          }
+        }
+      }
+    }
+
+    .header__account {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .user__header__visual__access {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+        padding: 5px 15px 5px 10px;
+
+        cursor: pointer;
+        transition: 0.3s;
+        border: 2px solid $_2k25-background-hue;
+        border-radius: 15px;
+
+        &:hover {
+          background-color: $_2k25-background-hue;
+        }
+
+        .name,
+        .username {
+          margin: 0;
+          padding: 0;
+          white-space: nowrap;
+        }
+        .username {
+          font-size: 13px;
+          opacity: 0.7;
+        }
+        .name {
+          font-size: 18px;
+          font-weight: 600;
+        }
+        .profile-picture {
+          padding: 5px;
+          background-color: $_2k25-background-hue;
+          border-radius: 50%;
+          width: 35px;
+          height: 35px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .nass__account__page__header {
+    flex-direction: column-reverse !important;
+    gap: 15px !important;
+    padding: 10px 20px !important;
+    width: calc(var(--nass-page-width) - 50px) !important;
+    position: relative;
+    .header__account {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+      width: 100% !important;
+      flex-direction: row !important;
+      justify-content: end !important;
+      align-items: center !important;
+      .user__header__data__informations {
+        height: fit-content !important;
+      }
+    }
+    .header__tabs {
+      width: 100%;
+      gap: 10px !important;
+      .tabs {
+        left: 0;
+        right: 0;
+        width: 100% !important;
+        justify-content: space-between !important;
+      }
+    }
+  }
+
+  .user__body__section {
+    width: calc(100% - 60px) !important;
+  }
 }
