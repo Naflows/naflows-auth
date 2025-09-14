@@ -1,6 +1,5 @@
 // ...existing code...
 import { useEffect, useState } from "react";
-import axios from "axios";
 import "../../../public/root/index.scss";
 import "../../../public/root/pages/account/index.scss";
 import Loader from "../../global/components/Loader";
@@ -10,13 +9,13 @@ import "../../../public/root/pages/account/index.scss";
 import type { ServicesBodyProps } from "../../types/ServicesBodyProps";
 import AccountHeader from "./account-header/AccountHeader";
 import ServicesComponent from "./sub-components/Services";
+import fetchData from "../../scripts/account/get-user-info";
 
 const Account = () => {
   const [userFetch, setUserFetch] = useState<UserBodyProps | undefined>(
     undefined
   );
   const [servicesFetch, setServicesFetch] = useState<ServicesBodyProps[]>([]);
-  const [scrollLevel, setScrollLevel] = useState<number>(0);
   const [selectedTab, setSelectedTab] = useState<string>("");
   const dir = {
     profile: { val: "user" },
@@ -26,19 +25,6 @@ const Account = () => {
     support: { val: "support" },
   };
   const [successfulFetch, setSuccessfulFetch] = useState<boolean>(false);
-  const fetchData = async (type: string) => {
-    const res = await axios.get(
-      `${process.env.DUMMY_API_URL_DEV}/get-user-info/${type}`,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return res;
-  };
   const fetch = async () => {
     try {
       const res = await fetchData(dir[selectedTab as keyof typeof dir]?.val);
@@ -46,7 +32,7 @@ const Account = () => {
 
       if (res.data.success === false) {
         // Handle error (e.g., redirect to login)
-        window.location.href = "/login";
+        window.location.href = "/login?redirect=" + window.location.pathname;
         return;
       }
       console.log(userData.data.data.user)
@@ -57,7 +43,7 @@ const Account = () => {
       setSuccessfulFetch(true);
     } catch (error) {
       // Handle fetch error
-      window.location.href = "/login";
+      window.location.href = "/login" + "?redirect=" + window.location.pathname;
       console.error("Error fetching user info:", error);
     }
   };
@@ -84,30 +70,6 @@ const Account = () => {
     }
   }, [selectedTab]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const position = window.pageYOffset;
-      setScrollLevel(position);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [scrollLevel]);
-
-  useEffect(() => {
-    const header = document.querySelector(
-      ".nass__account__page__header"
-    ) as HTMLElement;
-    if (header !== null) {
-      if (scrollLevel > 50) {
-        header.classList.add("scrolled");
-      } else {
-        header.classList.remove("scrolled");
-      }
-    }
-  }, [scrollLevel]);
 
   if (successfulFetch === false) {
     return (

@@ -4,7 +4,11 @@ import Alert from "../global/error-alert/Alert";
 import { manageLogin } from "../scripts/login";
 import Loader from "../global/components/Loader";
 
-const LoginForm = () => {
+const LoginForm = ({
+  redirectOnSuccess = "/account",
+}: {
+  redirectOnSuccess?: string;
+}) => {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({
     status: 0,
@@ -52,7 +56,7 @@ const LoginForm = () => {
       <button
         className="primary-button text-size-20"
         onClick={async () => {
-          await manageLogin(setLoading, setAlert);
+          await manageLogin(setLoading, setAlert, redirectOnSuccess);
         }}
       >
         <span

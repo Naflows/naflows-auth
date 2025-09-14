@@ -14,41 +14,44 @@
     opacity: 1;
   }
 }
-
-.user__body__services {
-  width: 100%;
+.services__section__header {
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  .section__header__content {
+    display: flex;
+    flex-direction: column;
+    h3 {
+      margin: 0;
+      padding: 0;
+      font-size: 18px;
+    }
+    p {
+      margin: 0;
+      padding: 0;
+      font-size: 13px;
+      opacity: 0.7;
+    }
+  }
+}
+.user__body__services {
+  width: 75%;
+  margin: auto;
+  display: flex;
+  align-items: start;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 20px;
   .user__body__section {
     flex: 1;
+    height: fit-content;
+    margin-top: 0;
     .services__list {
       display: flex;
       flex-direction: column;
       gap: 20px;
-      .services__section__header {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
-        .section__header__content {
-          display: flex;
-          flex-direction: column;
-          h3 {
-            margin: 0;
-            padding: 0;
-            font-size: 18px;
-          }
-          p {
-            margin: 0;
-            padding: 0;
-            font-size: 13px;
-            opacity: 0.7;
-          }
-        }
-      }
       .services__list__content {
         color: white;
         display: flex;
@@ -82,6 +85,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  color: white;
+
   .service__view__informations {
     display: flex;
     flex-direction: row;
@@ -198,6 +203,17 @@
   }
 }
 
+@keyframes AppearFromNothing {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .manage__connection {
   position: fixed;
   top: 0;
@@ -222,6 +238,7 @@
     display: flex;
     flex-direction: row;
     gap: 50px;
+    animation: 0.3s ease-out AppearFromNothing;
 
     .manage__service__connection {
       display: flex;
@@ -266,6 +283,7 @@
       flex-direction: column;
       gap: 20px;
       overflow-y: auto;
+      max-height: fit-content;
       .service__details__header {
         display: flex;
         flex-direction: column;
@@ -285,6 +303,8 @@
         display: flex;
         flex-direction: column;
         gap: 30px;
+        height: auto;
+        margin-right: 10px;
 
         .save__changes__button {
           width: fit-content !important;
@@ -357,6 +377,7 @@
           gap: 20px;
           overflow: hidden;
           transition: 0.3s;
+          height: auto;
           .manage__personal__data__options {
             color: white;
             display: flex;

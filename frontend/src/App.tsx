@@ -19,10 +19,13 @@ const AppLoginBigButton = ({ onClick, value }: AppLoginBigButtonProps) => {
 
 function App() {
   const [formType, setFormType] = useState<"login" | "register">("login");
+  const [redirect, setRedirect] = useState<string | null>(null);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const form = queryParams.get("form");
+    const r = queryParams.get("redirect");
+    setRedirect(r);
     if (form === "login" || form === "register") {
       setFormType(form as "login" | "register");
     } else {
@@ -58,7 +61,7 @@ function App() {
             </p>
           </div>
           <div className="form">
-            {formType === "login" ? <LoginForm /> : <RegisterForm />}
+            {formType === "login" ? <LoginForm redirectOnSuccess={redirect ? redirect : undefined} /> : <RegisterForm />}
           </div>
           <div className="panel-footer">
             <AppLoginBigButton

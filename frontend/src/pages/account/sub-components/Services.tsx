@@ -2,16 +2,15 @@ import type { ServicesBodyProps } from "../../../types/ServicesBodyProps";
 import "../../../../public/root/pages/account/sub-components/AccountServicesBody.scss";
 import BasicServiceBody from "./ServicesBody";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import type { ServicesCompleteBodyProps } from "../../../types/ServicesCompleteProps";
 import ManageServiceConnection from "./ManageConnection";
+import fetchServiceData from "../../../scripts/account/fetch-individual-service";
 
 const ServicesComponent = ({
   servicesData,
 }: {
   servicesData: ServicesBodyProps[];
 }) => {
-  console.log(servicesData, "servicesData");
   const userServices = servicesData.filter(
     (service : ServicesBodyProps) =>
       service.rights.includes("ADMINISTRATOR") ||
@@ -25,41 +24,28 @@ const ServicesComponent = ({
   const [serviceData, setServiceData] =
     useState<ServicesCompleteBodyProps | null>(null);
 
-  const fetchServiceData = async (id: string) => {
-    try {
-      const res = await axios.get(
-        `${process.env.DUMMY_API_URL_DEV}/get-user-info/services/${id}/service-informations`,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log(res.data);
-      if (res.data.success) {
-        console.log(res.data.data.service, "service data");
-        setServiceData(res.data.data.service);
-      }
-    } catch (error) {
-      console.error("Error fetching service data:", error);
-    }
-  };
+
 
   useEffect(() => {
     if (serviceID) {
-      fetchServiceData(serviceID);
+      fetchServiceData(serviceID, setServiceData as (data: object) => void);
     }
   }, [serviceID]);
 
+  useEffect(() => {
+    if (serviceData === null) setServiceID(null);
+  }, [serviceData])
+
   return (
-    <div className="user__body__services">
-      <ManageServiceConnection service={serviceData} />
+    <div className="user__body__services" style={{
+      flexDirection: userServices.length > 0 ? "row" : "column"
+    }}>
+      <ManageServiceConnection service={serviceData} setService={setServiceData} />
       <div className="user__body__section">
         <div className="services__list">
           <div className="services__section__header">
             <div className="section__header__content">
-              <h3 className="connections__list__title">Your Services</h3>
+              <h3 className="services__header__title">Your Services</h3>
               <p>Services you own or manage</p>
             </div>
             <button
@@ -80,12 +66,16 @@ const ServicesComponent = ({
               <span>New service</span>
             </button>
           </div>
-          <div className="services__list__content">
+          <div className="services__list__content" style={{
+            display : userServices.length > 0 ? "flex" : "none"
+          }}>
             {userServices.length > 0 ? (
               userServices.map((service) => (
                 <div key={service.id} className="service__item">
                   <BasicServiceBody service={service} />
-                  <button className="primary-button">Manage service</button>
+                  <button className="primary-button" onClick={() => {
+                    window.location.href = `/services/manage/${service.id}`;
+                  }}>Manage service</button>
                 </div>
               ))
             ) : (
@@ -99,7 +89,7 @@ const ServicesComponent = ({
         <div className="services__list">
           <div className="services__section__header">
             <div className="section__header__content">
-              <h3 className="connections__list__title">Your Connections</h3>
+              <h3 className="services__header__title">Your Connections</h3>
               <p>Services you're connected to</p>
             </div>
           </div>
@@ -115,7 +105,9 @@ const ServicesComponent = ({
                     >
                       Manage connection
                     </button>
-                    <button className="secondary-button">
+                    <button className="secondary-button" style={{
+                        display : service.user_active ? "block" : "none"
+                    }}>
                       Quick disconnect
                     </button>
                   </div>

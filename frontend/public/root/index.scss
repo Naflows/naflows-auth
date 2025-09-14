@@ -221,6 +221,27 @@ body {
   }
 }
 
+.parent__of__section {
+  display: flex;
+  gap: 20px;
+  .parent__of__section  {
+    width: auto !important; ;
+  }
+  &.row__layout {
+    align-items: start;
+    flex-direction: row;
+    width: 100% !important;
+  }
+  &.column__layout {
+    flex-direction: column;
+    height: auto !important;
+    .user__body__section {
+      height: auto !important;
+      width: auto !important;
+    }
+  }
+}
+
 input[type="number"] {
   -moz-appearance: textfield; /* Firefox */
 }
@@ -310,6 +331,7 @@ input[type="checkbox"]:checked:after {
   gap: 10px;
   align-items: center;
   text-wrap: nowrap;
+  border: 2px solid transparent;
   svg,
   svg * {
     width: 20px;
@@ -326,7 +348,6 @@ input[type="checkbox"]:checked:after {
 
 
 .tertiary-button {
-  padding: 10px 15px;
   border-radius: 10px;
   background-color: transparent;
   border: none;

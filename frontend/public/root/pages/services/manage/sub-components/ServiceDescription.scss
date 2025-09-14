@@ -1,0 +1,89 @@
+@import "../../../../variables.scss";
+
+.service__description {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: space-between;
+  .description__content {
+    color: white;
+    width: 100% !important;
+    .service__description__header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      .service__description__pseudo__image {
+        height: 50px;
+        width: 50px;
+        border-radius: 10px;
+        object-fit: cover;
+        img {
+          height: 100%;
+          width: 100%;
+          border-radius: 10px;
+          object-fit: cover;
+        }
+      }
+      .service__description__name {
+        h2 {
+          margin: 0;
+          padding: 0;
+        }
+        a {
+          padding: 0;
+          font-weight: normal;
+        }
+      }
+    }
+    .service__informations {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      .information__item {
+        font-size: 13px;
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+.service__public__settings {
+  max-width: 350px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+  min-height: 0; // Prevent overflow in flex containers
+  align-self: stretch; // Ensure it stretches to parent's height
+
+  .services__settings__view {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: white;
+    flex: 1; // Take available vertical space
+    min-height: 0;
+
+    .settings__content {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      border-radius: 5px;
+      align-items: center;
+
+      .setting__value {
+        font-weight: normal;
+        padding: 2.5px 5px;
+        border-radius: 5px;
+        font-size: 13px;
+        &.enabled {
+          background-color: $da-confirm-hue;
+        }
+        &.disabled {
+          background-color: $da-error-hue;
+        }
+      }
+    }
+  }
+}

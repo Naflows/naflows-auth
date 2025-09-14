@@ -152,7 +152,7 @@ app.post('/client/login', async (req, res) => {
 
 
 
-const  manageConnection = async (req,res) : Promise<User> => {
+const manageConnection = async (req, res): Promise<User> => {
     const userID = req.middleware.data.user_id;
     if (!userID) {
         res.status(401).json(software.methods.serverReply(401, "Unauthorized: No user ID in middleware data."));
@@ -165,7 +165,7 @@ const  manageConnection = async (req,res) : Promise<User> => {
     return user;
 }
 app.post('/client/secure/data/services', async (req, res) => {
-    const user = await manageConnection(req,res);
+    const user = await manageConnection(req, res);
     const userServices = user.services || [];
     const sentServices = await Promise.all(
         Object.keys(userServices).map(async (key) => {
@@ -204,7 +204,7 @@ app.post('/client/secure/data/services', async (req, res) => {
 });
 
 app.post('/client/secure/data/services/service-informations', async (req, res) => {
-    const user = await manageConnection(req,res);
+    const user = await manageConnection(req, res);
     const userData = await secure.user.get(user.id, false);
     if (!userData) {
         console.log("User data not found");
@@ -212,6 +212,11 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
     }
 
     const service = userData.services[req.body.service.id] || null;
+    if (!service) {
+        console.log("Service not found in user's services");
+        return res.status(404).json(software.methods.serverReply(404, "Service not found in user's services."));
+    }
+
     const serviceData = service ? await services.service.get(req.body.service.id) : null;
 
     if (!service || !serviceData || !serviceData.success) {
@@ -220,14 +225,14 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
 
     const serviceInfo = serviceData.data as Service;
 
-    // Remove sensitive information
-    delete serviceInfo.ip_address;
-    delete serviceInfo.created_by;
 
-    
-    
+
+
+
     if (!service.rights.includes("ADMINISTRATOR") && !service.rights.includes("DEVELOPER")) {
         // If the user is not an admin or developer, remove sensitive information
+        delete serviceInfo.ip_address;
+        delete serviceInfo.created_by;
         delete serviceInfo.storage;
         delete serviceInfo.settings;
     }
@@ -245,7 +250,7 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
             service: {
                 ...serviceData.data,
                 ...service,
-                user_active : service.active,
+                user_active: service.active,
             }
         }
     });
@@ -253,8 +258,8 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
 
 app.post('/client/secure/data/user', async (req, res) => {
 
-    const user = await manageConnection(req,res);
-    
+    const user = await manageConnection(req, res);
+
     // Remove sensitive information
     delete user.password;
     delete user.services;

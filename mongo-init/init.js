@@ -11,6 +11,7 @@ db.createCollection('nass_contracts');
 db.createCollection('blacklist');
 db.createCollection('logs');
 db.createCollection('requests'); // Logging requests to the NASS
+db.createCollection('user_connections'); // Connections between users and services
 
 const users = db.getCollection('users');
 const sessions = db.getCollection('sessions');
@@ -21,6 +22,9 @@ const nass_contracts = db.getCollection('nass_contracts');
 const blacklist = db.getCollection('blacklist');
 const logs = db.getCollection('logs');
 const requests = db.getCollection('requests');
+
+
+const userConnections = db.getCollection('user_connections'); // Connections between users and services
 
 
 
@@ -60,6 +64,10 @@ db.requests.createIndex({ associated_service: 1 });
 db.requests.createIndex({ ip: 1 });
 
 db.service_tokens.createIndex({ token: 1 }, { unique: true });
+
+db.userConnections.createIndex({ id: 1 }, { unique: true });
+db.userConnections.createIndex({ user_id: 1 });
+db.userConnections.createIndex({ service_id: 1 });
 
 
 // See the .env file in the root directory of the naflows-system repository for the unhashed password
@@ -360,13 +368,14 @@ db.service_tokens.insertOne({
 db.services.insertOne({
     id : "naflows_backend",
     name : "Naflows Backend Structure",
-    ip_address : "dummy-api", 
-    dns : "nass.naflows.com",
+    ip_address : "http://127.0.0.1:3005", 
+    dns : "naflows.com",
     description : "The Naflows Backend Structure for secure API communication.",
     created_at : new Date().getTime(),
     created_by : "NASS",
     status : "ACTIVE",
     service_token : "naflows_backend_token",
+    picture : "https://i.scdn.co/image/ab67616100005174877d4c061d08c040974224be",
     storage : {
         plan : "ENTERPRISE",
         type : "CLOUD",
@@ -374,7 +383,15 @@ db.services.insertOne({
         size : 1024, // in GB
     },
     settings : {
-        rates : 10000 // 10000 requests per day
+        rates : 10000,
+        allow_nass_payement_method : true, // Whether the service allows payment through NASS
+        ram : "8GB", // RAM allocated to the service
+        cpu : "8 CORES" // CPU allocated to the service
+    },
+    public_settings : {
+        allow_user_registration : true,
+        allow_service_connection : true,
+        allow_public_visibility : true
     }
 })
 
@@ -408,7 +425,15 @@ db.services.insertOne({
         size : 32, // in GB
     },
     settings : {
-        rates : 1000 // 1000 requests per day
+        rates : 1000, // 1000 requests per day
+        allow_nass_payement_method : true, // Whether the service allows payment through NASS
+        ram : "512MB", // RAM allocated to the service
+        cpu : "1 CORE" // CPU allocated to the service
+    },
+    public_settings : {
+        allow_user_registration : true,
+        allow_service_connection : true,
+        allow_public_visibility : true
     }
 })
 
@@ -438,7 +463,25 @@ db.services.insertOne({
         size : 32, // in GB
     },
     settings : {
-        rates : 1000 // 1000 requests per day
+        rates : 1000,
+        allow_nass_payement_method : false, // Whether the service allows payment through NASS
+        ram : "1GB", // RAM allocated to the service
+        cpu : "2 CORES" // CPU allocated to the service
+    },
+    public_settings : {
+        allow_user_registration : true,
+        allow_service_connection : true,
+        allow_public_visibility : true
     }
 })
 
+
+db.service_tokens.insertOne({
+    id : "the_pookie_shop_token",
+    service_id : "the_pookie_shop",
+    token : "the_pookie_shop_token",
+    created_at : new Date().getTime(),
+    lifespan: 1000 * 60 * 60 * 24 * 1000000000000000000, // Infinite
+    uses : 0
+})
+/* END OF TEST PURPOSES */
