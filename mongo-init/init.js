@@ -11,6 +11,7 @@ db.createCollection('nass_contracts');
 db.createCollection('blacklist');
 db.createCollection('logs');
 db.createCollection('requests'); // Logging requests to the NASS
+db.createCollection('user_connections'); // Connections between users and services
 
 const users = db.getCollection('users');
 const sessions = db.getCollection('sessions');
@@ -21,6 +22,9 @@ const nass_contracts = db.getCollection('nass_contracts');
 const blacklist = db.getCollection('blacklist');
 const logs = db.getCollection('logs');
 const requests = db.getCollection('requests');
+
+
+const userConnections = db.getCollection('user_connections'); // Connections between users and services
 
 
 
@@ -60,6 +64,10 @@ db.requests.createIndex({ associated_service: 1 });
 db.requests.createIndex({ ip: 1 });
 
 db.service_tokens.createIndex({ token: 1 }, { unique: true });
+
+db.userConnections.createIndex({ id: 1 }, { unique: true });
+db.userConnections.createIndex({ user_id: 1 });
+db.userConnections.createIndex({ service_id: 1 });
 
 
 // See the .env file in the root directory of the naflows-system repository for the unhashed password
@@ -374,7 +382,12 @@ db.services.insertOne({
         size : 1024, // in GB
     },
     settings : {
-        rates : 10000 // 10000 requests per day
+        rates : 10000 // 10000 requests per seconds
+    },
+    public_settings : {
+        allow_user_registration : true,
+        allow_service_connection : true,
+        allow_public_visibility : true
     }
 })
 
@@ -409,6 +422,11 @@ db.services.insertOne({
     },
     settings : {
         rates : 1000 // 1000 requests per day
+    },
+    public_settings : {
+        allow_user_registration : true,
+        allow_service_connection : true,
+        allow_public_visibility : true
     }
 })
 
@@ -439,6 +457,21 @@ db.services.insertOne({
     },
     settings : {
         rates : 1000 // 1000 requests per day
+    },
+    public_settings : {
+        allow_user_registration : true,
+        allow_service_connection : true,
+        allow_public_visibility : true
     }
 })
 
+
+db.service_tokens.insertOne({
+    id : "the_pookie_shop_token",
+    service_id : "the_pookie_shop",
+    token : "the_pookie_shop_token",
+    created_at : new Date().getTime(),
+    lifespan: 1000 * 60 * 60 * 24 * 1000000000000000000, // Infinite
+    uses : 0
+})
+/* END OF TEST PURPOSES */

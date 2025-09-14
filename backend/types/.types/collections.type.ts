@@ -153,7 +153,12 @@ export interface Service {
   ip_address: string; // IP address of the service
   service_token: string; // Service token, a secure way of connecting to the service
   storage: ServiceStoragePlan;
-  settings : ServiceSettings
+  settings : ServiceSettings;
+  public_settings : {
+    allow_user_registration : boolean; // Whether the service allows user registration or not
+    allow_service_connection : boolean; // Whether the service allows connection from other services or not
+    allow_public_visibility : boolean; // Whether the service is visible in the public services list or not
+  }
 }
 
 export enum CONTRACTED {

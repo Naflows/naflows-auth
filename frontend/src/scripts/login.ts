@@ -5,7 +5,8 @@ import axios from "axios";
 
 export async function manageLogin(
     setLoading: (loading: boolean) => void,
-    setAlert: (alert: { status : number; message: string; success : boolean; closeAlert: boolean }) => void
+    setAlert: (alert: { status : number; message: string; success : boolean; closeAlert: boolean }) => void,
+    redirectOnSuccess = "/account"
 ) {
     setLoading(true);
 
@@ -45,7 +46,7 @@ export async function manageLogin(
                 closeAlert: false,
             });
         } else {
-            window.location.href = "/account";
+            window.location.href = redirectOnSuccess;
         }
     } catch (error: unknown) {
         console.error(error);

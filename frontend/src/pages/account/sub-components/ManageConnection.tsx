@@ -54,8 +54,10 @@ const sensitiveDataPreferences: Record<
 
 const ManageServiceConnection = ({
   service,
+  setService
 }: {
   service: ServicesCompleteBodyProps | null;
+    setService: (service: ServicesCompleteBodyProps | null) => void;
 }) => {
   const [usageData, setUsageData] = useState<InformationKey | null>(null);
   const [personalData, setPersonalData] = useState<DataKeys[] | null>([]);
@@ -90,6 +92,20 @@ const ManageServiceConnection = ({
     };
   }, [usageData]); // Add usageData as dependency
 
+  // Also update the height on resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (detailledBodyRef.current) {
+        setDetailledBodyHeight(detailledBodyRef.current.scrollHeight);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     setUsageData(
       newService &&
@@ -99,6 +115,14 @@ const ManageServiceConnection = ({
       newService && (newService.data_preferences.personal_data as DataKeys[])
     );
   }, [newService]);
+
+  useEffect(() => {
+    if (service === null) {
+      setNewService(null);
+      setUsageData(null);
+      setPersonalData([]);
+    }
+  }, [service]);
 
   const updatePersonalData = (
     newPersonalData: DataKeys[] | SensitiveDataKeys[]
@@ -121,7 +145,7 @@ const ManageServiceConnection = ({
           <div className="manage__service__connection">
             <div className="manage__service__connection__header">
               <div className="manage__service__back">
-                <button className="tertiary-button">
+                <button className="tertiary-button" onClick={() => setService(null)}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     height="24px"
@@ -292,14 +316,14 @@ const ManageServiceConnection = ({
               <button
                 className="primary-button save__changes__button"
                 style={{
-                  opacity:
+                  display:
                     JSON.stringify(
                       newService.data_preferences.personal_data
                     ) !==
                       JSON.stringify(service.data_preferences.personal_data) ||
                     usageData !== service.data_preferences.usage_data
-                      ? 1
-                      : 0,
+                      ? "block"
+                      : "none",
                 }}
               >
                 Save Changes

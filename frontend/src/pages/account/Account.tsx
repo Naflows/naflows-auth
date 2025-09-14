@@ -1,6 +1,5 @@
 // ...existing code...
 import { useEffect, useState } from "react";
-import axios from "axios";
 import "../../../public/root/index.scss";
 import "../../../public/root/pages/account/index.scss";
 import Loader from "../../global/components/Loader";
@@ -10,6 +9,7 @@ import "../../../public/root/pages/account/index.scss";
 import type { ServicesBodyProps } from "../../types/ServicesBodyProps";
 import AccountHeader from "./account-header/AccountHeader";
 import ServicesComponent from "./sub-components/Services";
+import fetchData from "../../scripts/account/get-user-info";
 
 const Account = () => {
   const [userFetch, setUserFetch] = useState<UserBodyProps | undefined>(
@@ -26,19 +26,6 @@ const Account = () => {
     support: { val: "support" },
   };
   const [successfulFetch, setSuccessfulFetch] = useState<boolean>(false);
-  const fetchData = async (type: string) => {
-    const res = await axios.get(
-      `${process.env.DUMMY_API_URL_DEV}/get-user-info/${type}`,
-      {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return res;
-  };
   const fetch = async () => {
     try {
       const res = await fetchData(dir[selectedTab as keyof typeof dir]?.val);

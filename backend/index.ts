@@ -212,6 +212,11 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
     }
 
     const service = userData.services[req.body.service.id] || null;
+    if (!service) {
+        console.log("Service not found in user's services");
+        return res.status(404).json(software.methods.serverReply(404, "Service not found in user's services."));
+    }
+
     const serviceData = service ? await services.service.get(req.body.service.id) : null;
 
     if (!service || !serviceData || !serviceData.success) {
