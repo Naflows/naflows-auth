@@ -16,7 +16,6 @@ const Account = () => {
     undefined
   );
   const [servicesFetch, setServicesFetch] = useState<ServicesBodyProps[]>([]);
-  const [scrollLevel, setScrollLevel] = useState<number>(0);
   const [selectedTab, setSelectedTab] = useState<string>("");
   const dir = {
     profile: { val: "user" },
@@ -33,7 +32,7 @@ const Account = () => {
 
       if (res.data.success === false) {
         // Handle error (e.g., redirect to login)
-        window.location.href = "/login";
+        window.location.href = "/login?redirect=" + window.location.pathname;
         return;
       }
       console.log(userData.data.data.user)
@@ -44,7 +43,7 @@ const Account = () => {
       setSuccessfulFetch(true);
     } catch (error) {
       // Handle fetch error
-      window.location.href = "/login";
+      window.location.href = "/login" + "?redirect=" + window.location.pathname;
       console.error("Error fetching user info:", error);
     }
   };
@@ -71,30 +70,6 @@ const Account = () => {
     }
   }, [selectedTab]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const position = window.pageYOffset;
-      setScrollLevel(position);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [scrollLevel]);
-
-  useEffect(() => {
-    const header = document.querySelector(
-      ".nass__account__page__header"
-    ) as HTMLElement;
-    if (header !== null) {
-      if (scrollLevel > 50) {
-        header.classList.add("scrolled");
-      } else {
-        header.classList.remove("scrolled");
-      }
-    }
-  }, [scrollLevel]);
 
   if (successfulFetch === false) {
     return (

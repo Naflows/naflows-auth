@@ -368,13 +368,14 @@ db.service_tokens.insertOne({
 db.services.insertOne({
     id : "naflows_backend",
     name : "Naflows Backend Structure",
-    ip_address : "dummy-api", 
-    dns : "nass.naflows.com",
+    ip_address : "http://127.0.0.1:3005", 
+    dns : "naflows.com",
     description : "The Naflows Backend Structure for secure API communication.",
     created_at : new Date().getTime(),
     created_by : "NASS",
     status : "ACTIVE",
     service_token : "naflows_backend_token",
+    picture : "https://i.scdn.co/image/ab67616100005174877d4c061d08c040974224be",
     storage : {
         plan : "ENTERPRISE",
         type : "CLOUD",
@@ -382,7 +383,10 @@ db.services.insertOne({
         size : 1024, // in GB
     },
     settings : {
-        rates : 10000 // 10000 requests per seconds
+        rates : 10000,
+        allow_nass_payement_method : true, // Whether the service allows payment through NASS
+        ram : "8GB", // RAM allocated to the service
+        cpu : "8 CORES" // CPU allocated to the service
     },
     public_settings : {
         allow_user_registration : true,
@@ -421,7 +425,10 @@ db.services.insertOne({
         size : 32, // in GB
     },
     settings : {
-        rates : 1000 // 1000 requests per day
+        rates : 1000, // 1000 requests per day
+        allow_nass_payement_method : true, // Whether the service allows payment through NASS
+        ram : "512MB", // RAM allocated to the service
+        cpu : "1 CORE" // CPU allocated to the service
     },
     public_settings : {
         allow_user_registration : true,
@@ -456,7 +463,10 @@ db.services.insertOne({
         size : 32, // in GB
     },
     settings : {
-        rates : 1000 // 1000 requests per day
+        rates : 1000,
+        allow_nass_payement_method : false, // Whether the service allows payment through NASS
+        ram : "1GB", // RAM allocated to the service
+        cpu : "2 CORES" // CPU allocated to the service
     },
     public_settings : {
         allow_user_registration : true,

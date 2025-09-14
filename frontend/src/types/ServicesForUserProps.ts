@@ -15,10 +15,26 @@ interface ServicesForUserProps {
         personal_data: Array<"PHONE" | "EMAIL" | "FIRST AND LAST NAME" | "ADDRESS" | "BIRTHDATE" | "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS">;
     }; // Data preferences of the service
     status: "ACTIVE" | "INACTIVE" | "DEPRECATED"; // Status of the service
-    storage : object;
-    settings : object;
+    storage : {
+        plan: string; // Storage plan of the service, e.g., "BASIC", "PRO", "ENTERPRISE"
+        type: string; // Type of storage, e.g., "LOCAL", "CLOUD"
+        size: string; // Total storage size in GB
+        used_space: number; // Used storage space in MB
+    };
+    settings : {
+        rates: number; // Number of allowed operations per month
+        allow_nass_payement_method : boolean; // Whether the service allows payment through NASS
+        ram : string; // RAM allocated to the service
+        cpu : string; // CPU allocated to the service
+    };
     ip_address?: string; // IP address of the service, optional and may be omitted for non-admin users
-    public_settings?: object; // Public settings of the service, optional and may be omitted for non-admin users
+    picture?: string; // URL to the service picture, optional
+    public_settings : {
+        allow_user_registration : boolean;
+        allow_service_connections : boolean;
+        allow_public_visibility : boolean;
+
+    }
 }
 
 export type { ServicesForUserProps };

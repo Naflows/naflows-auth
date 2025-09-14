@@ -45,7 +45,7 @@ const ServicesComponent = ({
         <div className="services__list">
           <div className="services__section__header">
             <div className="section__header__content">
-              <h3 className="connections__list__title">Your Services</h3>
+              <h3 className="services__header__title">Your Services</h3>
               <p>Services you own or manage</p>
             </div>
             <button
@@ -89,7 +89,7 @@ const ServicesComponent = ({
         <div className="services__list">
           <div className="services__section__header">
             <div className="section__header__content">
-              <h3 className="connections__list__title">Your Connections</h3>
+              <h3 className="services__header__title">Your Connections</h3>
               <p>Services you're connected to</p>
             </div>
           </div>

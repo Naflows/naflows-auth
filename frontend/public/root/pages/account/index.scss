@@ -20,7 +20,8 @@ body {
   border-radius: 20px;
   width: fit-content;
   flex: 1;
-  width: calc(100% - 60px);
+  width: calc(75% - 60px);
+  margin: auto;
   .body__section__title {
     text-transform: uppercase;
   }
@@ -55,7 +56,7 @@ body {
 
     &.scrolled {
       top: 10px;
-      width: calc(var(--nass-page-width) - 200px);
+      width: calc(75% - 200px);
       background-color: $_2k25-background-hue-transparent;
       backdrop-filter: blur(10px);
       border-radius: 20px;

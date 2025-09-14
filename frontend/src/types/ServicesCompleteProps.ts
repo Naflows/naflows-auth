@@ -14,6 +14,6 @@ export interface ServicesCompleteBodyProps {
         personal_data: Array<"PHONE" | "EMAIL" | "FIRST AND LAST NAME" | "ADDRESS" | "BIRTHDATE" | "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS">;
     }; // Data preferences of the service
     status: "ACTIVE" | "INACTIVE" | "DEPRECATED"; // Status of the service
-
+    picture?: string; // URL to the service picture, optional
 
 }

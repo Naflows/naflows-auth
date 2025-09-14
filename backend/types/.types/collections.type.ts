@@ -12,16 +12,16 @@ export interface Blacklist {
 // Requests are related to counting the number of requests made by a user or an IP address
 // to the NASS services, this is used for rate limiting and abuse detection
 export interface UserRequest {
-    last_requests: Array<number>; // Timestamp of the request
-    request_number : number;
-    ip: string;
-    userAgent: string;
+  last_requests: Array<number>; // Timestamp of the request
+  request_number: number;
+  ip: string;
+  userAgent: string;
 }
 export interface Requests {
   requests: Array<UserRequest>;
   device_fingerprint: string; // Device fingerprint of the user, used for security purposes
-  associated_service : string;
-  associated_service_key : string;
+  associated_service: string;
+  associated_service_key: string;
 }
 // User chooses how the APIs are using their data
 export interface UserDataPreferences {
@@ -39,8 +39,8 @@ export interface User {
   services: {
     [key: number]: {
       rights: Array<"ADMINISTRATOR" | "DEVELOPER" | "USER">;
-      joined_at : number;
-      active : boolean;
+      joined_at: number;
+      active: boolean;
       data_preferences: UserDataPreferences;
     };
   };
@@ -69,11 +69,11 @@ export interface UserSession {
   token_id: string; // Token ID, the token that is used to authenticate the session
   ip: string; // IP address of the user, used for security purposes
   agent: string; // User agent of the user, used for security purposes
-  service_id : string; 
-  active : boolean;
+  service_id: string;
+  active: boolean;
   device_fingerprint: string; // Device fingerprint of the user, used for security purposes
   user_origin: string; // Origin of the user, used for security purposes,
-  supertest?:  boolean;
+  supertest?: boolean;
 }
 
 export type TokenRights =
@@ -122,8 +122,8 @@ export interface Tokens {
   expires_at: number;
   renewable: boolean;
   supertest?: boolean; // If the token is a supertest token, it can be used for testing purposes
-  data? : {
-    apiIDForRegistration? : string;
+  data?: {
+    apiIDForRegistration?: string;
   };
   enabled: boolean; // Whether the token is enabled or not, if not, it cannot be used
   frozen_until?: number; // UNIX TIMESTAMP, if the token is frozen, this is the amount of seconds until it can be unfrozen
@@ -134,13 +134,19 @@ export interface Tokens {
 }
 
 export interface ServiceStoragePlan {
-  plan : "FREE" | "PRO" | "ENTERPRISE";
+  plan: "FREE" | "PRO" | "ENTERPRISE";
   type: "LOCAL" | "CLOUD";
   size: 32 | 128 | 512 | 1024; // in GB
-  used_space : number; // in MB
+  used_space: number; // in MB
+  payement_plan: "FREE" | "MONTHLY" | "YEARLY"; // Payment plan of the service
+
 }
 export interface ServiceSettings {
-  rates : 100 | 500 | 1000 | 10000;
+  rates: 100 | 500 | 1000 | 10000;
+  ram: "512MB" | "1GB" | "2GB" | "4GB"; // RAM allocated to the service
+  cpu: "1 CORE" | "2 CORES" | "4 CORES" | "8 CORES"; // CPU allocated to the service
+  allow_nass_payement_method : boolean; // Whether the service allows payment through NASS
+
 }
 export interface Service {
   id: string; // Service ID
@@ -153,11 +159,12 @@ export interface Service {
   ip_address: string; // IP address of the service
   service_token: string; // Service token, a secure way of connecting to the service
   storage: ServiceStoragePlan;
-  settings : ServiceSettings;
-  public_settings : {
-    allow_user_registration : boolean; // Whether the service allows user registration or not
-    allow_service_connection : boolean; // Whether the service allows connection from other services or not
-    allow_public_visibility : boolean; // Whether the service is visible in the public services list or not
+  settings: ServiceSettings;
+  picture?: string; // URL to the service picture, optional
+  public_settings: {
+    allow_user_registration: boolean; // Whether the service allows user registration or not
+    allow_service_connection: boolean; // Whether the service allows connection from other services or not
+    allow_public_visibility: boolean; // Whether the service is visible in the public services list or not
   }
 }
 
@@ -223,8 +230,8 @@ export interface NassServiceToken {
   created_at: number; // Date when the token was created
   expires_at: number; // Date when the token expires, if not set, it never expires
   lifespan: number; // How long the token is valid for, in seconds, if not set, it never expires
-  creation_method : "AUTO" | "MANUAL";
-  uses : number
+  creation_method: "AUTO" | "MANUAL";
+  uses: number
 }
 
 // This service token type is only available for the NASS services, which are aware of their token but not the death of it

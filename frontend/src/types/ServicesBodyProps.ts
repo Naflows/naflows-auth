@@ -17,4 +17,5 @@ export interface ServicesBodyProps {
     rights: "ADMINISTRATOR" | "DEVELOPER" | "USER"; // Role of the user in the service, e.g., "admin", "user", etc.
     joined_at: string; // Date when the user joined the service
     user_active: boolean; // Whether the user's account in the service is active
+    public_settings?: object; // Public settings of the service, optional and may be omitted for non-admin users
 }
