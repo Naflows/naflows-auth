@@ -1,5 +1,5 @@
 // ...existing code...
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import "../../../public/root/index.scss";
 import "../../../public/root/pages/account/index.scss";
@@ -17,9 +17,14 @@ const Account = () => {
   );
   const [servicesFetch, setServicesFetch] = useState<ServicesBodyProps[]>([]);
   const [scrollLevel, setScrollLevel] = useState<number>(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const [selectedTab, setSelectedTab] = useState<string>("profile");
-
+  const [selectedTab, setSelectedTab] = useState<string>("");
+  const dir = {
+    profile: { val: "user" },
+    services: { val: "services" },
+    security: { val: "security" },
+    billing: { val: "billing" },
+    support: { val: "support" },
+  };
   const [successfulFetch, setSuccessfulFetch] = useState<boolean>(false);
   const fetchData = async (type: string) => {
     const res = await axios.get(
@@ -34,29 +39,19 @@ const Account = () => {
 
     return res;
   };
-
   const fetch = async () => {
     try {
-      const dir = {
-        profile: { val: "user" },
-        services: { val: "services" },
-        security: { val: "security" },
-        billing: { val: "billing" },
-        support: { val: "support" },
-      };
-      console.log(selectedTab + " tab selected");
-      const res = await fetchData(
-        dir[selectedTab as keyof typeof dir]?.val || "user"
-      );
-      console.log("Fetch response:", res.data.data);
+      const res = await fetchData(dir[selectedTab as keyof typeof dir]?.val);
+      const userData = await fetchData("user");
+
       if (res.data.success === false) {
         // Handle error (e.g., redirect to login)
         window.location.href = "/login";
         return;
       }
-      if (selectedTab === "profile") {
-        setUserFetch(res.data.data.user as UserBodyProps);
-      } else if (selectedTab === "services") {
+      console.log(userData.data.data.user)
+      setUserFetch(userData.data.data.user as UserBodyProps);
+      if (selectedTab === "services") {
         setServicesFetch(res.data.data.services as ServicesBodyProps[]);
       }
       setSuccessfulFetch(true);
@@ -66,8 +61,25 @@ const Account = () => {
       console.error("Error fetching user info:", error);
     }
   };
+
+  useEffect(() => {
+    // On initial page load, set the selected tab based on the URL, then fetch data
+
+    document.title = "Account - Naflows Auth";
+
+    const pathParts = window.location.pathname.split("/");
+    const tab = pathParts[2];
+    console.log("Path parts:", pathParts, "Tab:", tab);
+    if (tab && Object.keys(dir).includes(tab)) {
+      setSelectedTab(tab);
+    } else {
+      setSelectedTab("profile");
+    }
+  }, []);
+
   useEffect(() => {
     if (selectedTab) {
+      document.title = `Account - ${selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1)}`;
       fetch();
     }
   }, [selectedTab]);
@@ -120,20 +132,14 @@ const Account = () => {
         >
           <AccountHeader
             userFetch={userFetch}
-            ref={ref}
             selectedTab={selectedTab}
-            setSelectedTab={setSelectedTab}
           />
-
           {selectedTab === "profile" && (
             <AccountUserBody userData={userFetch} />
           )}
           {selectedTab === "services" && (
             <ServicesComponent servicesData={servicesFetch} />
           )}
-
-          <pre>{JSON.stringify(userFetch, null, 2)}</pre>
-          <pre>{JSON.stringify(servicesFetch, null, 2)}</pre>
         </div>
       </div>
     );

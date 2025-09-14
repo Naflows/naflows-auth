@@ -37,7 +37,7 @@ export async function hiddenLogin(req : Request, res : Response) : Promise<Reply
         return software.methods.serverReply(401, "Invalid token, session or user.");
     }
 
-    const tokenValid = await secure.token.valid(token, session, user.id);
+    const tokenValid = await secure.token.valid(token, session, user.id, true); // TODO : MAKE SURE CREDENTIALS ARE VALID
     if (!secure.session.valid(token, session, user.id).success || !tokenValid.success) {
         return software.methods.serverReply(401, "Invalid token or session.");
     }

@@ -8,7 +8,7 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route path="/login" element={<App />} />
         <Route
-          path="/account"
+          path="/account/:tab?"
           element={
             <>
               <Account />

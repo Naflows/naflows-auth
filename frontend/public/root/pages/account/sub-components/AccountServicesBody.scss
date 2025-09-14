@@ -22,9 +22,7 @@
   flex-wrap: wrap;
   gap: 20px;
   .user__body__section {
-    width: fit-content;
-    height: fit-content;
-
+    flex: 1;
     .services__list {
       display: flex;
       flex-direction: column;
@@ -65,125 +63,6 @@
           display: flex;
           flex-direction: column;
           gap: 30px;
-          .service__view__body {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            .service__view__informations {
-              display: flex;
-              flex-direction: row;
-              flex-wrap: wrap;
-              gap: 50px;
-              width: fit-content;
-              .service__view__info__section {
-                h5,
-                p {
-                  margin: 0;
-                  padding: 0;
-                }
-                display: flex;
-                flex-direction: column;
-                gap: 5px;
-                .service__info__title {
-                  font-size: 13px;
-                  opacity: 0.7;
-                }
-                .service__info__value {
-                  font-size: 14px;
-                  font-weight: bold;
-                  &.connected {
-                    color: $da-confirm-hue;
-                  }
-                  &.disconnected {
-                    color: $da-error-hue;
-                  }
-                }
-              }
-            }
-            .service__view__body__header {
-              display: flex;
-              width: 100%;
-              flex-direction: column;
-              align-items: start;
-              gap: 5px;
-              .service__status {
-                font-size: 14px;
-                font-weight: bold;
-                border-radius: 50px;
-                height: 15px;
-                width: 15px;
-                min-width: 15px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: relative;
-                z-index: 1;
-                .service__status__pastille {
-                  z-index: -1;
-                  position: absolute;
-                  top: 0;
-                  right: 0;
-                  bottom: 0;
-                  left: 0;
-                  margin: auto;
-                  height: 5px;
-                  width: 5px;
-                  border-radius: 50%;
-                  display: inline-block;
-                  animation: 1.5s infinite ease-in-out animateStatusPastille;
-                }
-                &.active {
-                  background-color: $da-confirm-hue-2;
-                  .service__status__pastille {
-                    background-color: $da-confirm-hue;
-                  }
-                }
-                &.inactive {
-                  background-color: $da-error-hue-2;
-                  .service__status__pastille {
-                    background-color: $da-error-hue;
-                  }
-                }
-                &.deprecated {
-                  background-color: $da-warning-hue-2;
-                  .service__status__pastille {
-                    background-color: $da-warning-hue;
-                  }
-                }
-              }
-              a {
-                padding: 0;
-                font-weight: normal;
-              }
-              .services__body__header__content {
-                display: flex;
-                flex-direction: row;
-                width: 100%;
-                align-items: center;
-                gap: 10px;
-                .service__name {
-                  font-size: 20px;
-                  font-weight: bold;
-                  margin: 0;
-                  padding: 0;
-                  width: fit-content;
-                  max-width: 80%;
-                  white-space: nowrap;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  svg {
-                    width: 16px;
-                    height: 16px;
-                    fill: $da-main-hue;
-                    cursor: pointer;
-                    &:hover {
-                      fill: $da-main-hue-2;
-                    }
-                  }
-                }
-              }
-            }
-          }
 
           .service__item__buttons {
             display: flex;
@@ -195,6 +74,349 @@
           }
         }
       }
+    }
+  }
+}
+
+.service__view__body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  .service__view__informations {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 50px;
+    width: fit-content;
+    .service__view__info__section {
+      h5,
+      p {
+        margin: 0;
+        padding: 0;
+      }
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      .service__info__title {
+        font-size: 13px;
+        opacity: 0.7;
+      }
+      .service__info__value {
+        font-size: 14px;
+        font-weight: bold;
+        &.connected {
+          color: $da-confirm-hue;
+        }
+        &.disconnected {
+          color: $da-error-hue;
+        }
+      }
+    }
+  }
+  .service__view__body__header {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: start;
+    gap: 5px;
+    .service__status {
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 50px;
+      height: 15px;
+      width: 15px;
+      min-width: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      .service__status__pastille {
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        height: 5px;
+        width: 5px;
+        border-radius: 50%;
+        display: inline-block;
+        animation: 1.5s infinite ease-in-out animateStatusPastille;
+      }
+      &.active {
+        background-color: $da-confirm-hue-2;
+        .service__status__pastille {
+          background-color: $da-confirm-hue;
+        }
+      }
+      &.inactive {
+        background-color: $da-error-hue-2;
+        .service__status__pastille {
+          background-color: $da-error-hue;
+        }
+      }
+      &.deprecated {
+        background-color: $da-warning-hue-2;
+        .service__status__pastille {
+          background-color: $da-warning-hue;
+        }
+      }
+    }
+    a {
+      padding: 0;
+      font-weight: normal;
+    }
+    .services__body__header__content {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      align-items: center;
+      gap: 10px;
+      .service__name {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0;
+        padding: 0;
+        width: fit-content;
+        max-width: 80%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        svg {
+          width: 16px;
+          height: 16px;
+          fill: $da-main-hue;
+          cursor: pointer;
+          &:hover {
+            fill: $da-main-hue-2;
+          }
+        }
+      }
+    }
+  }
+}
+
+.manage__connection {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+  .manage__connection__body {
+    background-color: $_2k25-background-hue-darker;
+    padding: 20px;
+    border-radius: 20px;
+    width: 400px;
+    max-width: 90%;
+    min-width: 60%;
+    min-height: 80%;
+    max-height: 80%;
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+
+    .manage__service__connection {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      justify-content: space-between;
+      .manage__service__connection__header {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .service__view__body {
+        .service__view__informations {
+          gap: 10px;
+        }
+      }
+      .manage__service__back {
+        button {
+          width: 100%;
+          justify-content: start;
+        }
+      }
+      .manage__service__actions {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        button {
+          width: 100%;
+        }
+      }
+    }
+
+    .manage__connection__separator {
+      width: 2px;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.1);
+      margin: 10px 0;
+    }
+
+    .manage__service__details {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+      .service__details__header {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        .manage__details__title {
+          font-size: 20px;
+          font-weight: bold;
+          margin: 0;
+          padding: 0;
+        }
+        .manage__details__description {
+          margin: 0;
+          padding: 0;
+        }
+      }
+      .manage__details__body {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+
+        .save__changes__button {
+          width: fit-content !important;
+          margin-left: auto;
+        }
+        .manage__details__info {
+          .manage__details__info__header {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 10px;
+            .manage__details__info__title {
+              font-size: 16px;
+              font-weight: bold;
+              margin: 0;
+              padding: 0;
+            }
+            .manage__details__info__description {
+              margin: 0;
+              padding: 0;
+              font-size: 14px;
+              opacity: 0.7;
+            }
+          }
+
+          .manage__cards {
+            color: white;
+
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 20px;
+            .manage__card {
+              display: flex;
+              flex-direction: column;
+              gap: 5px;
+              padding: 10px;
+              border-radius: 10px;
+              border: 2px solid transparent;
+              transition: 0.3s;
+              width: 200px;
+              background-color: $_2k25-background-hue-50-transparent;
+              &:not(.selected):hover {
+                cursor: pointer;
+                background-color: $_2k25-background-hue-40;
+                border: 2px solid $da-main-hue;
+              }
+              &.active {
+                border: 2px solid $da-main-hue;
+                cursor: default;
+                background-color: $_2k25-background-hue-40;
+              }
+              .manage__card__title {
+                font-size: 16px;
+                margin: 0;
+                padding: 0;
+              }
+              .manage__card__description {
+                font-size: 15px;
+                margin: 0;
+                padding: 0;
+                opacity: 0.7;
+              }
+            }
+          }
+        }
+        .details__body__content {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          overflow: hidden;
+          transition: 0.3s;
+          .manage__personal__data__options {
+            color: white;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 15px;
+            .manage__personal__data__option {
+              background-color: $_2k25-background-hue-50-transparent;
+              padding: 10px 15px;
+              border-radius: 10px;
+              min-width: 150px;
+              max-width: calc(100% - 30px);
+              display: flex;
+              flex-direction: column;
+              gap: 5px;
+              border: 2px solid transparent;
+              cursor: pointer;
+              &.selected {
+                background-color: $_2k25-background-hue-40;
+
+                border: 2px solid $da-main-hue;
+              }
+              &:not(.selected):hover {
+                background-color: $_2k25-background-hue-50-transparent;
+                border: 2px solid $da-main-hue;
+              }
+              .manage__personal__data__option__title {
+                font-size: 14px;
+                font-weight: bold;
+                margin: 0;
+                padding: 0;
+              }
+              .manage__personal__data__option__description {
+                font-size: 13px;
+                margin: 0;
+                padding: 0;
+                opacity: 0.7;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1600px) {
+  .manage__connection__body {
+    width: 90% !important;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .manage__connection__body {
+    flex-direction: column !important;
+    min-width: 90% !important;
+    max-width: 90% !important;
+    height: auto !important;
+    .manage__service__details {
+      width: 100% !important;
     }
   }
 }

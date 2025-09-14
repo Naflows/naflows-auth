@@ -23,7 +23,11 @@ export interface Requests {
   associated_service : string;
   associated_service_key : string;
 }
-
+// User chooses how the APIs are using their data
+export interface UserDataPreferences {
+  usage_data: "NONE" | "USAGE_ONLY" | "FULL"; // How the user wants their usage data to be handled. None means no data is sent by the NASS to the API, which means the user will not be able to use the API. Usage only means only usage data is sent, which means the API will know how many requests the user has made but not who they are. Full means all personal data is sent except for the user's password / identifier.
+  personal_data: Array<"PHONE" | "EMAIL" | "FIRST AND LAST NAME" | "ADDRESS" | "BIRTHDATE" | "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS">;
+}
 export interface User {
   id: string; // User ID
   identifier: string; // PRE-HASHED identifier, a secure way of connecting set before the user is created
@@ -37,6 +41,7 @@ export interface User {
       rights: Array<"ADMINISTRATOR" | "DEVELOPER" | "USER">;
       joined_at : number;
       active : boolean;
+      data_preferences: UserDataPreferences;
     };
   };
   username: string; // Username, used for display purposes
@@ -132,6 +137,7 @@ export interface ServiceStoragePlan {
   plan : "FREE" | "PRO" | "ENTERPRISE";
   type: "LOCAL" | "CLOUD";
   size: 32 | 128 | 512 | 1024; // in GB
+  used_space : number; // in MB
 }
 export interface ServiceSettings {
   rates : 100 | 500 | 1000 | 10000;

@@ -1,6 +1,10 @@
 import type { ServicesBodyProps } from "../../../types/ServicesBodyProps";
 import "../../../../public/root/pages/account/sub-components/AccountServicesBody.scss";
 import BasicServiceBody from "./ServicesBody";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import type { ServicesCompleteBodyProps } from "../../../types/ServicesCompleteProps";
+import ManageServiceConnection from "./ManageConnection";
 
 const ServicesComponent = ({
   servicesData,
@@ -9,24 +13,54 @@ const ServicesComponent = ({
 }) => {
   console.log(servicesData, "servicesData");
   const userServices = servicesData.filter(
-    (service) =>
-      service.user_role.includes("ADMINISTRATOR") ||
-      service.user_role.includes("DEVELOPER")
+    (service : ServicesBodyProps) =>
+      service.rights.includes("ADMINISTRATOR") ||
+      service.rights.includes("DEVELOPER")
   );
   const userConnections = servicesData.filter((service) =>
-    service.user_role.includes("USER")
+    service.rights.includes("USER")
   );
+
+  const [serviceID, setServiceID] = useState<string | null>(null);
+  const [serviceData, setServiceData] =
+    useState<ServicesCompleteBodyProps | null>(null);
+
+  const fetchServiceData = async (id: string) => {
+    try {
+      const res = await axios.get(
+        `${process.env.DUMMY_API_URL_DEV}/get-user-info/services/${id}/service-informations`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(res.data);
+      if (res.data.success) {
+        console.log(res.data.data.service, "service data");
+        setServiceData(res.data.data.service);
+      }
+    } catch (error) {
+      console.error("Error fetching service data:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (serviceID) {
+      fetchServiceData(serviceID);
+    }
+  }, [serviceID]);
 
   return (
     <div className="user__body__services">
+      <ManageServiceConnection service={serviceData} />
       <div className="user__body__section">
         <div className="services__list">
           <div className="services__section__header">
             <div className="section__header__content">
               <h3 className="connections__list__title">Your Services</h3>
-              <p>
-                Services are projects where you have an administrative role.
-              </p>
+              <p>Services you own or manage</p>
             </div>
             <button
               className="primary-button"
@@ -66,7 +100,7 @@ const ServicesComponent = ({
           <div className="services__section__header">
             <div className="section__header__content">
               <h3 className="connections__list__title">Your Connections</h3>
-              <p>Connections are services where you have a user role without</p>
+              <p>Services you're connected to</p>
             </div>
           </div>
           <div className="services__list__content">
@@ -75,9 +109,14 @@ const ServicesComponent = ({
                 <div key={service.id} className="service__item">
                   <BasicServiceBody service={service} />
                   <div className="service__item__buttons">
-                    <button className="primary-button">Manage connection</button>
+                    <button
+                      className="primary-button"
+                      onClick={() => setServiceID(service.id)}
+                    >
+                      Manage connection
+                    </button>
                     <button className="secondary-button">
-                        Quick disconnect
+                      Quick disconnect
                     </button>
                   </div>
                 </div>

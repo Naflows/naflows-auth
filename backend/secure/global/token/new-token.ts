@@ -27,7 +27,7 @@ export async function createToken(
             user_id: secure.hash(user.id),
             session_id: secure.hash(session.id),
             created_at: Date.now(),
-            expires_at: Date.now() + expires_in, // Default to 1 hour if not set
+            expires_at: Date.now() + expires_in * 1000, // Default to 1 hour if not set
             renewable: renewable,
             uses: 0,
             max_uses: max_uses || parseInt(process.env.STV_MAXIMAL_USE_RATES), // Default to 1 use if not specified

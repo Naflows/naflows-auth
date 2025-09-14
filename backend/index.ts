@@ -177,9 +177,9 @@ app.post('/client/secure/data/services', async (req, res) => {
                     name: service.name,
                     id: service.id,
                     description: service.description,
-                    domain: service.dns,
-                    active: service.status,
-                    user_role: userServices[key].rights,
+                    dns: service.dns,
+                    status: service.status,
+                    rights: userServices[key].rights,
                     joined_at: userServices[key].joined_at,
                     user_active: userServices[key].active,
                 };
@@ -190,6 +190,8 @@ app.post('/client/secure/data/services', async (req, res) => {
 
     const validServices = sentServices.filter(service => service !== null);
 
+
+
     res.status(200).json({
         status: 200,
         message: "Secure data access granted",
@@ -197,6 +199,54 @@ app.post('/client/secure/data/services', async (req, res) => {
         data: {
             middleware: req.middleware.data,
             services: validServices,
+        }
+    });
+});
+
+app.post('/client/secure/data/services/service-informations', async (req, res) => {
+    const user = await manageConnection(req,res);
+    const userData = await secure.user.get(user.id, false);
+    if (!userData) {
+        console.log("User data not found");
+        return res.status(404).json(software.methods.serverReply(404, "User not found."));
+    }
+
+    const service = userData.services[req.body.service.id] || null;
+    const serviceData = service ? await services.service.get(req.body.service.id) : null;
+
+    if (!service || !serviceData || !serviceData.success) {
+        return res.status(404).json(software.methods.serverReply(404, "Service not found."));
+    }
+
+    const serviceInfo = serviceData.data as Service;
+
+    // Remove sensitive information
+    delete serviceInfo.ip_address;
+    delete serviceInfo.created_by;
+
+    
+    
+    if (!service.rights.includes("ADMINISTRATOR") && !service.rights.includes("DEVELOPER")) {
+        // If the user is not an admin or developer, remove sensitive information
+        delete serviceInfo.storage;
+        delete serviceInfo.settings;
+    }
+
+    if (!service.rights.includes('ADMINISTRATOR')) {
+        delete serviceInfo.service_token;
+    }
+
+    res.status(200).json({
+        status: 200,
+        message: "Secure data access granted",
+        success: true,
+        data: {
+            middleware: req.middleware.data,
+            service: {
+                ...serviceData.data,
+                ...service,
+                user_active : service.active,
+            }
         }
     });
 });

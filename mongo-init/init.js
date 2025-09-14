@@ -85,17 +85,43 @@ db.users.insertOne({
         "naflows_backend" : {
             rights : ["ADMINISTRATOR"],
             joined_at: new Date().getTime(),
-            active : true
+            active : true,
+            data_preferences : {
+                usage_data : "FULL",
+                personal_data : [
+                    "PHONE",
+                    "EMAIL",
+                    "FIRST AND LAST NAME",
+                    "ACCOUNT SECURITY MEASURES",
+                    "BILLING DETAILS"
+                ],
+            }
         },
         "moo_deng_bar" : {
             rights : ["USER"],
             joined_at: new Date().getTime(),
-            active : true
+            active : true,
+            data_preferences : {
+                usage_data : "FULL",
+                personal_data : "ANONYMOUS",
+                personal_data : [
+                    "EMAIL",
+                    "FIRST AND LAST NAME",
+                ],
+            }
         },
         "the_pookie_shop" : {
             rights : ["USER"],
             joined_at: new Date().getTime(),
-            active : false
+            active : false,
+            data_preferences : {
+                usage_data : "FULL",
+                personal_data : "IDENTIFIED",
+                personal_data : [
+                    "PHONE",
+                    "EMAIL",
+                ],
+            }
         }
     },
     created_at : new Date().getTime(),
@@ -340,7 +366,16 @@ db.services.insertOne({
     created_at : new Date().getTime(),
     created_by : "NASS",
     status : "ACTIVE",
-    service_token : "naflows_backend_token"
+    service_token : "naflows_backend_token",
+    storage : {
+        plan : "ENTERPRISE",
+        type : "CLOUD",
+        used_space : 20480, // in MB
+        size : 1024, // in GB
+    },
+    settings : {
+        rates : 10000 // 10000 requests per day
+    }
 })
 
 
@@ -365,7 +400,16 @@ db.services.insertOne({
     created_at : new Date().getTime(),
     created_by : "NASS",
     status : "ACTIVE",
-    service_token : "moo_deng_bar_token"
+    service_token : "moo_deng_bar_token",
+    storage : {
+        plan : "FREE",
+        type : "CLOUD",
+        used_space : 6512, // in MB
+        size : 32, // in GB
+    },
+    settings : {
+        rates : 1000 // 1000 requests per day
+    }
 })
 
 db.service_tokens.insertOne({
@@ -386,6 +430,15 @@ db.services.insertOne({
     created_at : new Date().getTime(),
     created_by : "NASS",
     status : "INACTIVE",
-    service_token : "the_pookie_shop_token"
+    service_token : "the_pookie_shop_token",
+    storage : {
+        plan : "PRO",
+        type : "CLOUD",
+        used_space : 0, // in MB
+        size : 32, // in GB
+    },
+    settings : {
+        rates : 1000 // 1000 requests per day
+    }
 })
 

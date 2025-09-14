@@ -58,6 +58,35 @@ function getCookies(req) {
     return { sessionID, token, uid };
 }
 
+app.get('/get-user-info/services/:id/service-informations', async (req, res) => {
+    const { sessionID, token, uid } = getCookies(req);
+    const serviceID = req.params.id;
+    console.log("Service ID requested:", serviceID);
+
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/data/services/service-informations`, {
+        user: {
+            ip: req.ip,
+            agent: req.headers['user-agent'],
+            fingerprint: req.fingerprint,
+            user_origin: "naflows_backend",
+            session_id: sessionID || null,
+            token: token || null,
+            user_id: uid || null,
+        },
+        service: {
+            id: serviceID
+        }
+    });
+
+
+    sendCookies(res, f.data);
+
+    delete f.data.data.middleware;
+    console.log("Service information response from NASS:", f.data);
+
+    res.status(f.status).json(f.data);
+
+});
 
 app.get('/get-user-info/services', async (req, res) => {
     const cookies = req.headers.cookie || '';
@@ -162,6 +191,6 @@ app.post('/send-login-request', async (req, res) => {
 
 const PORT = 3005;
 app.listen(PORT, () => {
-    console.log(`Dummy API is running on http://localhost:${PORT}\nCommunication with NASS : ${process.env.AUTH_API_URL_DEV}\nLast update : 15:38 09/09/2025`);
+    console.log(`Dummy API is running on http://localhost:${PORT}\nCommunication with NASS : ${process.env.AUTH_API_URL_DEV}\nLast update : 10:11 14/09/2025`);
 });
 

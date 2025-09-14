@@ -51,9 +51,7 @@ body {
   height: fit-content;
 }
 .nass__page {
-  width: 75%;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
 }
 .global__input {
   display: flex;
@@ -325,6 +323,8 @@ input[type="checkbox"]:checked:after {
   }
 }
 
+
+
 .tertiary-button {
   padding: 10px 15px;
   border-radius: 10px;
@@ -370,10 +370,28 @@ input[type="checkbox"]:checked:after {
   align-items: center;
   justify-content: center;
   gap: 5px;
-  svg {
+  padding: 10px 15px;
+  border-radius: 10px;
+  transition: 0.3s;
+  width: fit-content;
+  height: fit-content;
+  text-wrap: nowrap;
+  border: 2px solid $_2k25-text;
+  svg,
+  svg * {
     width: 20px;
     height: 20px;
     fill: $_2k25-text;
+  }
+
+  &:hover {
+    background-color: $_2k25-darker;
+    color: $_2k25-background-hue-darker;
+    border-color: $_2k25-darker;
+    svg,
+    svg * {
+      fill: $_2k25-background-hue-darker;
+    }
   }
 }
 

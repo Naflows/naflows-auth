@@ -2,17 +2,15 @@ import type { UserBodyProps } from "../../../types/UserBodyProps";
 import AccountUserBodyProfilePicture from "../sub-components/ProfilePicture";
 
 const AccountHeader = ({
-  userFetch, ref,
-  selectedTab, setSelectedTab
+  userFetch,
+  selectedTab
 }: {
   userFetch: UserBodyProps | undefined;
-  ref: React.Ref<HTMLDivElement>;
   selectedTab: string;
-  setSelectedTab: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   if (userFetch) {
     return (
-      <div className="nass__account__page__header" ref={ref}>
+      <div className="nass__account__page__header">
         <div className="header__tabs">
           <img src="../../../../public/assets/naflows-green.svg" alt="Naflows logo" className="logo" />
           <div className="tabs">
@@ -20,7 +18,9 @@ const AccountHeader = ({
               <div
                 key={tab}
                 className={`header__tab ${selectedTab === tab.toLowerCase() ? "active" : ""}`}
-                onClick={() => setSelectedTab(tab.toLowerCase())}
+                onClick={() => {
+                  window.location.href = `/account/${tab.toLowerCase()}`;
+                }}
               >
                 {tab}
               </div>
