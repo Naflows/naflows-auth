@@ -86,6 +86,16 @@ db.users.insertOne({
             rights : ["ADMINISTRATOR"],
             joined_at: new Date().getTime(),
             active : true
+        },
+        "moo_deng_bar" : {
+            rights : ["USER"],
+            joined_at: new Date().getTime(),
+            active : true
+        },
+        "the_pookie_shop" : {
+            rights : ["USER"],
+            joined_at: new Date().getTime(),
+            active : false
         }
     },
     created_at : new Date().getTime(),
@@ -342,3 +352,40 @@ db.service_tokens.insertOne({
     lifespan: 1000 * 60 * 60 * 24 * 1000000000000000000, // Infinite
     uses : 0
 })
+
+
+
+/* TEST PURPOSES - TO BE REMOVED IN PRODUCTION */
+db.services.insertOne({
+    id : "moo_deng_bar",
+    name : "Moo Deng Bar",
+    ip_address : "dummy-api", 
+    dns : "moo-deng-bar.naflows.com",
+    description : "Moo Deng Bar Service for testing purposes.",
+    created_at : new Date().getTime(),
+    created_by : "NASS",
+    status : "ACTIVE",
+    service_token : "moo_deng_bar_token"
+})
+
+db.service_tokens.insertOne({
+    id : "moo_deng_bar_token",
+    service_id : "moo_deng_bar",
+    token : "moo_deng_bar_token",
+    created_at : new Date().getTime(),
+    lifespan: 1000 * 60 * 60 * 24 * 1000000000000000000, // Infinite
+    uses : 0
+})
+
+db.services.insertOne({
+    id : "the_pookie_shop",
+    name : "The Pookie Shop",
+    ip_address : "dummy-api",
+    dns : "the-pookie-shop.naflows.com",
+    description : "The Pookie Shop Service for testing purposes.",
+    created_at : new Date().getTime(),
+    created_by : "NASS",
+    status : "INACTIVE",
+    service_token : "the_pookie_shop_token"
+})
+

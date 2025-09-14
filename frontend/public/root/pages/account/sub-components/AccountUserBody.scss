@@ -4,13 +4,4 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  .user__body__section {
-    background-color: $_2k25-background-hue-darker;
-    padding: 20px 30px;
-    border-radius: 20px;
-    width: fit-content;
-    .body__section__title {
-        text-transform: uppercase;
-    }
-  }
 }

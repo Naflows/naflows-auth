@@ -9,6 +9,7 @@ import type { UserBodyProps } from "../../types/UserBodyProps";
 import "../../../public/root/pages/account/index.scss";
 import type { ServicesBodyProps } from "../../types/ServicesBodyProps";
 import AccountHeader from "./account-header/AccountHeader";
+import ServicesComponent from "./sub-components/Services";
 
 const Account = () => {
   const [userFetch, setUserFetch] = useState<UserBodyProps | undefined>(
@@ -17,6 +18,7 @@ const Account = () => {
   const [servicesFetch, setServicesFetch] = useState<ServicesBodyProps[]>([]);
   const [scrollLevel, setScrollLevel] = useState<number>(0);
   const ref = useRef<HTMLDivElement>(null);
+  const [selectedTab, setSelectedTab] = useState<string>("profile");
 
   const [successfulFetch, setSuccessfulFetch] = useState<boolean>(false);
   const fetchData = async (type: string) => {
@@ -33,35 +35,42 @@ const Account = () => {
     return res;
   };
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const userRes = await fetchData("user");
-        const servicesRes = await fetchData("services");
-        if (
-          userRes.data.success === false ||
-          servicesRes.data.success === false
-        ) {
-          // Handle error (e.g., redirect to login)
-          window.location.href = "/login";
-          return;
-        }
-        setUserFetch(userRes.data?.data.user || undefined);
-        setServicesFetch(servicesRes.data?.data.services || []);
-      } catch (error) {
-        // Handle fetch error
+  const fetch = async () => {
+    try {
+      const dir = {
+        profile: { val: "user" },
+        services: { val: "services" },
+        security: { val: "security" },
+        billing: { val: "billing" },
+        support: { val: "support" },
+      };
+      console.log(selectedTab + " tab selected");
+      const res = await fetchData(
+        dir[selectedTab as keyof typeof dir]?.val || "user"
+      );
+      console.log("Fetch response:", res.data.data);
+      if (res.data.success === false) {
+        // Handle error (e.g., redirect to login)
         window.location.href = "/login";
-        console.error("Error fetching user info:", error);
+        return;
       }
-    };
-    fetch();
-  }, []);
-
-  useEffect(() => {
-    if (userFetch) {
+      if (selectedTab === "profile") {
+        setUserFetch(res.data.data.user as UserBodyProps);
+      } else if (selectedTab === "services") {
+        setServicesFetch(res.data.data.services as ServicesBodyProps[]);
+      }
       setSuccessfulFetch(true);
+    } catch (error) {
+      // Handle fetch error
+      window.location.href = "/login";
+      console.error("Error fetching user info:", error);
     }
-  }, [userFetch, servicesFetch]);
+  };
+  useEffect(() => {
+    if (selectedTab) {
+      fetch();
+    }
+  }, [selectedTab]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,13 +97,7 @@ const Account = () => {
     }
   }, [scrollLevel]);
 
-
-
-
-
-
-
-  if (userFetch === undefined || successfulFetch === false) {
+  if (successfulFetch === false) {
     return (
       <div
         className="nass__page__loader"
@@ -115,8 +118,19 @@ const Account = () => {
             display: successfulFetch ? "block" : "none",
           }}
         >
-          <AccountHeader userFetch={userFetch} ref={ref} />
-          <AccountUserBody userData={userFetch} />
+          <AccountHeader
+            userFetch={userFetch}
+            ref={ref}
+            selectedTab={selectedTab}
+            setSelectedTab={setSelectedTab}
+          />
+
+          {selectedTab === "profile" && (
+            <AccountUserBody userData={userFetch} />
+          )}
+          {selectedTab === "services" && (
+            <ServicesComponent servicesData={servicesFetch} />
+          )}
 
           <pre>{JSON.stringify(userFetch, null, 2)}</pre>
           <pre>{JSON.stringify(servicesFetch, null, 2)}</pre>

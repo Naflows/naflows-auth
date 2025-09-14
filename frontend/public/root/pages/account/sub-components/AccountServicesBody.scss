@@ -1,0 +1,200 @@
+@import "../../../variables.scss";
+
+@keyframes animateStatusPastille {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.user__body__services {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+  .user__body__section {
+    width: fit-content;
+    height: fit-content;
+
+    .services__list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      .services__section__header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        .section__header__content {
+          display: flex;
+          flex-direction: column;
+          h3 {
+            margin: 0;
+            padding: 0;
+            font-size: 18px;
+          }
+          p {
+            margin: 0;
+            padding: 0;
+            font-size: 13px;
+            opacity: 0.7;
+          }
+        }
+      }
+      .services__list__content {
+        color: white;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        .service__item {
+          padding: 10px 15px;
+          border-radius: 10px;
+          width: calc(100% - 30px - 4px);
+          border: 2px solid rgba(255, 255, 255, 0.1);
+          transition: all 0.2s;
+          display: flex;
+          flex-direction: column;
+          gap: 30px;
+          .service__view__body {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            .service__view__informations {
+              display: flex;
+              flex-direction: row;
+              flex-wrap: wrap;
+              gap: 50px;
+              width: fit-content;
+              .service__view__info__section {
+                h5,
+                p {
+                  margin: 0;
+                  padding: 0;
+                }
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                .service__info__title {
+                  font-size: 13px;
+                  opacity: 0.7;
+                }
+                .service__info__value {
+                  font-size: 14px;
+                  font-weight: bold;
+                  &.connected {
+                    color: $da-confirm-hue;
+                  }
+                  &.disconnected {
+                    color: $da-error-hue;
+                  }
+                }
+              }
+            }
+            .service__view__body__header {
+              display: flex;
+              width: 100%;
+              flex-direction: column;
+              align-items: start;
+              gap: 5px;
+              .service__status {
+                font-size: 14px;
+                font-weight: bold;
+                border-radius: 50px;
+                height: 15px;
+                width: 15px;
+                min-width: 15px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                z-index: 1;
+                .service__status__pastille {
+                  z-index: -1;
+                  position: absolute;
+                  top: 0;
+                  right: 0;
+                  bottom: 0;
+                  left: 0;
+                  margin: auto;
+                  height: 5px;
+                  width: 5px;
+                  border-radius: 50%;
+                  display: inline-block;
+                  animation: 1.5s infinite ease-in-out animateStatusPastille;
+                }
+                &.active {
+                  background-color: $da-confirm-hue-2;
+                  .service__status__pastille {
+                    background-color: $da-confirm-hue;
+                  }
+                }
+                &.inactive {
+                  background-color: $da-error-hue-2;
+                  .service__status__pastille {
+                    background-color: $da-error-hue;
+                  }
+                }
+                &.deprecated {
+                  background-color: $da-warning-hue-2;
+                  .service__status__pastille {
+                    background-color: $da-warning-hue;
+                  }
+                }
+              }
+              a {
+                padding: 0;
+                font-weight: normal;
+              }
+              .services__body__header__content {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                align-items: center;
+                gap: 10px;
+                .service__name {
+                  font-size: 20px;
+                  font-weight: bold;
+                  margin: 0;
+                  padding: 0;
+                  width: fit-content;
+                  max-width: 80%;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  svg {
+                    width: 16px;
+                    height: 16px;
+                    fill: $da-main-hue;
+                    cursor: pointer;
+                    &:hover {
+                      fill: $da-main-hue-2;
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          .service__item__buttons {
+            display: flex;
+            flex-direction: row;
+            gap: 5px;
+            button {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+}

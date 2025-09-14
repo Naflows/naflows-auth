@@ -2,10 +2,13 @@ import type { UserBodyProps } from "../../../types/UserBodyProps";
 import AccountUserBodyProfilePicture from "../sub-components/ProfilePicture";
 
 const AccountHeader = ({
-  userFetch, ref 
+  userFetch, ref,
+  selectedTab, setSelectedTab
 }: {
   userFetch: UserBodyProps | undefined;
   ref: React.Ref<HTMLDivElement>;
+  selectedTab: string;
+  setSelectedTab: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   if (userFetch) {
     return (
@@ -13,11 +16,15 @@ const AccountHeader = ({
         <div className="header__tabs">
           <img src="../../../../public/assets/naflows-green.svg" alt="Naflows logo" className="logo" />
           <div className="tabs">
-            <div className="header__tab active">Profile</div>
-            <div className="header__tab">Services</div>
-            <div className="header__tab">Security</div>
-            <div className="header__tab">Billing</div>
-            <div className="header__tab">Support</div>
+            {["Profile", "Services", "Security", "Billing", "Support"].map((tab) => (
+              <div
+                key={tab}
+                className={`header__tab ${selectedTab === tab.toLowerCase() ? "active" : ""}`}
+                onClick={() => setSelectedTab(tab.toLowerCase())}
+              >
+                {tab}
+              </div>
+            ))}
           </div>
         </div>
         <div className="header__account">

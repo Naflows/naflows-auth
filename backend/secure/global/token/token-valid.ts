@@ -5,12 +5,12 @@ import { ReplyType } from "../../../types/.types/reply.type";
 import UCRType from "../../../types/.types/ucr.type";
 import secure from "../dir";
 
-export function isTokenValid(
+export async function isTokenValid(
   token: Tokens,
   session: UserSession,
   user_id: string,
   credentialsValid : boolean = false
-): ReplyType {
+): Promise<ReplyType> {
   if (token) {
     const sessionValid = token.session_id == secure.hash(session.id);
     const userValid = token.user_id == secure.hash(user_id);
@@ -21,6 +21,7 @@ export function isTokenValid(
       // If the token is expired but the user has provided valid credentials, extend the token's validity
       token.expires_at = Date.now() + (process.env.TOKEN_LIFESPAN ? parseInt(process.env.TOKEN_LIFESPAN) : 3600000);
       tokenValid = true;
+      await secure.token.update(token.id, token);
       // TODO: In a real-world scenario, you would also want to update this change in the database.
     }
 

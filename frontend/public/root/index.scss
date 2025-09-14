@@ -32,28 +32,28 @@ body {
   justify-content: center;
 }
 
+.nass__page__loader {
+  width: 20%;
+  height: fit-content;
+  margin: auto;
+  padding: 0 50px 20px 50px;
+  background-color: $_2k25-background-hue-darker;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: fit-content;
+}
 .nass__page {
   width: 75%;
   margin-left: auto;
   margin-right: auto;
-
-  .nass__page__loader {
-    max-width: 20%;
-    margin: auto;
-    padding: 0 20px 20px 20px;
-    background-color: $_2k25-background-hue-darker;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: fit-content;
-  }
 }
 .global__input {
   display: flex;
@@ -309,6 +309,9 @@ input[type="checkbox"]:checked:after {
   align-items: center;
   justify-content: center;
   transition: 0.3s;
+  gap: 10px;
+  align-items: center;
+  text-wrap: nowrap;
   svg,
   svg * {
     width: 20px;
@@ -329,6 +332,7 @@ input[type="checkbox"]:checked:after {
   border: none;
   outline: none;
   cursor: pointer;
+  white-space: nowrap;
   color: $_2k25-text;
   font-weight: bold;
   display: flex;
@@ -391,6 +395,7 @@ input[type="checkbox"]:checked:after {
   display: flex;
   flex-direction: row;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .col-20 {
