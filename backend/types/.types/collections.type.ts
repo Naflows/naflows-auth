@@ -72,7 +72,6 @@ export interface UserSession {
   service_id: string;
   active: boolean;
   device_fingerprint: string; // Device fingerprint of the user, used for security purposes
-  user_origin: string; // Origin of the user, used for security purposes,
   supertest?: boolean;
 }
 

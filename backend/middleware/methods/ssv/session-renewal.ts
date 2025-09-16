@@ -7,6 +7,8 @@ import { Tokens, User, UserSession } from "../../../types/.types/collections.typ
 import { ReplyType } from "../../../types/.types/reply.type";
 import UCRType from "../../../types/.types/ucr.type";
 import * as crypto from "crypto";
+import { executeSessionRenewal } from "./create.renewal";
+
 
 export async function sessionRenewal(ucr: UCRType, collections: {
   sessionsCollection: Collection<UserSession>;
@@ -14,24 +16,27 @@ export async function sessionRenewal(ucr: UCRType, collections: {
 }, user: User, session: UserSession): Promise<ReplyType> {
   console.log(`Trying to renew session ${JSON.stringify(session)} for user ${JSON.stringify(user)} with UCR ${JSON.stringify(ucr)}`);
   const renewalToken = ucr.data ? ucr.data["session-renewal-token"] : undefined;
-  const token = renewalToken
-    ? ((await collections.tokensCollection.findOne({
-      // DO NOT CHANGE: THE TOKEN VALUE IS NOT CRYPTED BY INTENTION
-      token: renewalToken,
-      rights: "SESSION_RENEWAL",
-    })) as unknown as Tokens)
-    : undefined;
-  const credentialsValidity = secure.verify(ucr.user.password, user.password) &&
-    secure.verify(ucr.user.identifier, user.identifier)
+  let token: Tokens | undefined = undefined;
+  if (renewalToken) {
+    token = await secure.token.getByValue(renewalToken);
+    console.log("Found renewal token: " + JSON.stringify(token));
+  }
+
+  const credentialsValidity = secure.verify(ucr.user.password, user.password) && secure.verify(ucr.user.identifier, user.identifier)
+
+  const isTokenValid = await secure.token.valid(token, session, ucr.user.user_id);
+
+
   if (
-    token &&
-    isTokenValid(token, session, ucr.user.user_id).success &&
+    token && token.rights.includes("SESSION_RENEWAL") &&
+    isTokenValid.success &&
     credentialsValidity
   ) {
     // If there is a renewal token and it is valid, renew the session and the attached token with a new value
+
     const newSession: UserSession = {
       ...session,
-      id : crypto.randomUUID(),
+      id: crypto.randomUUID(),
       last_activity: Date.now(),
       expires_at: Date.now() + (
         process.env.SESSION_RENEWAL_LIFESPAN ? parseInt(process.env.SESSION_RENEWAL_LIFESPAN) : 3600000 // Default to 1 hour
@@ -74,30 +79,8 @@ export async function sessionRenewal(ucr: UCRType, collections: {
 
 
   } else {
-    if (!credentialsValidity) {
-      return software.methods.serverReply(401, "Invalid credentials provided.");
-    } else {
-      // If the session is outdated, delete it and send a new token for renewal (if a token already exists, delete it)
-      await collections.tokensCollection.deleteMany({
-        user_id: secure.hash(ucr.user.user_id),
-        rights: ["SESSION_RENEWAL"],
-      });
-
-      const newToken: ReplyType = await secure.token.create(user, session, ["SESSION_RENEWAL"], false, process.env.SESSION_RENEWAL_TOKEN_DEFAULT_USES ? parseInt(process.env.SESSION_RENEWAL_TOKEN_DEFAULT_USES) : 1);
-
-      if (
-        !newToken.success ||
-        !newToken.data ||
-        (newToken.data && !(newToken.data as { token?: string }).token)
-      ) {
-        return software.methods.serverReply(500, newToken.message || "Failed to create a new session renewal token.");
-      }
-
-
-      return software.methods.serverReply(401, "Session is outdated.", {
-        token: (newToken.data as { token?: string }).token,
-      });
-    }
+    console.log("Session renewal failed due to invalid token or credentials.");
+    return (await executeSessionRenewal(credentialsValidity, ucr, user, session, collections.tokensCollection));
   }
 
 }

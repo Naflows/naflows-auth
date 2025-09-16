@@ -9,7 +9,7 @@ import renewSessionId from "./session/renew-id";
 import { updateSession } from "./session/update";
 import deleteToken from "./token/delete";
 import getToken from "./token/get";
-import { createToken } from "./token/new-token";
+import { createToken } from "./token/create";
 import updateToken from "./token/renew-token";
 import { isTokenValid } from "./token/token-valid";
 import { updateWholeToken } from "./token/update";
@@ -20,6 +20,7 @@ import logUserIn from "./user/login/index";
 import { hiddenLogin } from "./user/login/hidden-login";
 import { isSessionValid } from "./session/valid";
 import { updateUser } from "./user/update";
+import { getTokenByValue } from "./token/getByValue";
 
 
 const secure = {
@@ -32,6 +33,7 @@ const secure = {
         create : createToken,
         updateUse : updateTokenUse,
         get : getToken,
+        getByValue : getTokenByValue,
         delete : deleteToken,
         renew : updateToken,
         update : updateWholeToken

@@ -29,7 +29,6 @@ export async function createSession(
         service_id : service_id,
         active : process.env.DEV_SKIP_SESSION_CONFIRMATION === "true" ? true : false,
         device_fingerprint : device_fingerprint,
-        user_origin : service_id,
     }
 
     const t = await sessions.insertOne(session);

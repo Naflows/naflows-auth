@@ -8,7 +8,6 @@ export function isUCRType(obj: any): obj is UCRType {
             user.agent != undefined &&
             user.session_id != undefined &&
             user.device_fingerprint != undefined &&
-            user.user_origin != undefined && 
             user.user_id != undefined &&
             (user.token != undefined || (user.identifier != undefined && user.password != undefined)) &&
             !(user.token != undefined && (user.identifier != undefined || user.password != undefined)) &&
@@ -17,7 +16,6 @@ export function isUCRType(obj: any): obj is UCRType {
             typeof user.session_id === 'string' &&
             typeof user.user_id === 'string' &&
             typeof user.device_fingerprint === 'string' &&
-            typeof user.user_origin === 'string' &&
             (typeof user.token === 'string' || (typeof user.identifier === 'string' && typeof user.password === 'string'))
         )
     }

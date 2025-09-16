@@ -15,36 +15,36 @@ const dummy1 = {
     ip: "1.1.1.2",
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
     device_fingerprint: "fingerprint-1",
-    user_origin: "NASS",
     session_id: "1",
     token: "test-token",
     identifier: "dummy",
     password: "dummy",
-    user_id: "2"
+    user_id: "2",
+    service_id: "1"
 };
 
 const dummy2 = {
     ip: "1.1.1.3",
     agent: dummy1.agent,
     device_fingerprint: "fingerprint-2",
-    user_origin: "NASS",
     session_id: "2",
     token: "test-token-2",
     identifier: "dummy1",
     password: "dummy1",
-    user_id: "3"
+    user_id: "3",
+    service_id: "3"
 };
 
 const dummy1_2 = {
     ip: "5.5.5.5",
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
     device_fingerprint: "fingerprint-3",
-    user_origin: "NASS",
     session_id: "3",
     token: "test-token-3-frozen",
     identifier: "dummy",
     password: "dummy",
-    user_id: "2"
+    user_id: "2",
+    service_id: "2"
 }
 
 
@@ -386,18 +386,6 @@ describe("NASS SSV Tests", () => {
             });
         });
 
-        test("missing / invalid user origin", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1, user_origin: "wrong-user-origin", session_id: newSessionID } };
-            delete ucr.user.token;
-            ucr.data["customRequestURL"] = "/test-ssv/session-data-invalid/user-origin";
-            const res = await post(ucr);
-            expect(res.status).toBe(401);
-            expect(res.data).toEqual({
-                success: false,
-                status: 401,
-                message: "Invalid session informations.",
-            });
-        });
 
         test("missing / invalid user agent", async () => {
             const ucr = { ...validUCR, user: { ...dummy1, agent: "wrong-user-agent", session_id: newSessionID } };
@@ -518,7 +506,6 @@ describe("NASS SSV Tests", () => {
                 status: 401,
                 message: "Invalid credentials provided."
             });
-
         });
 
 
