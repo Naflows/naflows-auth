@@ -19,16 +19,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: NASS
     
-    # DEVELOPMENT ONLY
-    # REMOVE IN PRODUCTION
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 512M
-        reservations:
-          cpus: '0.1'
-          memory: 256M
+
+ 
 
   auth-api:
     build: 
@@ -56,13 +48,7 @@ services:
     volumes:
       - ./backend:/app/backend
 
-    # DEVELOPMENT ONLY
-    # REMOVE IN PRODUCTION
-    deploy:
-      resources:
-        limits:
-          cpus: '1.5'
-          memory: 512M
+
 
   mongo-express:
     image: mongo-express
@@ -100,14 +86,23 @@ services:
       - "3005"
   
      
-    # DEVELOPMENT ONLY
-    # REMOVE IN PRODUCTION
-    deploy:
-      resources:
-        limits:
-          cpus: '1.5'
-          memory: 512M
-        
+
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    profiles: ["frontend"]
+    container_name: auth-frontend
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    depends_on:
+      - auth-api
+    volumes:
+      - ./frontend:/app/frontend
+
 
 
   global-tests:
