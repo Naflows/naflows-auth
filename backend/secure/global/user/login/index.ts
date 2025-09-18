@@ -29,7 +29,7 @@ export default async function logUserIn(req: Request, res: Response) : Promise<R
     } = req.body;
 
     if (user.id == "" || user.password == "" || user.identifier == "") {
-        return software.methods.serverReply(400, "Missing user credentials");
+        return software.methods.serverReply(400, "Some user credentials are missing. Please provide all required information.");
     }
 
     const credentialsOk: boolean = await secure.user.credentials(user.user_id, user.password, user.identifier);
@@ -60,6 +60,6 @@ export default async function logUserIn(req: Request, res: Response) : Promise<R
             return r;
         }
     } else {
-        return software.methods.serverReply(401, "Login failed - invalid credentials");
+        return software.methods.serverReply(401, "The provided credentials are incorrect. Please try again with valid information or reset your password.");
     }
 }

@@ -13,6 +13,8 @@ db.createCollection('logs');
 db.createCollection('requests'); // Logging requests to the NASS
 db.createCollection('user_connections'); // Connections between users and services
 
+db.createCollection('mailings'); // Mailing list for notifications and updates
+
 const users = db.getCollection('users');
 const sessions = db.getCollection('sessions');
 const tokens = db.getCollection('tokens');
@@ -22,6 +24,7 @@ const nass_contracts = db.getCollection('nass_contracts');
 const blacklist = db.getCollection('blacklist');
 const logs = db.getCollection('logs');
 const requests = db.getCollection('requests');
+const mailings = db.getCollection('mailings'); // Mailing list for notifications and updates
 
 
 const userConnections = db.getCollection('user_connections'); // Connections between users and services
@@ -69,6 +72,11 @@ db.userConnections.createIndex({ id: 1 }, { unique: true });
 db.userConnections.createIndex({ user_id: 1 });
 db.userConnections.createIndex({ service_id: 1 });
 
+
+db.mailings.createIndex({ id: 1 }, { unique: true });
+db.mailings.createIndex({ email: 1 }, { unique: true });
+db.mailings.createIndex({ created_at: 1 });
+db.mailings.createIndex({ subscribed: 1 });
 
 // See the .env file in the root directory of the naflows-system repository for the unhashed password
 db.users.insertOne({

@@ -65,9 +65,32 @@ const service = {
     service_token_birth: new Date("2025-09-01").getTime()
 }
 
-app.post('/public/status-check', async (req, res) => {
-
+app.get('/public/status-check', async (req, res) => {
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/public/status`, {
+        client: service
+    });
+    res.status(f.status).json(f.data);
 });
+
+app.get('/public/subscribe-mailing', async (req, res) => {
+    const email = req.query.email;
+    if (email == undefined || typeof email !== 'string' || email.length < 5 || !email.includes('@')) {
+        return res.status(400).json({ status: 400, message: "Invalid email address.", success: false });
+    }
+
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/public/mailing/subscribe`, {
+        email: email,
+        client: service,
+        request: {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        }
+    });
+    res.status(f.status).json(f.data);
+});
+
 
 app.get('/get-user-info/services/:id/service-informations', async (req, res) => {
     const { sessionID, token, uid } = getCookies(req);
@@ -86,7 +109,7 @@ app.get('/get-user-info/services/:id/service-informations', async (req, res) => 
         service: {
             id: serviceID
         },
-        request : {
+        request: {
             method: req.method,
             url: req.originalUrl,
             headers: req.headers,
@@ -120,7 +143,7 @@ app.get('/get-user-info/services', async (req, res) => {
             user_id: uid || null,
         },
         client: service,
-        request : {
+        request: {
             method: req.method,
             url: req.originalUrl,
             headers: req.headers,
@@ -151,7 +174,7 @@ app.get('/get-user-info/user', async (req, res) => {
             token: token || null,
             user_id: uid || null,
         },
-        request : {
+        request: {
             method: req.method,
             url: req.originalUrl,
             headers: req.headers,

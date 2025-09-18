@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 import cors from 'cors';
 import secure from '../secure/global/dir';
 import { ReplyType } from '../types/.types/reply.type';
+import { software } from '../software/dir';
 
 export function useApp(app) {
     app.use(express.json());
@@ -35,6 +36,13 @@ export function useApp(app) {
                     };
                     console.log('\x1b[33m%s\x1b[0m', `Middleware access granted for secure route - Sending back middleware data: ${JSON.stringify(req.middleware.data)}`);
                 }
+            } else if (req.path.startsWith('/public')) {
+                const serviceOk = await middleware.check.origin(req.body.client);
+                if (!serviceOk.success || req.body.client.service !== process.env.AUTH_API_SERVICE_NAME) {
+                    return res.status(403).json(software.methods.serverReply(403, "Forbidden: Invalid client origin."));
+                }
+
+                console.log('\x1b[32m%s\x1b[0m', `Public route accessed: ${req.path}`);
             }
 
             next();

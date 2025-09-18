@@ -12,6 +12,7 @@ import { services } from "./secure/services/dir";
 import path from "path";
 import { software } from "./software/dir";
 import { Service, User } from "./types/.types/collections.type";
+import mailing from "./software/mailing/dir";
 
 
 const express = require('express');
@@ -278,25 +279,15 @@ app.post('/client/secure/data/user', async (req, res) => {
 
 
 // Get OS details for public display (RAM, CPU, Disk, etc.)
-app.get('/public/status', async (req, res) => {
-
-    const serviceOk = await middleware.check.origin(
-        {
-            ip: req.ip,
-            dns: req.hostname,
-            service: "public-status-check",
-            service_token: req.headers['x-service-token'] as string || "",
-            service_token_birth: parseInt(req.headers['x-service-token-birth'] as string) || 0,
-        }
-    );
-
-    if (!serviceOk) {
-        return res.status(403).send("Unauthorized service access.");
-    }
-
+app.post('/public/status', async (req, res) => {
     const status = await secure.system.status();
     console.log("System status requested:", status);
     res.status(status.status).json(status);
+});
+
+app.post('/public/mailing/subscribe', async (req, res) => {
+    const result = await mailing.list.subscribe(req.body.email);
+    res.status(result.status).json(result);
 });
 
 

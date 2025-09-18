@@ -18,6 +18,7 @@ const Mailing = () => {
       success: data.success,
       closeAlert: false,
       displayCode: false,
+      title: data.success ? "Subscription Successful" : "Subscription Failed",
     });
   };
 
