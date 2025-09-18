@@ -4,7 +4,13 @@ import { Service, NassServiceToken } from "../../../types/.types/collections.typ
 import { ReplyType } from "../../../types/.types/reply.type";
 import UCRType from "../../../types/.types/ucr.type";
 
-export async function checkRequestOrigin(UCR: UCRType): Promise<ReplyType> {
+export async function checkRequestOrigin(client: {
+  ip: string;
+  dns: string;
+  service: string;
+  service_token: string;
+  service_token_birth: number;
+}): Promise<ReplyType> {
   /*
 
         This function checks the origin of the request by validating the client origin in the UCR.
@@ -22,16 +28,16 @@ export async function checkRequestOrigin(UCR: UCRType): Promise<ReplyType> {
     //console.log(`Searching for service in the database with:\nIP: ${UCR.client.ip}\nDNS: ${UCR.client.dns}\nService: ${UCR.client.service}`);
     // The easiest way to check if a service exists is first to check ip + dns + service.
     const queriedService = (await servicesCollection.findOne({
-      ip_address: UCR.client.ip,
-      id: UCR.client.service,
+      ip_address: client.ip,
+      id: client.service,
     })) as unknown as Service | null;
     if (queriedService && queriedService.status === "ACTIVE") {
       //console.log(`Service ${queriedService.name} is active, checking service token...`);
       //console.log(`Token parameters are:\nService ID: ${queriedService.id}\nToken: ${UCR.client.service_token}\nCreated at: ${UCR.client.service_token_birth}`);
       const serviceToken = (await servicesToken.findOne({
         service_id: queriedService.id,
-        token: UCR.client.service_token,
-        created_at: UCR.client.service_token_birth,
+        token: client.service_token,
+        created_at: client.service_token_birth,
       })) as unknown as NassServiceToken | null;
       //console.log(`The following service token are related to ${queriedService.name}: `, serviceToken ? serviceToken.id : "No service token found");
       if (serviceToken) {

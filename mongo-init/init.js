@@ -277,7 +277,7 @@ db.tokens.insertOne({
 db.services.insertOne({
     id: "1",
     name : "Test Service : token is not expired",
-    ip_address : "127.0.0.1",
+    ip_address : "::ffff:172.18.0.6",
     dns : "local.nass.com",
     description : "This is a test service for the NASS.",
     created_at : 123456789,
@@ -289,7 +289,7 @@ db.services.insertOne({
 db.services.insertOne({
     id: "2",
     name : "Test Service : token is expired",
-    ip_address : "127.0.0.1",
+    ip_address : "::ffff:172.18.0.6",
     dns : "local.nass.com",
     description : "This is a test service for the NASS.",
     created_at : new Date().getTime(),
@@ -301,7 +301,7 @@ db.services.insertOne({
 db.services.insertOne({
     id: "3",
     name : "Test Service : expired",
-    ip_address : "127.0.0.1",
+    ip_address : "::ffff:172.18.0.6",
     dns : "local.nass.com",
     description : "This is a test service for the NASS.",
     created_at : new Date().getTime(),
@@ -313,7 +313,7 @@ db.services.insertOne({
 db.services.insertOne({
     id : "test_aim_id",
     name : "Contracts Service",
-    ip_address : "127.0.0.1",
+    ip_address : "::ffff:172.18.0.6",
     dns : "contracts.nass.com",
     description : "This is a test service for the NASS.",
     created_at : new Date().getTime(),
@@ -368,7 +368,7 @@ db.service_tokens.insertOne({
 db.services.insertOne({
     id : "naflows_backend",
     name : "Naflows Backend Structure",
-    ip_address : "http://127.0.0.1:3005", 
+    ip_address : "::ffff:172.18.0.2", 
     dns : "naflows.com",
     description : "The Naflows Backend Structure for secure API communication.",
     created_at : new Date().getTime(),

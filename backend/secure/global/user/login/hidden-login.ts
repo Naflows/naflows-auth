@@ -9,12 +9,6 @@ import { acceptLogin } from "./modules/accept-login";
 
 export async function hiddenLogin(req : Request, res : Response) : Promise<ReplyType> {
 
-    const serviceOk = await middleware.process.scv(req, res);
-
-    if (!serviceOk) {
-        return res.status(403).send("Unauthorized service access.");
-    }
-
     // Verify all parameters: user, session, token 
     const tokenValue = req.body.user.token;
     const session_id = req.body.user.session_id;

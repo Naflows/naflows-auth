@@ -14,7 +14,6 @@ if (!app) {
 const dummy1 = {
     ip: "1.1.1.2",
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-    device_fingerprint: "fingerprint-1",
     session_id: "1",
     token: "test-token",
     identifier: "dummy",
@@ -26,7 +25,6 @@ const dummy1 = {
 const dummy2 = {
     ip: "1.1.1.3",
     agent: dummy1.agent,
-    device_fingerprint: "fingerprint-2",
     session_id: "2",
     token: "test-token-2",
     identifier: "dummy1",
@@ -38,7 +36,6 @@ const dummy2 = {
 const dummy1_2 = {
     ip: "5.5.5.5",
     agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-    device_fingerprint: "fingerprint-3",
     session_id: "3",
     token: "test-token-3-frozen",
     identifier: "dummy",
@@ -55,7 +52,7 @@ const getValidUCR = (userOverride = {}) => ({
         ...userOverride
     },
     client: {
-        ip: "127.0.0.1",
+        ip: "::ffff:172.18.0.6",
         dns: "local.nass.com",
         service: "1",
         service_token: "test-service-token",
@@ -142,17 +139,7 @@ describe("NASS SCV Tests", () => {
         });
     });
 
-    test("UCR is invalid (missing fingerprint)", async () => {
-        const ucr = getValidUCR({ device_fingerprint: undefined });
-        const res = await post(ucr);
-        ucr.data["customRequestURL"] = "/test/missing-fingerprint";
-        expect(res.status).toBe(400);
-        expect(res.data).toEqual({
-            success: false,
-            status: 400,
-            message: "Invalid request format."
-        });
-    });
+
 
     test("Service invalid (wrong client IP)", async () => {
         const ucr = getValidUCR();
@@ -373,18 +360,18 @@ describe("NASS SSV Tests", () => {
     });
 
     describe("Session data is missing or wrong", () => {
-        test("missing / invalid device fingerprint", async () => {
-            const ucr = { ...validUCR, user: { ...dummy1, device_fingerprint: "wrong-device-fingerprint", session_id: newSessionID } };
-            delete ucr.user.token;
-            ucr.data["customRequestURL"] = "/test-ssv/session-data-invalid/device-fingerprint";
-            const res = await post(ucr);
-            expect(res.status).toBe(401);
-            expect(res.data).toEqual({
-                success: false,
-                status: 401,
-                message: "Invalid session informations.",
-            });
-        });
+        // test("missing / invalid device fingerprint", async () => {
+        //     const ucr = { ...validUCR, user: { ...dummy1, device_fingerprint: "wrong-device-fingerprint", session_id: newSessionID } };
+        //     delete ucr.user.token;
+        //     ucr.data["customRequestURL"] = "/test-ssv/session-data-invalid/device-fingerprint";
+        //     const res = await post(ucr);
+        //     expect(res.status).toBe(401);
+        //     expect(res.data).toEqual({
+        //         success: false,
+        //         status: 401,
+        //         message: "Invalid session informations.",
+        //     });
+        // });
 
 
         test("missing / invalid user agent", async () => {

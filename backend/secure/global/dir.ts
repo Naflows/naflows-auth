@@ -21,6 +21,7 @@ import { hiddenLogin } from "./user/login/hidden-login";
 import { isSessionValid } from "./session/valid";
 import { updateUser } from "./user/update";
 import { getTokenByValue } from "./token/getByValue";
+import getSystemStatus from "../health/getSystemStatus";
 
 
 const secure = {
@@ -28,6 +29,9 @@ const secure = {
     verify : verifyHash,
     hash : hashID,
     blacklist : blacklistIP,
+    system : {
+        status : getSystemStatus
+    },
     token : {
         valid : isTokenValid,
         create : createToken,

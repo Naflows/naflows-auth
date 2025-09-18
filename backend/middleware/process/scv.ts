@@ -33,7 +33,7 @@ export async function scv(req: Request, res: Response): Promise<ReplyType> {
 
   if (process.env.NASS_SERVICE_FILTER === "true") {
     const isRequestOriginValid: ReplyType = await middleware.check.origin(
-      req.body
+      req.body.client
     );
     if (!isRequestOriginValid.success) {
       return isRequestOriginValid;

@@ -11,14 +11,23 @@ export function useApp(app) {
     app.use(cors());
     app.use(async (req, res, next) => {
         req.middleware = { data: {} } as any;
+        console.log("\x1b[33m%s\x1b[0m", `Request received: ${req.method} ${req.path} with body: ${JSON.stringify(req.body)}`);
+        if (req.body.client.ip == undefined) {
+            req.body.client.ip = req.ip;
+        }
+
         // If the request path starts with "/client" or "/public"
         if (req.path.startsWith('/client') || req.path.startsWith('/public')) {
             // Continue 
             if (req.path.startsWith('/client/secure')) {
-                const secureLogin : ReplyType = (await secure.user.hiddenLogin(req, res));
+                const secureLogin: ReplyType = (await secure.user.hiddenLogin(req, res));
+                const checkService: ReplyType = await middleware.process.scv(req, res);
                 if (!secureLogin.success) {
                     return res.status(secureLogin.status).json(secureLogin);
+                } else if (!checkService.success) {
+                    return res.status(checkService.status).json(checkService);
                 } else {
+                    console.log('\x1b[32m%s\x1b[0m', `Secure route accessed: ${req.path}`);
                     req.middleware.data = {
                         session: (secureLogin.data as any)?.session,
                         token: (secureLogin.data as any)?.token,

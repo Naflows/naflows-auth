@@ -59,7 +59,9 @@ export async function checkRates(UCR: UCRType): Promise<ReplyType> {
         return software.methods.serverReply(429, "Rate limit exceeded. Too many requests.");
       } else {
         await ratesCollection.updateOne(
-          { associated_service: UCR.client.service, device_fingerprint: UCR.user.device_fingerprint },
+          { 
+            associated_service: UCR.client.service
+          },
           {
             $set: {
               lastRequest: Date.now(),

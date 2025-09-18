@@ -13,7 +13,7 @@ import { acceptLogin } from './modules/accept-login';
 import { manageNewSession } from './modules/manage-new-session';
 
 export default async function logUserIn(req: Request, res: Response) : Promise<ReplyType> {
-
+    req.body.client.session_id = null; // Ensure no session is sent in the client data for login requests.
     const serviceOk = await middleware.process.scv(req, res);
 
     if (!serviceOk) {
@@ -25,7 +25,7 @@ export default async function logUserIn(req: Request, res: Response) : Promise<R
 
     const {
         user,
-        service
+        client
     } = req.body;
 
     if (user.id == "" || user.password == "" || user.identifier == "") {
@@ -56,7 +56,7 @@ export default async function logUserIn(req: Request, res: Response) : Promise<R
                 return software.methods.serverReply(401, "Login failed - session is not active");
             }
         } else {
-            const r: ReplyType = await manageNewSession(_user, user, service);
+            const r: ReplyType = await manageNewSession(_user, user, client);
             return r;
         }
     } else {

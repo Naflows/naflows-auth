@@ -277,6 +277,28 @@ app.post('/client/secure/data/user', async (req, res) => {
 })
 
 
+// Get OS details for public display (RAM, CPU, Disk, etc.)
+app.get('/public/status', async (req, res) => {
+
+    const serviceOk = await middleware.check.origin(
+        {
+            ip: req.ip,
+            dns: req.hostname,
+            service: "public-status-check",
+            service_token: req.headers['x-service-token'] as string || "",
+            service_token_birth: parseInt(req.headers['x-service-token-birth'] as string) || 0,
+        }
+    );
+
+    if (!serviceOk) {
+        return res.status(403).send("Unauthorized service access.");
+    }
+
+    const status = await secure.system.status();
+    console.log("System status requested:", status);
+    res.status(status.status).json(status);
+});
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

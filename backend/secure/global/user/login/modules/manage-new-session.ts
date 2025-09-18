@@ -16,6 +16,7 @@ export async function manageNewSession(
     _user: User, user: any, service: any
 ) {
 
+    
     const s: ReplyType = await services.service.get(service.service) as ReplyType;
 
     if (!s.success) {

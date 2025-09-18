@@ -58,6 +58,17 @@ function getCookies(req) {
     return { sessionID, token, uid };
 }
 
+
+const service = {
+    service: "naflows_backend",
+    service_token: "naflows_backend_token",
+    service_token_birth: new Date("2025-09-01").getTime()
+}
+
+app.post('/public/status-check', async (req, res) => {
+
+});
+
 app.get('/get-user-info/services/:id/service-informations', async (req, res) => {
     const { sessionID, token, uid } = getCookies(req);
     const serviceID = req.params.id;
@@ -67,14 +78,21 @@ app.get('/get-user-info/services/:id/service-informations', async (req, res) => 
         user: {
             ip: req.ip,
             agent: req.headers['user-agent'],
-            fingerprint: req.fingerprint,
+            device_fingerprint: req.fingerprint,
             session_id: sessionID || null,
             token: token || null,
             user_id: uid || null,
         },
         service: {
             id: serviceID
-        }
+        },
+        request : {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        },
+        client: service
     });
 
 
@@ -96,11 +114,18 @@ app.get('/get-user-info/services', async (req, res) => {
         user: {
             ip: req.ip,
             agent: req.headers['user-agent'],
-            fingerprint: req.fingerprint,
+            device_fingerprint: req.fingerprint,
             session_id: sessionID || null,
             token: token || null,
             user_id: uid || null,
         },
+        client: service,
+        request : {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        }
     });
 
 
@@ -121,11 +146,18 @@ app.get('/get-user-info/user', async (req, res) => {
         user: {
             ip: req.ip,
             agent: req.headers['user-agent'],
-            fingerprint: req.fingerprint,
+            device_fingerprint: req.fingerprint,
             session_id: sessionID || null,
             token: token || null,
             user_id: uid || null,
         },
+        request : {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        },
+        client: service
     });
 
 
@@ -153,16 +185,17 @@ app.post('/send-login-request', async (req, res) => {
                 user_id,
                 password,
                 identifier,
-                user_ip: req.ip,
+                ip: req.ip,
                 agent: req.headers['user-agent'],
-                fingerprint: req.fingerprint
+                device_fingerprint: req.fingerprint
             },
-            service: {
-                ip: "dummy-api", // TODO : Get real IP
-                service: "naflows_backend",
-                service_token: "naflows_backend_token",
-                service_token_birth: new Date("2025-09-01").getTime()
-            }
+            request: {
+                method: req.method,
+                url: req.originalUrl,
+                headers: req.headers,
+                request_date: Date.now()
+            },
+            client: service
         });
 
         // Get session and token from f.data
