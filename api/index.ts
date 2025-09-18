@@ -14,6 +14,10 @@ app.use(cors({
     origin: 'http://localhost:8080',// Dev
     credentials: true
 }));
+app.use(cors({
+    origin: 'https://nass.naflows.com', // Prod
+    credentials: true
+}))
 app.use(fingerprint({
     parameters: [
         fingerprint.useragent,
