@@ -11,13 +11,9 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: 'http://localhost:8080',// Dev
+    origin: ['http://localhost:8080', 'https://nass.naflows.com'],
     credentials: true
 }));
-app.use(cors({
-    origin: 'https://nass.naflows.com', // Prod
-    credentials: true
-}))
 app.use(fingerprint({
     parameters: [
         fingerprint.useragent,
