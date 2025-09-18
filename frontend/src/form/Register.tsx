@@ -52,10 +52,10 @@ const RegisterForm = () => {
       </div>
 
       <div className="global__terms__and__conditions">
-        <label>
+        <label className="checkbox-container">
           <input type="checkbox" required />I agree to <a href="https://naflows.com/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="https://naflows.com/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
         </label>
-        <label>
+        <label className="checkbox-container">
           <input type="checkbox" required />I want to receive email updates & promotions
         </label>
       </div>

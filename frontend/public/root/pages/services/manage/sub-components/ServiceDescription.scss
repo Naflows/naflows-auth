@@ -77,11 +77,16 @@
         padding: 2.5px 5px;
         border-radius: 5px;
         font-size: 13px;
+        border: 1px solid;
         &.enabled {
-          background-color: $da-confirm-hue;
+          background-color: $da-confirm-hue-transparent;
+          border-color: $da-confirm-hue;
+          color: $da-confirm-hue;
         }
         &.disabled {
-          background-color: $da-error-hue;
+          background-color: $da-error-hue-transparent;
+          border-color: $da-error-hue;
+          color: $da-error-hue;
         }
       }
     }

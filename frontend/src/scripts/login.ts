@@ -1,11 +1,12 @@
 import type { AxiosError } from "axios";
 import axios from "axios";
+import type { AlertContentProps } from "../global/error-alert/Alert";
 
 
 
 export async function manageLogin(
     setLoading: (loading: boolean) => void,
-    setAlert: (alert: { status : number; message: string; success : boolean; closeAlert: boolean }) => void,
+    setAlert: (alert: AlertContentProps) => void,
     redirectOnSuccess = "/account"
 ) {
     setLoading(true);
@@ -41,9 +42,11 @@ export async function manageLogin(
                 status: response.data.status,
                 message:
                     response.data.message ||
-                    "Something went wrong. If the issue persists, please contact support.",
+                    "Something went wrong when logging in. The server encountered an issue. If the issue persists, please contact support.",
                 success: response.data.success,
                 closeAlert: false,
+                title: "Server Unreachable",
+                displayCode: true,
             });
         } else {
             window.location.href = redirectOnSuccess;
@@ -60,9 +63,11 @@ export async function manageLogin(
             status: data?.error.status || 500,
             message:
                 data?.error.message ||
-                "Something went wrong. If the issue persists, please contact support.",
+                "Something went wrong when logging in. Please try again later. If the issue persists, please contact support.",
             success: false,
             closeAlert: false,
+            title: "Server Unreachable",
+            displayCode: true,
         });
     } finally {
         setLoading(false);

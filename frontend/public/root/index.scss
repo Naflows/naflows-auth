@@ -169,7 +169,7 @@ body {
     align-items: start;
     gap: 10px;
     h2,
-    h1 {
+    h1,p {
       margin: 0;
       padding: 0;
     }
@@ -205,6 +205,8 @@ body {
       column-gap: 20px;
       .inputs-container {
         flex: 1;
+        min-width: 150px;
+        width: 100% !important;
       }
     }
   }
@@ -224,8 +226,8 @@ body {
 .parent__of__section {
   display: flex;
   gap: 20px;
-  .parent__of__section  {
-    width: auto !important; ;
+  .parent__of__section {
+    width: auto !important;
   }
   &.row__layout {
     align-items: start;
@@ -300,19 +302,6 @@ input[type="checkbox"]:checked:after {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  label {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-    a {
-      color: $_2k25-text;
-      text-decoration: underline;
-      &:hover {
-        color: $_2k25-darker;
-      }
-    }
-  }
 }
 
 /* ------------------------------- */
@@ -344,8 +333,6 @@ input[type="checkbox"]:checked:after {
     color: $_2k25-background-hue-darker;
   }
 }
-
-
 
 .tertiary-button {
   border-radius: 10px;
@@ -453,6 +440,10 @@ input[type="checkbox"]:checked:after {
   max-width: 100vw;
 }
 
+.width-100-auto {
+  width: 100% !important;
+}
+
 .width-fit {
   width: fit-content !important;
 }
@@ -463,6 +454,31 @@ input[type="checkbox"]:checked:after {
 
 .text-size-20 {
   font-size: 20px;
+}
+
+.checkbox-container {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  gap: 10px;
+
+  user-select: none;
+  cursor: pointer;
+
+  input {
+    min-width: 15px;
+    min-height: 15px;
+  }
+}
+
+
+
+a {
+  color: $_2k25-text;
+  text-decoration: underline;
+  &:hover {
+    color: $_2k25-darker;
+  }
 }
 
 @media screen and (max-width: 600px) {

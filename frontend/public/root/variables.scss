@@ -1,11 +1,17 @@
 $da-main-hue: #3E4DEDFF;
+$da-main-hue-lighter: rgb(93, 95, 255);
 $da-main-hue-2: #2530A9FF;
+
 $da-secondary-hue: #28B88DFF;
+$da-secondary-hue-lighter: #34D399FF;
 $da-error-hue: #FF4221FF;
+$da-error-hue-transparent: rgba(255, 66, 33, 0.1);
 $da-error-hue-2: rgb(255, 212, 205);
 $da-warning-hue: rgb(255, 144, 33);
+$da-warning-hue-transparent: rgba(255, 144, 33, 0.1);
 $da-warning-hue-2: rgb(255, 157, 59);
 $da-confirm-hue: #1FA218FF;
+$da-confirm-hue-transparent: rgba(31, 162, 24, 0.1);
 $da-confirm-hue-2: rgb(186, 255, 182);
 $order-creation-hue: #38BDF8FF;
 $order-devis-hue: #6366F1FF;

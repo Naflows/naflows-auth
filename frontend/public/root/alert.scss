@@ -37,35 +37,58 @@
     background-color: white;
     border-radius: 20px;
     padding: 20px;
-    width: 400px;
+    width: 30%;
     max-height: 400px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     animation: slideIn 0.3s forwards;
     background-color: $_2k25-background-hue;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 20px;
+    align-items: start;
+    gap: 25px;
 
-    .global___alert__component__header {
+    .global__alert__body {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      align-items: center;
-      svg {
-        width: 40px;
-        height: 40px;
-        padding: 5px;
-        background-color: $_2k25-text;
-        border-radius: 50px;
-        * {
-          fill: $_2k25-background-hue;
+      gap: 15px;
+      width: 100%;
+      .global___alert__component__message {
+        p {
+          margin: 0;
+          padding: 0;
         }
       }
 
-      strong {
-        font-size: 20px;
-        text-transform: uppercase;
+      .global___alert__component__header {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        width: 100%;
+        align-items: center;
+
+        h3,p {
+          margin: 0;
+          padding: 0;
+        }
+
+
+        .alert__header__banner {
+          text-transform: uppercase;
+          padding: 5px 10px;
+          border-radius: 10px;
+          border: 1px solid;
+          height: fit-content;
+          &.error {
+            color: $da-error-hue;
+            background-color: $da-error-hue-transparent;
+            border-color: $da-error-hue;
+          }
+          &.success {
+            color: $da-confirm-hue;
+            background-color: $da-confirm-hue-transparent;
+            border-color: $da-confirm-hue;
+          }
+        }
       }
     }
 

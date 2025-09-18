@@ -1,0 +1,465 @@
+@import "../../variables.scss";
+
+
+.nass_home__activity,
+.nass_welcome__informations {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: stretch;
+  width: 100%;
+  height: fit-content !important;
+
+  .nass_homepage__box {
+    align-self: stretch !important;
+    height: calc(100% - 50px) !important;
+    flex: 1;
+
+    .nass_homepage__buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .nass_home__box__description {
+      margin: 0;
+      line-height: 1.4rem;
+    }
+  }
+
+  .nass_service__informations {
+    max-width: 350px !important;
+  }
+
+  .nass_discord__box {
+    max-width: 250px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .nass__connect {
+    max-width: 300px !important;
+  }
+
+}
+
+.nass__home__page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  align-items: center;
+
+  .nass__home__head {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+
+
+
+    .nass__home__logos {
+      display: flex;
+      flex-direction: column;
+
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-weight: bold;
+
+      .nass__author {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+
+      .nass__home__logo {
+        height: 150px;
+
+        &.naf-logo {
+          height: 50px;
+        }
+      }
+    }
+  }
+}
+
+.nass__welcome__header {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.nass_homepage__content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 75%;
+}
+
+// Pulse animation for active state
+@keyframes ActivePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba($da-confirm-hue, 0.7);
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px rgba($da-confirm-hue, 0.2);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba($da-confirm-hue, 0);
+  }
+}
+
+@keyframes InactivePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba($da-error-hue, 0.7);
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px rgba($da-error-hue, 0.2);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba($da-error-hue, 0);
+  }
+}
+
+.nass_advantages {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+
+  .nass_advantage {
+    width: calc(100% - 30px);
+    display: flex;
+    flex-direction: row;
+    border-radius: 24px;
+    padding: 15px;
+    gap: 75px;
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+
+    .nass_advantage__image {
+      overflow: hidden;
+      width: 100%;
+
+      img {
+        width: 100%;
+        height: auto;
+        transition: 0.3s;
+        border-radius: 12px;
+      }
+    }
+
+    &:hover {
+      .nass_advantage__body {
+        opacity: 1;
+        z-index: 6;
+        left: 20px;
+      }
+
+      img {
+        transform: scale(1.05);
+      }
+    }
+
+    .nass_advantage__body {
+      width: 25%;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      position: absolute;
+      background-color: $_2k25-background-hue-darker-transparent;
+      backdrop-filter: blur(10px);
+      padding: 15px 20px;
+      border-radius: 12px;
+      bottom: 0;
+      top: 0;
+      left: -25%;
+      opacity: 0;
+      margin: auto;
+
+      transition: 0.3s;
+      z-index: 6;
+      max-height: calc(100% - 20px - 30px - 15px);
+      height: fit-content;
+
+      justify-content: space-between;
+
+      .nass_advantage__content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: space-between;
+        gap: 30px;
+
+        .content__box {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+
+          .content__item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            .content__title {
+              font-size: 1.1rem;
+              font-weight: bold;
+              margin: 0;
+            }
+
+            .content__description {
+              font-size: 0.9rem;
+              opacity: 0.8;
+              margin: 0;
+            }
+          }
+        }
+      }
+
+      .nass_advantage__title {
+        display: flex;
+        flex-direction: row-reverse;
+        border-radius: 12px;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.5rem;
+        font-weight: bold;
+
+        svg {
+          width: 30px;
+          height: 30px;
+          fill: $_2k25-text;
+        }
+      }
+
+      .nass_advantage__description {
+        b {
+          color: $da-main-hue-lighter;
+        }
+      }
+    }
+  }
+}
+
+
+
+.nass_homepage__box {
+  padding: 20px;
+  border-radius: 24px;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: fit-content;
+  display: flex;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid transparent;
+  backdrop-filter: blur(10px);
+  height: fit-content;
+  width: calc(100% - 40px);
+  transition: 0.3s;
+  flex-direction: column;
+  gap: 20px;
+
+  .nass_service__info__header,
+  .nass_homepage__box__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px;
+    width: 100%;
+
+    .nass_service__info__item__title,
+    .nass_home__box__header__subtitle {
+      display: flex;
+      flex-direction: column;
+
+      .nass_service__info__item__title__subtitle {
+        font-size: 0.8rem;
+        opacity: 0.8;
+      }
+    }
+
+    .nass_service__info__item__value {
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+      align-items: center;
+      padding: 10px 15px;
+      border-radius: 8px;
+
+      span {
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
+
+.nass_mailing__list {
+  width: calc(100% - 40px);
+
+  .nass_homepage__box__content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    justify-content: space-between;
+    height: 100%;
+
+    .mailing__input__container {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      width: 100%;
+      align-items: center;
+      height: 100%;
+
+      .inputs-container {
+        flex: 1;
+        width: 100% !important;
+        margin: 0;
+
+        .global__input__content {
+          width: 100% !important;
+        }
+      }
+    }
+  }
+}
+
+.nass_service__informations {
+  width: 25%;
+  background-color: $_2k25-background-hue-darker-transparent;
+
+  .nass_service__info__item {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .nass_service__info__item__title {
+    p {
+      margin: 0;
+      padding: 0;
+    }
+
+    .nass_service__info__item__title__subtitle {
+      color: $da-confirm-hue;
+    }
+  }
+
+  // Active state
+  &.nass_service__info__item__value--active {
+    .nass_service__info__item__value {
+      animation: ActivePulse 2s ease-in-out infinite;
+
+      background-color: rgba($da-confirm-hue, 0.1);
+      border: 1px solid $da-confirm-hue;
+      color: $da-confirm-hue;
+
+      svg * {
+        fill: $da-confirm-hue;
+      }
+    }
+
+
+  }
+
+  // Inactive state
+  &.nass_service__info__item__value--inactive {
+    .nass_service__info__item__value {
+      animation: InactivePulse 2s ease-in-out infinite;
+
+      background-color: rgba($da-error-hue, 0.1);
+      border: 1px solid $da-error-hue;
+      color: $da-error-hue;
+
+      svg * {
+        fill: $da-error-hue;
+      }
+    }
+
+    .nass_service__info__item__title {
+      .nass_service__info__item__title__subtitle {
+        color: $da-error-hue;
+      }
+    }
+  }
+}
+
+.service__info__display {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .service__info__display__expander {
+    padding: 5px 10px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 10px;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+    user-select: none;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  }
+
+  .nass_service__system__description {
+    width: calc(100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 0.9rem;
+
+    .nass_service__system__desc__item {
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+      align-items: center;
+      justify-content: space-between;
+
+      h5 {
+        margin: 0;
+        padding: 0;
+        font-weight: normal;
+        opacity: 0.8;
+      }
+
+      span {
+        width: fit-content;
+        white-space: wrap;
+      }
+    }
+  }
+}

@@ -108,12 +108,20 @@
       }
       .service__info__value {
         font-size: 14px;
-        font-weight: bold;
+        width: fit-content;
+        padding: 2px 5px;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        height: fit-content;
         &.connected {
           color: $da-confirm-hue;
+          border-color: $da-confirm-hue-transparent;
+          background-color: $da-confirm-hue-transparent;
         }
         &.disconnected {
           color: $da-error-hue;
+          border-color: $da-error-hue-transparent;
+          background-color: $da-error-hue-transparent;
         }
       }
     }
