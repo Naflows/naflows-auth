@@ -64,8 +64,8 @@ const Status = ({
         data-tooltip="Current status of the NASS service"
       >
         <div className="nass_service__info__header">
-          <div className="nass_service__info__item__title">
-            <p>Service Status</p>
+          <div className="nass_home__box__header__subtitle">
+            <span className="nass_service__info__item__title">Service Status</span>
             <span className="nass_service__info__item__title__subtitle">
               {serviceStatus && serviceStatus.status == 200
                 ? "All systems operational"
