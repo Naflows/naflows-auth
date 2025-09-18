@@ -491,4 +491,33 @@ a {
   :root {
     width: 100%;
   }
+
+  .panel {
+    padding: 20px 20px;
+    width: calc(100% - 40px) !important;
+    height: calc(100% - 40px) !important;
+    img {
+      width: 100% !important;
+    }
+    .form {
+      .two-columns {
+        flex-direction: column;
+        .inputs-container {
+          width: 100% !important;
+        }
+        .global__input {
+          margin: 0 !important;
+          width: 100% !important;
+          .global__input__content {
+            width: 100% !important;
+          }
+        }
+      }
+    }
+  }
+
+
+  .nass__page__loader {
+    width: calc(90% - 40px) !important;
+  }
 }

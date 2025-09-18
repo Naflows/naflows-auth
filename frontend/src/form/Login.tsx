@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Input from "../global/components/Input";
-import Alert from "../global/error-alert/Alert";
+import Alert, { type AlertContentProps } from "../global/error-alert/Alert";
 import { manageLogin } from "../scripts/login";
 import Loader from "../global/components/Loader";
 
@@ -10,7 +10,7 @@ const LoginForm = ({
   redirectOnSuccess?: string;
 }) => {
   const [loading, setLoading] = useState(false);
-  const [alert, setAlert] = useState({
+  const [alert, setAlert] = useState<AlertContentProps>({
     status: 0,
     message: "",
     success: false,

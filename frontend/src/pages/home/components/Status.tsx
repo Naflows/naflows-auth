@@ -49,7 +49,7 @@ const Status = ({
     const intervalId = setInterval(fetchStatus, 15000); // Repeat every 15s
 
     return () => clearInterval(intervalId); // Cleanup on unmount
-  }, []);
+  }, [setServiceStatus]);
 
   return (
     <div

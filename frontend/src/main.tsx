@@ -8,7 +8,6 @@ import Home from "./pages/home/Home.tsx";
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <Routes>
-      {/*  */}
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<App />} />
       <Route

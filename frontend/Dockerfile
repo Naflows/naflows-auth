@@ -4,15 +4,21 @@ WORKDIR /app/frontend
 
 COPY . .
 RUN npm install
-EXPOSE 8080
-RUN npm install -g nodemon
 RUN npm run build
 
-# RUN PRODUCTION SERVER 
-# Found at https://stackoverflow.com/questions/75531401/how-to-use-vite-for-production-build
-FROM busybox:1.35
-RUN adduser -D static 
-USER static 
-WORKDIR /home/static 
-COPY --from=build-stage /app/frontend/dist .
-CMD ["busybox","httpd","-f","-v","-p","8080"]
+# RUN PRODUCTION SERVER WITH NGINX
+FROM nginx:alpine
+COPY --from=build-stage /app/frontend/dist /usr/share/nginx/html
+
+# Create nginx config for SPA routing
+RUN echo 'server { \
+    listen 8080; \
+    location / { \
+        root /usr/share/nginx/html; \
+        index index.html index.htm; \
+        try_files $uri $uri/ /index.html; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
+
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]

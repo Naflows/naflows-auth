@@ -40,7 +40,7 @@ const AccountHeader = ({
       <div className="nass__account__page__header">
         <div className="header__tabs">
           <img
-            src="../../../../public/assets/naflows-green.svg"
+            src="/assets/naflows-green.svg"
             alt="Naflows logo"
             className="logo"
           />

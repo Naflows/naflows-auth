@@ -14,14 +14,14 @@ const Home = () => {
       <div className="nass__home__head">
         <div className="nass__home__logos">
           <img
-            src="../../../public/assets/NASS-logotype.png"
+            src="/assets/NASS-logotype.png"
             alt="NASS Logo"
             className="nass__home__logo"
           />
           <div className="nass__author">
             <span>BY</span>
             <img
-              src="../../../public/assets/naflows-logotype.svg"
+              src="/assets/naflows-logotype.svg"
               alt="Naflows Logo"
               className="nass__home__logo naf-logo"
             />
@@ -151,7 +151,7 @@ const Home = () => {
                 <path d="M612-85q-12 12-28.5 12T555-85l-87-87q-12-12-12-28t12-28l87-87q12-12 28.5-12t28.5 12q12 12 12 28t-12 28l-59 59 59 59q12 12 12 28t-12 28Zm136 0q-12-12-12-28t12-28l59-59-59-59q-12-12-12-28t12-28q12-12 28.5-12t28.5 12l87 87q12 12 12 28t-12 28l-87 87q-12 12-28.5 12T748-85Zm-588-75q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v160q0 17-11.5 28.5T840-440H600q-100 0-170 70t-70 170q0 17-11.5 28.5T320-160H160Z" />
               </svg>
             }
-            imgLink="../../../public/assets/home-page/open-source.png"
+            imgLink="/home-page/open-source.png"
           />
           <HomeAdvantage
             title="Privacy-Focused"
@@ -201,7 +201,7 @@ const Home = () => {
                 <path d="M444-360h72q9 0 15.5-7.5T536-384l-19-105q20-10 31.5-29t11.5-42q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 23 11.5 42t31.5 29l-19 105q-2 9 4.5 16.5T444-360Zm36 276q-7 0-13-1t-12-3q-135-45-215-166.5T160-516v-189q0-25 14.5-45t37.5-29l240-90q14-5 28-5t28 5l240 90q23 9 37.5 29t14.5 45v189q0 140-80 261.5T505-88q-6 2-12 3t-13 1Z" />
               </svg>
             }
-            imgLink="../../../public/assets/home-page/privacy-focused.png"
+            imgLink="/home-page/privacy-focused.png"
           />
           <HomeAdvantage
             title="User-Centric Design"
@@ -249,7 +249,7 @@ const Home = () => {
                 <path d="M120-120q-33 0-56.5-23.5T40-200v-80q0-33 23.5-56.5T120-360h240q33 0 56.5 23.5T440-280v80q0 33-23.5 56.5T360-120H120Zm480 0q-33 0-56.5-23.5T520-200v-560q0-33 23.5-56.5T600-840h240q33 0 56.5 23.5T920-760v560q0 33-23.5 56.5T840-120H600Zm120-120q17 0 28.5-11.5T760-280q0-17-11.5-28.5T720-320q-17 0-28.5 11.5T680-280q0 17 11.5 28.5T720-240ZM120-440q-33 0-56.5-23.5T40-520v-240q0-33 23.5-56.5T120-840h240q33 0 56.5 23.5T440-760v240q0 33-23.5 56.5T360-440H120Zm160-200q17 0 28.5-11.5T320-680q0-17-11.5-28.5T280-720q-17 0-28.5 11.5T240-680q0 17 11.5 28.5T280-640ZM150-520h100q12 0 18-11t-2-21l-50-67q-6-8-16-8t-16 8l-50 67q-8 10-2 21t18 11Z" />
               </svg>
             }
-            imgLink="../../../public/assets/home-page/user-centric-design.png"
+            imgLink="/home-page/user-centric-design.png"
           />
         </div>
       </div>
