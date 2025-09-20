@@ -3,6 +3,7 @@ import Input from "../../../../global/components/Input";
 import axios from "axios";
 import Textarea from "../../../../global/components/Textarea";
 import ImageUpload from "./ImageUpload";
+import Switch from "../../../../global/components/Switch";
 
 export interface ServiceDescriptionProps {
     name: string;
@@ -16,8 +17,8 @@ const CreateServiceDescription = ({
     serviceDescription,
     setServiceDescription
 }: {
-    serviceDescription: ServiceDescriptionProps | null;
-    setServiceDescription: React.Dispatch<React.SetStateAction<ServiceDescriptionProps | null>>;
+    serviceDescription: ServiceDescriptionProps;
+    setServiceDescription: React.Dispatch<React.SetStateAction<ServiceDescriptionProps>>;
 }) => {
 
     const [serviceID, setServiceID] = useState<string>("");
@@ -34,6 +35,13 @@ const CreateServiceDescription = ({
         })();
     }, []);
 
+    useEffect(() => {
+        setServiceDescription({
+            ...serviceDescription,
+            name: serviceDescription ? serviceDescription.name : "",
+        });
+    }, [serviceID]);
+
     return (
         <div className="services__creation__form">
             <div className="services__creation__header">
@@ -44,45 +52,78 @@ const CreateServiceDescription = ({
             </div>
 
             <div className="form">
-                <div className="form-content two-columns" style={{
-                    alignItems: "center",
-                    gap: "50px"
+                <div className="inputs-container two-rows" style={{
+                    gap: "20px",
+                    display: "flex",
+                    flexDirection: "column",
+                    flexWrap: "wrap",
                 }}>
-                    <ImageUpload
-                        serviceDescription={serviceDescription}
-                        setServiceDescription={setServiceDescription}
-                    />
-                    <div className="inputs-container">
-                        <div className="global__input__container two-columns">
-                            <Input
-                                label="Service Name"
-                                type="text"
-                                required={true}
-                                editMode={true}
-                                name="service-name"
-                                value={serviceDescription ? serviceDescription.name : ""}
-                                autoComplete={false}
-                            />
-                            <Input
-                                label="Service Id"
-                                type="text"
-                                required={true}
-                                editMode={false}
-                                name="service-id"
-                                allowCopy={true}
-                                value={serviceID}
-                                fitContent={true}
-                            />
-                        </div>
-                        <div className="global__input">
-                            <Textarea
-                                label="Service Description"
-                                name="service-description"
-                                required={true}
-                                maxCharacters={500}
-                            />
+                    <div className="inputs-container  two-columns" style={{
+                        alignItems: "start",
+                        gap: "50px"
+                    }}>
+                        <ImageUpload
+                            serviceDescription={serviceDescription}
+                            setServiceDescription={setServiceDescription}
+                        />
+                        <div className="inputs-container">
+                            <div className="global__input__container two-columns">
+                                <Input
+                                    label="Service Name"
+                                    type="text"
+                                    required={true}
+                                    editMode={true}
+                                    name="service-name"
+                                    value={serviceDescription ? serviceDescription.name : ""}
+                                    autoComplete={false}
+                                    onChange={(e) => {
+                                        if (e.target.value != serviceDescription.name) {
+                                            setServiceDescription({ ...serviceDescription, name: e.target.value });
+                                        }
+                                    }}
+                                    maxLength={100}
+                                    maxChar={100}
+                                    displayMaxChar={true}
+                                />
+                                <Input
+                                    label="Service Id"
+                                    type="text"
+                                    required={true}
+                                    editMode={false}
+                                    name="service-id"
+                                    allowCopy={true}
+                                    value={serviceID}
+                                    fitContent={true}
+                                    autoComplete={false}
+                                />
+                            </div>
+                            <div className="global__input">
+                                <Textarea
+                                    label="Service Description"
+                                    name="service-description"
+                                    required={true}
+                                    maxCharacters={500}
+                                    onChange={(e) => {
+                                        if (e.target.value != serviceDescription.description) {
+                                            setServiceDescription({ ...serviceDescription, description: e.target.value });
+                                        }
+                                    }}
+                                    value={serviceDescription ? serviceDescription.description : ""}
+                                    minHeight={200}
+                                />
+                            </div>
                         </div>
                     </div>
+                    <Switch
+                        label="Allow Public Visibility"
+                        checked={serviceDescription ? serviceDescription.allow_public_visibility : false}
+                        onChange={(checked) => {
+                            if (checked != serviceDescription.allow_public_visibility) {
+                                setServiceDescription({ ...serviceDescription, allow_public_visibility: checked });
+                            }
+                        }}
+                        description="If enabled, your service will be listed publicly in the Naflows Services Directory, and anyone will be able to connect to it. If disabled, only users you invite to your service will be able to connect."
+                    />
                 </div>
             </div>
         </div>

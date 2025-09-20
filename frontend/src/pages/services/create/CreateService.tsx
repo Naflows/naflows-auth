@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import fetchData from "../../../scripts/account/get-user-info";
 import type { AxiosResponse } from "axios";
 import type { UserBodyProps } from "../../../types/UserBodyProps";
@@ -40,28 +40,39 @@ const CreateService = () => {
         description: string;
         profileImage: string;
         allow_public_visibility: boolean;
-    } | null>(null);
+    }>({
+        name: "",
+        description: "",
+        profileImage: "",
+        allow_public_visibility: false
+    });
     const [guidelinesAccepted, setGuidelinesAccepted] = useState(false);
+    const [component, setComponent] = useState<React.JSX.Element | null>(null);
+
+
+    useEffect(() => {
+        if (serviceCreationStep == "disclaimer") {
+            setComponent(<div key={"disclaimer-header"} className="services__creation__body">
+                <CreateServiceHeaderButtons setServiceCreationStep={setServiceCreationStep} currentStep={serviceCreationStep} />
+                <ServiceCreationDisclaimer setGuidelinesAccepted={setGuidelinesAccepted} guidelinesAccepted={guidelinesAccepted} />
+                <button className={`primary-button width-100-auto ${guidelinesAccepted ? "active" : "inactive"}`} disabled={!guidelinesAccepted} onClick={() => {
+                    if (guidelinesAccepted) {
+                        setServiceCreationStep("wizard-init");
+                    }
+                }}>Proceed</button>
+            </div>);
+        } else if (serviceCreationStep == "wizard-init") {
+            setComponent(<div key={"wizard-init"} className="services__creation__body">
+                <CreateServiceHeaderButtons setServiceCreationStep={setServiceCreationStep} currentStep={serviceCreationStep} />
+                <CreateServiceDescription serviceDescription={serviceDescription} setServiceDescription={setServiceDescription} />
+                <ServiceCreationFooterButtons setServiceCreationStep={setServiceCreationStep} nextConditionMet={ serviceDescription?.name != "" && serviceDescription?.description != "" && serviceDescription?.profileImage != ""} />
+            </div>);
+        }
+    }, [serviceCreationStep, guidelinesAccepted, serviceDescription]);
 
 
 
 
-    const components = {
-        "disclaimer": [<div key={"disclaimer-header"} className="services__creation__body">
-            <CreateServiceHeaderButtons setServiceCreationStep={setServiceCreationStep} currentStep={serviceCreationStep} />
-            <ServiceCreationDisclaimer setGuidelinesAccepted={setGuidelinesAccepted} guidelinesAccepted={guidelinesAccepted} />
-            <button className={`primary-button width-100-auto ${guidelinesAccepted ? "active" : "inactive"}`} disabled={!guidelinesAccepted} onClick={() => {
-                if (guidelinesAccepted) {
-                    setServiceCreationStep("wizard-init");
-                }
-            }}>Proceed</button>
-        </div>],
-        "wizard-init": [<div key={"wizard-init"} className="services__creation__body">
-            <CreateServiceHeaderButtons setServiceCreationStep={setServiceCreationStep} currentStep={serviceCreationStep} />
-            <CreateServiceDescription serviceDescription={serviceDescription} setServiceDescription={setServiceDescription} />
-            <ServiceCreationFooterButtons setServiceCreationStep={setServiceCreationStep} />
-        </div>]
-    }
 
 
 
@@ -90,7 +101,7 @@ const CreateService = () => {
                             <p>Create a new service.</p>
                         </div>
                     </div>
-                    {components[serviceCreationStep]}
+                    {component}
                 </div>
             </div>
         );

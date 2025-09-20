@@ -14,7 +14,7 @@
     .services__creation__body {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 30px;
 
         .buttons-container {
             display: flex;
@@ -26,7 +26,9 @@
         .services__creation__form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
+
+
 
             .image__upload__container {
                 width: 200px;
@@ -41,7 +43,7 @@
                     object-fit: cover;
                 }
                 border: 2px solid $_2k25-background-hue-40;
-                margin-top:-10px;
+                margin-top:10px;
                 display: flex;
                 align-items: center;
                 justify-content: center;

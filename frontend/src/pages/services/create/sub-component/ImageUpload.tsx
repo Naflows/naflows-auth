@@ -6,8 +6,8 @@ const ImageUpload = ({
     serviceDescription,
     setServiceDescription
 }: {
-    serviceDescription: ServiceDescriptionProps | null;
-    setServiceDescription: React.Dispatch<React.SetStateAction<ServiceDescriptionProps | null>>;
+    serviceDescription: ServiceDescriptionProps;
+    setServiceDescription: React.Dispatch<React.SetStateAction<ServiceDescriptionProps>>;
 }) => {
     return (
         <div className="image__upload__container" onClick={() => {
@@ -27,15 +27,10 @@ const ImageUpload = ({
             </div>
             <input type="file" id="file-input" accept="image/*" style={{ display: 'none' }} onChange={(e) => {
                 const file = e.target.files ? e.target.files[0] : null;
-                if (file && setServiceDescription) {
+                if (file) {
                     const reader = new FileReader();
                     reader.onloadend = () => {
-                        setServiceDescription({
-                            name: serviceDescription ? serviceDescription.name : "",
-                            description: serviceDescription ? serviceDescription.description : "",
-                            profileImage: reader.result as string,
-                            allow_public_visibility: serviceDescription ? serviceDescription.allow_public_visibility : false
-                        });
+                        setServiceDescription({ ...serviceDescription, profileImage: reader.result as string });
                     }
                     reader.readAsDataURL(file);
                 }

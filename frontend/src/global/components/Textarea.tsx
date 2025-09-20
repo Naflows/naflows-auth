@@ -1,8 +1,8 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const Textarea = ({
-    value, onChange, maxCharacters, label, name, required
+    value, onChange, maxCharacters, label, name, required, minHeight = 150
 }: {
     value?: string;
     onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -10,6 +10,7 @@ const Textarea = ({
     label?: string;
     name?: string;
     required?: boolean;
+    minHeight?: number;
 }) => {
     const [char, setChar] = useState<number>(0);
     const [valueIn, setValueIn] = useState<boolean>(value ? true : false);
@@ -33,8 +34,9 @@ const Textarea = ({
                 name={name}
                 id={name}
                 required={required}
+                style={{ minHeight: minHeight }}
             />
-            <p className="textarea-character-count">{char}/{maxCharacters ? maxCharacters : 0}</p>
+            <p className="character-count">{char}/{maxCharacters ? maxCharacters : 0}</p>
         </div>
     )
 }

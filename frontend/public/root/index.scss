@@ -82,6 +82,7 @@ body {
         top: -10px;
         left: 10px;
         font-size: 13px;
+
         &.textarea-label {
           top: 0;
         }
@@ -108,12 +109,14 @@ body {
       border-radius: 10px;
       padding: 10px 20px;
       resize: none;
-      position:relative;
+      position: relative;
+
       &:focus {
         outline: 2px solid $_2k25-darker;
       }
     }
-    .textarea-character-count {
+
+    .character-count {
       position: absolute;
       bottom: 5px;
       right: 10px;
@@ -134,6 +137,7 @@ body {
       width: fit-content;
       min-width: 150px;
       max-width: calc(100% - 40px);
+      
 
       /* Remove the input number type arrows */
       &::-webkit-inner-spin-button,
@@ -177,7 +181,8 @@ body {
       width: fit-content;
       border-radius: 10px;
       height: fit-content;
-      color : $da-secondary-hue-lighter-2;
+      color: $da-secondary-hue-lighter-2;
+
       &.textarea-label {
         top: 15px;
       }
@@ -209,6 +214,60 @@ body {
       background-color: $_2k25-darker;
       color: $_2k25-background-hue-darker;
       border-color: $_2k25-darker;
+    }
+  }
+}
+
+.nass_switch {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  cursor: pointer;
+
+  .nass_switch__container {
+    width: 60px;
+    height: 25px;
+    border-radius: 15px;
+    background-color: $_2k25-background-hue-40;
+    position: relative;
+    transition: background-color 0.3s;
+
+    &.nass_switch__container--checked {
+      .nass_switch__toggle {
+        transform: translateX(calc(-100% - 5px));
+        background-color: $da-secondary-hue
+      }
+    }
+
+    .nass_switch__toggle {
+      width: 21px;
+      height: 21px;
+      border-radius: 50%;
+      right: 2px;
+      background-color: $_2k25-background-hue-darker;
+      position: absolute;
+      top: 2px;
+      transition: all 0.3s;
+    }
+
+
+  }
+
+  .nass_switch__label {
+    width: 100%;
+    h5, p {
+      margin: 0;
+      padding: 0;
+    }
+    h5 {
+      font-size: 15px;
+      font-weight: 600;
+      color: $da-secondary-hue-lighter-2;
+    }
+    p {
+      font-size: 13px;
+      opacity: 0.7;
     }
   }
 }

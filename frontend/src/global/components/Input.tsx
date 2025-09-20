@@ -13,6 +13,9 @@ interface InputProps {
   aboutModeText?: string;
   allowCopy?: boolean;
   fitContent?: boolean;
+  maxChar?: number;
+  displayMaxChar?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Input = ({
@@ -28,11 +31,25 @@ const Input = ({
   aboutModeText,
   allowCopy = false,
   fitContent = true,
+  onChange = undefined,
+  maxChar = 100,
+  displayMaxChar = false,
 }: InputProps) => {
   const [valueIn, setValueIn] = useState<boolean>(value ? true : false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
 
   const copyButtonRef = useRef<HTMLButtonElement>(null);
+
+  if (onChange === undefined) {
+    onChange = (el: React.ChangeEvent<HTMLInputElement>) => {
+      const value = el.currentTarget.value;
+      if (value.replace(" ", "") !== "") {
+        setValueIn(true);
+      } else {
+        setValueIn(false);
+      }
+    }
+  }
 
   useEffect(() => {
     if (allowCopy && value) {
@@ -46,13 +63,19 @@ const Input = ({
   useEffect(() => {
     if (copyButtonRef.current) {
       // Set input width to fit content without overflowing on copy button
-      const input = document.getElementById(name+"-input") as HTMLInputElement;
+      const input = document.getElementById(name + "-input") as HTMLInputElement;
       if (input) {
         input.style.paddingRight = copyButtonRef.current.offsetWidth + 20 + "px";
         input.style.width = fitContent ? "auto" : `calc(100% - ${copyButtonRef.current.offsetWidth + 40}px)`;
       }
+    } else if (displayMaxChar) {
+      const input = document.getElementById(name + "-input") as HTMLInputElement;
+      if (input) {
+        input.style.paddingRight = 60 + "px";
+        input.style.width = fitContent ? "auto" : `calc(100% - 90px)`;
+      }
     }
-  }, [copyButtonRef, name, fitContent, isCopied, value]);
+  }, [copyButtonRef, name, fitContent, isCopied, value, displayMaxChar]);
 
   return (
     <div
@@ -69,16 +92,10 @@ const Input = ({
           className="text-size-20"
           type={type}
           name={name}
-          id={name+"-input"}
+          id={name + "-input"}
           defaultValue={value}
-          onInput={(el) => {
-            const value = el.currentTarget.value;
-            if (value.replace(" ", "") !== "") {
-              setValueIn(true);
-            } else {
-              setValueIn(false);
-            }
-          }}
+          onInput={onChange}
+
           style={{
             width: fitContent ? "auto" : "calc(100% - 40px)",
           }}
@@ -95,13 +112,17 @@ const Input = ({
             onClick={() => {
               navigator.clipboard.writeText(value);
               setIsCopied(true);
-              
             }}
             ref={copyButtonRef}
           >
             <span>{isCopied ? "Copied!" : "Copy"}</span>
           </button>
         ) : null}
+
+        {maxChar && displayMaxChar ? (
+          <p className="character-count">{value ? value.length : 0}/{maxChar}</p>
+        ) : null}
+
       </div>
 
       {aboutMode && aboutModeText ? (
