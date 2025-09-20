@@ -14,11 +14,11 @@
 */
 
 import { v4 } from "uuid";
-import { Service, ServiceSettings, ServiceStoragePlan, ServiceToken } from "../../types/.types/collections.type";
-import { ReplyType } from "../../types/.types/reply.type";
-import { software } from "../../software/dir";
-import { services } from "./dir";
-import { db } from "../..";
+import { Service, ServiceSettings, ServiceStoragePlan, ServiceToken } from "../../../types/.types/collections.type";
+import { ReplyType } from "../../../types/.types/reply.type";
+import { software } from "../../../software/dir";
+import { services } from "../dir";
+import { db } from "../../..";
 import { Collection } from "mongoose";
 
 export async function registerService(

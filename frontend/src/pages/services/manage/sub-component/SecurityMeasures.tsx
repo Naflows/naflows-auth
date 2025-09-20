@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { ServicesForUserProps } from "../../../types/ServicesForUserProps";
+import type { ServicesForUserProps } from "../../../../types/ServicesForUserProps";
 
 async function checkServiceReachability(
   service: ServicesForUserProps | null,

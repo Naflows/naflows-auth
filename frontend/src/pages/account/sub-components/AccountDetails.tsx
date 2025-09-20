@@ -23,6 +23,7 @@ const AccountDetails = ({
                 autoComplete={false}
                 editMode={false}
                 aboutMode={true}
+                fitContent={true}
                 aboutModeText="This is your unique user ID and cannot be changed. It is used for account identification and authentication purposes."
                 allowCopy={true}
               />

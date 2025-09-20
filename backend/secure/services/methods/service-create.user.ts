@@ -1,10 +1,10 @@
 import { Collection } from "mongoose";
-import { software } from "../../software/dir";
-import { Service, ServiceSettings, ServiceStoragePlan } from "../../types/.types/collections.type";
-import { ReplyType } from "../../types/.types/reply.type";
-import secure from "../global/dir";
-import { db } from "../..";
-import { services } from "./dir";
+import { software } from "../../../software/dir";
+import { Service, ServiceSettings, ServiceStoragePlan } from "../../../types/.types/collections.type";
+import { ReplyType } from "../../../types/.types/reply.type";
+import secure from "../../global/dir";
+import { db } from "../../..";
+import { services } from "../dir";
 
 /*
 

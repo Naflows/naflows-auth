@@ -290,6 +290,12 @@ app.post('/public/mailing/subscribe', async (req, res) => {
     res.status(result.status).json(result);
 });
 
+app.post('/public/services/generate-api-id', async (req, res) => {
+    // This generates API IDs for third-party services to connect to Naflows when creating a service
+    const newKey = await services.service.generateID();
+    res.status(newKey.status).json(newKey);
+});
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -359,10 +359,10 @@
               &:not(.selected):hover {
                 cursor: pointer;
                 background-color: $_2k25-background-hue-40;
-                border: 2px solid $da-main-hue;
+                border: 2px solid $da-secondary-hue;
               }
               &.active {
-                border: 2px solid $da-main-hue;
+                border: 2px solid $da-secondary-hue;
                 cursor: default;
                 background-color: $_2k25-background-hue-40;
               }
@@ -407,11 +407,11 @@
               &.selected {
                 background-color: $_2k25-background-hue-40;
 
-                border: 2px solid $da-main-hue;
+                border: 2px solid $da-secondary-hue;
               }
               &:not(.selected):hover {
                 background-color: $_2k25-background-hue-50-transparent;
-                border: 2px solid $da-main-hue;
+                border: 2px solid $da-secondary-hue;
               }
               .manage__personal__data__option__title {
                 font-size: 14px;

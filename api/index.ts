@@ -11,7 +11,8 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: ['http://localhost:8080', 'https://nass.naflows.com'],
+    origin: ['http://localhost:8080', 'https://nass.naflows.com', 'http://localhost:3005'  // Add this
+    ],
     credentials: true
 }));
 app.use(fingerprint({
@@ -22,7 +23,21 @@ app.use(fingerprint({
     ]
 }));
 
+
+
 app.use(express.urlencoded({ extended: true }));
+
+// Middleware to return req url
+import { Request, Response, NextFunction } from 'express';
+// when coming from a proxy (e.g. connecting to frontend.com/api the proxy will return correct link without /api/), the request is rejected because of a typerror where the URL is invalid. How to fix that?
+app.use((req: Request, _res: Response, next: NextFunction) => {
+    // Check for the proxy path prefix, e.g., '/api'
+    if (req.url.startsWith('/api')) {
+        // Strip the prefix to get the correct path
+        req.url = req.url.substring('/api'.length);
+    }
+    next();
+});
 
 app.get('/', (req, res) => {
     res.send('Hello from Dummy API');
@@ -65,14 +80,23 @@ const service = {
     service_token_birth: new Date("2025-09-01").getTime()
 }
 
-app.get('/public/status-check', async (req, res) => {
+app.get('/public/status-check', async (req: Request, res: Response) => {
     const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/public/status`, {
         client: service
     });
     res.status(f.status).json(f.data);
 });
 
-app.get('/public/subscribe-mailing', async (req, res) => {
+app.get('/public/generate-api-id', async (req: Request, res: Response) => {
+    // This generates API IDs for third-party services to connect to Naflows when creating a service
+    console.log("Generating new API ID for service creation...");
+    const newKey = await axios.post(`${process.env.AUTH_API_URL_DEV}/public/services/generate-api-id`, {
+        client: service
+    });
+    res.status(newKey.status).json(newKey.data);
+});
+
+app.get('/public/subscribe-mailing', async (req: Request, res: Response) => {
     const email = req.query.email;
     if (email == undefined || typeof email !== 'string' || email.length < 5 || !email.includes('@')) {
         return res.status(400).json({ status: 400, message: "Invalid email address.", success: false });
@@ -92,7 +116,7 @@ app.get('/public/subscribe-mailing', async (req, res) => {
 });
 
 
-app.get('/get-user-info/services/:id/service-informations', async (req, res) => {
+app.get('/get-user-info/services/:id/service-informations', async (req: Request, res: Response) => {
     const { sessionID, token, uid } = getCookies(req);
     const serviceID = req.params.id;
     console.log("Service ID requested:", serviceID);
@@ -128,7 +152,7 @@ app.get('/get-user-info/services/:id/service-informations', async (req, res) => 
 
 });
 
-app.get('/get-user-info/services', async (req, res) => {
+app.get('/get-user-info/services', async (req: Request, res: Response) => {
     const cookies = req.headers.cookie || '';
 
     const { sessionID, token, uid } = getCookies(req);
@@ -160,7 +184,7 @@ app.get('/get-user-info/services', async (req, res) => {
 
 });
 
-app.get('/get-user-info/user', async (req, res) => {
+app.get('/get-user-info/user', async (req: Request, res: Response) => {
     const cookies = req.headers.cookie || '';
 
     const { sessionID, token, uid } = getCookies(req);
@@ -197,7 +221,7 @@ app.get('/get-user-info/user', async (req, res) => {
 // IT WILL FORWARD THE REQUEST TO NASS AND RETURN THE RESPONSE
 // IT WILL ALSO SET THE COOKIES RECEIVED FROM NASS
 
-app.post('/send-login-request', async (req, res) => {
+app.post('/send-login-request', async (req: Request, res: Response) => {
     const { user_id, password, identifier } = req.body;
 
 

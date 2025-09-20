@@ -1,0 +1,120 @@
+@import '../../../variables.scss';
+
+
+.services__creation__page {
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.services__creation__section {
+    width: 50%;
+    box-shadow: 0 0 100px $da-secondary-hue-transparent;
+
+    .services__creation__body {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .buttons-container {
+            display: flex;
+            gap: 10px;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .services__creation__form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+
+            .image__upload__container {
+                width: 200px;
+                height: 200px;
+                border-radius: 8px;
+                overflow: hidden;
+                position: relative;
+                cursor: pointer;
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+                border: 2px solid $_2k25-background-hue-40;
+                margin-top:-10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 10px;
+                position:relative;
+
+                .image__upload__placeholder {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                    position:absolute;
+                    &.with-image {
+                        background: rgba(0, 0, 0, 0.5);
+                        color: white;
+                        backdrop-filter: blur(5px);
+                        flex-direction: row;
+                        font-size: 13px;
+                        gap: 5px;
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                        bottom: 5px;
+                        left: 5px;
+                        svg {
+                            width: 16px;
+                            height: 16px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.services__creation__header__step {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: start;
+    button {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
+
+.services__creation__header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-width: 75%;
+    user-select: none;
+
+    h3 {
+        margin: 0 0 0 0;
+        color: $da-secondary-hue;
+    }
+
+    p {
+        margin: 0;
+        font-size: 14px;
+        opacity: 0.8;
+    }
+}
+
+.services__creation__disclaimer {
+    padding: 20px;
+    border: 1px solid $da-secondary-hue;
+    background-color: $da-secondary-hue-transparent;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}

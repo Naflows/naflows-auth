@@ -1,4 +1,4 @@
-import type { ServicesForUserProps } from "../../../types/ServicesForUserProps";
+import type { ServicesForUserProps } from "../../../../types/ServicesForUserProps";
 
 const ServiceCapacities = ({
   service,

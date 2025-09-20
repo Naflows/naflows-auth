@@ -51,7 +51,7 @@ const ServicesComponent = ({
             <button
               className="primary-button"
               onClick={() => {
-                alert("Feature coming soon!");
+                window.location.href = "/services/new";
               }}
             >
               <svg

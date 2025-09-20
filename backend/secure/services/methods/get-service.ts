@@ -1,6 +1,6 @@
-import { db } from "../..";
-import { software } from "../../software/dir";
-import { ReplyType } from "../../types/.types/reply.type";
+import { db } from "../../..";
+import { software } from "../../../software/dir";
+import { ReplyType } from "../../../types/.types/reply.type";
 
 
 export async function getService(api_id: string): Promise<ReplyType> {

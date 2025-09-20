@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface InputProps {
   label: string;
@@ -32,6 +32,8 @@ const Input = ({
   const [valueIn, setValueIn] = useState<boolean>(value ? true : false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
 
+  const copyButtonRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     if (allowCopy && value) {
       const timer = setTimeout(() => {
@@ -41,6 +43,17 @@ const Input = ({
     }
   }, [isCopied, allowCopy, value]);
 
+  useEffect(() => {
+    if (copyButtonRef.current) {
+      // Set input width to fit content without overflowing on copy button
+      const input = document.getElementById(name+"-input") as HTMLInputElement;
+      if (input) {
+        input.style.paddingRight = copyButtonRef.current.offsetWidth + 20 + "px";
+        input.style.width = fitContent ? "auto" : `calc(100% - ${copyButtonRef.current.offsetWidth + 40}px)`;
+      }
+    }
+  }, [copyButtonRef, name, fitContent, isCopied, value]);
+
   return (
     <div
       className={
@@ -48,9 +61,7 @@ const Input = ({
       }
 
     >
-      <div className={"global__input__content" + (valueIn ? " filled" : "")} style={{
-        width: fitContent ? "fit-content" : "100%",
-      }}>
+      <div className={"global__input__content" + (allowCopy ? " allow-copy" : "") + (value || valueIn ? " filled" : "")}>
         <label htmlFor={name} className="text-size-20">
           {label}
         </label>
@@ -58,7 +69,7 @@ const Input = ({
           className="text-size-20"
           type={type}
           name={name}
-          id={name}
+          id={name+"-input"}
           defaultValue={value}
           onInput={(el) => {
             const value = el.currentTarget.value;
@@ -84,7 +95,9 @@ const Input = ({
             onClick={() => {
               navigator.clipboard.writeText(value);
               setIsCopied(true);
+              
             }}
+            ref={copyButtonRef}
           >
             <span>{isCopied ? "Copied!" : "Copy"}</span>
           </button>

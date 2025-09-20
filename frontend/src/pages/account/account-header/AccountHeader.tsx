@@ -47,17 +47,15 @@ const AccountHeader = ({
           <div className="tabs">
             {["Profile", "Services", "Security", "Billing", "Support"].map(
               (tab) => (
-                <div
+                <a
                   key={tab}
                   className={`header__tab ${
                     selectedTab === tab.toLowerCase() ? "active" : ""
                   }`}
-                  onClick={() => {
-                    window.location.href = `/account/${tab.toLowerCase()}`;
-                  }}
+                  href={`/account/${tab.toLowerCase()}`}
                 >
                   {tab}
-                </div>
+                </a>
               )
             )}
           </div>

@@ -1,5 +1,5 @@
-import type { ServicesForUserProps } from "../../../types/ServicesForUserProps";
-import "../../../../public/root/pages/services/manage/sub-components/ServiceDescription.scss";
+import type { ServicesForUserProps } from "../../../../types/ServicesForUserProps";
+import "../../../../../public/root/pages/services/manage/sub-components/ServiceDescription.scss";
 
 const ServiceDescription = ({
   service,
