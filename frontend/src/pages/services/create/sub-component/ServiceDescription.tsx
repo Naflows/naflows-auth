@@ -10,6 +10,7 @@ export interface ServiceDescriptionProps {
     description: string;
     profileImage: string;
     allow_public_visibility: boolean;
+    bannerImage? : string;
 }
 
 
@@ -52,6 +53,14 @@ const CreateServiceDescription = ({
             </div>
 
             <div className="form">
+                <div className="banner__container">
+                    <ImageUpload
+                        serviceDescription={serviceDescription}
+                        setServiceDescription={setServiceDescription}
+                        isBanner={true}
+                    />
+
+                </div>
                 <div className="inputs-container two-rows" style={{
                     gap: "20px",
                     display: "flex",
@@ -65,6 +74,7 @@ const CreateServiceDescription = ({
                         <ImageUpload
                             serviceDescription={serviceDescription}
                             setServiceDescription={setServiceDescription}
+                            isBanner={false}
                         />
                         <div className="inputs-container">
                             <div className="global__input__container two-columns">

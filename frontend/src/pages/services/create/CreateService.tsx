@@ -40,11 +40,13 @@ const CreateService = () => {
         description: string;
         profileImage: string;
         allow_public_visibility: boolean;
+        bannerImage? : string;
     }>({
         name: "",
         description: "",
         profileImage: "",
-        allow_public_visibility: false
+        allow_public_visibility: false,
+        bannerImage : ""
     });
     const [guidelinesAccepted, setGuidelinesAccepted] = useState(false);
     const [component, setComponent] = useState<React.JSX.Element | null>(null);

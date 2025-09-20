@@ -42,6 +42,20 @@
                     height: 100%;
                     object-fit: cover;
                 }
+
+                &.banner {
+                    width: 100% !important;
+                    height: 150px;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    position: relative;
+                    cursor: pointer;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
                 border: 2px solid $_2k25-background-hue-40;
                 margin-top:10px;
                 display: flex;

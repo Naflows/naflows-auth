@@ -20,7 +20,7 @@ const Textarea = ({
     }, [char])
 
     return (
-        <div className={`global__input__content textarea-container ${valueIn ? "filled" : ""}`}>
+        <div className={`global__input__content textarea-container ${valueIn || value ? "filled" : ""}`}>
             <label className="text-size-20 textarea-label" htmlFor="service-description">{label}</label>
             <textarea
                 className="global__input text-size-20"

@@ -4,33 +4,47 @@ import type { ServiceDescriptionProps } from "./ServiceDescription";
 
 const ImageUpload = ({
     serviceDescription,
-    setServiceDescription
+    setServiceDescription,
+    isBanner = false
 }: {
     serviceDescription: ServiceDescriptionProps;
     setServiceDescription: React.Dispatch<React.SetStateAction<ServiceDescriptionProps>>;
+    isBanner?: boolean;
 }) => {
     return (
-        <div className="image__upload__container" onClick={() => {
-            const fileInput = document.getElementById('file-input');
+        <div className={`image__upload__container ${isBanner ? 'banner' : ''}`} onClick={() => {
+            const fileInput = document.getElementById(`file-input-${isBanner ? 'banner' : 'profile'}`);
             if (fileInput) {
                 fileInput.click();
             }
         }}>
-            {serviceDescription && serviceDescription.profileImage && (
-                <img src={serviceDescription.profileImage} alt="Service Profile" className="image__upload__preview" />
+            {serviceDescription && ((serviceDescription.profileImage && !isBanner) || (isBanner && serviceDescription.bannerImage)) && (
+                <img src={(
+                    (isBanner && serviceDescription.bannerImage) ? serviceDescription.bannerImage :
+                    (!isBanner && serviceDescription.profileImage) ?
+                        serviceDescription.profileImage : ""
+                )} alt="Service Profile" className="image__upload__preview" />
             )}
-            <div className={`image__upload__placeholder ${serviceDescription && serviceDescription.profileImage ? 'with-image' : ''}`}>
+            <div className={`image__upload__placeholder ${serviceDescription && ((serviceDescription.profileImage != "" && !isBanner) || (isBanner && serviceDescription.bannerImage != "")) ? 'with-image' : ''}`}>
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M240-160q-33 0-56.5-23.5T160-240v-80q0-17 11.5-28.5T200-360q17 0 28.5 11.5T240-320v80h480v-80q0-17 11.5-28.5T760-360q17 0 28.5 11.5T800-320v80q0 33-23.5 56.5T720-160H240Zm200-486-75 75q-12 12-28.5 11.5T308-572q-11-12-11.5-28t11.5-28l144-144q6-6 13-8.5t15-2.5q8 0 15 2.5t13 8.5l144 144q12 12 11.5 28T652-572q-12 12-28.5 12.5T595-571l-75-75v286q0 17-11.5 28.5T480-320q-17 0-28.5-11.5T440-360v-286Z" /></svg>
                 <span>{
-                    serviceDescription && serviceDescription.profileImage ? "Change" : "Upload"
-                } Image</span>
+                    serviceDescription && ((serviceDescription.profileImage != "" && !isBanner) || (isBanner && serviceDescription.bannerImage != "")) ? "Change" : "Upload"
+                } {
+                        isBanner ? "Banner" : "Profile"
+                    } Image</span>
             </div>
-            <input type="file" id="file-input" accept="image/*" style={{ display: 'none' }} onChange={(e) => {
+            <input type="file" id={`file-input-${isBanner ? 'banner' : 'profile'}`} accept="image/*" style={{ display: 'none' }} onChange={(e) => {
                 const file = e.target.files ? e.target.files[0] : null;
                 if (file) {
                     const reader = new FileReader();
                     reader.onloadend = () => {
-                        setServiceDescription({ ...serviceDescription, profileImage: reader.result as string });
+                        if (setServiceDescription) {
+                            if (isBanner) {
+                                setServiceDescription({ ...serviceDescription, bannerImage: reader.result as string });
+                            } else {
+                                setServiceDescription({ ...serviceDescription, profileImage: reader.result as string });
+                            }
+                        }
                     }
                     reader.readAsDataURL(file);
                 }
