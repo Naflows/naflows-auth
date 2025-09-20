@@ -11,9 +11,10 @@ body {
 
 .nass__page {
   width: var(--nass-page-width) !important;
-  display:flex;
-  
+  display: flex;
+
 }
+
 .user__body__section {
   background-color: $_2k25-background-hue-darker;
   padding: 20px 30px;
@@ -25,10 +26,12 @@ body {
   gap: 20px;
   display: flex;
   flex-direction: column;
+
   .body__section__title {
     text-transform: uppercase;
   }
 }
+
 .nass__page {
   display: flex !important;
   flex-direction: column;
@@ -38,12 +41,13 @@ body {
   width: 75%;
   margin: auto;
   padding-top: calc(var(--header-height) + 80px);
+
   .nass__account__page__header {
     display: flex;
     flex-direction: row;
     gap: 20px;
     justify-content: space-between;
-    align-items: start;
+    align-items: center;
     padding: 20px 50px;
     background-color: $_2k25-background-hue-darker;
     border-radius: 0 0 20px 20px;
@@ -56,22 +60,25 @@ body {
     z-index: 10;
     transition: 0.3s;
     height: var(--header-height);
+    border: 2px solid transparent;
 
     &.scrolled {
       top: 10px;
       width: calc(75% - 200px);
-      background-color: $_2k25-background-hue-transparent;
+      background-color: $_2k25-background-hue-darker-2-transparent;
       backdrop-filter: blur(10px);
       border-radius: 20px;
+      border: 2px solid $_2k25-background-hue-darker;
 
       .header__tabs {
         .tabs {
           user-select: none;
-          
+
           .header__tab {
             &.active {
               background-color: $_2k25-background-hue-50-transparent;
             }
+
             &:not(.active):hover {
               background-color: $_2k25-background-hue-50-transparent;
             }
@@ -81,6 +88,7 @@ body {
 
       .user__header__visual__access {
         border-color: transparent !important;
+
         &:hover {
           background-color: $_2k25-background-hue-50-transparent !important;
         }
@@ -92,10 +100,12 @@ body {
       flex-direction: column;
       gap: 10px;
       align-items: start;
+
       img {
         height: 50px;
         width: auto;
       }
+
       .tabs {
         display: flex;
         flex-direction: row;
@@ -110,8 +120,8 @@ body {
           font-size: 20px;
           height: fit-content;
           text-align: center;
-            color: $Color !important;
-            text-decoration: none;
+          color: $Color !important;
+          text-decoration: none;
 
           &.active,
           &:hover {
@@ -149,14 +159,17 @@ body {
           padding: 0;
           white-space: nowrap;
         }
+
         .username {
           font-size: 13px;
           opacity: 0.7;
         }
+
         .name {
           font-size: 18px;
           font-weight: 600;
         }
+
         .profile-picture {
           padding: 5px;
           background-color: $_2k25-background-hue;
@@ -171,31 +184,54 @@ body {
 
 @media (max-width: 1200px) {
   .nass__account__page__header {
-    flex-direction: column-reverse !important;
+    flex-direction: row-reverse !important;
     gap: 15px !important;
+    left: 0 !important;
+    margin: unset !important;
     padding: 10px 20px !important;
-    width: calc(var(--nass-page-width) - 40px) !important;
+    width: calc(100vw - 40px) !important;
     position: relative;
+    
+    height: fit-content !important;
+
     .header__account {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      width: 100% !important;
+      position: relative;
       flex-direction: row !important;
       justify-content: end !important;
       align-items: center !important;
-      .user__header__data__informations {
-        height: fit-content !important;
+      .user__header__visual__access {
+        width: fit-content !important;
+        padding: 5px 10px !important;
       }
+      .user__header__informations {
+        display: none !important;
+      }
+
     }
+
     .header__tabs {
       width: 100%;
       gap: 10px !important;
+
+
+      img {
+        display: none;
+      }
+
       .tabs {
         left: 0;
         right: 0;
+        gap: 5px !important;
         width: 100% !important;
-        justify-content: space-between !important;
+        flex-wrap: wrap;
+        justify-content: start !important;
+        align-items: start !important;
+
+        .header__tab {
+          font-size: 16px !important;
+          text-align: center;
+          width: fit-content !important;
+        }
       }
     }
   }
@@ -204,5 +240,3 @@ body {
     width: calc(100% - 60px) !important;
   }
 }
-
-

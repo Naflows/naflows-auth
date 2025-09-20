@@ -134,3 +134,24 @@
     flex-direction: column;
     gap: 15px;
 }
+
+@media screen and (max-width: 900px) {
+    .services__creation__header__step {
+        flex-direction: column;
+        align-items: start;
+        svg {
+            display: none
+        }
+    }
+
+    .services__creation__disclaimer__content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px !important;
+    }
+
+    .form {
+        flex-direction: column !important;
+    }
+    
+}

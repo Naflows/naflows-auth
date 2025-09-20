@@ -67,7 +67,7 @@ const CreateService = () => {
             setComponent(<div key={"wizard-init"} className="services__creation__body">
                 <CreateServiceHeaderButtons setServiceCreationStep={setServiceCreationStep} currentStep={serviceCreationStep} />
                 <CreateServiceDescription serviceDescription={serviceDescription} setServiceDescription={setServiceDescription} />
-                <ServiceCreationFooterButtons setServiceCreationStep={setServiceCreationStep} nextConditionMet={ serviceDescription?.name != "" && serviceDescription?.description != "" && serviceDescription?.profileImage != ""} />
+                <ServiceCreationFooterButtons setServiceCreationStep={setServiceCreationStep} nextConditionMet={ serviceDescription?.name != "" && serviceDescription?.description != "" && serviceDescription?.profileImage != "" && serviceDescription?.bannerImage != ""} />
             </div>);
         }
     }, [serviceCreationStep, guidelinesAccepted, serviceDescription]);

@@ -5,17 +5,23 @@ import Account from "./pages/account/Account.tsx";
 import ManageService from "./pages/services/manage/ManageService.tsx";
 import Home from "./pages/home/Home.tsx";
 import CreateService from "./pages/services/create/CreateService.tsx";
+import AppFooter from "./global/components/AppFooter.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<App />} />
+      <Route path="/" element={<>
+        <Home /><AppFooter />
+      </>} />
+      <Route path="/login" element={<>
+        <App /><AppFooter />
+      </>} />
       <Route
         path="/account/:tab?"
         element={
           <>
             <Account />
+            <AppFooter />
           </>
         }
       />
@@ -24,17 +30,20 @@ createRoot(document.getElementById("root")!).render(
         element={
           <>
             <ManageService />
+            <AppFooter />
           </>
         }
       />
-      <Route 
+      <Route
         path="/services/new"
         element={
           <>
             <CreateService />
+            <AppFooter />
           </>
         }
       />
+
     </Routes>
   </BrowserRouter>
 );
