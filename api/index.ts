@@ -1,6 +1,6 @@
+require('dotenv').config();
 import axios from 'axios';
 import cors from 'cors';
-require('dotenv').config();
 
 const express = require('express');
 const fingerprint = require('express-fingerprint');
@@ -102,6 +102,31 @@ app.get('/public/data/plans.json', async (req: Request, res: Response) => {
         client: service
     });
     res.status(f.status).json(f.data);
+});
+
+app.post('/secure/payement/create-intent', async (req: Request, res: Response) => {
+    const { plan_id } = req.body;
+
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/data/services/validate-plan`, {
+        plan: {
+            id: plan_id
+        },
+        client: service
+    });
+
+    res.status(f.status).json(f.data);
+});
+
+app.post('/secure/payement/stripe-pk', async (_req: Request, res: Response) => {
+    // Send stripe public key to frontend
+    res.status(200).json({
+        status: 200,
+        message: "Stripe public key fetched successfully",
+        success: true,
+        data: {
+            stripe_pk: "" 
+        }
+    });
 });
 
 app.get('/public/subscribe-mailing', async (req: Request, res: Response) => {

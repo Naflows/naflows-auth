@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+
 import { serve } from "./public/method/serve";
 import secure from "./secure/global/dir";
 import mongoose from 'mongoose';
@@ -16,6 +17,7 @@ import mailing from "./software/mailing/dir";
 
 
 const express = require('express');
+const stripe = require('stripe')(process.env.STRIPE_API_SECRET_KEY);
 const app = express();
 const bodyParser = require('body-parser');
 const router = express.Router();
@@ -302,6 +304,47 @@ app.post('/public/services/plans', async (req, res) => {
     res.status(plans.status).json(plans);
 });
 
+
+
+async function createPayementIntent(amount: number, currency: string, metadata: object) {
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: currency,
+        metadata: metadata,
+        automatic_payment_methods: {enabled: true},
+    });
+    return paymentIntent;
+}
+
+app.post('/client/secure/data/services/validate-plan', async (req, res) => {
+    const user = await manageConnection(req, res);
+    const { plan_id } = req.body;
+
+    const plans = await services.service.getPlans() as ReplyType;
+
+    if (!plans.success || !plans.data) {
+        return res.status(500).json(software.methods.serverReply(500, "Failed to fetch plans."));
+    }
+
+    const plan = (plans.data as { plans: any[] }).plans.find((p: any) => p.id === plan_id);
+    if (!plan) {
+        return res.status(404).json(software.methods.serverReply(404, "Plan not found."));
+    }
+
+    const paymentIntent = await createPayementIntent(plan.price, "eur", {
+        user_id: user.id,
+        plan_id: plan.id
+    });
+
+    res.status(200).json({
+        status: 200,
+        message: "Payment intent created successfully.",
+        success: true,
+        data: {
+            client_secret: paymentIntent.client_secret
+        }
+    });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

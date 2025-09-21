@@ -17,6 +17,10 @@ export async function getPlans() {
                         "icon": "token"
                     },
                     {
+                        "feature" : "5GB Storage for service data",
+                        "icon": "storage"
+                    },
+                    {
                         "feature": "Basic analytics",
                         "icon": "analytics"
                     },
@@ -33,9 +37,10 @@ export async function getPlans() {
             {
                 "id": 1,
                 "name": "Pro",
-                "price": 20,
+                "price": 20 * 1.07,
                 "features": [
                     {"feature": "Unlimited token generation", "icon": "token"},
+                    {"feature" : "10GB Storage for service data", "icon": "storage"},
                     {"feature": "Multiple users for service management", "icon": "users"},
                     {"feature": "Advanced analytics", "icon": "analytics"},
                     {"feature": "Priority support", "icon": "support"}
@@ -48,9 +53,10 @@ export async function getPlans() {
             {
                 "id": 2,
                 "name": "Enterprise",
-                "price": 50,
+                "price": 50 * 1.07,
                 "features": [
                     {"feature": "Unlimited token generation", "icon": "token"},
+                    {"feature" : "25GB Storage for service data", "icon": "storage"},
                     {"feature": "Custom integrations", "icon": "integration"},
                     {"feature": "Multiple users with role-based access", "icon": "users"},
                     {"feature": "Advanced security features", "icon": "security"},

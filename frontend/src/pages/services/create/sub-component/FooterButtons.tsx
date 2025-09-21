@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import type { ServiceCreationSteps } from "./HeaderButtons";
+import CreateServiceHeaderButtons from "./HeaderButtons";
 
 
 const servicesCreationsStep = {
     "disclaimer": "Service Creation Guidelines",
     "wizard-init": "Service Details",
     "wizard-configure": "Service Configuration",
-    "wizard-review": "Review & Create"
+    "wizard-payement": "Review & Create"
 };
 
 
@@ -34,17 +35,20 @@ const ServiceCreationFooterButtons: React.FC<{
         }, [serviceCreationStep, nextStep, backStep]);
 
         return (
-            <div className="buttons-container">
-                <button className="secondary-button width-100-auto" onClick={() => {
-                    if (backStep) {
-                        setServiceCreationStep(backStep as ServiceCreationSteps);
-                    }
-                }}>Back</button>
-                <button className={`primary-button width-100-auto ${!nextConditionMet ? "inactive" : ""}`} onClick={() => {
-                    if (nextConditionMet && nextStep) {
-                        setServiceCreationStep(nextStep as ServiceCreationSteps);
-                    }
-                }} disabled={!nextConditionMet}>Next</button>
+            <div className="nass__services__creation__footer">
+                <CreateServiceHeaderButtons setServiceCreationStep={setServiceCreationStep} currentStep={serviceCreationStep} />
+                <div className="buttons-container">
+                    <button className="secondary-button width-100-auto" onClick={() => {
+                        if (backStep) {
+                            setServiceCreationStep(backStep as ServiceCreationSteps);
+                        }
+                    }}>Back</button>
+                    <button className={`primary-button width-100-auto ${!nextConditionMet ? "inactive" : ""}`} onClick={() => {
+                        if (nextConditionMet && nextStep) {
+                            setServiceCreationStep(nextStep as ServiceCreationSteps);
+                        }
+                    }} disabled={!nextConditionMet}>Next</button>
+                </div>
             </div>
         );
     };

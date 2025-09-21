@@ -21,7 +21,7 @@ body {
   border-radius: 20px;
   width: fit-content;
   flex: 1;
-  width: calc(75% - 60px);
+  width: calc(75% - 60px) !important;
   margin: auto;
   gap: 20px;
   display: flex;
@@ -50,10 +50,10 @@ body {
     padding: 20px 50px;
     background-color: $_2k25-background-hue-darker;
     border-radius: 0 0 20px 20px;
-    width: calc(75% - 90px);
+    width: calc(100% - 100px);
     position: fixed;
     top: 0;
-    left: 10px;
+    left: 0;
     right: 0;
     margin: auto;
     z-index: 10;

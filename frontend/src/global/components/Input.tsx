@@ -15,7 +15,9 @@ interface InputProps {
   fitContent?: boolean;
   maxChar?: number;
   displayMaxChar?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (value : string | React.ChangeEvent<HTMLInputElement>) => void;
+  onError?: (value: string) => boolean;
+  errorMessage?: string;
 }
 
 const Input = ({
@@ -34,22 +36,33 @@ const Input = ({
   onChange = undefined,
   maxChar = 100,
   displayMaxChar = false,
+  onError = undefined,
+  errorMessage = undefined
 }: InputProps) => {
   const [valueIn, setValueIn] = useState<boolean>(value ? true : false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [displayError, setDisplayError] = useState<boolean>(false);
 
   const copyButtonRef = useRef<HTMLButtonElement>(null);
 
-  const t = onChange ? onChange : (e: React.ChangeEvent<HTMLInputElement>) => { return e };
-  onChange = (el: React.ChangeEvent<HTMLInputElement>) => {
-    t(el);
-    const value = el.currentTarget.value;
-    
-    if (value.replace(" ", "") !== "") {
+  const t = onChange ? onChange : (e : string) => { return e };
+  onChange = (el : React.ChangeEvent<HTMLInputElement> | string) => {
+    const v = typeof el === "string" ? el : el.currentTarget.value;
+
+    if (v.replace(" ", "") !== "") {
       setValueIn(true);
     } else {
       setValueIn(false);
     }
+
+    if (onError && onError(v) && errorMessage) {
+      setDisplayError(true);
+      t("");
+    } else {
+      setDisplayError(false);
+      t(v);
+    }
+
   }
 
 
@@ -96,7 +109,7 @@ const Input = ({
           name={name}
           id={name + "-input"}
           defaultValue={value}
-          onInput={onChange}
+          onInput={(e) => onChange && onChange(e.currentTarget.value)}
 
           style={{
             width: fitContent ? "auto" : "calc(100% - 40px)",
@@ -124,12 +137,16 @@ const Input = ({
         {maxChar && displayMaxChar ? (
           <p className="character-count">{value ? value.length : 0}/{maxChar}</p>
         ) : null}
-
+        {displayError && errorMessage ? (
+          <p className="error-message text-size-14">{errorMessage}</p>
+        ) : null}
       </div>
 
       {aboutMode && aboutModeText ? (
         <p className="about-mode text-size-14">{aboutModeText}</p>
       ) : null}
+
+
     </div>
   );
 };

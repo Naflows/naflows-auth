@@ -13,7 +13,8 @@ export default defineConfig({
 
   define: {
     'process.env': {
-      'DUMMY_API_URL_DEV': "http://localhost:3005"
+      'DUMMY_API_URL_DEV': "http://localhost:3005",
+      'STRIPE_API_PUBLIC_KEY': "pk_test_51S9m2OLiJo83k1CounymnaDfJJnyJfZCthqDbScBLEjoStuBC4cOnE9m4a7rDeSZi36wigl7ME3IA2c5s1Q9ucGm00RhYbrNy6"
     }
   }
 })

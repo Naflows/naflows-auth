@@ -86,9 +86,9 @@ const CreateServiceDescription = ({
                                     name="service-name"
                                     value={serviceDescription ? serviceDescription.name : ""}
                                     autoComplete={false}
-                                    onChange={(e) => {
-                                        if (e.target.value != serviceDescription.name) {
-                                            setServiceDescription({ ...serviceDescription, name: e.target.value });
+                                    onChange={(value) => {
+                                        if (value != serviceDescription.name) {
+                                            setServiceDescription({ ...serviceDescription, name: value.toString().slice(0, 100)});
                                         }
                                     }}
                                     maxLength={100}

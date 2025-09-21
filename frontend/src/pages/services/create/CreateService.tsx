@@ -9,8 +9,10 @@ import ServiceCreationDisclaimer from "./sub-component/Disclaimer";
 import ServiceCreationFooterButtons from "./sub-component/FooterButtons";
 import CreateServiceDescription from "./sub-component/ServiceDescription";
 import type { ServiceCreationSteps } from "./sub-component/HeaderButtons";
-import CreateServiceHeaderButtons from "./sub-component/HeaderButtons";
 import ServiceConfiguration, { type ServiceConfigurationProps } from "./sub-component/ServiceConfiguration";
+import ReviewService from "./sub-component/ReviewService";
+
+
 
 
 const CreateService = () => {
@@ -35,7 +37,7 @@ const CreateService = () => {
 
 
 
-    const [serviceCreationStep, setServiceCreationStep] = useState<ServiceCreationSteps>("wizard-configure");
+    const [serviceCreationStep, setServiceCreationStep] = useState<ServiceCreationSteps>("wizard-payement");
     const [serviceDescription, setServiceDescription] = useState<{
         name: string;
         description: string;
@@ -51,7 +53,7 @@ const CreateService = () => {
     });
     const [serviceConfiguration, setServiceConfiguration] = useState<ServiceConfigurationProps>({
         plans: {
-            id: -1,
+            id: 0,
             name: "",
             description: "",    
             price: 0,
@@ -76,7 +78,6 @@ const CreateService = () => {
     useEffect(() => {
         if (serviceCreationStep == "disclaimer") {
             setComponent(<div key={"disclaimer-header"} className="services__creation__body">
-                <CreateServiceHeaderButtons setServiceCreationStep={setServiceCreationStep} currentStep={serviceCreationStep} />
                 <ServiceCreationDisclaimer setGuidelinesAccepted={setGuidelinesAccepted} guidelinesAccepted={guidelinesAccepted} />
                 <button className={`primary-button width-100-auto ${guidelinesAccepted ? "active" : "inactive"}`} disabled={!guidelinesAccepted} onClick={() => {
                     if (guidelinesAccepted) {
@@ -86,14 +87,20 @@ const CreateService = () => {
             </div>);
         } else if (serviceCreationStep == "wizard-init") {
             setComponent(<div key={"wizard-init"} className="services__creation__body">
-                <CreateServiceHeaderButtons setServiceCreationStep={setServiceCreationStep} currentStep={serviceCreationStep} />
                 <CreateServiceDescription serviceDescription={serviceDescription} setServiceDescription={setServiceDescription} />
                 <ServiceCreationFooterButtons serviceCreationStep={serviceCreationStep} setServiceCreationStep={setServiceCreationStep} nextConditionMet={ serviceDescription?.name != "" && serviceDescription?.description != "" && serviceDescription?.profileImage != "" && serviceDescription?.bannerImage != ""} />
             </div>);
         } else if (serviceCreationStep == "wizard-configure") {
             setComponent(<div key={"wizard-configure"} className="services__creation__body">
-                <CreateServiceHeaderButtons setServiceCreationStep={setServiceCreationStep} currentStep={serviceCreationStep} />
                 <ServiceConfiguration serviceConfiguration={serviceConfiguration} setServiceConfiguration={setServiceConfiguration} />
+                <ServiceCreationFooterButtons serviceCreationStep={serviceCreationStep} setServiceCreationStep={setServiceCreationStep} nextConditionMet={
+                    serviceConfiguration.config.ip_address !== "" &&
+                    serviceConfiguration.config.dns !== ""
+                } />
+            </div>);
+        } else if (serviceCreationStep == "wizard-payement") {
+            setComponent(<div key={"wizard-payement"} className="services__creation__body">
+                <ReviewService serviceDescription={serviceDescription} serviceConfiguration={serviceConfiguration} />
                 <ServiceCreationFooterButtons serviceCreationStep={serviceCreationStep} setServiceCreationStep={setServiceCreationStep} nextConditionMet={true} />
             </div>);
         }

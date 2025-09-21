@@ -1,11 +1,11 @@
 
-export type ServiceCreationSteps = "disclaimer" | "wizard-init" | "wizard-configure" | "wizard-review";
+export type ServiceCreationSteps = "disclaimer" | "wizard-init" | "wizard-configure" | "wizard-payement";
 
 const servicesCreationsStep = {
     "disclaimer": "Service Creation Guidelines",
     "wizard-init": "Service Details",
     "wizard-configure": "Service Configuration",
-    "wizard-review": "Review & Create"
+    "wizard-payement": "Review & Create"
 };
 
 const CreateServiceHeaderButtons = ({
