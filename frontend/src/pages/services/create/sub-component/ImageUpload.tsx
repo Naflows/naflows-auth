@@ -31,7 +31,7 @@ const ImageUpload = ({
                     serviceDescription && ((serviceDescription.profileImage != "" && !isBanner) || (isBanner && serviceDescription.bannerImage != "")) ? "Change" : "Upload"
                 } {
                         isBanner ? "Banner" : "Profile"
-                    } Image</span>
+                    } Image ({isBanner ? "700x150" : "300x300"})</span>
             </div>
             <input type="file" id={`file-input-${isBanner ? 'banner' : 'profile'}`} accept="image/*" style={{ display: 'none' }} onChange={(e) => {
                 const file = e.target.files ? e.target.files[0] : null;

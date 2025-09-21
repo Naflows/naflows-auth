@@ -40,7 +40,6 @@ body {
   justify-content: start;
   width: 75%;
   margin: auto;
-  padding-top: calc(var(--header-height) + 80px);
 
   .nass__account__page__header {
     display: flex;
@@ -136,6 +135,7 @@ body {
       display: flex;
       flex-direction: column;
       gap: 10px;
+      overflow: hidden;
 
       .user__header__visual__access {
         display: flex;
@@ -182,7 +182,7 @@ body {
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 900px) {
   .nass__account__page__header {
     flex-direction: row-reverse !important;
     gap: 15px !important;

@@ -1,4 +1,5 @@
 import { generateApiID } from "./methods/generate-key";
+import { getPlans } from "./methods/get-plans";
 import { getService } from "./methods/get-service";
 import { registerService } from "./methods/register.service";
 import { createService } from "./methods/service-create.user";
@@ -18,7 +19,8 @@ export const services = {
         generateID : generateApiID,
         user: {
             register : registerUserInAPI
-        }
+        },
+        getPlans: getPlans
     },
     token : {
         new : generateServiceToken,

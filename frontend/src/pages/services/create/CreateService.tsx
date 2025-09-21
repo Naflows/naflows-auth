@@ -10,6 +10,7 @@ import ServiceCreationFooterButtons from "./sub-component/FooterButtons";
 import CreateServiceDescription from "./sub-component/ServiceDescription";
 import type { ServiceCreationSteps } from "./sub-component/HeaderButtons";
 import CreateServiceHeaderButtons from "./sub-component/HeaderButtons";
+import ServiceConfiguration, { type ServiceConfigurationProps } from "./sub-component/ServiceConfiguration";
 
 
 const CreateService = () => {
@@ -34,7 +35,7 @@ const CreateService = () => {
 
 
 
-    const [serviceCreationStep, setServiceCreationStep] = useState<ServiceCreationSteps>("disclaimer");
+    const [serviceCreationStep, setServiceCreationStep] = useState<ServiceCreationSteps>("wizard-configure");
     const [serviceDescription, setServiceDescription] = useState<{
         name: string;
         description: string;
@@ -48,6 +49,26 @@ const CreateService = () => {
         allow_public_visibility: false,
         bannerImage : ""
     });
+    const [serviceConfiguration, setServiceConfiguration] = useState<ServiceConfigurationProps>({
+        plans: {
+            id: -1,
+            name: "",
+            description: "",    
+            price: 0,
+            features: [],
+            type: "cloud",
+            storage: 0,
+            RPS: 0
+        },
+        config: {
+            ip_address : "",
+            dns : "",
+        },
+        settings: {
+            allow_public_registration: false,
+        }
+    });
+
     const [guidelinesAccepted, setGuidelinesAccepted] = useState(false);
     const [component, setComponent] = useState<React.JSX.Element | null>(null);
 
@@ -67,10 +88,16 @@ const CreateService = () => {
             setComponent(<div key={"wizard-init"} className="services__creation__body">
                 <CreateServiceHeaderButtons setServiceCreationStep={setServiceCreationStep} currentStep={serviceCreationStep} />
                 <CreateServiceDescription serviceDescription={serviceDescription} setServiceDescription={setServiceDescription} />
-                <ServiceCreationFooterButtons setServiceCreationStep={setServiceCreationStep} nextConditionMet={ serviceDescription?.name != "" && serviceDescription?.description != "" && serviceDescription?.profileImage != "" && serviceDescription?.bannerImage != ""} />
+                <ServiceCreationFooterButtons serviceCreationStep={serviceCreationStep} setServiceCreationStep={setServiceCreationStep} nextConditionMet={ serviceDescription?.name != "" && serviceDescription?.description != "" && serviceDescription?.profileImage != "" && serviceDescription?.bannerImage != ""} />
+            </div>);
+        } else if (serviceCreationStep == "wizard-configure") {
+            setComponent(<div key={"wizard-configure"} className="services__creation__body">
+                <CreateServiceHeaderButtons setServiceCreationStep={setServiceCreationStep} currentStep={serviceCreationStep} />
+                <ServiceConfiguration serviceConfiguration={serviceConfiguration} setServiceConfiguration={setServiceConfiguration} />
+                <ServiceCreationFooterButtons serviceCreationStep={serviceCreationStep} setServiceCreationStep={setServiceCreationStep} nextConditionMet={true} />
             </div>);
         }
-    }, [serviceCreationStep, guidelinesAccepted, serviceDescription]);
+    }, [serviceCreationStep, guidelinesAccepted, serviceDescription, serviceConfiguration]);
 
 
 

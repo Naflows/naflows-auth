@@ -1,0 +1,66 @@
+import { software } from "../../../software/dir";
+
+
+export async function getPlans() {
+
+
+
+    return software.methods.serverReply(200, "Plans fetched successfully", {
+        plans: [
+            {
+                "id": 0,
+                "name": "Free",
+                "price": 0,
+                "features": [
+                    {
+                        "feature": "Rate-limited token generation",
+                        "icon": "token"
+                    },
+                    {
+                        "feature": "Basic analytics",
+                        "icon": "analytics"
+                    },
+                    {
+                        "feature": "Community support",
+                        "icon": "community"
+                    }
+                ],
+                "RPS": 100,
+                "type": "cloud",
+                "storage": "5GB",
+                "description": "Ideal for individuals and small projects starting out."
+            },
+            {
+                "id": 1,
+                "name": "Pro",
+                "price": 20,
+                "features": [
+                    {"feature": "Unlimited token generation", "icon": "token"},
+                    {"feature": "Multiple users for service management", "icon": "users"},
+                    {"feature": "Advanced analytics", "icon": "analytics"},
+                    {"feature": "Priority support", "icon": "support"}
+                ],
+                "RPS": 1000,
+                "type": "cloud",
+                "storage": "10GB",
+                "description": "Perfect for growing teams and businesses needing more resources."
+            },
+            {
+                "id": 2,
+                "name": "Enterprise",
+                "price": 50,
+                "features": [
+                    {"feature": "Unlimited token generation", "icon": "token"},
+                    {"feature": "Custom integrations", "icon": "integration"},
+                    {"feature": "Multiple users with role-based access", "icon": "users"},
+                    {"feature": "Advanced security features", "icon": "security"},
+                    {"feature": "Dedicated support", "icon": "support"}
+                ],
+                "RPS": 10000,
+                "description": "Custom solutions for large organizations with specific needs.",
+                "type": "cloud",
+                "storage": "50GB"
+            }
+        ]
+    });
+}

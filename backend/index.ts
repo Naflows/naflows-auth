@@ -297,6 +297,12 @@ app.post('/public/services/generate-api-id', async (req, res) => {
 });
 
 
+app.post('/public/services/plans', async (req, res) => {
+    const plans = await services.service.getPlans();
+    res.status(plans.status).json(plans);
+});
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`NASS is running on http://localhost:${PORT}`);

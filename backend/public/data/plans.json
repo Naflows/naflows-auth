@@ -1,0 +1,45 @@
+[
+    {
+        "id" : 0,
+        "name" : "Free",
+        "price" : 0,
+        "features" : [
+            "Rate-limited token generation",
+            "Basic analytics",
+            "Community support"
+        ],
+        "RPS" : 100,
+        "type": "cloud",
+        "storage" : "5GB"
+    },
+    {
+        "id" : 1,
+        "name" : "Pro",
+        "price" : 15,
+        "features" : [
+            "Unlimited token generation",
+            "Multiple users for service management",
+            "Advanced analytics",
+            "Priority support"
+        ],
+        "RPS" : 1000,
+        "type": "cloud",
+        "storage" : "10GB"
+    },
+    {
+        "id" : 2,
+        "name" : "Enterprise",
+        "price" : 50,
+        "features" : [
+            "Unlimited token generation",
+            "Custom integrations",
+            "Multiple users with role-based access",
+            "Naflows branding removal",
+            "Advanced security features",
+            "Dedicated support"
+        ],
+        "RPS" : 5000,
+        "type": "cloud",
+        "storage" : "50GB"
+    }
+]

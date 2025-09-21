@@ -25,11 +25,11 @@ body {
 
   #root {
     width: 100%;
+    padding-top: 200px;
   }
 }
 
 .global__nass__form {
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,6 +56,53 @@ body {
 
 .nass__page {
   width: 100%;
+}
+
+.global__nass__disclaimer {
+  padding: 20px;
+  border: 1px solid $da-secondary-hue;
+  background-color: $da-secondary-hue-transparent;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .global__disclaimer__header {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+
+    h4 {
+      margin: 0;
+      color: $da-secondary-hue;
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+
+  .global__disclaimer__hide {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+
+    button {
+      color: $da-secondary-hue-lighter-2;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 }
 
 .global__input {
@@ -87,6 +134,10 @@ body {
           top: 0;
         }
       }
+    }
+
+    label {
+      color: $da-secondary-hue-lighter-2;
     }
 
 
@@ -137,7 +188,7 @@ body {
       width: fit-content;
       min-width: 150px;
       max-width: calc(100% - 40px);
-      
+
 
       /* Remove the input number type arrows */
       &::-webkit-inner-spin-button,
@@ -256,15 +307,19 @@ body {
 
   .nass_switch__label {
     width: 100%;
-    h5, p {
+
+    h5,
+    p {
       margin: 0;
       padding: 0;
     }
+
     h5 {
       font-size: 15px;
       font-weight: 600;
       color: $da-secondary-hue-lighter-2;
     }
+
     p {
       font-size: 13px;
       opacity: 0.7;
@@ -277,6 +332,45 @@ body {
   flex-direction: column;
   gap: 10px;
   width: 100%;
+
+  &.form__parts__separated {
+    gap: 50px;
+
+    .services__creation__form {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
+  }
+
+  .form__part {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: calc(100% - 20px);
+    border: 2px solid $_2k25-background-hue-40;
+    border-style: none none none solid;
+    padding: 5px 0 5px 20px;
+    .form__part__header {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+
+      h4 {
+        margin: 0;
+        font-size: 18px;
+        color: $da-secondary-hue-lighter-2;
+      }
+
+      p {
+        margin: 0;
+        font-size: 14px;
+        opacity: 0.8;
+      }
+    }
+    
+  }
 
   .global__input__container {
     display: flex;
@@ -645,7 +739,7 @@ a {
   .nass_switch {
     width: 100% !important;
     align-items: start !important;
-    /* Disable the blue block on click */  
+    /* Disable the blue block on click */
     -webkit-tap-highlight-color: transparent;
   }
 

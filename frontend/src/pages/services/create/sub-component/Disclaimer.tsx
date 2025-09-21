@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import GlobalDisclaimer from "../../../../global/components/GlobalDisclaimer";
 
 
 const ServiceCreationDisclaimer = ({
@@ -24,13 +25,12 @@ const ServiceCreationDisclaimer = ({
         }
     }, [guidelinesAccepted])
 
+
     return (
-        <div className="services__creation__disclaimer">
-            <div className="services__creation__header">
-                <h3>Important Notice</h3>
-                <p>Naflows Services are subject to strict compliance with our policies and guidelines. Please read the following information carefully before creating a service.</p>
-            </div>
-            <div className="services__creation__disclaimer__content">
+        <GlobalDisclaimer
+            title="Important Notice"
+            message="Naflows Services are subject to strict compliance with our policies and guidelines. Please read the following information carefully before creating a service."
+            content={<>
                 <div className="checkbox-container">
                     <input type="checkbox" id="tos" onChange={handleCheckboxChange} />
                     <label htmlFor="tos">
@@ -38,14 +38,16 @@ const ServiceCreationDisclaimer = ({
                     </label>
                 </div>
                 <div className="checkbox-container">
-                    <input type="checkbox" id="consent" onChange={handleCheckboxChange}  />
+                    <input type="checkbox" id="consent" onChange={handleCheckboxChange} />
                     <label htmlFor="consent">
                         I agree to the <a href="/legal/terms-of-service" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
                     </label>
                 </div>
-            </div>
-        </div>
+            </>
+            }
+        />
     )
+
 }
 
 export default ServiceCreationDisclaimer;

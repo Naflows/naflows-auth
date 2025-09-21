@@ -40,16 +40,18 @@ const Input = ({
 
   const copyButtonRef = useRef<HTMLButtonElement>(null);
 
-  if (onChange === undefined) {
-    onChange = (el: React.ChangeEvent<HTMLInputElement>) => {
-      const value = el.currentTarget.value;
-      if (value.replace(" ", "") !== "") {
-        setValueIn(true);
-      } else {
-        setValueIn(false);
-      }
+  const t = onChange ? onChange : (e: React.ChangeEvent<HTMLInputElement>) => { return e };
+  onChange = (el: React.ChangeEvent<HTMLInputElement>) => {
+    t(el);
+    const value = el.currentTarget.value;
+    
+    if (value.replace(" ", "") !== "") {
+      setValueIn(true);
+    } else {
+      setValueIn(false);
     }
   }
+
 
   useEffect(() => {
     if (allowCopy && value) {

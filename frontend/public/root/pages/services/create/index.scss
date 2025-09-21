@@ -4,7 +4,7 @@
 .services__creation__page {
     align-items: center;
     justify-content: center;
-    
+
 }
 
 .services__creation__section {
@@ -37,6 +37,7 @@
                 overflow: hidden;
                 position: relative;
                 cursor: pointer;
+
                 img {
                     width: 100%;
                     height: 100%;
@@ -50,12 +51,14 @@
                     overflow: hidden;
                     position: relative;
                     cursor: pointer;
+
                     img {
                         width: 100%;
                         height: 100%;
                         object-fit: cover;
                     }
                 }
+
                 border: 2px solid $_2k25-background-hue-40;
                 margin-top:10px;
                 display: flex;
@@ -71,7 +74,13 @@
                     align-items: center;
                     justify-content: center;
                     gap: 10px;
-                    position:absolute;
+                    position: absolute;
+
+                    span {
+                        text-align: center;
+                        width: 75%;
+                    }
+
                     &.with-image {
                         background: rgba(0, 0, 0, 0.5);
                         color: white;
@@ -83,9 +92,19 @@
                         border-radius: 5px;
                         bottom: 5px;
                         left: 5px;
+                        max-width: calc(100% - 30px);
+
                         svg {
                             width: 16px;
                             height: 16px;
+                        }
+
+                        span {
+                            width: auto;
+                            max-width: calc(100% - 16px);
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
                         }
                     }
                 }
@@ -100,6 +119,7 @@
     gap: 10px;
     align-items: center;
     justify-content: start;
+
     button {
         padding-right: 0;
         padding-left: 0;
@@ -110,12 +130,12 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
-    max-width: 75%;
+    max-width: 100%;
     user-select: none;
 
     h3 {
         margin: 0 0 0 0;
-        color: $da-secondary-hue;
+        color: $da-secondary-hue-lighter-2;
     }
 
     p {
@@ -125,20 +145,139 @@
     }
 }
 
-.services__creation__disclaimer {
-    padding: 20px;
-    border: 1px solid $da-secondary-hue;
-    background-color: $da-secondary-hue-transparent;
-    border-radius: 8px;
+.plans__container {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
+
+    .plans__content {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        row-gap: 10px;
+        column-gap: 20px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        justify-content: space-between;
+
+        .plan__card {
+            border: 2px solid $_2k25-background-hue-40;
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 250px;
+            max-width: 250px;
+
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid $_2k25-background-hue-40;
+
+            &:hover {
+                border: 2px solid $da-secondary-hue-lighter;
+            }
+
+            &.selected {
+                border: 2px solid $da-secondary-hue-transparent;
+                background-color: $da-secondary-hue-transparent;
+            }
+
+            .plan__card__header {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                .plan__card__header__title {
+                    height: fit-content;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+
+                    .card__header__title__head {
+                        height: fit-content;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: space-between;
+                        gap: 20px;
+
+                        p {
+                            text-align: center;
+                        }
+
+                        .plan__specs {
+                            flex-direction: row;
+                            display: flex;
+                            gap: 10px;
+
+                            .plan__spec {
+                                color: $da-secondary-hue-lighter-2;
+                                background-color: $_2k25-background-hue-50-transparent;
+                                padding: 5px 10px;
+                                border-radius: 5px;
+                                font-weight: bold;
+                                border: 1px solid $_2k25-background-hue-50;
+                            }
+                        }
+                    }
+
+                    h4,
+                    p {
+                        margin: 0;
+                    }
+
+                    h4 {
+                        font-size: 20px;
+                        color: $da-secondary-hue-lighter-2;
+                    }
+
+                    p {
+                        font-size: 14px;
+                        opacity: 0.8;
+                    }
+                }
+            }
+
+            .plan__features {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                height: 100%;
+                padding: 0;
+                margin: 0;
+
+
+                li {
+                    /* Remove default list styling */
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                    display: flex;
+                    align-items: start;
+                    gap: 10px;
+                    padding: 5px 10px;
+                    background-color: $_2k25-background-hue-50-transparent;
+                    border-radius: 5px;
+                    border: 1px solid $_2k25-background-hue-50;
+                    span {
+                        height: 100%;
+                        margin-top: 1px;
+                    }
+                    
+                    
+                }
+
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 900px) {
     .services__creation__header__step {
         flex-direction: column;
         align-items: start;
+
         svg {
             display: none
         }
@@ -153,5 +292,5 @@
     .form {
         flex-direction: column !important;
     }
-    
+
 }

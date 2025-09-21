@@ -96,6 +96,14 @@ app.get('/public/generate-api-id', async (req: Request, res: Response) => {
     res.status(newKey.status).json(newKey.data);
 });
 
+app.get('/public/data/plans.json', async (req: Request, res: Response) => {
+    // This endpoint is used to fetch plans for service creation page
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/public/services/plans`, {
+        client: service
+    });
+    res.status(f.status).json(f.data);
+});
+
 app.get('/public/subscribe-mailing', async (req: Request, res: Response) => {
     const email = req.query.email;
     if (email == undefined || typeof email !== 'string' || email.length < 5 || !email.includes('@')) {
