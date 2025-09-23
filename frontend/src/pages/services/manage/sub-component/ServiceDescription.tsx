@@ -40,9 +40,12 @@ const ServiceDescription = ({
               </div>
             </div>
           </div>
-          <button className="secondary-button" style={{
-            width: "100%",
-          }}>Edit Service</button>
+          <div className="buttons-container">
+            <button className="secondary-button">Share</button>
+            <button className="primary-button" style={{
+              width: "100%",
+            }}>Edit Service</button>
+          </div>
         </div>
       </div>
     );

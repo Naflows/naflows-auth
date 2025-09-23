@@ -15,7 +15,6 @@ import ServiceDescription from "./sub-component/ServiceDescription";
 import ServiceCapacities from "./sub-component/ServiceCapacities";
 import ServicePublicSettings from "./sub-component/PublicSettings";
 import SecurityMeasures from "./sub-component/SecurityMeasures";
-import ServiceStorage from "./sub-component/ServiceStorage";
 import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert";
 
 const ManageService = () => {
@@ -52,16 +51,16 @@ const ManageService = () => {
           }
           setUser(res.data.data.user as UserBodyProps);
         } catch (error) {
-            console.log("Service data fetch returned status:", (error as AxiosError)?.response?.status);
-            setDisplayAlert({
-              status: (error as AxiosError)?.response?.status || 500,
-              message: "Failed to fetch service data. Please try again. Make sure you have access to this service, or that it exists.",
-              success: false,
-              closeAlert: false,
-              title: "Error Fetching Service Data",
-              displayCode: true,
-              customClose: { text: "Go to Services", action: () => { window.location.href = "/account/services"; } }
-            });
+          console.log("Service data fetch returned status:", (error as AxiosError)?.response?.status);
+          setDisplayAlert({
+            status: (error as AxiosError)?.response?.status || 500,
+            message: "Failed to fetch service data. Please try again. Make sure you have access to this service, or that it exists.",
+            success: false,
+            closeAlert: false,
+            title: "Error Fetching Service Data",
+            displayCode: true,
+            customClose: { text: "Go to Services", action: () => { window.location.href = "/account/services"; } }
+          });
         }
       })();
     }
@@ -110,20 +109,26 @@ const ManageService = () => {
               <SecurityMeasures service={service} />
               <div className="parent__of__section row__layout" style={{
                 flex: 1,
-                
+
               }}>
                 <ServiceDescription service={service} />
-                <ServicePublicSettings service={service} />
               </div>
             </div>
+            <ServicePublicSettings service={service} />
+
             <div className="parent__of__section column__layout" style={{
-              flex: 0.5,
-              height: "max-content",
-              justifyContent: "space-between",
-              alignSelf: "stretch",
-              minHeight: "100%",
+              maxWidth: "350px",
             }}>
-              <ServiceStorage service={service} />
+              <div className="service__actions__field">
+                <div className="service__actions__field__header">
+                  <h3 className="service__actions__field__title">Users</h3>
+                  <p>Quick access to user management</p>
+                </div>
+                <div className="service__actions__buttons">
+                  <button className="secondary-button">Analytics</button>
+                  <button className="secondary-button">Manage Users</button>
+                </div>
+              </div>
               <ServiceCapacities service={service} />
             </div>
           </div>

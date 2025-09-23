@@ -5,14 +5,21 @@ import Input from "../../../../global/components/Input";
 const SettingsComponent = ({
   name,
   value,
+  description,
+  disabled = false,
 }: {
   name: string;
   value: boolean;
+  description: string;
+  disabled?: boolean;
 }) => {
   return (
-    <div className="settings__content">
+    <div className={`settings__content ${disabled ? "disabled" : ""}`}>
       <div className="setting__title">
-        <span>{name}</span>
+        <span className="setting__name">{name}</span>
+        <span className="setting_description">
+          {description}
+        </span>
       </div>
       <div className={`setting__value ${value ? "enabled" : "disabled"}`}>
         {value ? "Enabled" : "Disabled"}
@@ -52,26 +59,29 @@ const ServicePublicSettings = ({
               />
             </div>
             <SettingsComponent
-              name="Allow service connections"
-              value={service.public_settings.allow_service_connections}
-            />
-            <SettingsComponent
               name="Allow user registration"
+              description="Allow users to register for this service"
               value={service.public_settings.allow_user_registration}
             />
             <SettingsComponent
+              description="Make this service publicly visible on your profile"
               name="Allow public visibility"
               value={service.public_settings.allow_public_visibility}
             />
             <SettingsComponent
+              name="Allow service connections"
+              description="Allow other Naflows services to connect to this service"
+              value={service.public_settings.allow_service_connections}
+              disabled={true}
+            />
+            <SettingsComponent
+              description="Allow users to use Naflows Payement System for subscriptions"
               name="Naflows Payement System"
               value={service.settings.allow_nass_payement_method}
+              disabled={true}
             />
           </div>
         </div>
-        <button className="secondary-button" style={{
-          width: "100%",
-        }}>Manage Settings</button>
       </div>
     );
   }

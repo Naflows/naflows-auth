@@ -49,20 +49,12 @@ const SecurityMeasures = ({
                   <p>Monitor your service reachability</p>
                 </div>
                 <div className="service__actions__buttons">
-                  <button className="primary-button">Pause Service</button>
-                  <button className="secondary-button">
-                    Break Naflows' Connection
+                  <button className="primary-button">
+                    {service.status !== "ACTIVE" ? "Restart Service" : "Pause Service"}
                   </button>
-                </div>
-              </div>
-              <div className="service__actions__field">
-                <div className="service__actions__field__header">
-                  <h3 className="service__actions__field__title">Users</h3>
-                  <p>Quick access to user management</p>
-                </div>
-                <div className="service__actions__buttons">
-                    <button className="primary-button">Analytics</button>
-                  <button className="secondary-button">Manage Users</button>
+                  <button className="secondary-button">
+                    Manage DNS Records
+                  </button>
                 </div>
               </div>
               <div className="service__actions__field">

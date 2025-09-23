@@ -15,11 +15,25 @@ const ServiceCapacities = ({
               <p>Overview of your current service capacities</p>
             </div>
           </div>
-          <div className="services__section__content  plans__table">
-            <div className="table__content">
-              <div className="table__header">Storage Size</div>
-              <div className="table__value">{service.plan.size}</div>
+          <div className="service__storage">
+            <span className="service__storage__usage__text">
+              {service.plan.used_space / 1024} out of {service.plan.size}{" "}
+              GB used
+            </span>
+            <div className="service__storage__usage">
+              <div
+                className="storage__usage__bar"
+                style={{
+                  width: `${(service.plan.used_space /
+                      1024 /
+                      parseInt(service.plan.size || "0")) *
+                    100
+                    }%`,
+                }}
+              ></div>
             </div>
+          </div>
+          <div className="services__section__content  plans__table">
             <div className="table__content">
               <div className="table__header">RPS</div>
               <div className="table__value">{service.settings.rates}</div>

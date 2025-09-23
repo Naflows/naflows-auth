@@ -10,18 +10,22 @@
     gap: 20px;
     justify-content: start;
   }
+
   .service__description__section {
     flex: 1;
     height: 100%;
     align-self: stretch;
     justify-content: space-between;
   }
+
   .service__storage__section {
     max-width: 350px;
   }
+
   .service__plans {
     max-width: 350px;
   }
+
   .plans__table {
     display: flex;
     flex-direction: row;
@@ -29,6 +33,7 @@
     column-gap: 40px;
     justify-content: space-between;
     flex-wrap: wrap;
+
     .table__content {
       display: flex;
       flex-direction: column;
@@ -36,9 +41,11 @@
       color: white;
       width: fit-content;
       width: 100px;
+
       .table__header {
         opacity: 0.8;
       }
+
       .table__value {
         font-weight: normal;
       }
@@ -48,36 +55,36 @@
   .user__body__section {
     width: fit-content !important;
     margin: unset !important;
+
     .service__storage {
       display: flex;
       flex-direction: column;
-      gap: 20px;
-      .services__section__content {
-        color: white;
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        .service__storage__usage {
-          width: 100%;
-          height: 20px;
+      gap: 5px;
+
+      .service__storage__usage {
+        width: 100%;
+        height: 20px;
+        border-radius: 50px;
+        background-color: $_2k25-background-hue-transparent;
+        overflow: hidden;
+
+        .storage__usage__bar {
+          height: 100%;
           border-radius: 50px;
-          background-color: $_2k25-background-hue-transparent;
-          overflow: hidden;
-          .storage__usage__bar {
-            height: 100%;
-            border-radius: 50px;
-            background-color: $_2k25-text;
-          }
+          background-color: $_2k25-text;
         }
       }
+
     }
   }
+
   .service__plan {
     flex: 1;
     width: fit-content;
     display: flex;
     flex-direction: column;
     gap: 20px;
+
     .services__section__content {
       color: white;
     }
@@ -89,25 +96,31 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+
   .services__section__content {
     display: flex;
     min-height: auto !important;
     flex: unset !important;
     flex-direction: column;
+
     .service__status {
       min-height: fit-content;
+
       .service__status__title {
         font-weight: bold;
       }
+
       .service__status {
         color: white;
         padding: 5px 10px;
         border-radius: 10px;
         height: fit-content;
         width: fit-content;
+
         &.status-failure {
           background-color: $da-error-hue;
         }
+
         &.status-success {
           background-color: $da-confirm-hue;
         }
@@ -121,40 +134,48 @@
       gap: 20px;
       height: max-content;
       align-items: start;
-      .service__actions__field {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        justify-content: space-between;
-        padding: 10px;
-        border-radius: 20px;
-        background-color: $_2k25-background-hue-darker;
-        padding: 20px 30px;
-        .service__actions__field__header {
-          display: flex;
-          flex-direction: column;
-          .service__actions__field__title {
-            margin: 0;
-            padding: 0;
-            color :$da-secondary-hue-lighter-2;
-          }
-          p {
-            margin: 0;
-            padding: 0;
-            font-size: 13px;
-            opacity: 0.8;
-          }
-        }
-        .service__actions__buttons {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          button {
-            width: 100%;
-          }
-        }
-      }
+
+
+    }
+  }
+}
+
+.service__actions__field {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: space-between;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: $_2k25-background-hue-darker;
+  padding: 20px 30px;
+  height: fit-content !important;
+
+  .service__actions__field__header {
+    display: flex;
+    flex-direction: column;
+
+    .service__actions__field__title {
+      margin: 0;
+      padding: 0;
+      color: $da-secondary-hue-lighter-2;
+    }
+
+    p {
+      margin: 0;
+      padding: 0;
+      font-size: 13px;
+      opacity: 0.8;
+    }
+  }
+
+  .service__actions__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    button {
+      width: 100%;
     }
   }
 }
