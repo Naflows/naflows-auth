@@ -35,7 +35,7 @@ const LoginForm = ({
           <div className="inputs-container global__input">
             <Input
               label="Identifier"
-              type="number"
+              type="text"
               name="identifier"
               required={true}
               maxLength={9}

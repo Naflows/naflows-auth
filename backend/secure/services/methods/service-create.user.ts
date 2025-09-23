@@ -1,6 +1,6 @@
 import { Collection } from "mongoose";
 import { software } from "../../../software/dir";
-import { Service, ServiceSettings, ServiceStoragePlan } from "../../../types/.types/collections.type";
+import { Service, ServicePlan, ServiceSettings } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import secure from "../../global/dir";
 import { db } from "../../..";
@@ -15,7 +15,7 @@ import { services } from "../dir";
 export async function createService(userID : string, password : string, identifier: string, details : {
     name : string,
     description : string | null,
-    storagePlan : ServiceStoragePlan,
+    storagePlan : ServicePlan,
     ip_address : string,
     dns : string,
     settings : ServiceSettings
@@ -35,12 +35,12 @@ export async function createService(userID : string, password : string, identifi
             return software.methods.serverReply(409, "Conflict: Service with same name, IP address or DNS already exists.");
         }
 
-        const service : ReplyType = await services.service.register(details.name, details.description, userID, details.storagePlan, details.ip_address, details.dns, details.settings);
+        //const service : ReplyType = await services.service.register(details.name, details.description, userID, details.storagePlan, details.ip_address, details.dns, details.settings);
 
-        if (!service.success) return service;
-        else {
-            return software.methods.serverReply(201, "Service created successfully.", service.data);
-        }
+        // if (!service.success) return service;
+        // else {
+        //     return software.methods.serverReply(201, "Service created successfully.", service.data);
+        // }
 
     } else {
         return software.methods.serverReply(401, "Unauthorized: Invalid credentials.");

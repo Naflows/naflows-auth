@@ -104,30 +104,7 @@ app.get('/public/data/plans.json', async (req: Request, res: Response) => {
     res.status(f.status).json(f.data);
 });
 
-app.post('/secure/payement/create-intent', async (req: Request, res: Response) => {
-    const { plan_id } = req.body;
 
-    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/data/services/validate-plan`, {
-        plan: {
-            id: plan_id
-        },
-        client: service
-    });
-
-    res.status(f.status).json(f.data);
-});
-
-app.post('/secure/payement/stripe-pk', async (_req: Request, res: Response) => {
-    // Send stripe public key to frontend
-    res.status(200).json({
-        status: 200,
-        message: "Stripe public key fetched successfully",
-        success: true,
-        data: {
-            stripe_pk: "" 
-        }
-    });
-});
 
 app.get('/public/subscribe-mailing', async (req: Request, res: Response) => {
     const email = req.query.email;
@@ -186,8 +163,6 @@ app.get('/get-user-info/services/:id/service-informations', async (req: Request,
 });
 
 app.get('/get-user-info/services', async (req: Request, res: Response) => {
-    const cookies = req.headers.cookie || '';
-
     const { sessionID, token, uid } = getCookies(req);
 
     const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/data/services`, {
@@ -208,6 +183,7 @@ app.get('/get-user-info/services', async (req: Request, res: Response) => {
         }
     });
 
+    console.log("Services list response from NASS:", f.data);
 
     sendCookies(res, f.data);
 
@@ -218,8 +194,6 @@ app.get('/get-user-info/services', async (req: Request, res: Response) => {
 });
 
 app.get('/get-user-info/user', async (req: Request, res: Response) => {
-    const cookies = req.headers.cookie || '';
-
     const { sessionID, token, uid } = getCookies(req);
 
     const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/data/user`, {
@@ -231,6 +205,46 @@ app.get('/get-user-info/user', async (req: Request, res: Response) => {
             token: token || null,
             user_id: uid || null,
         },
+        request: {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        },
+        client: service
+    });
+
+
+    sendCookies(res, f.data);
+
+    delete f.data.data.middleware;
+
+    res.status(f.status).json(f.data);
+
+});
+
+
+app.post('/set-user-info/services/create', async (req: Request, res: Response) => {
+    const { sessionID, token, uid } = getCookies(req);
+    const details = req.body.details;
+
+    console.log("Service creation details received:", details);
+
+    if (!details || !details.public || !details.configuration) {
+        console.log("Bad Request: Missing service details.");
+        return res.status(400).json({ status: 400, message: "Bad Request: Missing service details.", success: false });
+    }
+
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/data/services/build`, {
+        user: {
+            ip: req.ip,
+            agent: req.headers['user-agent'],
+            device_fingerprint: req.fingerprint,
+            session_id: sessionID || null,
+            token: token || null,
+            user_id: uid || null,
+        },
+        service: details,
         request: {
             method: req.method,
             url: req.originalUrl,

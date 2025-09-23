@@ -11,9 +11,7 @@ const stripePromise = loadStripe(process.env.STRIPE_API_PUBLIC_KEY!);
 
 const ReviewService = () => {
 
-    const [payementStatus, setPayementStatus] = useState(null);
 
-    const [paymentIntent, setPaymentIntent] = useState(null);
     const [clientSecret, setClientSecret] = useState("");
 
     useEffect(() => {

@@ -10,7 +10,8 @@ import ServiceCreationFooterButtons from "./sub-component/FooterButtons";
 import CreateServiceDescription from "./sub-component/ServiceDescription";
 import type { ServiceCreationSteps } from "./sub-component/HeaderButtons";
 import ServiceConfiguration, { type ServiceConfigurationProps } from "./sub-component/ServiceConfiguration";
-import ReviewService from "./sub-component/ReviewService";
+import axios from "axios";
+import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert";
 
 
 
@@ -37,25 +38,27 @@ const CreateService = () => {
 
 
 
-    const [serviceCreationStep, setServiceCreationStep] = useState<ServiceCreationSteps>("wizard-payement");
+    const [serviceCreationStep, setServiceCreationStep] = useState<ServiceCreationSteps>("wizard-configure"); // Prod : disclaimer
     const [serviceDescription, setServiceDescription] = useState<{
         name: string;
         description: string;
         profileImage: string;
         allow_public_visibility: boolean;
-        bannerImage? : string;
+        bannerImage?: string;
+        id: string;
     }>({
-        name: "",
-        description: "",
-        profileImage: "",
-        allow_public_visibility: false,
-        bannerImage : ""
+        id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15).toString(),
+        name: "New Service",
+        description: "Describe your service here.",
+        profileImage: "https://naflows.com/public/assets/naflows_small_logotype.png",
+        allow_public_visibility: true,
+        bannerImage: "https://naflows.com/public/assets/naflows_small_logotype.png"
     });
     const [serviceConfiguration, setServiceConfiguration] = useState<ServiceConfigurationProps>({
         plans: {
-            id: 0,
+            id: 1,
             name: "",
-            description: "",    
+            description: "",
             price: 0,
             features: [],
             type: "cloud",
@@ -63,16 +66,24 @@ const CreateService = () => {
             RPS: 0
         },
         config: {
-            ip_address : "",
-            dns : "",
+            ip_address: "1.1.1.1",
+            dns: "test.naflows.com",
         },
         settings: {
             allow_public_registration: false,
         }
     });
 
-    const [guidelinesAccepted, setGuidelinesAccepted] = useState(false);
+    const [guidelinesAccepted, setGuidelinesAccepted] = useState(true); // Prod : false
     const [component, setComponent] = useState<React.JSX.Element | null>(null);
+
+    const [displayAlert, setDisplayAlert] = useState<AlertContentProps>({
+        status: 0,
+        message: "",
+        success: false,
+        closeAlert: true,
+        displayCode: false,
+    });
 
 
     useEffect(() => {
@@ -88,7 +99,7 @@ const CreateService = () => {
         } else if (serviceCreationStep == "wizard-init") {
             setComponent(<div key={"wizard-init"} className="services__creation__body">
                 <CreateServiceDescription serviceDescription={serviceDescription} setServiceDescription={setServiceDescription} />
-                <ServiceCreationFooterButtons serviceCreationStep={serviceCreationStep} setServiceCreationStep={setServiceCreationStep} nextConditionMet={ serviceDescription?.name != "" && serviceDescription?.description != "" && serviceDescription?.profileImage != "" && serviceDescription?.bannerImage != ""} />
+                <ServiceCreationFooterButtons serviceCreationStep={serviceCreationStep} setServiceCreationStep={setServiceCreationStep} nextConditionMet={serviceDescription?.name != "" && serviceDescription?.description != "" && serviceDescription?.profileImage != "" && serviceDescription?.bannerImage != ""} />
             </div>);
         } else if (serviceCreationStep == "wizard-configure") {
             setComponent(<div key={"wizard-configure"} className="services__creation__body">
@@ -99,10 +110,49 @@ const CreateService = () => {
                 } />
             </div>);
         } else if (serviceCreationStep == "wizard-payement") {
-            setComponent(<div key={"wizard-payement"} className="services__creation__body">
-                <ReviewService serviceDescription={serviceDescription} serviceConfiguration={serviceConfiguration} />
-                <ServiceCreationFooterButtons serviceCreationStep={serviceCreationStep} setServiceCreationStep={setServiceCreationStep} nextConditionMet={true} />
-            </div>);
+            const create = axios.post(`${process.env.DUMMY_API_URL_DEV}/set-user-info/services/create`, {
+                details: {
+                    public: serviceDescription,
+                    configuration: {
+                        plans: serviceConfiguration.plans.id,
+                        config: serviceConfiguration.config,
+                        settings: serviceConfiguration.settings
+                    }
+                }
+            }, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                withCredentials: true
+            });
+            create.then((res) => {
+                console.log(res.data);
+                if (res.data.success) {
+                    setDisplayAlert({
+                        status: 200,
+                        message: "Service created successfully! You will be redirected to the service page shortly.",
+                        success: true,
+                        closeAlert: true,
+                        displayCode: false,
+                        title: "Service Created"
+                    });
+                    setTimeout(() => {
+                        window.location.href = `/services/manage/${serviceDescription.id}`;
+                    }, 5000);
+                }
+            }).catch((err) => {
+                setDisplayAlert({
+                    status: err.response?.status || 500,
+                    message: err.response?.data?.message || "An error occurred while creating the service.",
+                    success: false,
+                    closeAlert: false,
+                    displayCode: true,
+                    title: "Service Creation Failed"
+                });
+            });
+
+            // dev
+            setServiceCreationStep("wizard-configure");
         }
     }, [serviceCreationStep, guidelinesAccepted, serviceDescription, serviceConfiguration]);
 
@@ -127,19 +177,21 @@ const CreateService = () => {
         );
     } else {
         return (
-            <div className="nass__page user__page services__creation__page">
-                <AccountHeader selectedTab="services" userFetch={user} />
-
-                <div className="user__body__section services__creation__section">
-                    <div className="services__section__header">
-                        <div className="section__header__content">
-                            <h3 className="services__header__title">Services Creation</h3>
-                            <p>Create a new service.</p>
+            <>
+                <Alert alert={displayAlert} setAlert={setDisplayAlert} />
+                <div className="nass__page user__page services__creation__page">
+                    <AccountHeader selectedTab="services" userFetch={user} />
+                    <div className="user__body__section services__creation__section">
+                        <div className="services__section__header">
+                            <div className="section__header__content">
+                                <h3 className="services__header__title">Services Creation</h3>
+                                <p>Create a new service.</p>
+                            </div>
                         </div>
+                        {component}
                     </div>
-                    {component}
                 </div>
-            </div>
+            </>
         );
     }
 }

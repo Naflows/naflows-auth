@@ -1,15 +1,33 @@
 import { software } from "../../../software/dir";
 
 
+export interface ServicePlan {
+    id: number;
+    name: 'FREE' | 'PRO' | 'ENTERPRISE';
+    price: number;
+    features: Array<{
+        feature: string;
+        icon: string;
+    }>;
+    RPS: 100 | 500 | 1000 | 10000;
+    storage : 5 | 10 | 25 | 50;
+    type: "CLOUD" | "CLOUD";
+    description: string;
+}
+
 export async function getPlans() {
 
+    /*
 
+        Since stripe gets 0.7% off every transaction, we add +2% to the price to cover the fees.
+
+    */
 
     return software.methods.serverReply(200, "Plans fetched successfully", {
         plans: [
             {
                 "id": 0,
-                "name": "Free",
+                "name": "FREE",
                 "price": 0,
                 "features": [
                     {
@@ -30,14 +48,14 @@ export async function getPlans() {
                     }
                 ],
                 "RPS": 100,
-                "type": "cloud",
-                "storage": "5GB",
+                "type": "CLOUD",
+                "storage": 5,
                 "description": "Ideal for individuals and small projects starting out."
             },
             {
                 "id": 1,
-                "name": "Pro",
-                "price": 20 * 1.07,
+                "name": "PRO",
+                "price": Math.round(20 * 1.2),
                 "features": [
                     {"feature": "Unlimited token generation", "icon": "token"},
                     {"feature" : "10GB Storage for service data", "icon": "storage"},
@@ -46,14 +64,14 @@ export async function getPlans() {
                     {"feature": "Priority support", "icon": "support"}
                 ],
                 "RPS": 1000,
-                "type": "cloud",
-                "storage": "10GB",
+                "type": "CLOUD",
+                "storage": 10,
                 "description": "Perfect for growing teams and businesses needing more resources."
             },
             {
                 "id": 2,
-                "name": "Enterprise",
-                "price": 50 * 1.07,
+                "name": "ENTERPRISE",
+                "price": Math.round(50 * 1.2),
                 "features": [
                     {"feature": "Unlimited token generation", "icon": "token"},
                     {"feature" : "25GB Storage for service data", "icon": "storage"},
@@ -64,8 +82,8 @@ export async function getPlans() {
                 ],
                 "RPS": 10000,
                 "description": "Custom solutions for large organizations with specific needs.",
-                "type": "cloud",
-                "storage": "50GB"
+                "type": "CLOUD",
+                "storage": 50
             }
         ]
     });

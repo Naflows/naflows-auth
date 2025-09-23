@@ -20,15 +20,21 @@ export async function hiddenLogin(req : Request, res : Response) : Promise<Reply
     }
 
     const session : UserSession = await secure.session.get(session_id, false);
+
+    if (!session) {
+        return software.methods.serverReply(401, "Unauthorized: Session not found.");
+    }
+
     const token : Tokens = await secure.token.get(session.token_id, true);
+
+    if (!token) {
+        return software.methods.serverReply(401, "Unauthorized: Token not found.");
+    }
+
     const user : User = await secure.user.get(uid, false);
 
-
-    if (!token || !session || !user) {
-        console.error("\x1b[31m%s\x1b[0m", 
-            `The following were not found: ${!token ? "token" : ""} ${!session ? "session" : ""} ${!user ? "user" : ""}`
-        );
-        return software.methods.serverReply(401, "Invalid token, session or user.");
+    if (!user) {
+        return software.methods.serverReply(401, "Unauthorized: User not found.");
     }
 
     const tokenValid = await secure.token.valid(token, session, user.id, true); // TODO : MAKE SURE CREDENTIALS ARE VALID

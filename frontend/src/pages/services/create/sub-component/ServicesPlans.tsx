@@ -34,7 +34,7 @@ const ServicesPlans = ({
                             <p>Loading plans...</p>
                         ) : (
                             plans.map((plan) => (
-                                <div key={plan.id} className={`plan__card ${serviceConfiguration.plans?.id === plan.id ? "selected" : ""}`} onClick={() => {
+                                <div key={plan.id} className={`plan__card ${serviceConfiguration.plans.id === plan.id ? "selected" : ""}`} onClick={() => {
                                     setServiceConfiguration({
                                         ...serviceConfiguration,
                                         plans: plan

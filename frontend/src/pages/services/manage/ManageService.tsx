@@ -9,18 +9,25 @@ import "../../../../public/root/pages/services/manage/index.scss";
 import "../../../../public/root/pages/account/index.scss";
 import Loader from "../../../global/components/Loader";
 import fetchServiceData from "../../../scripts/account/fetch-individual-service";
-import type { AxiosResponse } from "axios";
+import type { AxiosError, AxiosResponse } from "axios";
 import type { ServicesForUserProps } from "../../../types/ServicesForUserProps";
-import ServiceStorage from "./sub-component/ServiceStorage";
 import ServiceDescription from "./sub-component/ServiceDescription";
 import ServiceCapacities from "./sub-component/ServiceCapacities";
 import ServicePublicSettings from "./sub-component/PublicSettings";
 import SecurityMeasures from "./sub-component/SecurityMeasures";
+import ServiceStorage from "./sub-component/ServiceStorage";
+import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert";
 
 const ManageService = () => {
   const [serviceID, setServiceID] = useState<string | null>(null);
   const [service, setService] = useState<ServicesForUserProps | null>(null);
   const [user, setUser] = useState<UserBodyProps | null>(null);
+  const [displayAlert, setDisplayAlert] = useState<AlertContentProps>({
+    status: 0,
+    message: "",
+    success: false,
+    closeAlert: true,
+  });
 
   useEffect(() => {
     const pathParts = window.location.pathname.split("/");
@@ -32,7 +39,7 @@ const ManageService = () => {
 
   useEffect(() => {
     // Fetch user data from the backend
-    if (serviceID != null) {
+    if (serviceID != null && service == null) {
       (async () => {
         try {
           const res = (await fetchData("user")) as AxiosResponse;
@@ -40,18 +47,31 @@ const ManageService = () => {
             serviceID,
             setService as (data: object) => void
           );
-          console.log(res.data, "user data");
           if (res.data == null) {
             throw new Error("Failed to fetch user data");
           }
           setUser(res.data.data.user as UserBodyProps);
         } catch (error) {
-          console.error("Error initializing page:", error);
-          window.location.href = "/login?redirect=" + window.location.pathname;
+            console.log("Service data fetch returned status:", (error as AxiosError)?.response?.status);
+            setDisplayAlert({
+              status: (error as AxiosError)?.response?.status || 500,
+              message: "Failed to fetch service data. Please try again. Make sure you have access to this service, or that it exists.",
+              success: false,
+              closeAlert: false,
+              title: "Error Fetching Service Data",
+              displayCode: true,
+              
+            });
         }
       })();
     }
-  }, [serviceID]);
+  }, [serviceID, service]);
+
+
+
+  if (displayAlert.status != 0) {
+    return <Alert alert={displayAlert} setAlert={setDisplayAlert} />;
+  }
 
   if (!user || !service) {
     return (

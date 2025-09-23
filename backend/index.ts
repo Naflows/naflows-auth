@@ -17,7 +17,6 @@ import mailing from "./software/mailing/dir";
 
 
 const express = require('express');
-const stripe = require('stripe')(process.env.STRIPE_API_SECRET_KEY);
 const app = express();
 const bodyParser = require('body-parser');
 const router = express.Router();
@@ -155,20 +154,9 @@ app.post('/client/login', async (req, res) => {
 
 
 
-const manageConnection = async (req, res): Promise<User> => {
-    const userID = req.middleware.data.user_id;
-    if (!userID) {
-        res.status(401).json(software.methods.serverReply(401, "Unauthorized: No user ID in middleware data."));
-    }
-    const user = await secure.user.get(userID, false);
-    if (!user) {
-        res.status(404).json(software.methods.serverReply(404, "User not found."));
-    }
 
-    return user;
-}
 app.post('/client/secure/data/services', async (req, res) => {
-    const user = await manageConnection(req, res);
+    const user = await secure.user.manageConnection(req, res);
     const userServices = user.services || [];
     const sentServices = await Promise.all(
         Object.keys(userServices).map(async (key) => {
@@ -207,23 +195,29 @@ app.post('/client/secure/data/services', async (req, res) => {
 });
 
 app.post('/client/secure/data/services/service-informations', async (req, res) => {
-    const user = await manageConnection(req, res);
+    const user = await secure.user.manageConnection(req, res);
     const userData = await secure.user.get(user.id, false);
     if (!userData) {
         console.log("User data not found");
-        return res.status(404).json(software.methods.serverReply(404, "User not found."));
+        return res.status(404).json(software.methods.serverReply(404, "User not found.", {
+            middleware: req.middleware.data,
+        }));
     }
 
     const service = userData.services[req.body.service.id] || null;
     if (!service) {
         console.log("Service not found in user's services");
-        return res.status(404).json(software.methods.serverReply(404, "Service not found in user's services."));
+        return res.status(404).json(software.methods.serverReply(404, "Service not found in user's services.", {
+            middleware: req.middleware.data,
+        }));
     }
 
     const serviceData = service ? await services.service.get(req.body.service.id) : null;
 
     if (!service || !serviceData || !serviceData.success) {
-        return res.status(404).json(software.methods.serverReply(404, "Service not found."));
+        return res.status(404).json(software.methods.serverReply(404, "Service not found.", {
+            middleware: req.middleware.data,
+        }));
     }
 
     const serviceInfo = serviceData.data as Service;
@@ -236,7 +230,7 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
         // If the user is not an admin or developer, remove sensitive information
         delete serviceInfo.ip_address;
         delete serviceInfo.created_by;
-        delete serviceInfo.storage;
+        delete serviceInfo.plan;
         delete serviceInfo.settings;
     }
 
@@ -259,9 +253,48 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
     });
 });
 
+app.post('/client/secure/data/services/build', async (req, res) => {
+
+    console.log("Request to build service received:", req.body);
+
+    const service = req.body.service;
+    if (!service) {
+        console.log("Bad Request: Missing service details.");
+        return res.status(400).json(software.methods.serverReply(400, "Bad Request: No service data provided.", {
+            middleware: req.middleware.data,
+        }));
+    }
+    const create: ReplyType = await services.service.register({
+        id : service.public.id ,
+        name: service.public.name,
+        description: service.public.description || null,
+        ip_address: service.configuration.config.ip_address,
+        dns: service.configuration.config.dns,
+        picture: service.public.picture || null,
+        banner: service.public.banner || null,
+    }, {
+        rates: service.configuration.plans.RPS || 100,
+    }, {
+        allow_public_visibility: service.public.allow_public_visibility || false,
+        allow_user_registration: service.public.allow_user_registration || false,
+    }, {
+        id : service.configuration.plans
+    }, req, res);
+    res.status(create.status).json({
+        status: create.status,
+        message: create.message,
+        success: create.success,
+        data: {
+            middleware: req.middleware.data,
+        }
+    });
+
+
+})
+
 app.post('/client/secure/data/user', async (req, res) => {
 
-    const user = await manageConnection(req, res);
+    const user = await secure.user.manageConnection(req, res);
 
     // Remove sensitive information
     delete user.password;
@@ -306,45 +339,6 @@ app.post('/public/services/plans', async (req, res) => {
 
 
 
-async function createPayementIntent(amount: number, currency: string, metadata: object) {
-    const paymentIntent = await stripe.paymentIntents.create({
-        amount: amount,
-        currency: currency,
-        metadata: metadata,
-        automatic_payment_methods: {enabled: true},
-    });
-    return paymentIntent;
-}
-
-app.post('/client/secure/data/services/validate-plan', async (req, res) => {
-    const user = await manageConnection(req, res);
-    const { plan_id } = req.body;
-
-    const plans = await services.service.getPlans() as ReplyType;
-
-    if (!plans.success || !plans.data) {
-        return res.status(500).json(software.methods.serverReply(500, "Failed to fetch plans."));
-    }
-
-    const plan = (plans.data as { plans: any[] }).plans.find((p: any) => p.id === plan_id);
-    if (!plan) {
-        return res.status(404).json(software.methods.serverReply(404, "Plan not found."));
-    }
-
-    const paymentIntent = await createPayementIntent(plan.price, "eur", {
-        user_id: user.id,
-        plan_id: plan.id
-    });
-
-    res.status(200).json({
-        status: 200,
-        message: "Payment intent created successfully.",
-        success: true,
-        data: {
-            client_secret: paymentIntent.client_secret
-        }
-    });
-});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

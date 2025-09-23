@@ -8,7 +8,7 @@
 }
 
 .services__creation__section {
-    width: 50%;
+    width: 50% !important;
     box-shadow: 0 0 100px $da-secondary-hue-transparent;
 
     .services__creation__body {
@@ -357,6 +357,27 @@
     }
 }
 
+
+
+@media screen and (max-width: 1400px) {
+    
+    .plans__content {
+        flex-direction: column !important;
+        .plan__card  {
+            width: calc(100% - 40px) !important;
+            .plan__features {
+                flex-wrap: wrap;
+                flex-direction: row !important;
+                justify-content: center;
+                gap: 10px !important;
+                li {
+                    width: fit-content !important;
+                }
+            }
+        }
+    }
+}
+
 @media screen and (max-width: 900px) {
     .services__creation__header__step {
         flex-direction: column;
@@ -376,5 +397,6 @@
     .form {
         flex-direction: column !important;
     }
+
 
 }

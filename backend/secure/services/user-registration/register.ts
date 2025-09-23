@@ -19,35 +19,53 @@ import secure from "../../global/dir";
 import { services } from "../dir";
 
 
-export default async function registerUserInAPI(userID : string, apiID : string, ucr : UCRType) : Promise<ReplyType> {
+export default async function registerUserInAPI(user: User, apiID: string, session_id: string, ucr : UCRType | null, force = false, rights: string[]): Promise<ReplyType> {
     // Implementation for registering the user in the API
 
-    const user : User = await secure.user.get(userID);
-    const session : UserSession = await secure.session.get(ucr.user.session_id);
+    const session: UserSession = await secure.session.get(session_id);
 
-    if (!user) return software.methods.serverReply(404, "User not found when retrieving user information for API registration.");
+    if (!session) {
+        return software.methods.serverReply(401, "Unauthorized: Session not found.");
+    }
+
+    const registerUser = async () => {
+        const usersCollection = db.collection('users');
+
+        // Update user by creating a new entry in the services OBJECT
+
+        const userDoc = await usersCollection.updateOne(
+            { id: user.id },
+            { $set: { [`services.${apiID}`]: { id: secure.hash(apiID), active: true, joined_at: new Date().getTime(), rights } } },
+            { upsert: true }
+        );
+
+        if (userDoc.modifiedCount === 0) {
+            return software.methods.serverReply(404, "User not found.");
+        }
+
+        return software.methods.serverReply(200, "User credentials are valid for API registration.");
+    }
+
+    if (force) {
+        const registration = await registerUser();
+        return registration;
+    } else if (force && ucr === null) {
+        return software.methods.serverReply(400, "Bad Request: UCR data must be provided when force is true.");
+    }
+
+
 
     if (ucr.data && ucr.data.tokens && ucr.data.tokens.serviceRegistration) {
-        if (ucr.user.password && ucr.user.identifier && (await secure.user.credentials(userID, ucr.user.identifier, ucr.user.password))) {
+        if (ucr.user.password && ucr.user.identifier && (await secure.user.credentials(user.id, ucr.user.identifier, ucr.user.password))) {
             // User is registered and credentials are valid
-            const isTokenValid =  services.userRegistration.isTokenValid(ucr.data.tokens.serviceRegistration);
+            const isTokenValid = services.userRegistration.isTokenValid(ucr.data.tokens.serviceRegistration);
 
             if (!isTokenValid) {
                 return software.methods.serverReply(403, "Invalid service registration token.");
             }
 
-            const usersCollection = db.collection('users');
-            const userDoc = await usersCollection.updateOne(
-                { id: userID },
-                { $set: { "services.$[elem].active": true, "services.$[elem].joined_at": new Date().getTime(), "services.$[elem].rights" : ["USER"] } },
-                { arrayFilters: [{ "elem.id": secure.hash(apiID) }] }
-            );
-
-            if (userDoc.modifiedCount === 0) {
-                return software.methods.serverReply(404, "User not found.");
-            }
-
-            return software.methods.serverReply(200, "User credentials are valid for API registration.");
+            const registration = await registerUser();
+            return registration;
         } else {
             return software.methods.serverReply(403, "Invalid user credentials for API registration.");
         }
@@ -55,8 +73,8 @@ export default async function registerUserInAPI(userID : string, apiID : string,
 
     if (!Array.from(Object.keys(user.services)).includes(apiID) || !user.services[apiID].active) {
         // This means the user is not registered to the api 
-        const token : ReplyType = await secure.token.create(user, session, ["API_REGISTRATION"], false, 1, {
-            apiIDForRegistration : apiID,
+        const token: ReplyType = await secure.token.create(user, session, ["API_REGISTRATION"], false, 1, {
+            apiIDForRegistration: apiID,
         });
         if (token.success) {
             return software.methods.serverReply(200, "Token for API registration successfully created.", token.data);
@@ -65,7 +83,7 @@ export default async function registerUserInAPI(userID : string, apiID : string,
         }
     }
 
-    
+
 
 
 

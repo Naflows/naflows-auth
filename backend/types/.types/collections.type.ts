@@ -132,18 +132,15 @@ export interface Tokens {
   rights: TokenRights[]; // Rights of the token, used to determine what the token can do
 }
 
-export interface ServiceStoragePlan {
+export interface ServicePlan {
   plan: "FREE" | "PRO" | "ENTERPRISE";
   type: "LOCAL" | "CLOUD";
-  size: 32 | 128 | 512 | 1024; // in GB
+  size: 5 | 10 | 25 | 50; // in GB
   used_space: number; // in MB
-  payement_plan: "FREE" | "MONTHLY" | "YEARLY"; // Payment plan of the service
 
 }
 export interface ServiceSettings {
   rates: 100 | 500 | 1000 | 10000;
-  ram: "512MB" | "1GB" | "2GB" | "4GB"; // RAM allocated to the service
-  cpu: "1 CORE" | "2 CORES" | "4 CORES" | "8 CORES"; // CPU allocated to the service
   allow_nass_payement_method : boolean; // Whether the service allows payment through NASS
 
 }
@@ -157,9 +154,10 @@ export interface Service {
   dns: string; // DNS of the service, used to identify the service
   ip_address: string; // IP address of the service
   service_token: string; // Service token, a secure way of connecting to the service
-  storage: ServiceStoragePlan;
+  plan: ServicePlan;
   settings: ServiceSettings;
   picture?: string; // URL to the service picture, optional
+  banner?: string; // URL to the service banner, optional
   public_settings: {
     allow_user_registration: boolean; // Whether the service allows user registration or not
     allow_service_connection: boolean; // Whether the service allows connection from other services or not

@@ -15,12 +15,12 @@ interface ServicesForUserProps {
         personal_data: Array<"PHONE" | "EMAIL" | "FIRST AND LAST NAME" | "ADDRESS" | "BIRTHDATE" | "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS">;
     }; // Data preferences of the service
     status: "ACTIVE" | "INACTIVE" | "DEPRECATED"; // Status of the service
-    storage : {
-        plan: string; // Storage plan of the service, e.g., "BASIC", "PRO", "ENTERPRISE"
-        type: string; // Type of storage, e.g., "LOCAL", "CLOUD"
-        size: string; // Total storage size in GB
-        used_space: number; // Used storage space in MB
-    };
+    plan : {
+        plan : "FREE" | "PRO" | "ENTERPRISE"; // Service plan name
+        type : "CLOUD" | "CLOUD"; // Type of the plan
+        size : string; // Size of the plan in GB
+        used_space : number; // Used space in MB
+    },
     settings : {
         rates: number; // Number of allowed operations per month
         allow_nass_payement_method : boolean; // Whether the service allows payment through NASS

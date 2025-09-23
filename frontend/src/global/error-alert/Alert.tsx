@@ -8,6 +8,9 @@ export interface AlertContentProps {
   closeAlert: boolean;
   title?: string;
   displayCode?: boolean;
+  customClose? : {
+    text: string; action: () => void;
+  }
 }
 interface AlertProps {
   alert: AlertContentProps;
@@ -39,9 +42,14 @@ const Alert = ({ alert, setAlert }: AlertProps) => {
         </div>
         <button
           className="primary-button"
-          onClick={() => setAlert({ ...alert, closeAlert: true })}
-        >
-          Close
+          onClick={() => {
+            if (alert.customClose) {
+              alert.customClose.action();
+            } else {
+              setAlert({ ...alert, closeAlert: true })
+            }
+          }}>
+          {alert.customClose ? alert.customClose.text : "Close"}
         </button>
       </div>
     </div>

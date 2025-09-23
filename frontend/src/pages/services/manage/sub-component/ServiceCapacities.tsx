@@ -17,16 +17,8 @@ const ServiceCapacities = ({
           </div>
           <div className="services__section__content  plans__table">
             <div className="table__content">
-              <div className="table__header">RAM</div>
-              <div className="table__value">{service.settings.ram}</div>
-            </div>
-            <div className="table__content">
-              <div className="table__header">CPU</div>
-              <div className="table__value">{service.settings.cpu}</div>
-            </div>
-            <div className="table__content">
               <div className="table__header">Storage Size</div>
-              <div className="table__value">{service.storage.size}</div>
+              <div className="table__value">{service.plan.size}</div>
             </div>
             <div className="table__content">
               <div className="table__header">RPS</div>
@@ -34,11 +26,11 @@ const ServiceCapacities = ({
             </div>
             <div className="table__content">
               <div className="table__header">Service Plan</div>
-              <div className="table__value">{service?.storage.plan}</div>
+              <div className="table__value">{service?.plan.plan}</div>
             </div>
             <div className="table__content">
               <div className="table__header">Storage Type</div>
-              <div className="table__value">{service?.storage.type}</div>
+              <div className="table__value">{service?.plan.type}</div>
             </div>
           </div>
           <button className="primary-button">Change Capacities</button>

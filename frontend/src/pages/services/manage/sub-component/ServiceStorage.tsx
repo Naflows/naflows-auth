@@ -5,7 +5,7 @@ const ServiceStorage = ({
 }: {
   service: ServicesForUserProps | null;
 }) => {
-  if (service) {
+  if (service && service.plan) {
     return (
       <div className="user__body__section service__storage__section">
         <div className="service__storage">
@@ -17,7 +17,7 @@ const ServiceStorage = ({
           </div>
           <div className="services__section__content">
             <span className="service__storage__usage__text">
-              {service.storage.used_space / 1024} out of {service.storage.size}{" "}
+              {service.plan.used_space / 1024} out of {service.plan.size}{" "}
               GB used
             </span>
             <div className="service__storage__usage">
@@ -25,9 +25,9 @@ const ServiceStorage = ({
                 className="storage__usage__bar"
                 style={{
                   width: `${
-                    (service.storage.used_space /
+                    (service.plan.used_space /
                       1024 /
-                      parseInt(service.storage.size)) *
+                      parseInt(service.plan.size || "0")) *
                     100
                   }%`,
                 }}

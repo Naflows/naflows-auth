@@ -11,6 +11,7 @@ export interface ServiceDescriptionProps {
     profileImage: string;
     allow_public_visibility: boolean;
     bannerImage? : string;
+    id : string;
 }
 
 
@@ -40,6 +41,7 @@ const CreateServiceDescription = ({
         setServiceDescription({
             ...serviceDescription,
             name: serviceDescription ? serviceDescription.name : "",
+            id : serviceID
         });
     }, [serviceID]);
 
