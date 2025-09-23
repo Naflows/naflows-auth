@@ -3,6 +3,7 @@ import "../public/root/index.scss";
 import LoginForm from "./form/Login";
 import { useEffect, useState } from "react";
 import RegisterForm from "./form/Register";
+import GlobalDisclaimer from "./global/components/GlobalDisclaimer";
 
 interface AppLoginBigButtonProps {
   onClick: () => void;
@@ -43,6 +44,17 @@ function App() {
     <>
       <div className="col-20 global__nass__form">
         <div className="panel">
+        <GlobalDisclaimer
+          allowHidden={true}
+          title={`This login will redirect you`}
+          message={""}
+          maxWidth={true}
+          content={<>
+            <p>
+              Once logged in, you will be redirected to {redirect}. If you wish to log in to your account dashboard, please use <a href="/account">https://auth.naflows.com/account</a> instead.
+            </p>
+          </>}
+        />
           <img
             src={NAFLOWS_LOGO}
             alt="Naflows Logo"

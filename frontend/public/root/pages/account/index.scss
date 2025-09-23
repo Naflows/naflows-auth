@@ -87,6 +87,9 @@ body {
 
       .user__header__visual__access {
         border-color: transparent !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         &:hover {
           background-color: $_2k25-background-hue-50-transparent !important;
@@ -176,6 +179,9 @@ body {
           border-radius: 50%;
           width: 35px;
           height: 35px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
       }
     }

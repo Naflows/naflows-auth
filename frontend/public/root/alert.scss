@@ -6,6 +6,7 @@
   from {
     transform: translateY(-100%);
   }
+
   to {
     transform: translateY(0);
   }
@@ -15,6 +16,7 @@
   from {
     transform: translateY(0);
   }
+
   to {
     transform: translateY(-100%);
   }
@@ -52,6 +54,7 @@
       flex-direction: column;
       gap: 15px;
       width: 100%;
+
       .global___alert__component__message {
         p {
           margin: 0;
@@ -65,11 +68,15 @@
         gap: 10px;
         width: 100%;
         align-items: center;
+        position: relative;
 
-        h3,p {
+        h3,
+        p {
           margin: 0;
           padding: 0;
         }
+
+
 
 
         .alert__header__banner {
@@ -78,15 +85,38 @@
           border-radius: 10px;
           border: 1px solid;
           height: fit-content;
+          transition: 0.3s;
+          cursor: pointer;
+
+
+          &:hover {
+            .error__code__explainer {
+              opacity: 1;
+              z-index: 10;
+              transition: 0.3s;
+              top: -100%;
+            }
+          }
+
+
           &.error {
             color: $da-error-hue;
             background-color: $da-error-hue-transparent;
             border-color: $da-error-hue;
+
+            &:hover {
+              border-color: $da-error-hue-darker;
+            }
           }
+
           &.success {
             color: $da-confirm-hue;
             background-color: $da-confirm-hue-transparent;
             border-color: $da-confirm-hue;
+
+            &:hover {
+              border-color: $da-confirm-hue-darker;
+            }
           }
         }
       }
@@ -99,10 +129,22 @@
     button {
       width: 100%;
     }
+
+    .global___alert__component__message {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    .error__code__explainer {
+      border-radius: 10px;
+      color: $da-error-hue;
+      transition: 0.3s;
+    }
+    }
   }
 
   &.hidden {
     display: none;
+
     .global__alert__component__content {
       animation: slideOut 0.3s forwards;
     }
@@ -114,6 +156,7 @@
   .global__alert__component {
     .global__alert__component__content {
       width: calc(90% - 40px);
+
       .global___alert__component__header {
         flex-direction: column !important;
         align-items: start !important;

@@ -6,6 +6,7 @@ interface ServicesForUserProps {
     description?: string; // Service description, optional
     dns: string; // DNS of the service, used to identify the service
     active: "ACTIVE" | "INACTIVE" | "DEPRECATED"; // Service status, ACTIVE means the service is running, INACTIVE means the service is not running, DEPRECATED means the service is no longer supported
+    banner?: string; // URL to the service banner, optional
     rights: "ADMINISTRATOR" | "DEVELOPER" | "USER"; // Role of the user in the service, e.g., "admin", "user", etc.
     joined_at: string; // Date when the user joined the service
     user_active: boolean; // Whether the user's account in the service is active

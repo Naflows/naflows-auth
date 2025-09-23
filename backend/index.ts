@@ -21,6 +21,10 @@ const app = express();
 const bodyParser = require('body-parser');
 const router = express.Router();
 
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+
+
 connectToDatabase();
 useApp(app);
 
@@ -270,8 +274,8 @@ app.post('/client/secure/data/services/build', async (req, res) => {
         description: service.public.description || null,
         ip_address: service.configuration.config.ip_address,
         dns: service.configuration.config.dns,
-        picture: service.public.picture || null,
-        banner: service.public.banner || null,
+        picture: service.public.profileImage || null,
+        banner: service.public.bannerImage || null,
     }, {
         rates: service.configuration.plans.RPS || 100,
     }, {

@@ -38,7 +38,7 @@ const CreateService = () => {
 
 
 
-    const [serviceCreationStep, setServiceCreationStep] = useState<ServiceCreationSteps>("wizard-configure"); // Prod : disclaimer
+    const [serviceCreationStep, setServiceCreationStep] = useState<ServiceCreationSteps>("disclaimer"); // Prod : disclaimer
     const [serviceDescription, setServiceDescription] = useState<{
         name: string;
         description: string;
@@ -47,16 +47,16 @@ const CreateService = () => {
         bannerImage?: string;
         id: string;
     }>({
-        id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15).toString(),
-        name: "New Service",
-        description: "Describe your service here.",
-        profileImage: "https://naflows.com/public/assets/naflows_small_logotype.png",
-        allow_public_visibility: true,
-        bannerImage: "https://naflows.com/public/assets/naflows_small_logotype.png"
+        id: "",
+        name: "",
+        description: "",
+        profileImage: "",
+        allow_public_visibility: false,
+        bannerImage: ""
     });
     const [serviceConfiguration, setServiceConfiguration] = useState<ServiceConfigurationProps>({
         plans: {
-            id: 1,
+            id: 0,
             name: "",
             description: "",
             price: 0,
@@ -66,15 +66,15 @@ const CreateService = () => {
             RPS: 0
         },
         config: {
-            ip_address: "1.1.1.1",
-            dns: "test.naflows.com",
+            ip_address: "",
+            dns: "",
         },
         settings: {
             allow_public_registration: false,
         }
     });
 
-    const [guidelinesAccepted, setGuidelinesAccepted] = useState(true); // Prod : false
+    const [guidelinesAccepted, setGuidelinesAccepted] = useState(false); // Prod : false
     const [component, setComponent] = useState<React.JSX.Element | null>(null);
 
     const [displayAlert, setDisplayAlert] = useState<AlertContentProps>({
@@ -121,7 +121,9 @@ const CreateService = () => {
                 }
             }, {
                 headers: {
-                    "Content-Type": "application/json"
+                    // Also allow large image uploads
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
                 },
                 withCredentials: true
             });
@@ -132,7 +134,7 @@ const CreateService = () => {
                         status: 200,
                         message: "Service created successfully! You will be redirected to the service page shortly.",
                         success: true,
-                        closeAlert: true,
+                        closeAlert: false,
                         displayCode: false,
                         title: "Service Created"
                     });

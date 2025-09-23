@@ -7,8 +7,9 @@ const fingerprint = require('express-fingerprint');
 const cookieParser = require('cookie-parser');
 const router = express.Router();
 const app = express();
+const bodyParser = require('body-parser');
 
-app.use(express.json());
+
 app.use(cookieParser());
 app.use(cors({
     origin: ['http://localhost:8080', 'https://nass.naflows.com', 'http://localhost:3005'  // Add this
@@ -23,9 +24,11 @@ app.use(fingerprint({
     ]
 }));
 
-
-
-app.use(express.urlencoded({ extended: true }));
+// Allow large payloads (for image uploads)
+// Is this a security risk? Should we limit it to 50mb?
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
 // Middleware to return req url
 import { Request, Response, NextFunction } from 'express';

@@ -60,7 +60,7 @@ const ManageService = () => {
               closeAlert: false,
               title: "Error Fetching Service Data",
               displayCode: true,
-              
+              customClose: { text: "Go to Services", action: () => { window.location.href = "/account/services"; } }
             });
         }
       })();

@@ -1,5 +1,6 @@
 import type { ServicesForUserProps } from "../../../../types/ServicesForUserProps";
 import "../../../../../public/root/pages/services/manage/sub-components/ServiceDescription.scss";
+import Input from "../../../../global/components/Input";
 
 const SettingsComponent = ({
   name,
@@ -36,6 +37,20 @@ const ServicePublicSettings = ({
             </div>
           </div>
           <div className="services__settings__view">
+            <div className="information__item" style={{
+              maxWidth: '100%'
+            }}>
+              <Input
+                label="Referential Identifier"
+                value={service.id}
+                editMode={false}
+                allowCopy={true}
+                type="text"
+                name="service-id"
+                required={false}
+                onChange={() => { }}
+              />
+            </div>
             <SettingsComponent
               name="Allow service connections"
               value={service.public_settings.allow_service_connections}
@@ -55,7 +70,7 @@ const ServicePublicSettings = ({
           </div>
         </div>
         <button className="secondary-button" style={{
-            width : "100%",
+          width: "100%",
         }}>Manage Settings</button>
       </div>
     );
