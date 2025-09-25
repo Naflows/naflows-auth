@@ -601,7 +601,6 @@ button * {
   cursor: pointer;
   white-space: nowrap;
   color: $_2k25-text;
-  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -620,8 +619,7 @@ button * {
   }
 
   &:hover {
-    color: $_2k25-darker;
-    transform: scale(1.01);
+    color: $da-secondary-hue-lighter-2;
 
     svg,
     svg * {
@@ -633,7 +631,6 @@ button * {
 .secondary-button {
   background-color: transparent;
   border: none;
-  font-weight: bold;
   color: $_2k25-text;
   cursor: pointer;
   display: flex;
@@ -728,6 +725,8 @@ button * {
 .text-size-20 {
   font-size: 20px;
 }
+
+
 
 .checkbox-container {
   display: flex;

@@ -62,11 +62,13 @@
           padding: 10px 15px;
           border-radius: 10px;
           width: calc(100% - 30px - 4px);
-          border: 2px solid rgba(255, 255, 255, 0.1);
+          border: 2px solid $_2k25-background-hue-50-transparent;
           transition: all 0.2s;
           display: flex;
           flex-direction: column;
-          gap: 30px;
+          gap: 10px;
+
+
 
           .service__item__buttons {
             display: flex;

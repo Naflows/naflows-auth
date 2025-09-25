@@ -184,11 +184,22 @@
   .service__actions__field__header {
     display: flex;
     flex-direction: column;
-
+    gap: 5px;
+    align-items: start;
+    user-select: none;
     .service__actions__field__title {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 7px;
       margin: 0;
       padding: 0;
       color: $da-secondary-hue-lighter-2;
+      svg {
+        height: 24px;
+        width: 24px;
+        fill: $da-secondary-hue-lighter-2;
+      }
     }
 
     p {

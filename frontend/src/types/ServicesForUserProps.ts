@@ -16,26 +16,31 @@ interface ServicesForUserProps {
         personal_data: Array<"PHONE" | "EMAIL" | "FIRST AND LAST NAME" | "ADDRESS" | "BIRTHDATE" | "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS">;
     }; // Data preferences of the service
     status: "ACTIVE" | "INACTIVE" | "DEPRECATED"; // Status of the service
-    plan : {
-        plan : "FREE" | "PRO" | "ENTERPRISE"; // Service plan name
-        type : "CLOUD" | "CLOUD"; // Type of the plan
-        size : string; // Size of the plan in GB
-        used_space : number; // Used space in MB
+    plan: {
+        plan: "FREE" | "PRO" | "ENTERPRISE"; // Service plan name
+        type: "CLOUD" | "CLOUD"; // Type of the plan
+        size: string; // Size of the plan in GB
+        used_space: number; // Used space in MB
     },
-    settings : {
+    settings: {
         rates: number; // Number of allowed operations per month
-        allow_nass_payement_method : boolean; // Whether the service allows payment through NASS
-        ram : string; // RAM allocated to the service
-        cpu : string; // CPU allocated to the service
+        allow_nass_payement_method: boolean; // Whether the service allows payment through NASS
+        ram: string; // RAM allocated to the service
+        cpu: string; // CPU allocated to the service
     };
     ip_address?: string; // IP address of the service, optional and may be omitted for non-admin users
     picture?: string; // URL to the service picture, optional
-    public_settings : {
-        allow_user_registration : boolean;
-        allow_service_connections : boolean;
-        allow_public_visibility : boolean;
+    public_settings: {
+        allow_user_registration: boolean;
+        allow_service_connections: boolean;
+        allow_public_visibility: boolean;
+        required_data?: Array<"PHONE" | "EMAIL" | "FIRST AND LAST NAME" | "ADDRESS" | "BIRTHDATE" | "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS">; // What personal data is required for a user to register in the service
+    },
+    details: {
+        users: number; // Number of users in the service
+        official: boolean; // Whether the service is verified or not
+    },
 
-    }
 }
 
 export type { ServicesForUserProps };

@@ -108,6 +108,10 @@ export async function registerService(
             allow_user_registration: public_settings.allow_user_registration,
             allow_service_connection: false
         },
+
+        details : {
+            users : 1 // The creator is the first user
+        }
     };
 
     const token: ReplyType = await services.token.new(service.id, "AUTO");

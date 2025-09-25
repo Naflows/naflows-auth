@@ -90,11 +90,11 @@ const CreateServiceDescription = ({
                                     autoComplete={false}
                                     onChange={(value) => {
                                         if (value != serviceDescription.name) {
-                                            setServiceDescription({ ...serviceDescription, name: value.toString().slice(0, 100)});
+                                            setServiceDescription({ ...serviceDescription, name: value.toString().slice(0, 50)});
                                         }
                                     }}
-                                    maxLength={100}
-                                    maxChar={100}
+                                    maxLength={50}
+                                    maxChar={50}
                                     displayMaxChar={true}
                                 />
                                 <Input

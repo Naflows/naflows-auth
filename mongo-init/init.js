@@ -386,8 +386,8 @@ db.services.insertOne({
     created_by : "NASS",
     status : "ACTIVE",
     service_token : "naflows_backend_token",
-    picture : "https://i.scdn.co/image/ab67616100005174877d4c061d08c040974224be",
-    banner : "https://naflows.com/public/assets/naflows_full_logotype.png",
+    picture : "https://avatars.githubusercontent.com/u/188961317?s=200&v=4",
+    banner : "https://private-user-images.githubusercontent.com/69418024/476258484-e33829b9-935c-457e-9cc0-4ddecc2cfdb1.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTg4MDYzMzQsIm5iZiI6MTc1ODgwNjAzNCwicGF0aCI6Ii82OTQxODAyNC80NzYyNTg0ODQtZTMzODI5YjktOTM1Yy00NTdlLTljYzAtNGRkZWNjMmNmZGIxLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA5MjUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwOTI1VDEzMTM1NFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTA0MzQ0MjY5ZTkwOWUxYzI1YTdlZTRiMzQyYjlmOTVlNjg4YTlkNDU4MmRmYjk1MmJhYzJjODk1YWJjY2VlMGUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.BKVtjPwtHyMaCYDNsoEtQ-BWAOKn1sUF4jhv-Ne84C4",
     settings : {
         rates : 10000,
         allow_nass_payement_method : true, // Whether the service allows payment through NASS
@@ -401,7 +401,20 @@ db.services.insertOne({
     public_settings : {
         allow_user_registration : true,
         allow_service_connection : true,
-        allow_public_visibility : true
+        allow_public_visibility : true,
+        required_data : [
+            "PHONE",
+            "EMAIL",
+            "FIRST AND LAST NAME",
+            "ADDRESS",
+            "BIRTHDATE",
+            "ACCOUNT SECURITY MEASURES",
+            "BILLING DETAILS"
+        ]
+    },
+    details : {
+        users : 1, // Number of users in the service
+        official : true, // Whether the service is official or third-party
     }
 })
 

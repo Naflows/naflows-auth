@@ -16,5 +16,12 @@ export interface ServicesCompleteBodyProps {
     picture: string; // URL to the service picture
     banner: string; // URL to the service banner
     status: "ACTIVE" | "INACTIVE" | "DEPRECATED"; // Status of the service
-
+    public_settings?: {
+        required_data?: Array<"PHONE" | "EMAIL" | "FIRST AND LAST NAME" | "ADDRESS" | "BIRTHDATE" | "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS">; // What personal data is required for a user to register in the service
+    }; // Public settings of the service, optional and may be omitted for non-admin users
+    details : {
+        users : number; // Number of users in the service
+        official: boolean; // Whether the service is verified or not
+    },
+    required_data?: Array<"PHONE" | "EMAIL" | "FIRST AND LAST NAME" | "ADDRESS" | "BIRTHDATE" | "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS">; // What personal data is required for a user to register in the service
 }

@@ -11,7 +11,7 @@
 export interface ServicesBodyProps {
     name: string; // Service name, used for display purposes
     id: string; // Service ID
-    description?: string; // Service description, optional
+    description?: string; // Service description, optional 
     dns: string; // DNS of the service, used to identify the service
     picture: string; // URL to the service's picture or logo
     banner: string; // URL to the service's banner image
@@ -19,5 +19,11 @@ export interface ServicesBodyProps {
     rights: "ADMINISTRATOR" | "DEVELOPER" | "USER"; // Role of the user in the service, e.g., "admin", "user", etc.
     joined_at: string; // Date when the user joined the service
     user_active: boolean; // Whether the user's account in the service is active
-    public_settings?: object; // Public settings of the service, optional and may be omitted for non-admin users
+    public_settings?: {
+        required_data?: Array<"PHONE" | "EMAIL" | "FIRST AND LAST NAME" | "ADDRESS" | "BIRTHDATE" | "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS">; // What personal data is required for a user to register in the service
+    }; // Public settings of the service, optional and may be omitted for non-admin users
+    details : {
+        users : number; // Number of users in the service
+        official: boolean; // Whether the service is verified or not
+    },
 }

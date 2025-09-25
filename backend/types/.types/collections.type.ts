@@ -141,7 +141,7 @@ export interface ServicePlan {
 }
 export interface ServiceSettings {
   rates: 100 | 500 | 1000 | 10000;
-  allow_nass_payement_method : boolean; // Whether the service allows payment through NASS
+  allow_nass_payement_method: boolean; // Whether the service allows payment through NASS
 
 }
 export interface Service {
@@ -162,7 +162,12 @@ export interface Service {
     allow_user_registration: boolean; // Whether the service allows user registration or not
     allow_service_connection: boolean; // Whether the service allows connection from other services or not
     allow_public_visibility: boolean; // Whether the service is visible in the public services list or not
-  }
+    required_data?: UserDataPreferences["personal_data"]; // What personal data is required for a user to register in the service
+  },
+  details: {
+    users: number; // Number of users in the service
+    official: boolean; // Whether the service is verified or not, verified services are services that have been verified by the NASS team to be legitimate and secur
+  },
 }
 
 export enum CONTRACTED {
