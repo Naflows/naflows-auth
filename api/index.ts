@@ -128,6 +128,31 @@ app.get('/public/subscribe-mailing', async (req: Request, res: Response) => {
     res.status(f.status).json(f.data);
 });
 
+app.get('/public/services/:id/infos/:userID', async (req: Request, res: Response) => {
+    const serviceID = req.params.id;
+    const userID = req.params.userID;
+    console.log("Public service info requested for ID:", serviceID);
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/public/services/service-informations`, {
+        service: {
+            id: serviceID,
+            userID : userID || null
+        },
+        client: service,
+        request: {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        }
+    });
+
+    console.log("Public service information response from NASS:", f.data);
+    sendCookies(res, f.data);
+
+    delete f.data.data.middleware;
+
+    res.status(f.status).json(f.data.data.service);
+});
 
 app.get('/get-user-info/services/:id/service-informations', async (req: Request, res: Response) => {
     const { sessionID, token, uid } = getCookies(req);
@@ -318,6 +343,6 @@ app.post('/send-login-request', async (req: Request, res: Response) => {
 
 const PORT = 3005;
 app.listen(PORT, () => {
-    console.log(`Dummy API is running on http://localhost:${PORT}\nCommunication with NASS : ${process.env.AUTH_API_URL_DEV}\nLast update : 10:11 14/09/2025`);
+    console.log(`Dummy API is running on http://localhost:${PORT}\nCommunication with NASS : ${process.env.AUTH_API_URL_DEV}\nLast update : 15:53 25/09/2025`);
 });
 

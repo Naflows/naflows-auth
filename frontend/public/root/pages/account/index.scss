@@ -14,11 +14,10 @@ body {
   display: flex;
 }
 
-.user__body__section {
+.user__body__section:not(.service__description__section) {
   background-color: $_2k25-background-hue-darker;
   padding: 20px 30px;
   border-radius: 20px;
-  width: fit-content;
   width: calc(75% - 60px) !important;
   margin: auto;
   gap: 20px;
@@ -48,6 +47,7 @@ body {
   justify-content: start;
   width: 75%;
   margin: auto;
+}
 
   .nass__account__page__header {
     display: flex;
@@ -210,7 +210,6 @@ body {
       }
     }
   }
-}
 
 @media (max-width: 1200px) {
   .nass__page {

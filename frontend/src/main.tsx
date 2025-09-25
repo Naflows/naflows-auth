@@ -6,6 +6,7 @@ import ManageService from "./pages/services/manage/ManageService.tsx";
 import Home from "./pages/home/Home.tsx";
 import CreateService from "./pages/services/create/CreateService.tsx";
 import AppFooter from "./global/components/AppFooter.tsx";
+import JoinPage from "./pages/services/join/JoinPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
@@ -42,6 +43,13 @@ createRoot(document.getElementById("root")!).render(
             <AppFooter />
           </>
         }
+      />
+      <Route
+        path="/services/join/:id"
+        element={<>
+          <JoinPage />
+          <AppFooter />
+        </>}
       />
 
     </Routes>

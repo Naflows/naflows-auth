@@ -1,6 +1,5 @@
 import type { ServicesForUserProps } from "../../../../types/ServicesForUserProps";
 import "../../../../../public/root/pages/services/manage/sub-components/ServiceDescription.scss";
-import Input from "../../../../global/components/Input";
 
 
 

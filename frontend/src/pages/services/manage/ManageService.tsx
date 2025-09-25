@@ -13,7 +13,6 @@ import type { AxiosError, AxiosResponse } from "axios";
 import type { ServicesForUserProps } from "../../../types/ServicesForUserProps";
 import ServiceDescription from "./sub-component/ServiceDescription";
 import ServiceCapacities from "./sub-component/ServiceCapacities";
-import ServicePublicSettings from "./sub-component/PublicSettings";
 import SecurityMeasures from "./sub-component/SecurityMeasures";
 import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert";
 

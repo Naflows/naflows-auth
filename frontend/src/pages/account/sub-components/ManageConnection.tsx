@@ -3,38 +3,8 @@ import type { ServicesCompleteBodyProps } from "../../../types/ServicesCompleteP
 import BasicServiceBody from "./ServicesBody";
 import UsageDataCards from "./core/connections/UsageDataCards";
 import type { InformationKey } from "./core/connections/PersonalDataInformation";
+import { dataPreferences, type DataKeys } from "./core/connections/PersonalInformations";
 
-type DataKeys =
-  | "PHONE"
-  | "EMAIL"
-  | "FIRST AND LAST NAME"
-  | "ADDRESS"
-  | "BIRTHDATE";
-const dataPreferences: Record<
-  DataKeys,
-  { title: string; description: string }
-> = {
-  PHONE: {
-    title: "Phone Number",
-    description: "View and use your phone number.",
-  },
-  EMAIL: {
-    title: "Email Address",
-    description: "View and use your email address.",
-  },
-  "FIRST AND LAST NAME": {
-    title: "First and Last Name",
-    description: "View and use your first and last name.",
-  },
-  ADDRESS: {
-    title: "Address",
-    description: "View and use your address.",
-  },
-  BIRTHDATE: {
-    title: "Birthdate",
-    description: "View and use your birthdate.",
-  },
-};
 
 type SensitiveDataKeys = "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS";
 const sensitiveDataPreferences: Record<

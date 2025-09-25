@@ -166,7 +166,20 @@ export interface Service {
   },
   details: {
     users: number; // Number of users in the service
-    official: boolean; // Whether the service is verified or not, verified services are services that have been verified by the NASS team to be legitimate and secur
+    official?: boolean; // Whether the service is verified or not, verified services are services that have been verified by the NASS team to be legitimate and secure
+    user_is_registered? : boolean; // Whether the user is registered in the service
+    owner? : {
+      username : string;
+      profile_picture : string;
+      verified : boolean;
+      first_name? : string;
+      last_name? : string;
+    },
+    public : {
+      privacy_policy_url? : string;
+      terms_of_service_url? : string;
+      contact_email? : string;
+    }
   },
 }
 

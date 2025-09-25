@@ -111,6 +111,7 @@ export async function registerService(
 
         details : {
             users : 1 // The creator is the first user
+            
         }
     };
 

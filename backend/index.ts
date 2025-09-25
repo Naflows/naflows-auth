@@ -318,6 +318,19 @@ app.post('/client/secure/data/user', async (req, res) => {
     })
 })
 
+app.post('/public/services/service-informations', async (req, res) => {
+    const getter = await services.service.getPublicDetails(req.body.service.id, req.body.service.userID || null);
+    res.status(getter.status).json({
+        status : getter.status,
+        message : getter.message,
+        success : getter.success,
+        data : {
+            service : getter.data,
+            middleware: req.middleware.data,
+        }
+    });
+});
+
 
 // Get OS details for public display (RAM, CPU, Disk, etc.)
 app.post('/public/status', async (req, res) => {

@@ -151,9 +151,10 @@ db.users.insertOne({
     identifier : "100000:137db0ce6e8b0b238a304614ebc5dc33:64c94524560e67d1e78a96dc67ba92af545d490077fa2e5b13473107f6b7f5e7a6841f89eea8a7cd6ac740969b521f82fb88cd815d6b3f26d96677ef7c224dfe",
     password : "100000:137db0ce6e8b0b238a304614ebc5dc33:64c94524560e67d1e78a96dc67ba92af545d490077fa2e5b13473107f6b7f5e7a6841f89eea8a7cd6ac740969b521f82fb88cd815d6b3f26d96677ef7c224dfe",
     email : "dummy@gmail.com",
-    username : "Dummy User",
-    first_name : "Dummy",
-    last_name : "User",
+    username : "The Penguin",
+    first_name : "Oswald",
+    last_name : "Cobblepot",
+    profile_picture : "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse4.mm.bing.net%2Fth%2Fid%2FOIP.uIM2fG4I4rMhoGWm1PG0PgHaMD%3Fpid%3DApi&sp=1758813750T7b7eefd8e6cccadb8df319c8d18806d26d7f31e06337f3d6992a13e8301fcbcb",
     services : {
         1 : {
             rights : ["USER"],
@@ -383,11 +384,11 @@ db.services.insertOne({
     dns : "naflows.com",
     description : "The Naflows Backend Structure for secure API communication.",
     created_at : new Date().getTime(),
-    created_by : "NASS",
+    created_by : "1",
     status : "ACTIVE",
     service_token : "naflows_backend_token",
     picture : "https://avatars.githubusercontent.com/u/188961317?s=200&v=4",
-    banner : "https://private-user-images.githubusercontent.com/69418024/476258484-e33829b9-935c-457e-9cc0-4ddecc2cfdb1.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTg4MDYzMzQsIm5iZiI6MTc1ODgwNjAzNCwicGF0aCI6Ii82OTQxODAyNC80NzYyNTg0ODQtZTMzODI5YjktOTM1Yy00NTdlLTljYzAtNGRkZWNjMmNmZGIxLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA5MjUlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwOTI1VDEzMTM1NFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTA0MzQ0MjY5ZTkwOWUxYzI1YTdlZTRiMzQyYjlmOTVlNjg4YTlkNDU4MmRmYjk1MmJhYzJjODk1YWJjY2VlMGUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.BKVtjPwtHyMaCYDNsoEtQ-BWAOKn1sUF4jhv-Ne84C4",
+    banner : "https://www.naflows.com/public/showcase/banners/nass-banner.png",
     settings : {
         rates : 10000,
         allow_nass_payement_method : true, // Whether the service allows payment through NASS
@@ -415,6 +416,11 @@ db.services.insertOne({
     details : {
         users : 1, // Number of users in the service
         official : true, // Whether the service is official or third-party
+    },
+    public : {
+        privacy_policy_url : "https://www.naflows.com/legal/privacy-policy",
+        terms_of_service_url : "https://www.naflows.com/legal/terms-of-service",
+        contact_email : "support@naflows.com"
     }
 })
 
