@@ -106,7 +106,6 @@ const ManageService = () => {
               alignSelf: "stretch",
               minHeight: "100%"
             }}>
-              <SecurityMeasures service={service} />
               <div className="parent__of__section row__layout" style={{
                 flex: 1,
 
@@ -114,21 +113,12 @@ const ManageService = () => {
                 <ServiceDescription service={service} />
               </div>
             </div>
-            <ServicePublicSettings service={service} />
+              <SecurityMeasures service={service} />
 
-            <div className="parent__of__section column__layout second__management__content" style={{
+            <div className=" second__management__content" style={{
               maxWidth: "350px",
             }}>
-              <div className="service__actions__field">
-                <div className="service__actions__field__header">
-                  <h3 className="service__actions__field__title">Users</h3>
-                  <p>Quick access to user management</p>
-                </div>
-                <div className="service__actions__buttons">
-                  <button className="secondary-button">Analytics</button>
-                  <button className="secondary-button">Manage Users</button>
-                </div>
-              </div>
+
               <ServiceCapacities service={service} />
             </div>
           </div>

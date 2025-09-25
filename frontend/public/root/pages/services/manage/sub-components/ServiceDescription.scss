@@ -139,8 +139,21 @@
 
 
 @media screen and (max-width: 1200px) {
-  .service__public__settings, {
+  .service__public__settings {
     max-width: none !important;
+
+
+    .service__description__header {
+      min-width: fit-content;
+      .service__description__pseudo__image {
+        min-height: 75px !important;
+        min-width: 75px !important;
+        img {
+          height: 75px;
+          width: 75px;
+        }
+      }
+    }
 
   }
 }

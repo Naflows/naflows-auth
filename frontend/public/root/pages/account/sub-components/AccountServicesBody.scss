@@ -478,13 +478,15 @@
   }
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 1200px) {
   .manage__connection {
     align-items: start;
     max-height: calc(100vh - 20px - 50px) !important;
     padding: 50px 0 20px 0;
     overflow-y: auto;
   }
+
+
 
   .user__body__services {
     width: 100% !important;

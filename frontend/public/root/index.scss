@@ -10,14 +10,13 @@ body {
   display: flex;
   justify-content: center;
 
-
   h1 {
     text-transform: uppercase;
     font-size: 20px;
   }
 
   margin: 0;
-  padding:  0;
+  padding: 0;
   height: 100vh;
   width: 100% !important;
 
@@ -71,8 +70,6 @@ body {
     max-width: 600px !important;
   }
 
-
-
   .global__disclaimer__header {
     display: flex;
     flex-direction: row;
@@ -86,7 +83,6 @@ body {
       font-weight: 600;
       font-size: 18px;
     }
-
   }
 
   p {
@@ -146,7 +142,6 @@ body {
       color: $da-secondary-hue-lighter-2;
     }
 
-
     textarea {
       resize: vertical;
       min-height: 100px;
@@ -205,15 +200,12 @@ body {
       min-width: 150px;
       max-width: calc(100% - 40px);
 
-
-
       /* Remove the input number type arrows */
       &::-webkit-inner-spin-button,
       &::-webkit-outer-spin-button {
         -webkit-appearance: none;
         margin: 0;
       }
-
 
       &:disabled {
         cursor: not-allowed;
@@ -304,7 +296,7 @@ body {
     &.nass_switch__container--checked {
       .nass_switch__toggle {
         transform: translateX(calc(-100% - 5px));
-        background-color: $da-secondary-hue
+        background-color: $da-secondary-hue;
       }
     }
 
@@ -318,8 +310,6 @@ body {
       top: 2px;
       transition: all 0.3s;
     }
-
-
   }
 
   .nass_switch__label {
@@ -374,7 +364,6 @@ body {
       flex-direction: column;
       gap: 5px;
 
-
       h4 {
         margin: 0;
         font-size: 18px;
@@ -387,7 +376,6 @@ body {
         opacity: 0.8;
       }
     }
-
   }
 
   .global__input__container {
@@ -553,15 +541,31 @@ input[type="checkbox"]:checked:after {
   gap: 5px;
 }
 
-/* ------------------------------- */
+//
+//       background-color: $_2k25-background-hue-50-transparent;
+//       * {
+//         transition: 0.3s;
+//       }
+//       &:hover {
+//         background-color: $da-secondary-hue-transparent;
+//         color: $da-secondary-hue-lighter-2;
+//         svg {
+//           transform: translateX(5px);
+//         }
+//       }
+
+button,
+button * {
+  transition: 0.3s;
+}
+
 .primary-button {
   padding: 10px 15px;
   border-radius: 10px;
-  background-color: $_2k25-text;
+  background-color: $_2k25-background-hue-50-transparent;
   border: none;
   cursor: pointer;
-  color: $_2k25-background-hue;
-  font-weight: bold;
+  color: $_2k25-text;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -569,18 +573,23 @@ input[type="checkbox"]:checked:after {
   gap: 10px;
   align-items: center;
   text-wrap: nowrap;
-  border: 2px solid transparent;
+  border: 2px solid $_2k25-background-hue-50-transparent;
 
   svg,
   svg * {
     width: 20px;
     height: 20px;
-    fill: $_2k25-background-hue;
+    fill: $_2k25-text;
   }
 
   &:hover {
-    background-color: $_2k25-darker;
-    color: $_2k25-background-hue-darker;
+    transition: 0.3s;
+    background-color: $da-secondary-hue-transparent;
+    color: $da-secondary-hue-lighter-2;
+    border-color: $da-secondary-hue-transparent;
+    svg * {
+      fill: $da-secondary-hue-lighter-2;
+    }
   }
 }
 
@@ -612,6 +621,7 @@ input[type="checkbox"]:checked:after {
 
   &:hover {
     color: $_2k25-darker;
+    transform: scale(1.01);
 
     svg,
     svg * {
@@ -629,14 +639,14 @@ input[type="checkbox"]:checked:after {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 10px;
   padding: 10px 15px;
   border-radius: 10px;
   transition: 0.3s;
   width: fit-content;
   height: fit-content;
   text-wrap: nowrap;
-  border: 2px solid $_2k25-text;
+  border: 2px solid $_2k25-background-hue-50-transparent;
 
   svg,
   svg * {
@@ -646,13 +656,12 @@ input[type="checkbox"]:checked:after {
   }
 
   &:hover {
-    background-color: $_2k25-darker;
-    color: $_2k25-background-hue-darker;
-    border-color: $_2k25-darker;
-
+    background-color: $da-secondary-hue-transparent;
+    color: $da-secondary-hue-lighter-2;
+    border-color: $da-secondary-hue-transparent;
     svg,
     svg * {
-      fill: $_2k25-background-hue-darker;
+      fill: $da-secondary-hue-lighter-2;
     }
   }
 }
@@ -736,8 +745,6 @@ input[type="checkbox"]:checked:after {
   }
 }
 
-
-
 a {
   color: $_2k25-text;
   text-decoration: underline;
@@ -747,15 +754,13 @@ a {
   }
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 1200px) {
   body {
     margin: 0;
     padding: 0;
     height: 100vh;
     width: 100vw;
   }
-
-
 
   :root {
     width: 100%;
@@ -798,7 +803,6 @@ a {
       }
     }
   }
-
 
   .nass__page__loader {
     width: calc(90% - 40px) !important;

@@ -2,31 +2,7 @@ import type { ServicesForUserProps } from "../../../../types/ServicesForUserProp
 import "../../../../../public/root/pages/services/manage/sub-components/ServiceDescription.scss";
 import Input from "../../../../global/components/Input";
 
-const SettingsComponent = ({
-  name,
-  value,
-  description,
-  disabled = false,
-}: {
-  name: string;
-  value: boolean;
-  description: string;
-  disabled?: boolean;
-}) => {
-  return (
-    <div className={`settings__content ${disabled ? "disabled" : ""}`}>
-      <div className="setting__title">
-        <span className="setting__name">{name}</span>
-        <span className="setting_description">
-          {description}
-        </span>
-      </div>
-      <div className={`setting__value ${value ? "enabled" : "disabled"}`}>
-        {value ? "Enabled" : "Disabled"}
-      </div>
-    </div>
-  );
-};
+
 
 const ServicePublicSettings = ({
   service,
@@ -36,51 +12,17 @@ const ServicePublicSettings = ({
   if (service) {
     return (
       <div className="user__body__section service__public__settings">
-        <div className="service__public__settings ">
+        <div className="service__actions__field ">
           <div className="service__actions__field no-padding">
             <div className="service__actions__field__header">
               <h3 className="service__actions__field__title">Service Settings</h3>
               <p>Overview of your current service settings</p>
             </div>
           </div>
-          <div className="services__settings__view">
-            <div className="information__item" style={{
-              maxWidth: '100%'
-            }}>
-              <Input
-                label="Referential Identifier"
-                value={service.id}
-                editMode={false}
-                allowCopy={true}
-                type="text"
-                name="service-id"
-                required={false}
-                onChange={() => { }}
-              />
-            </div>
-            <SettingsComponent
-              name="Allow user registration"
-              description="Allow users to register for this service"
-              value={service.public_settings.allow_user_registration}
-            />
-            <SettingsComponent
-              description="Make this service publicly visible on your profile"
-              name="Allow public visibility"
-              value={service.public_settings.allow_public_visibility}
-            />
-            <SettingsComponent
-              name="Allow service connections"
-              description="Allow other Naflows services to connect to this service"
-              value={service.public_settings.allow_service_connections}
-              disabled={true}
-            />
-            <SettingsComponent
-              description="Allow users to use Naflows Payement System for subscriptions"
-              name="Naflows Payement System"
-              value={service.settings.allow_nass_payement_method}
-              disabled={true}
-            />
-          </div>
+          <button className="primary-button">
+            <span>Public Settings</span>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z"/></svg>
+          </button>
         </div>
       </div>
     );

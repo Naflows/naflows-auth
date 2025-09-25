@@ -11,7 +11,6 @@ const BasicServiceBody = ({ service }: { service: ServicesBodyProps | ServicesCo
 
   return (
     <div className="service__view__body">
-      <img src={service.banner} alt={`${service.name} Banner`} className="service__view__banner" style={{ display: service.banner ? 'block' : 'none' }} />
       <div className="service__view__body__public">
         <img src={service.picture} alt={`${service.name} Logo`} className="service__view__logo" style={{ display: service.picture ? 'block' : 'none' }} />
         <div className="service__view__body__public__content">

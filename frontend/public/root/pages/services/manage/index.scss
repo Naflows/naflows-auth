@@ -143,17 +143,44 @@
 .service__actions__field {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  align-items: center;
+  align-items: start;
   justify-content: space-between;
   padding: 10px;
   border-radius: 20px;
+  gap: 20px;
   background-color: $_2k25-background-hue-darker;
   padding: 20px 30px;
   &.no-padding {
     padding: 0;
   }
   height: fit-content !important;
-
+  .service__actions__buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 5px !important;
+    flex-wrap: wrap;
+    width: 100%;
+    button {
+      min-width: calc(100% - 40px) !important;
+      justify-content: space-between;
+      white-space: nowrap;
+      gap: 10px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      background-color: $_2k25-background-hue-50-transparent;
+      * {
+        transition: 0.3s;
+      }
+      &:hover {
+        background-color: $da-secondary-hue-transparent;
+        color: $da-secondary-hue-lighter-2;
+        svg {
+          transform: translateX(5px);
+        }
+      }
+    }
+  }
   .service__actions__field__header {
     display: flex;
     flex-direction: column;

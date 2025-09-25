@@ -43,15 +43,18 @@ const ServicesComponent = ({
       <ManageServiceConnection service={serviceData} setService={setServiceData} />
       <div className="user__body__section">
         <div className="services__list">
-          <div className="services__section__header">
-            <div className="section__header__content">
-              <h3 className="services__header__title">Your Services</h3>
+          <div className="service__actions__field no-padding">
+            <div className="service__actions__field__header">
+              <h3 className="service__actions__field__title">Your Services</h3>
               <p>Services you own or manage</p>
             </div>
             <button
               className="primary-button"
               onClick={() => {
                 window.location.href = "/services/new";
+              }}
+              style={{
+                width: 'fit-content',
               }}
             >
               <svg
@@ -87,9 +90,9 @@ const ServicesComponent = ({
 
       <div className="user__body__section">
         <div className="services__list">
-          <div className="services__section__header">
-            <div className="section__header__content">
-              <h3 className="services__header__title">Your Connections</h3>
+          <div className="service__actions__field no-padding">
+            <div className="service__actions__field__header">
+              <h3 className="service__actions__field__title">Your Connections</h3>
               <p>Services you're connected to</p>
             </div>
           </div>
