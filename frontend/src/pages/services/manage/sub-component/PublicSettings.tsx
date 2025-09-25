@@ -36,10 +36,10 @@ const ServicePublicSettings = ({
   if (service) {
     return (
       <div className="user__body__section service__public__settings">
-        <div className="service__public__settings">
-          <div className="services__section__header">
-            <div className="section__header__content">
-              <h3 className="services__header__title">Service Settings</h3>
+        <div className="service__public__settings ">
+          <div className="service__actions__field no-padding">
+            <div className="service__actions__field__header">
+              <h3 className="service__actions__field__title">Service Settings</h3>
               <p>Overview of your current service settings</p>
             </div>
           </div>

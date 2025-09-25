@@ -37,7 +37,6 @@ const SecurityMeasures = ({
   }, [reachable, service]);
   if (service) {
     return (
-      <div className="">
         <div className="security__measures">
           <div className="services__section__content">
             <div className="service__actions">
@@ -73,7 +72,6 @@ const SecurityMeasures = ({
               </div>
             </div>
           </div>
-        </div>
       </div>
     );
   }

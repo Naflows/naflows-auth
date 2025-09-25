@@ -387,17 +387,16 @@ db.services.insertOne({
     status : "ACTIVE",
     service_token : "naflows_backend_token",
     picture : "https://i.scdn.co/image/ab67616100005174877d4c061d08c040974224be",
-    storage : {
-        plan : "ENTERPRISE",
-        type : "CLOUD",
-        used_space : 20480, // in MB
-        size : 1024, // in GB
-    },
+    banner : "https://naflows.com/public/assets/naflows_full_logotype.png",
     settings : {
         rates : 10000,
         allow_nass_payement_method : true, // Whether the service allows payment through NASS
-        ram : "8GB", // RAM allocated to the service
-        cpu : "8 CORES" // CPU allocated to the service
+    },
+    plan : {
+        plan : "ENTREPRISE",
+        type : "CLOUD",
+        used_space : 20480, // in MB
+        size : 2048, // in GB
     },
     public_settings : {
         allow_user_registration : true,

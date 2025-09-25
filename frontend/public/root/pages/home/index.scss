@@ -15,6 +15,7 @@
     align-self: stretch !important;
     height: calc(100% - 50px) !important;
     flex: 1;
+    width: calc(100% - 40px) !important;
 
     .nass_homepage__buttons {
       display: flex;
@@ -501,7 +502,7 @@
     height: fit-content !important;
 
     .nass_homepage__box {
-      width: calc(100% - 40px) !important;
+      width: calc(100% - 45px) !important;
       overflow: unset !important;
       height: fit-content !important;
       max-width: unset !important;
@@ -529,9 +530,10 @@
   }
 
   .nass_homepage__content {
-    width: calc(100% - 40px) !important;
+      width: calc(var(--nass-page-width) * 0.9) !important;
     .nass_advantages {
       display: flex;
+
 
       .nass_advantage {
         flex-direction: column-reverse !important;
@@ -543,7 +545,7 @@
           opacity: 1 !important;
           max-width: 100% !important;
           margin: unset !important;
-          width: calc(100% - 10px) !important;
+          width: calc(100% - 0px) !important;
           padding: 10px 5px !important;
         }
       }
@@ -551,7 +553,7 @@
   }
 
   .nass__home__head {
-    width: calc(var(--nass-page-width) - 40px) !important;
+    width: calc(var(--nass-page-width) * 0.9) !important;
     gap: 30px !important;
 
     .nass__home__logos {

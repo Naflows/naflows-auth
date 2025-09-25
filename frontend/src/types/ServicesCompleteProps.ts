@@ -13,7 +13,8 @@ export interface ServicesCompleteBodyProps {
         usage_data: "NONE" | "BASIC" | "FULL"; // Level of usage data the service can access
         personal_data: Array<"PHONE" | "EMAIL" | "FIRST AND LAST NAME" | "ADDRESS" | "BIRTHDATE" | "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS">;
     }; // Data preferences of the service
+    picture: string; // URL to the service picture
+    banner: string; // URL to the service banner
     status: "ACTIVE" | "INACTIVE" | "DEPRECATED"; // Status of the service
-    picture?: string; // URL to the service picture, optional
 
 }

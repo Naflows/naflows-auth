@@ -9,9 +9,9 @@ const ServiceCapacities = ({
     return (
       <div className="user__body__section service__plans">
         <div className="service__plan">
-          <div className="services__section__header">
-            <div className="section__header__content">
-              <h3 className="services__header__title">Service Capacities</h3>
+          <div className="service__actions__field no-padding">
+            <div className="service__actions__field__header">
+              <h3 className="service__actions__field__title">Service Capacities</h3>
               <p>Overview of your current service capacities</p>
             </div>
           </div>

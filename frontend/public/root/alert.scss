@@ -152,10 +152,10 @@
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .global__alert__component {
     .global__alert__component__content {
-      width: calc(90% - 40px);
+      width: calc(80% - 40px);
 
       .global___alert__component__header {
         flex-direction: column !important;

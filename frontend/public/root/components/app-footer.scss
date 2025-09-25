@@ -3,9 +3,11 @@
 #root {
     position: relative;
     min-height: 100vh;
+    height: fit-content;
     display: flex;
     flex-direction: column;
     gap: 25vh;
+    
 }
 
 .nass__app__footer {
@@ -64,5 +66,24 @@
                 }
             }
         }
+    }
+}
+
+
+@media screen and (max-width: 1200px) {
+    .nass__app__footer {
+        flex-direction: column;
+        gap: 30px;
+        align-items: start;
+        padding: 30px 5% 30px 5%;
+        width: calc(100% - 10%);
+
+        .nass__naflows__informations {
+            img {
+                width: 35%;
+            }
+        }
+
+
     }
 }

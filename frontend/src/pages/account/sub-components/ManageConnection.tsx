@@ -57,7 +57,7 @@ const ManageServiceConnection = ({
   setService
 }: {
   service: ServicesCompleteBodyProps | null;
-    setService: (service: ServicesCompleteBodyProps | null) => void;
+  setService: (service: ServicesCompleteBodyProps | null) => void;
 }) => {
   const [usageData, setUsageData] = useState<InformationKey | null>(null);
   const [personalData, setPersonalData] = useState<DataKeys[] | null>([]);
@@ -109,7 +109,7 @@ const ManageServiceConnection = ({
   useEffect(() => {
     setUsageData(
       newService &&
-        (newService.data_preferences.usage_data as InformationKey | null)
+      (newService.data_preferences.usage_data as InformationKey | null)
     );
     setPersonalData(
       newService && (newService.data_preferences.personal_data as DataKeys[])
@@ -193,9 +193,8 @@ const ManageServiceConnection = ({
                 }}
               >
                 <div
-                  className={`manage__details__info ${
-                    usageData !== "FULL" ? "disabled" : ""
-                  }`}
+                  className={`manage__details__info ${usageData !== "FULL" ? "disabled" : ""
+                    }`}
                 >
                   <div className="manage__details__info__header">
                     <h5 className="manage__details__info__title">
@@ -212,13 +211,12 @@ const ManageServiceConnection = ({
                       return (
                         <div
                           key={key}
-                          className={`manage__personal__data__option ${
-                            newService.data_preferences.personal_data.includes(
-                              key as DataKeys
-                            )
-                              ? "selected"
-                              : ""
-                          }`}
+                          className={`manage__personal__data__option ${newService.data_preferences.personal_data.includes(
+                            key as DataKeys
+                          )
+                            ? "selected"
+                            : ""
+                            }`}
                           onClick={() => {
                             // Add or remove the key from personalData
                             if (personalData) {
@@ -251,9 +249,8 @@ const ManageServiceConnection = ({
                   </div>
                 </div>
                 <div
-                  className={`manage__details__info ${
-                    usageData !== "FULL" ? "disabled" : ""
-                  }`}
+                  className={`manage__details__info ${usageData !== "FULL" ? "disabled" : ""
+                    }`}
                 >
                   <div className="manage__details__info__header">
                     <h5 className="manage__details__info__title">
@@ -269,18 +266,17 @@ const ManageServiceConnection = ({
                     {Object.keys(sensitiveDataPreferences).map((key) => {
                       const { title, description } =
                         sensitiveDataPreferences[
-                          key as "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS"
+                        key as "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS"
                         ];
                       return (
                         <div
                           key={key}
-                          className={`manage__personal__data__option ${
-                            newService.data_preferences.personal_data.includes(
-                              key as DataKeys
-                            )
-                              ? "selected"
-                              : ""
-                          } disabled`}
+                          className={`manage__personal__data__option ${newService.data_preferences.personal_data.includes(
+                            key as DataKeys
+                          )
+                            ? "selected"
+                            : ""
+                            } disabled`}
                           onClick={() => {
                             // Add or remove the key from personalData
                             if (personalData) {
@@ -313,22 +309,23 @@ const ManageServiceConnection = ({
                   </div>
                 </div>
               </div>
-              <button
-                className="primary-button save__changes__button"
-                style={{
-                  display:
-                    JSON.stringify(
-                      newService.data_preferences.personal_data
-                    ) !==
-                      JSON.stringify(service.data_preferences.personal_data) ||
-                    usageData !== service.data_preferences.usage_data
-                      ? "block"
-                      : "none",
-                }}
-              >
-                Save Changes
-              </button>
             </div>
+          </div>
+          <div className="save__content__button" style={{
+            display:
+              JSON.stringify(
+                newService.data_preferences.personal_data
+              ) !==
+                JSON.stringify(service.data_preferences.personal_data) ||
+                usageData !== service.data_preferences.usage_data
+                ? "block"
+                : "none",
+          }}>
+            <button
+              className="primary-button save__changes__button"
+            >
+              Save Changes
+            </button>
           </div>
         </div>
       </div>

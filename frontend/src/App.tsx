@@ -44,20 +44,23 @@ function App() {
     <>
       <div className="col-20 global__nass__form">
         <div className="panel">
-        <GlobalDisclaimer
-          allowHidden={true}
-          title={`This login will redirect you`}
-          message={""}
-          maxWidth={true}
-          content={<>
-            <p>
-              Once logged in, you will be redirected to {redirect}. If you wish to log in to your account dashboard, please use <a href="/account">https://auth.naflows.com/account</a> instead.
-            </p>
-          </>}
-        />
+          {
+            redirect && <GlobalDisclaimer
+              allowHidden={true}
+              title={`This login will redirect you`}
+              message={""}
+              maxWidth={true}
+              content={<>
+                <p>
+                  Once logged in, you will be redirected to {redirect}. If you wish to log in to your account dashboard, please use <a href="/account">https://auth.naflows.com/account</a> instead.
+                </p>
+              </>}
+            />
+          }
           <img
             src={NAFLOWS_LOGO}
             alt="Naflows Logo"
+            className="logo"
             style={{ height: "100px" }}
           />
           <div className="panel-header">
@@ -82,8 +85,8 @@ function App() {
               }}
               value={formType === "login" ? "Sign up" : "Log in"}
             />
-            <AppLoginBigButton onClick={() => {}} value="Forgot password?" />
-            <AppLoginBigButton onClick={() => {}} value="Forgot customer ID?" />
+            <AppLoginBigButton onClick={() => { }} value="Forgot password?" />
+            <AppLoginBigButton onClick={() => { }} value="Forgot customer ID?" />
           </div>
         </div>
       </div>

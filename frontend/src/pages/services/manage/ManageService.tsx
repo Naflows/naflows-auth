@@ -94,12 +94,12 @@ const ManageService = () => {
 
         <div className="manage__service__body">
           <div
-            className="parent__of__section row__layout"
+            className="parent__of__section row__layout service__manage__content"
             style={{
               width: "100%"
             }}
           >
-            <div className="parent__of__section column__layout" style={{
+            <div className="parent__of__section column__layout first__row" style={{
               flex: 1.5,
               height: "max-content",
               justifyContent: "space-between",
@@ -116,7 +116,7 @@ const ManageService = () => {
             </div>
             <ServicePublicSettings service={service} />
 
-            <div className="parent__of__section column__layout" style={{
+            <div className="parent__of__section column__layout second__management__content" style={{
               maxWidth: "350px",
             }}>
               <div className="service__actions__field">

@@ -10,6 +10,7 @@ export function useApp(app) {
     app.use(express.json());
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(cors());
+
     app.use(async (req, res, next) => {
         req.middleware = { data: {} } as any;
         console.log("\x1b[33m%s\x1b[0m", `Request received: ${req.method} ${req.path} with body: ${JSON.stringify(req.body)}`);

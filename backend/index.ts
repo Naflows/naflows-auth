@@ -1,4 +1,4 @@
-require('dotenv').config();
+import "dotenv/config.js";
 
 
 import { serve } from "./public/method/serve";
@@ -14,11 +14,11 @@ import path from "path";
 import { software } from "./software/dir";
 import { Service, User } from "./types/.types/collections.type";
 import mailing from "./software/mailing/dir";
+import express from "express";
+import bodyParser from "body-parser";
 
 
-const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 const router = express.Router();
 
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -177,6 +177,8 @@ app.post('/client/secure/data/services', async (req, res) => {
                     rights: userServices[key].rights,
                     joined_at: userServices[key].joined_at,
                     user_active: userServices[key].active,
+                    picture: service.picture,
+                    banner: service.banner,
                 };
             }
             return null; // Return null for invalid services

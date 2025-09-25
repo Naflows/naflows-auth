@@ -136,3 +136,11 @@
     }
   }
 }
+
+
+@media screen and (max-width: 1200px) {
+  .service__public__settings, {
+    max-width: none !important;
+
+  }
+}

@@ -149,6 +149,9 @@
   border-radius: 20px;
   background-color: $_2k25-background-hue-darker;
   padding: 20px 30px;
+  &.no-padding {
+    padding: 0;
+  }
   height: fit-content !important;
 
   .service__actions__field__header {
