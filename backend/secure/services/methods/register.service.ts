@@ -110,8 +110,12 @@ export async function registerService(
         },
 
         details : {
-            users : 1 // The creator is the first user
-            
+            users : 1, // The creator is the first user
+            public : {
+                privacy_policy_url : "null",
+                terms_of_service_url : "null",
+                contact_email : "null",
+            }
         }
     };
 
