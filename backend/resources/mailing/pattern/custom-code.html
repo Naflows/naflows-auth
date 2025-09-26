@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+    
+    /* Reset styles for email clients */
+    body, table, td, p, h1 {
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Nunito', Arial, sans-serif;
+      background-color: #f0f0f0;
+      padding: 20px;
+    }
+    
+    .main-container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #212b91;
+      border-radius: 50px;
+      padding: 50px;
+    }
+    
+    .logo {
+      height: 100px;
+      width: auto;
+      margin-bottom: 20px;
+    }
+    
+    .greeting {
+      color: #4cffc9;
+      font-family: 'Nunito', Arial, sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    
+    .content-text {
+      color: #4cffc9;
+      font-family: 'Nunito', Arial, sans-serif;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .code-container {
+      width: 100%;
+      text-align: center;
+      margin: 20px 0;
+    }
+    
+    .code-box {
+      display: inline-block;
+      font-size: 30px;
+      padding: 15px 20px;
+      background-color: #141d79;
+      border-radius: 15px;
+      color: #4cffc9;
+      font-family: 'Nunito', Arial, monospace;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .code-box a {
+      color : #4cffc9 !important;
+    }
+    
+    .footer-container {
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    
+    .signature {
+      color: #4cffc9;
+      font-family: 'Nunito', Arial, sans-serif;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .links-container {
+      text-align: center;
+      width: 100%;
+    }
+    
+    .footer-link {
+      color: #4cffc9;
+      text-decoration: underline;
+      margin: 0 25px;
+      font-family: 'Nunito', Arial, sans-serif;
+      font-size: 14px;
+    }
+    
+    /* Mobile responsive */
+    @media only screen and (max-width: 600px) {
+      .main-container {
+        padding: 30px 20px;
+        border-radius: 25px;
+      }
+      
+      .greeting {
+        font-size: 24px;
+      }
+      
+      .code-box {
+        font-size: 24px;
+        padding: 10px 15px;
+      }
+      
+      .footer-link {
+        display: block;
+        margin: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Main container table for maximum compatibility -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f0f0f0; padding: 20px;">
+    <tr>
+      <td align="center">
+        <!-- Content container -->
+        <table class="main-container" width="800" cellpadding="0" cellspacing="0" border="0" style="background-color: #212b91; border-radius: 50px; padding: 50px; max-width: 800px;">
+          <tr>
+            <td>
+              <!-- Logo -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td>
+                    <img
+                      src="https://naflows.com/public/assets/naflows_full_logotype_green.png"
+                      alt="Naflows Logo"
+                      class="logo"
+                      style="height: 100px; width: auto; display: block;"
+                    />
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Greeting -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 20px;">
+                <tr>
+                  <td>
+                    <h1 class="greeting" style="color: #4cffc9; font-family: 'Nunito', Arial, sans-serif; font-size: 28px; font-weight: 600; margin: 0;">
+                      Hello [USER_NAME],
+                    </h1>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Main content -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 20px;">
+                <tr>
+                  <td>
+                    <p class="content-text" style="color: #4cffc9; font-family: 'Nunito', Arial, sans-serif; font-size: 16px; margin: 0;">
+                      Someone (hopefully you) has tried to connect to [SERVICE_NAME] using your Naflows account. If this was you, please use the code below to confirm your identity:
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Code section -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0;">
+                <tr>
+                  <td align="center" class="code-container">
+                    <div class="code-box" style="display: inline-block; font-size: 15px; padding: 15px 20px; background-color: #141d79; border-radius: 15px; color: #4cffc9; font-family: 'Nunito', Arial, monospace; font-weight: 700; letter-spacing: 2px; text-decoration: none;">
+                      [CODE]
+                    </div>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Security warning -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td>
+                    <p class="content-text" style="color: #4cffc9; font-family: 'Nunito', Arial, sans-serif; font-size: 16px; margin: 0;">
+                      If you were not the one who requested this link, please
+                      <a href="https://nass.naflows.com/account/reset-password" style="color: #4cffc9; text-decoration: underline;">reset your password immediately</a>.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Footer -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 50px;">
+                <tr>
+                  <td align="center" class="footer-container">
+                    <!-- Signature -->
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="start">
+                          <p class="signature" style="color: #4cffc9; font-family: 'Nunito', Arial, sans-serif; font-size: 16px; margin: 0 0 5px 0;">Best regards,</p>
+                          <p class="signature" style="color: #4cffc9; font-family: 'Nunito', Arial, sans-serif; font-size: 16px; margin: 0;">The Naflows Team</p>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                    <!-- Links -->
+                    <table cellpadding="0" cellspacing="0" border="0" style="margin-top: 20px; width:100%">
+                      <tr>
+                        <td align="center" class="links-container">
+                          <a href="https://naflows.com/privacy-policy" class="footer-link" style="color: #4cffc9; text-decoration: underline; font-family: 'Nunito', Arial, sans-serif; font-size: 14px;">Privacy Policy</a>
+                          <span style="color: #4cffc9; margin: 0 25px;">|</span>
+                          <a href="https://naflows.com/terms-of-service" class="footer-link" style="color: #4cffc9; text-decoration: underline; font-family: 'Nunito', Arial, sans-serif; font-size: 14px;">Terms of Service</a>
+                          <span style="color: #4cffc9; margin: 0 25px;">|</span>
+                          <a href="https://naflows.com/contact" class="footer-link" style="color: #4cffc9; text-decoration: underline; font-family: 'Nunito', Arial, sans-serif; font-size: 14px;">Contact Us</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

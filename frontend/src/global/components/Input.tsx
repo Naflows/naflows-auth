@@ -15,7 +15,7 @@ interface InputProps {
   fitContent?: boolean;
   maxChar?: number;
   displayMaxChar?: boolean;
-  onChange?: (value : string | React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (value: string | React.ChangeEvent<HTMLInputElement>) => void;
   onError?: (value: string) => boolean;
   errorMessage?: string;
 }
@@ -26,7 +26,7 @@ const Input = ({
   name,
   required,
   maxLength,
-  value,
+  value = "",
   editMode = true,
   autoComplete = true,
   aboutMode = false,
@@ -40,15 +40,23 @@ const Input = ({
   errorMessage = undefined
 }: InputProps) => {
   const [valueIn, setValueIn] = useState<boolean>(value ? true : false);
+  const [inputValue, setInputValue] = useState<string>(value);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [displayError, setDisplayError] = useState<boolean>(false);
 
   const copyButtonRef = useRef<HTMLButtonElement>(null);
 
-  const t = onChange ? onChange : (e : string) => { return e };
-  onChange = (el : React.ChangeEvent<HTMLInputElement> | string) => {
+  const t = onChange ? onChange : (e: string) => { return e };
+  onChange = (el: React.ChangeEvent<HTMLInputElement> | string) => {
     const v = typeof el === "string" ? el : el.currentTarget.value;
 
+    if (maxChar != null && v.length > maxChar) {
+      const input = document.getElementById(name + "-input") as HTMLInputElement;
+      if (input) {
+        input.value = v.substring(0, maxChar);
+      }
+      return;
+    }
     if (v.replace(" ", "") !== "") {
       setValueIn(true);
     } else {
@@ -62,6 +70,9 @@ const Input = ({
       setDisplayError(false);
       t(v);
     }
+
+
+    setInputValue(v);
 
   }
 
@@ -110,18 +121,18 @@ const Input = ({
           id={name + "-input"}
           defaultValue={value}
           onInput={(e) => onChange && onChange(e.currentTarget.value)}
-
           style={{
             width: fitContent ? "auto" : "calc(100% - 40px)",
           }}
-          size={fitContent && value ? value.length : undefined}
+          size={fitContent && inputValue ? inputValue.length : undefined}
           required={required}
           disabled={!editMode}
           autoComplete={autoComplete ? "on" : "off"}
           {...(type === "number" && maxLength ? { maxLength } : {})}
+          maxLength={type !== "number" && maxLength ? maxLength : undefined}
         />
 
-        {allowCopy && value && !editMode ? (
+        {allowCopy && inputValue && !editMode ? (
           <button
             className="copy-button secondary-button text-size-14 width-fit"
             onClick={() => {
@@ -135,7 +146,7 @@ const Input = ({
         ) : null}
 
         {maxChar && displayMaxChar ? (
-          <p className="character-count">{value ? value.length : 0}/{maxChar}</p>
+          <p className="character-count">{inputValue ? inputValue.length : 0}/{maxChar}</p>
         ) : null}
         {displayError && errorMessage ? (
           <p className="error-message text-size-14">{errorMessage}</p>

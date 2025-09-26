@@ -10,7 +10,9 @@ export interface AlertContentProps {
   displayCode?: boolean;
   customClose?: {
     text: string; action: () => void;
-  }
+    additionalButton?: { content: React.JSX.Element; action: () => void; class?: string }; // Optional additional button
+  },
+  displaySuccess?: boolean; // If true, will display a success message even if status is not 200
 }
 interface AlertProps {
   alert: AlertContentProps;
@@ -41,14 +43,16 @@ const Alert = ({ alert, setAlert }: AlertProps) => {
           <div className={`global___alert__component__header`}>
             <p
               className={`alert__header__banner ${alert.success ? "success" : "error"
-                }`}
+                }`} style={{
+                  display: alert.displaySuccess === false ? "none" : "block"
+                }}
             >
               {alert.success
                 ? "Success"
                 : `Error ${alert.displayCode ? `${alert.status}` : ""}`}
             </p>
 
-            <h3>{alert.title || (alert.success ? "Success" : "Error")}</h3>
+            <h3 className={`${!alert.displaySuccess && "enhanced"}`}>{alert.title || (alert.success ? "Success" : "Error")}</h3>
           </div>
           <div className="global___alert__component__message">
             {alert.displayCode && (
@@ -62,17 +66,29 @@ const Alert = ({ alert, setAlert }: AlertProps) => {
             <p>{alert.message}</p>
           </div>
         </div>
-        <button
-          className="primary-button"
-          onClick={() => {
-            if (alert.customClose) {
-              alert.customClose.action();
-            } else {
-              setAlert({ ...alert, closeAlert: true })
+        <div className="buttons-container">
+          <button
+            className={
+              !alert.customClose?.additionalButton ? "primary-button" : "secondary-button"
             }
-          }}>
-          {alert.customClose ? alert.customClose.text : "Close"}
-        </button>
+            onClick={() => {
+              if (alert.customClose) {
+                alert.customClose.action();
+              } else {
+                setAlert({ ...alert, closeAlert: true })
+              }
+            }}>
+            {alert.customClose ? alert.customClose.text : "Close"}
+          </button>
+          {alert.customClose && alert.customClose.additionalButton && (
+            <button
+              className={alert.customClose.additionalButton.class || "secondary-button"}
+              onClick={alert.customClose.additionalButton.action}
+            >
+              {alert.customClose.additionalButton.content}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

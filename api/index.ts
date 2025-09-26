@@ -80,7 +80,7 @@ function getCookies(req) {
 const service = {
     service: "naflows_backend",
     service_token: "naflows_backend_token",
-    service_token_birth: new Date("2025-09-01").getTime()
+    service_token_birth: new Date("2025-09-26").getTime()
 }
 
 app.get('/public/status-check', async (req: Request, res: Response) => {
@@ -152,6 +152,38 @@ app.get('/public/services/:id/infos/:userID', async (req: Request, res: Response
     delete f.data.data.middleware;
 
     res.status(f.status).json(f.data.data.service);
+});
+
+
+app.post('/user/secure/confirm-identity/send-code', async (req: Request, res: Response) => {
+    const { sessionID, token, uid } = getCookies(req);
+    
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/user/send-verification-code`, {
+        user: {
+            ip: req.ip,
+            agent: req.headers['user-agent'],
+            device_fingerprint: req.fingerprint,
+            session_id: sessionID || null,
+            token: token || null,
+            user_id: uid || null,
+        },
+        serviceID : req.body.serviceID,
+        request: {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        },
+        client: service
+    });
+
+    sendCookies(res, f.data);
+
+    delete f.data.data.middleware;
+    console.log("Service information response from NASS:", f.data);
+
+    res.status(f.status).json(f.data);
+
 });
 
 app.get('/get-user-info/services/:id/service-informations', async (req: Request, res: Response) => {
@@ -290,6 +322,7 @@ app.post('/set-user-info/services/create', async (req: Request, res: Response) =
     res.status(f.status).json(f.data);
 
 });
+
 
 // THIS IS A PIPE USED LATER TO COMMUNICATE WITH NASS
 // THIS PIPE IS TO BE USED BY ANY SERVICE THAT NEEDS TO AUTHENTICATE A USER

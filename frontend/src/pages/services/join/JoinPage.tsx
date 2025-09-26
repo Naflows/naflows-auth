@@ -11,6 +11,10 @@ import { dataPreferences } from "../../account/sub-components/core/connections/P
 import Switch from "../../../global/components/Switch";
 import GlobalDisclaimer from "../../../global/components/GlobalDisclaimer";
 import AccountHeader from "../../account/account-header/AccountHeader";
+import Loader from "../../../global/components/Loader";
+import TermsAndRequirements from "./sub-component/TermsAndRequirements";
+import Input from "../../../global/components/Input";
+import ManageAlert from "./sub-component/ManageAlert";
 
 
 
@@ -18,7 +22,15 @@ const JoinPage = () => {
     const [userInfo, setUserInfo] = useState<UserBodyProps | null>(null);
     const [serviceID, setServiceID] = useState<string | null>(null);
     const [service, setService] = useState<ServicesBodyProps | null>(null);
+    const [userIdQueried, setUserIdQueried] = useState<boolean>(true);
     const [displayAlert, setDisplayAlert] = useState<AlertContentProps>({
+        status: 0,
+        message: "",
+        success: false,
+        closeAlert: true,
+    });
+
+    const [displayAlertCode, setDisplayAlertCode] = useState<AlertContentProps>({
         status: 0,
         message: "",
         success: false,
@@ -54,6 +66,7 @@ const JoinPage = () => {
                 const res = await fetchData("user");
                 if (res.data && res.data.data && res.data.data.user) {
                     setUserInfo(res.data.data.user as UserBodyProps);
+                    setUserIdQueried(false);
                 }
             } catch (error) {
                 const status = (error as any)?.response?.status || 500;
@@ -77,13 +90,14 @@ const JoinPage = () => {
 
 
     useEffect(() => {
-        if (serviceID != null && service == null) {
+        if ((service == null || !userIdQueried) && serviceID) {
             (async () => {
                 try {
                     const res = await axios.get(`${process.env.DUMMY_API_URL_DEV}/public/services/${serviceID}/infos/${userInfo?.id || "null"}`);
                     if (res.data) {
                         console.log("Fetched service data:", res.data);
                         setService(res.data);
+                        setUserIdQueried(true);
                     } else {
                         throw new Error("Failed to fetch service data");
                     }
@@ -99,14 +113,27 @@ const JoinPage = () => {
                 }
             })();
         }
-    }, [serviceID, service, userInfo])
+    }, [serviceID, service, userIdQueried])
+
+    if (!service) {
+        return (
+            <div
+                className="nass__page__loader"
+            >
+                <h3>Loading service information...</h3>
+                <Loader loading={true} />
+            </div>
+        )
+    }
 
     if (displayAlert.status != 0) {
         return (
-            <Alert
-                alert={displayAlert}
-                setAlert={setDisplayAlert}
-            />
+            <div className="nass__page__loader">
+                <Alert
+                    alert={displayAlert}
+                    setAlert={setDisplayAlert}
+                />
+            </div>
         )
     }
 
@@ -168,11 +195,17 @@ const JoinPage = () => {
                 <div className="nass__service__connection__body">
                     <div className="service__informations">
                         <ServiceDescription service={service} publicDisplay={true} />
-
+                        <Alert
+                            alert={displayAlertCode}
+                            setAlert={setDisplayAlertCode}
+                        />
                         <button className={`primary-button connect-button ${!requirementsAccepted ? "inactive" : ""}`} disabled={!requirementsAccepted} onClick={() => {
-                            if (service) {
-                                window.location.href = `${process.env.DUMMY_API_URL_DEV}/public/services/${service.id}/connect`;
-                            }
+                            ManageAlert({
+                                requirementsAccepted,
+                                userInfo,
+                                displayAlertCode,
+                                setDisplayAlertCode
+                            });
                         }}>
                             <span>Connect to {service ? service.name : "the service"}</span>
                         </button>
@@ -237,73 +270,11 @@ const JoinPage = () => {
                                         })}
                                     </div>
                                 </div>
-                                <div className="service__connection__detail__body">
-                                    <div className="service__actions__field__header">
-                                        <h3 className="service__actions__field__title">
-                                            <span>
-                                                Terms and Requirements
-                                            </span>
-                                        </h3>
-                                        <p>Please read and accept the following terms to continue.</p>
-                                    </div>
-                                    <div className="service__connection__details__content requirements">
-                                        <div className="switch__content">
-                                            <Switch
-                                                label="I accept the terms of service."
-                                                checked={acceptedRequirements.terms_of_service}
-                                                onChange={(checked) => {
-                                                    if (checked != acceptedRequirements.terms_of_service) {
-                                                        setAcceptedRequirements({
-                                                            ...acceptedRequirements,
-                                                            terms_of_service: checked,
-                                                        });
-                                                    }
-                                                }}
-                                                description="I have read and agree to the service's terms of service."
-                                            />
-                                            <button className="primary-button" onClick={() => {
-                                                window.open(service?.public?.terms_of_service_url || "https://www.naflows.com/legal/privacy-policy", "_blank");
-                                            }}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h240q17 0 28.5 11.5T480-800q0 17-11.5 28.5T440-760H200v560h560v-240q0-17 11.5-28.5T800-480q17 0 28.5 11.5T840-440v240q0 33-23.5 56.5T760-120H200Zm560-584L416-360q-11 11-28 11t-28-11q-11-11-11-28t11-28l344-344H600q-17 0-28.5-11.5T560-800q0-17 11.5-28.5T600-840h200q17 0 28.5 11.5T840-800v200q0 17-11.5 28.5T800-560q-17 0-28.5-11.5T760-600v-104Z" /></svg>
-                                            </button>
-                                        </div>
-                                        <div className="switch__content">
-                                            <Switch
-                                                label="I accept the privacy policy."
-                                                checked={acceptedRequirements.privacy_policy}
-                                                onChange={(checked) => {
-                                                    if (checked != acceptedRequirements.privacy_policy) {
-                                                        setAcceptedRequirements({
-                                                            ...acceptedRequirements,
-                                                            privacy_policy: checked,
-                                                        });
-                                                    }
-                                                }}
-                                                description="I have read and agree to the service's privacy policy."
-                                            />
-                                            <button className="primary-button" onClick={() => {
-                                                window.open(service?.public?.privacy_policy_url || "https://www.naflows.com/legal/privacy-policy", "_blank");
-                                            }}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h240q17 0 28.5 11.5T480-800q0 17-11.5 28.5T440-760H200v560h560v-240q0-17 11.5-28.5T800-480q17 0 28.5 11.5T840-440v240q0 33-23.5 56.5T760-120H200Zm560-584L416-360q-11 11-28 11t-28-11q-11-11-11-28t11-28l344-344H600q-17 0-28.5-11.5T560-800q0-17 11.5-28.5T600-840h200q17 0 28.5 11.5T840-800v200q0 17-11.5 28.5T800-560q-17 0-28.5-11.5T760-600v-104Z" /></svg>
-                                            </button>
-                                        </div>
-                                        <div className="switch__content">
-                                            <Switch
-                                                label="Allow data sharing with this service."
-                                                checked={acceptedRequirements.data_share}
-                                                onChange={(checked) => {
-                                                    if (checked != acceptedRequirements.data_share) {
-                                                        setAcceptedRequirements({
-                                                            ...acceptedRequirements,
-                                                            data_share: checked,
-                                                        });
-                                                    }
-                                                }}
-                                                description="I accept that my personal data will be shared with the service as described above."
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
+                                <TermsAndRequirements
+                                    service={service}
+                                    acceptedRequirements={acceptedRequirements}
+                                    setAcceptedRequirements={setAcceptedRequirements}
+                                />
                             </div>
                         )}
 

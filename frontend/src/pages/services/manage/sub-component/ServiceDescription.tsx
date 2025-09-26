@@ -67,40 +67,7 @@ const ServiceDescription = ({
                     <p>{service.description || "No description provided."}</p>
                   </div>
 
-                  {
-                    publicDisplay && (
-                      <div className="service__creator">
-                        <div className="service__creator__label">
-                          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-440q58 0 99-41t41-99q0-58-41-99t-99-41q-58 0-99 41t-41 99q0 58 41 99t99 41ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-46q-54-53-125.5-83.5T480-360q-83 0-154.5 30.5T200-246v46Z" /></svg>
-                          <span>Owned by</span>
-                        </div>
-                        <div className="service__creator__info">
-                          <div className="service__creator__image">
-                            {service.details.owner && service.details.owner.profile_picture ? (
-                              <img src={service.details.owner.profile_picture} alt={service.details.owner.username} />
-                            ) : (
-                              <div className="service__creator__image__placeholder">
-                                <span>{service.details.owner ? service.details.owner.username.charAt(0) : "?"}</span>
-                              </div>
-                            )}
-                          </div>
-                          <div className="service__creation__body">
-                            <div className="service__creator__name">
-                              <div className="service__creator__full__name" style={{ display: service.details.owner && (service.details.owner.first_name || service.details.owner.last_name) ? "inline-flex" : "none" }}>
-                                {service.details.owner ? `${service.details.owner.first_name || ""} ${service.details.owner.last_name || ""}` : ""}
-                              </div>
-                              <span className="creator__username">@{service.details.owner ? service.details.owner.username : "unknown"}</span>
-
-                            </div>
-                            <div className="service__creator__status" style={{ display: service.details.owner && service.details.owner.verified ? "inline-flex" : "none" }} title="Verified Owner">
-
-                              Verified
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  }
+  
                 </div>
               </div>
             </div>

@@ -2,42 +2,68 @@ import { User } from "../../types/.types/collections.type";
 import mailing from "./dir";
 
 
-const dummyUser: User = {
-  id: "usr_7f9a2b8c3d4e5f6g",
-  identifier: "$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/lewRuMqMmKVj1.uPy", // hashed: "user_alexandre_2024"
-  password: "$2b$12$EIXYBj9RKtJGbr2/9k3JvOuO8Y7XqQ5zRwC.nHf8NJ1mK4L6pQ2Rm", // hashed: "SecurePass123!"
-  email: "alexandre.dubois@email.fr",
-  created_at: new Date("2024-03-15T10:30:00Z"),
-  last_login: new Date("2025-08-30T14:22:15Z"),
-  last_update: new Date("2025-08-28T09:15:30Z"),
-  services: {
-    1001: { // Naflows main service
-      rights: ["DEVELOPER", "USER"],
-      joined_at: 1710504600000, // March 15, 2024 timestamp
-      active: true
+const dummyUser : User = {
+    id : "1",
+    identifier : "100000:8ae7a11eb6919690bf6b81c0fab32804:d03e7cea89287a3b8e4bdcff25a002f58bdb78032941ff693aa751f16306acc6123782a1a136d2198cf2fd9ccce2a5bd56d0515abac8a3d11fb304e8915e82e0",
+    password : "100000:5ee1efc5ad26b93e2cd51ceeedc18451:c986c5f6a979289c7da5146868b6832198835f656eb3c9683d597fa781ae64b2bd9684db0cfff6a64fcd630a2a46fbece8858f4ad9eccb394844e591a8cb35d8",
+    email : "mougel.david.pro@gmail.com",
+    username : "Naflouille",
+    first_name : "David",
+    last_name : "Mougel",
+    country : "France",
+    language : "en",
+    city : "Paris",
+    postal_code : "75000",
+    address : "Naflows Street",
+    address_complement : "Apt 42",
+    phone_number : "0123456789",
+    phone_verified : true,
+    email_verified : true,
+    profile_picture : "https://avatars.githubusercontent.com/u/188961317?s=400&u=d2b087040380d0a38c83fa26469d1bc919d0bf74&v=4",
+    services : {
+        0 : {
+            rights : ["ADMINISTRATOR"],
+            joined_at: new Date().getTime(),
+            active : true,
+            data_preferences : {
+                usage_data : "FULL",
+                personal_data : [
+                    "PHONE",
+                    "EMAIL",
+                    "FIRST AND LAST NAME",
+                    "ACCOUNT SECURITY MEASURES",
+                    "BILLING DETAILS"
+                ],
+            }
+        },
+        1 : {
+            rights : ["USER"],
+            joined_at: new Date().getTime(),
+            active : true,
+            data_preferences : {
+                usage_data : "FULL",
+                personal_data : [
+                    "EMAIL",
+                    "FIRST AND LAST NAME",
+                ],
+            }
+        },
+        2 : {
+            rights : ["USER"],
+            joined_at: new Date().getTime(),
+            active : false,
+            data_preferences : {
+                usage_data : "FULL",
+                personal_data : [
+                    "PHONE",
+                    "EMAIL",
+                ],
+            }
+        }
     },
-    2003: { // Analytics service
-      rights: ["USER"],
-      joined_at: 1720876800000, // July 13, 2024 timestamp
-      active: true
-    },
-    5007: { // Beta testing service
-      rights: ["ADMINISTRATOR", "DEVELOPER", "USER"],
-      joined_at: 1722470400000, // August 1, 2024 timestamp
-      active: false
-    }
-  },
-  username: "alex_dev",
-  first_name: "Alexandre",
-  last_name: "Dubois",
-  profile_picture: "https://api.dicebear.com/7.x/avataaars/svg?seed=alexandre",
-  country: "France",
-  language: "fr-FR",
-  postal_code: "75001",
-  adress: "12 Rue de la Paix, Paris",
-  phone_number: "+33 6 12 34 56 78",
-  phone_verified: true,
-  email_verified: true
+    created_at : new Date().getTime(),
+    last_update : new Date().getTime(),
+    last_login : new Date().getTime(),
 };
 
 
@@ -50,6 +76,7 @@ console.log("SMTP Pass:", process.env.SMTP_PASS);
 
 (async () => {
   const s = await mailing.send(
+    'Naflows',
     "mougel.david.pro@gmail.com",
     " « Naflows » account verification ",
     (await mailing.patterns.customLink("503514", dummyUser,"Naflows"))

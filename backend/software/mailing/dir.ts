@@ -1,6 +1,7 @@
 import { subscribeToMailingList } from "./list/subscribe";
 import sendEmail from "./methods/send-email";
 import transporter from "./nodemailer.config";
+import customCodePattern from "./pattern/custom-code";
 import customLinkPattern from "./pattern/custom-link";
 
 
@@ -15,7 +16,8 @@ const mailing = {
     },
 
     patterns : {
-        customLink : customLinkPattern
+        customLink : customLinkPattern,
+        customCode : customCodePattern
     },
     
     send : sendEmail

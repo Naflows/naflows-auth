@@ -259,6 +259,20 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
     });
 });
 
+app.post('/client/secure/user/send-verification-code', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    const serviceID = req.body.serviceID || "Naflows Auth API";
+    const sendCode : ReplyType = await secure.user.sendVerificationCode(user.id, serviceID);
+    res.status(sendCode.status).json({
+        status: sendCode.status,
+        message: sendCode.message,
+        success: sendCode.success,
+        data: {
+            middleware: req.middleware.data,
+        }
+    });
+});
+
 app.post('/client/secure/data/services/build', async (req, res) => {
 
     console.log("Request to build service received:", req.body);

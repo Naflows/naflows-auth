@@ -255,3 +255,17 @@ export interface ServiceToken {
   token: string; // The service token, a secure way of connecting to the service
   created_at: number; // Date when the token was created
 }
+
+
+
+export interface SecurityCode {
+  id: string; // Code ID
+  user_id: string; // User ID, the user that owns the code
+  code: string; // The code, a secure way of verifying the user, hashed
+  created_at: number; // Date when the code was created
+  expires_at: number; // Date when the code expires
+  used: boolean; // Whether the code has been used or not
+  used_at?: number; // Date when the code was used, if used is true
+  purpose: "EMAIL_VERIFICATION" | "PASSWORD_RESET" | "TWO_FACTOR_AUTHENTICATION"; // Purpose of the code
+  associated_service: string; // Service ID, the service that requested the code, if any
+}

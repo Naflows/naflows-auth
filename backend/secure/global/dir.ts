@@ -23,6 +23,7 @@ import { updateUser } from "./user/update";
 import { getTokenByValue } from "./token/getByValue";
 import getSystemStatus from "../health/getSystemStatus";
 import manageConnection from "./user/manage-connection";
+import { sendVerificationCode } from "./user/send-code";
 
 
 const secure = {
@@ -49,7 +50,8 @@ const secure = {
         login : logUserIn,
         hiddenLogin : hiddenLogin,
         update : updateUser,
-        manageConnection : manageConnection
+        manageConnection : manageConnection,
+        sendVerificationCode : sendVerificationCode
     },
     session : {
         renew : renewSessionId,

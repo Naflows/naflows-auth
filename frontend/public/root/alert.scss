@@ -49,6 +49,14 @@
     align-items: start;
     gap: 25px;
 
+    .buttons-container {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+    }
+
     .global__alert__body {
       display: flex;
       flex-direction: column;
@@ -74,6 +82,10 @@
         p {
           margin: 0;
           padding: 0;
+        }
+
+        .enhanced {
+          color : $da-secondary-hue-lighter-2;
         }
 
 
