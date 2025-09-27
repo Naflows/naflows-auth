@@ -106,7 +106,8 @@ export async function registerService(
         public_settings: {
             allow_public_visibility: public_settings.allow_public_visibility,
             allow_user_registration: public_settings.allow_user_registration,
-            allow_service_connection: false
+            allow_service_connection: false,
+            required_data: []
         },
 
         details : {
@@ -125,7 +126,7 @@ export async function registerService(
 
     service.service_token = (token.data as ServiceToken).token;
 
-    const u = await services.service.user.register(user, service.id, req.middleware.data.session, null, true, ["ADMINISTRATOR"]);
+    const u = await services.service.user.register(user, service.id, null, true, ["ADMINISTRATOR"]);
 
     if (!u.success) return software.methods.serverReply(500, "Internal Server Error: Failed to register service owner as user of the service.");
 

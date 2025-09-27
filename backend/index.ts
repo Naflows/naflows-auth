@@ -259,6 +259,23 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
     });
 });
 
+app.post('/client/secure/user/register-in-api', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    const apiID = req.body.serviceID || "Naflows Auth API";
+    const code = req.body.code || null;
+
+    const register = await services.service.user.register(user, apiID, code, false, ["USER"]);
+    res.status(register.status).json({
+        status: register.status,
+        message: register.message,
+        success: register.success,
+        data: {
+            middleware: req.middleware.data,
+            ...register.data,
+        }
+    });
+});
+
 app.post('/client/secure/user/send-verification-code', async (req, res) => {
     const user = await secure.user.manageConnection(req, res);
     const serviceID = req.body.serviceID || "Naflows Auth API";

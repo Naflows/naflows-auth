@@ -266,6 +266,6 @@ export interface SecurityCode {
   expires_at: number; // Date when the code expires
   used: boolean; // Whether the code has been used or not
   used_at?: number; // Date when the code was used, if used is true
-  purpose: "EMAIL_VERIFICATION" | "PASSWORD_RESET" | "TWO_FACTOR_AUTHENTICATION"; // Purpose of the code
+  purpose: "EMAIL_VERIFICATION" | "PASSWORD_RESET" | "TWO_FACTOR_AUTHENTICATION" | "SELF_SERVICE_MANAGEMENT"; // Purpose of the code
   associated_service: string; // Service ID, the service that requested the code, if any
 }

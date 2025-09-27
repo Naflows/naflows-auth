@@ -155,6 +155,39 @@ app.get('/public/services/:id/infos/:userID', async (req: Request, res: Response
 });
 
 
+app.post('/user/secure/service/register', async (req: Request, res: Response) => {
+    const { sessionID, token, uid } = getCookies(req);
+    const code = req.body.code;
+    const serviceID = req.body.serviceID;
+
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/user/register-in-api`, {
+        user: {
+            ip: req.ip,
+            agent: req.headers['user-agent'],
+            device_fingerprint: req.fingerprint,
+            session_id: sessionID || null,
+            token: token || null,
+            user_id: uid || null,
+        },
+        code: code,
+        serviceID: serviceID,
+        request: {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        },
+        client: service
+    });
+
+    sendCookies(res, f.data);
+
+    delete f.data.data.middleware;
+
+    res.status(f.status).json(f.data);
+});
+
+ 
 app.post('/user/secure/confirm-identity/send-code', async (req: Request, res: Response) => {
     const { sessionID, token, uid } = getCookies(req);
     

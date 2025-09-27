@@ -2,6 +2,7 @@ import axios from "axios";
 import Input from "../../../../global/components/Input";
 import type { AlertContentProps } from "../../../../global/error-alert/Alert";
 import Loader from "../../../../global/components/Loader";
+import type { ServicesBodyProps } from "../../../../types/ServicesBodyProps";
 
 
 
@@ -9,13 +10,15 @@ const ManageAlert = ({
     requirementsAccepted,
     userInfo,
     displayAlertCode,
-    setDisplayAlertCode
+    setDisplayAlertCode,
+    service
 }: {
     requirementsAccepted: boolean;
 
     userInfo: { email: string } | null;
     displayAlertCode: AlertContentProps;
     setDisplayAlertCode: (alert: AlertContentProps) => void;
+    service : ServicesBodyProps
 }) => {
     if (requirementsAccepted) {
 
@@ -85,7 +88,33 @@ const ManageAlert = ({
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M647-440H200q-17 0-28.5-11.5T160-480q0-17 11.5-28.5T200-520h447L451-716q-12-12-11.5-28t12.5-28q12-11 28-11.5t28 11.5l264 264q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L508-188q-11 11-27.5 11T452-188q-12-12-12-28.5t12-28.5l195-195Z" /></svg>
                             </>
                         ),
-                        action: () => {
+                        action: async () => {
+                            const codeInput = (document.querySelector('input[name="service-connection-code"]') as HTMLInputElement).value;
+                            const res = await axios.post(`${process.env.DUMMY_API_URL_DEV}/user/secure/service/register`, {
+                                serviceID: service.id,
+                                code: codeInput
+                            }, {
+                                withCredentials: true
+                            });
+                            if (res.data.success) {
+                                setDisplayAlertCode({
+                                    status: 200,
+                                    message: `You have been successfully connected to ${service.name}. You can now close this alert.`,
+                                    success: true,
+                                    closeAlert: true,
+                                    title: `Success`,
+                                    displaySuccess: true,
+                                })
+                            } else {
+                                setDisplayAlertCode({
+                                    status: 400,
+                                    message: `Failed to connect to ${service.name}. Please try again.`,
+                                    success: false,
+                                    closeAlert: true,
+                                    title: `Error`,
+                                    displaySuccess: false,
+                                })
+                            }
                         },
                         class: "primary-button"
                     }

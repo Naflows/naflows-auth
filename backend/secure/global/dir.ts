@@ -24,6 +24,10 @@ import { getTokenByValue } from "./token/getByValue";
 import getSystemStatus from "../health/getSystemStatus";
 import manageConnection from "./user/manage-connection";
 import { sendVerificationCode } from "./user/send-code";
+import { createSecurityCode } from "./security-code/methods/create-code";
+import { verifySecurityCode } from "./security-code/methods/verify-code";
+import { getSecurityCode } from "./security-code/methods/get-code";
+import { invalidateSecurityCode } from "./security-code/methods/invalidate-code";
 
 
 const secure = {
@@ -43,6 +47,12 @@ const secure = {
         delete : deleteToken,
         renew : updateToken,
         update : updateWholeToken
+    },
+    code : {
+        create :  createSecurityCode,
+        check : verifySecurityCode,
+        get: getSecurityCode,
+        invalidate : invalidateSecurityCode
     },
     user: {
         credentials : checkUserCredentials,

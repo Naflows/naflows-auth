@@ -12,30 +12,37 @@
 import { Session } from "inspector/promises";
 import { db } from "../../..";
 import { software } from "../../../software/dir";
-import { Tokens, User, UserSession } from "../../../types/.types/collections.type";
+import { SecurityCode, Service, Tokens, User, UserSession } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import UCRType from "../../../types/.types/ucr.type";
 import secure from "../../global/dir";
 import { services } from "../dir";
 
 
-export default async function registerUserInAPI(user: User, apiID: string, session_id: string, ucr : UCRType | null, force = false, rights: string[]): Promise<ReplyType> {
+export default async function registerUserInAPI(user: User, apiID: string, codeNumber: string | null, force = false, rights: string[]): Promise<ReplyType> {
     // Implementation for registering the user in the API
-
-    const session: UserSession = await secure.session.get(session_id);
-
-    if (!session) {
-        return software.methods.serverReply(401, "Unauthorized: Session not found.");
-    }
-
     const registerUser = async () => {
         const usersCollection = db.collection('users');
 
         // Update user by creating a new entry in the services OBJECT
+        const service = await services.service.get(apiID);
+        if (!service.success) {
+            return software.methods.serverReply(404, "Service not found.");
+        }
+        console.log("Service data:", service.data);
 
         const userDoc = await usersCollection.updateOne(
             { id: user.id },
-            { $set: { [`services.${apiID}`]: { id: secure.hash(apiID), active: true, joined_at: new Date().getTime(), rights } } },
+            {
+                $set: {
+                    [`services.${apiID}`]: {
+                        id: secure.hash(apiID), active: true, joined_at: new Date().getTime(), rights, data_preferences: {
+                            usage_data: "FULL",
+                            personal_data: (service.data as Service)?.public_settings.required_data || [],
+                        }
+                    }
+                }
+            },
             { upsert: true }
         );
 
@@ -49,38 +56,32 @@ export default async function registerUserInAPI(user: User, apiID: string, sessi
     if (force) {
         const registration = await registerUser();
         return registration;
-    } else if (force && ucr === null) {
-        return software.methods.serverReply(400, "Bad Request: UCR data must be provided when force is true.");
+    } else if (!force && codeNumber === null) {
+        return software.methods.serverReply(400, "Bad Request: Security code must be provided when force is true.");
     }
 
 
 
-    if (ucr.data && ucr.data.tokens && ucr.data.tokens.serviceRegistration) {
-        if (ucr.user.password && ucr.user.identifier && (await secure.user.credentials(user.id, ucr.user.identifier, ucr.user.password))) {
-            // User is registered and credentials are valid
-            const isTokenValid = services.userRegistration.isTokenValid(ucr.data.tokens.serviceRegistration);
-
-            if (!isTokenValid) {
-                return software.methods.serverReply(403, "Invalid service registration token.");
-            }
-
-            const registration = await registerUser();
-            return registration;
-        } else {
-            return software.methods.serverReply(403, "Invalid user credentials for API registration.");
+    if (codeNumber) {
+        console.log("Code provided, verifying...");
+        const code: SecurityCode = await secure.code.get(null, codeNumber);
+        if (!code) {
+            return software.methods.serverReply(404, "Security code not found.");
         }
-    }
 
-    if (!Array.from(Object.keys(user.services)).includes(apiID) || !user.services[apiID].active) {
-        // This means the user is not registered to the api 
-        const token: ReplyType = await secure.token.create(user, session, ["API_REGISTRATION"], false, 1, {
-            apiIDForRegistration: apiID,
-        });
-        if (token.success) {
-            return software.methods.serverReply(200, "Token for API registration successfully created.", token.data);
-        } else {
-            return software.methods.serverReply(token.status, token.message, token.data);
+        const isCodeValid = await secure.code.check(code, user, apiID, "SELF_SERVICE_MANAGEMENT");
+        if (!isCodeValid) {
+            return software.methods.serverReply(400, "Bad Request: Invalid or expired security code.");
         }
+
+        const updatedCode = await secure.code.invalidate(code.id);
+        if (!updatedCode.success) {
+            return software.methods.serverReply(500, "Failed to invalidate security code.");
+        }
+
+        const registration = await registerUser();
+
+        return registration;
     }
 
 

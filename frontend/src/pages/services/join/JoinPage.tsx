@@ -8,12 +8,10 @@ import ServiceDescription from "../manage/sub-component/ServiceDescription";
 import '../../../../public/root/pages/services/join/index.scss';
 import type { ServicesBodyProps } from "../../../types/ServicesBodyProps";
 import { dataPreferences } from "../../account/sub-components/core/connections/PersonalInformations";
-import Switch from "../../../global/components/Switch";
 import GlobalDisclaimer from "../../../global/components/GlobalDisclaimer";
 import AccountHeader from "../../account/account-header/AccountHeader";
 import Loader from "../../../global/components/Loader";
 import TermsAndRequirements from "./sub-component/TermsAndRequirements";
-import Input from "../../../global/components/Input";
 import ManageAlert from "./sub-component/ManageAlert";
 
 
@@ -204,7 +202,8 @@ const JoinPage = () => {
                                 requirementsAccepted,
                                 userInfo,
                                 displayAlertCode,
-                                setDisplayAlertCode
+                                setDisplayAlertCode,
+                                service
                             });
                         }}>
                             <span>Connect to {service ? service.name : "the service"}</span>
