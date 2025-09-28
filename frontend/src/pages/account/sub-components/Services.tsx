@@ -1,10 +1,10 @@
 import type { ServicesBodyProps } from "../../../types/ServicesBodyProps";
 import "../../../../public/root/pages/account/sub-components/AccountServicesBody.scss";
-import BasicServiceBody from "./ServicesBody";
 import { useEffect, useState } from "react";
 import type { ServicesCompleteBodyProps } from "../../../types/ServicesCompleteProps";
 import ManageServiceConnection from "./ManageConnection";
 import fetchServiceData from "../../../scripts/account/fetch-individual-service";
+import ServiceDescription from "../../services/manage/sub-component/ServiceDescription";
 
 const ServicesComponent = ({
   servicesData,
@@ -12,7 +12,7 @@ const ServicesComponent = ({
   servicesData: ServicesBodyProps[];
 }) => {
   const userServices = servicesData.filter(
-    (service : ServicesBodyProps) =>
+    (service: ServicesBodyProps) =>
       service.rights.includes("ADMINISTRATOR") ||
       service.rights.includes("DEVELOPER")
   );
@@ -24,16 +24,35 @@ const ServicesComponent = ({
   const [serviceData, setServiceData] =
     useState<ServicesCompleteBodyProps | null>(null);
 
+  useEffect(() => {
+    const pathParts = window.location.pathname.split("/");
+    const id = pathParts[3];
+    if (id) {
+      console.log("Found service ID in URL:", id);
+      setServiceID(id);
+      fetchServiceData(id, setServiceData as (data: object) => void);
+    }
+  }, []);
 
 
   useEffect(() => {
-    if (serviceID) {
+    if (serviceID != null) {
+      console.log("Fetching data for service ID:", serviceID);
       fetchServiceData(serviceID, setServiceData as (data: object) => void);
     }
   }, [serviceID]);
 
   useEffect(() => {
-    if (serviceData === null) setServiceID(null);
+    if (serviceData === null) {
+      setServiceID(null);
+      const url = new URL(window.location.href);
+      url.searchParams.delete("manage");
+      window.history.replaceState({}, "", url.toString());
+    } else {
+      const url = new URL(window.location.href);
+      url.searchParams.set("manage", serviceData.id);
+      window.history.replaceState({}, "", url.toString());
+    }
   }, [serviceData])
 
   return (
@@ -70,16 +89,11 @@ const ServicesComponent = ({
             </button>
           </div>
           <div className="services__list__content" style={{
-            display : userServices.length > 0 ? "flex" : "none"
+            display: userServices.length > 0 ? "flex" : "none"
           }}>
             {userServices.length > 0 ? (
               userServices.map((service) => (
-                <div key={service.id} className="service__item">
-                  <BasicServiceBody service={service} />
-                  <button className="primary-button" onClick={() => {
-                    window.location.href = `/services/manage/${service.id}`;
-                  }}>Manage service</button>
-                </div>
+                <ServiceDescription service={service} smallBody={true} userManagement={true} owned={true} />
               ))
             ) : (
               <p>No services found.</p>
@@ -100,20 +114,7 @@ const ServicesComponent = ({
             {userConnections.length > 0 ? (
               userConnections.map((service) => (
                 <div key={service.id} className="service__item">
-                  <BasicServiceBody service={service} />
-                  <div className="service__item__buttons">
-                    <button
-                      className="primary-button"
-                      onClick={() => setServiceID(service.id)}
-                    >
-                      Manage connection
-                    </button>
-                    <button className="secondary-button" style={{
-                        display : service.user_active ? "block" : "none"
-                    }}>
-                      Quick disconnect
-                    </button>
-                  </div>
+                  <ServiceDescription service={service} smallBody={true} userManagement={true} owned={false} />
                 </div>
               ))
             ) : (

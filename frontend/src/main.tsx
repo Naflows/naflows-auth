@@ -27,6 +27,15 @@ createRoot(document.getElementById("root")!).render(
         }
       />
       <Route
+        path="/account/services/:id?"
+        element={
+          <>
+            <Account />
+            <AppFooter />
+          </>
+        }
+      />
+      <Route
         path="/services/manage/:id"
         element={
           <>

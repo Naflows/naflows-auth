@@ -167,7 +167,7 @@ app.post('/client/secure/data/services', async (req, res) => {
             const serviceRt: ReplyType = await services.service.get(key);
             const service: Service = serviceRt.data as Service;
             if (service) {
-                console.log("Pushing service to sentServices:", service.name);
+                console.log("Pushing service to sentServices:", service);
                 return {
                     name: service.name,
                     id: service.id,
@@ -179,6 +179,7 @@ app.post('/client/secure/data/services', async (req, res) => {
                     user_active: userServices[key].active,
                     picture: service.picture,
                     banner: service.banner,
+                    details : service.details,
                 };
             }
             return null; // Return null for invalid services
@@ -187,7 +188,7 @@ app.post('/client/secure/data/services', async (req, res) => {
 
     const validServices = sentServices.filter(service => service !== null);
 
-
+    console.log("Sending services to user:", validServices);
 
     res.status(200).json({
         status: 200,
@@ -228,6 +229,8 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
 
     const serviceInfo = serviceData.data as Service;
 
+    console.log('>>> Service ID requested:', serviceInfo.id);
+
 
 
 
@@ -244,6 +247,8 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
         delete serviceInfo.service_token;
     }
 
+
+    console.log("Sending service information for service:", serviceInfo.name, "to user:", user.username);
     res.status(200).json({
         status: 200,
         message: "Secure data access granted",
@@ -253,6 +258,7 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
             service: {
                 ...serviceData.data,
                 ...service,
+                ...serviceInfo,
                 user_active: service.active,
             }
         }
@@ -351,6 +357,7 @@ app.post('/client/secure/data/user', async (req, res) => {
 
 app.post('/public/services/service-informations', async (req, res) => {
     const getter = await services.service.getPublicDetails(req.body.service.id, req.body.service.userID || null);
+    console.log("Retrieved public service information:", getter.data);
     res.status(getter.status).json({
         status : getter.status,
         message : getter.message,

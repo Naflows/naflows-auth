@@ -52,7 +52,7 @@ const Alert = ({ alert, setAlert }: AlertProps) => {
                 : `Error ${alert.displayCode ? `${alert.status}` : ""}`}
             </p>
 
-            <h3 className={`${!alert.displaySuccess && "enhanced"}`}>{alert.title || (alert.success ? "Success" : "Error")}</h3>
+            <h3 className={`${alert.displaySuccess && "enhanced"}`}>{alert.title || (alert.success ? "Success" : "Error")}</h3>
           </div>
           <div className="global___alert__component__message">
             {alert.displayCode && (

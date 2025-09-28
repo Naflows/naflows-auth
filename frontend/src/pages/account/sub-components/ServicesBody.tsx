@@ -12,7 +12,10 @@ const BasicServiceBody = ({ service }: { service: ServicesBodyProps | ServicesCo
   return (
     <div className="service__view__body">
       <div className="service__view__body__public">
-        <img src={service.picture} alt={`${service.name} Logo`} className="service__view__logo" style={{ display: service.picture ? 'block' : 'none' }} />
+        <div className="service__view__header">
+          <img src={service.banner} alt={`${service.name} Banner`} className="service__view__banner" style={{ display: service.banner ? 'block' : 'none' }} />
+          <img src={service.picture} alt={`${service.name} Logo`} className="service__view__logo" style={{ display: service.picture ? 'block' : 'none' }} />
+        </div>
         <div className="service__view__body__public__content">
           <div className="service__view__body__header">
             <div className="services__body__header__content">

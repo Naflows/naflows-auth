@@ -23,6 +23,8 @@ export default async function registerUserInAPI(user: User, apiID: string, codeN
     // Implementation for registering the user in the API
     const registerUser = async () => {
         const usersCollection = db.collection('users');
+        const servicesCollection = db.collection('services');
+        const sessionsCollection = db.collection('user_sessions');
 
         // Update user by creating a new entry in the services OBJECT
         const service = await services.service.get(apiID);
@@ -46,7 +48,14 @@ export default async function registerUserInAPI(user: User, apiID: string, codeN
             { upsert: true }
         );
 
-        if (userDoc.modifiedCount === 0) {
+        const serviceActualize = await servicesCollection.updateOne(
+            { id: apiID },
+            {
+                $inc: { "details.users": 1 }
+            }
+        );
+
+        if (userDoc.modifiedCount === 0 && serviceActualize.modifiedCount === 0) {
             return software.methods.serverReply(404, "User not found.");
         }
 

@@ -25,6 +25,10 @@ const Account = () => {
     support: { val: "support" },
   };
   const [successfulFetch, setSuccessfulFetch] = useState<boolean>(false);
+
+
+
+  
   const fetch = async () => {
     try {
       const res = await fetchData(dir[selectedTab as keyof typeof dir]?.val);

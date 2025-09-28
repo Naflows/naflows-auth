@@ -5,10 +5,17 @@ import type { ServicesBodyProps } from "../../../../types/ServicesBodyProps";
 const ServiceDescription = ({
   service,
   publicDisplay = false,
+  smallBody = false,
+  userManagement = false,
+  owned = false
 }: {
   service: ServicesForUserProps | ServicesBodyProps | null;
   publicDisplay?: boolean;
+  smallBody?: boolean;
+  userManagement?: boolean;
+  owned?: boolean;
 }) => {
+  console.log("Rendering ServiceDescription with service:", service);
   if (service) {
     return (
       <div className="user__body__section service__description__section">
@@ -67,12 +74,12 @@ const ServiceDescription = ({
                     <p>{service.description || "No description provided."}</p>
                   </div>
 
-  
+
                 </div>
               </div>
             </div>
             <div className="buttons-container" style={{
-              display: publicDisplay ? "none" : "flex",
+              display: publicDisplay || smallBody ? "none" : "flex",
             }}>
               <button className="secondary-button" onClick={() => {
                 window.open(`/services/join/${service.id}`, '_blank')?.focus();
@@ -87,6 +94,55 @@ const ServiceDescription = ({
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z" /></svg>
               </button>
             </div>
+            <div className="buttons-container" style={{
+              flexDirection: "column",
+              gap: "5px",
+              display: !publicDisplay || smallBody ? "none" : "flex",
+            }}>
+              <button className="primary-button width-100-auto" onClick={() => {
+                window.open(service?.public?.contact_email || "https://www.naflows.com/support", "_blank");
+              }}>
+                <span>Contact Service</span>
+              </button>
+              <button className="secondary-button width-100-auto" onClick={() => {
+                window.open(service?.public?.privacy_policy_url || "https://www.naflows.com/support", "_blank");
+              }}>
+                <span>Service Privacy Policy</span>
+              </button>
+              <button className="secondary-button width-100-auto" onClick={() => {
+                window.open(service?.public?.terms_of_service_url || "https://www.naflows.com/support", "_blank");
+              }}>
+                <span>Terms of Service</span>
+              </button>
+            </div>
+
+
+            <div className="buttons-container" style={{
+              display: userManagement && owned ? "flex" : "none",
+            }}>
+              <button className="primary-button" onClick={() => {
+                window.location.href = `/services/manage/${service.id}`;
+              }}>Manage service</button>
+            </div>
+
+            <div className="buttons-container" style={{
+              display: userManagement && !owned ? "flex" : "none",
+            }}>
+              <button
+                className="primary-button"
+                onClick={() => {
+                  window.location.href = `/account/services/${service.id}`;
+                }}
+              >
+                Manage connection
+              </button>
+              <button className="secondary-button" style={{
+                display: service.user_active ? "block" : "none"
+              }}>
+                Quick disconnect
+              </button>
+            </div>
+
           </div>
         </div>
       </div>

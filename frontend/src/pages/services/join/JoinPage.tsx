@@ -50,6 +50,7 @@ const JoinPage = () => {
     }, [acceptedRequirements])
 
 
+
     useEffect(() => {
         const pathParts = window.location.pathname.split("/");
         const id = pathParts[3];
@@ -233,14 +234,14 @@ const JoinPage = () => {
                                 </div>
                             </div>
                         )}
-                        {service?.public_settings?.required_data && service.public_settings.required_data.length > 0 && (
+                        
                             <div className="service__connection__details">
                                 <img src={userInfo?.profile_picture || ""} alt="User profile" className="user__profile__picture small" style={{
                                     display: userInfo && userInfo.profile_picture ? "block" : "none",
                                 }} />
 
 
-                                <div className="service__connection__detail__body">
+                                {service?.public_settings?.required_data && service.public_settings.required_data.length > 0 && (<div className="service__connection__detail__body">
                                     <div className="service__actions__field__header">
                                         <h3 className="service__actions__field__title">
                                             <span>
@@ -268,14 +269,14 @@ const JoinPage = () => {
                                             }
                                         })}
                                     </div>
-                                </div>
+                                </div>)}
                                 <TermsAndRequirements
                                     service={service}
                                     acceptedRequirements={acceptedRequirements}
                                     setAcceptedRequirements={setAcceptedRequirements}
                                 />
                             </div>
-                        )}
+                        
 
 
                     </div>

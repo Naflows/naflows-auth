@@ -26,15 +26,15 @@ import { ServicePlan } from "./get-plans";
 export async function registerService(
     // These data are the one defined by the user creating the service
     pub: {
-        name: string, description: string | null, picture, banner, ip_address: string, dns: string, id : string
+        name: string, description: string | null, picture, banner, ip_address: string, dns: string, id: string
     }, settings: {
         rates: 100 | 500 | 1000 | 10000;
     },
     public_settings: {
         allow_public_visibility: boolean;
         allow_user_registration: boolean;
-    }, plan : {
-        id : number,
+    }, plan: {
+        id: number,
     }, req, res
 ): Promise<ReplyType> {
 
@@ -91,7 +91,7 @@ export async function registerService(
         picture: pub.picture,
         banner: pub.banner,
 
-        settings : {
+        settings: {
             rates: settings.rates,
             allow_nass_payement_method: false
         },
@@ -110,12 +110,12 @@ export async function registerService(
             required_data: []
         },
 
-        details : {
-            users : 1, // The creator is the first user
-            public : {
-                privacy_policy_url : "null",
-                terms_of_service_url : "null",
-                contact_email : "null",
+        details: {
+            users: 1, // The creator is the first user
+            public: {
+                privacy_policy_url: "null",
+                terms_of_service_url: "null",
+                contact_email: "null",
             }
         }
     };
@@ -126,12 +126,14 @@ export async function registerService(
 
     service.service_token = (token.data as ServiceToken).token;
 
+    await serviceCollection.insertOne(service);
+
+
     const u = await services.service.user.register(user, service.id, null, true, ["ADMINISTRATOR"]);
 
     if (!u.success) return software.methods.serverReply(500, "Internal Server Error: Failed to register service owner as user of the service.");
 
     try {
-        await serviceCollection.insertOne(service);
         return software.methods.serverReply(200, "Service registered successfully.");
 
     } catch (error) {

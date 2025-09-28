@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import type { ServicesCompleteBodyProps } from "../../../types/ServicesCompleteProps";
-import BasicServiceBody from "./ServicesBody";
 import UsageDataCards from "./core/connections/UsageDataCards";
 import type { InformationKey } from "./core/connections/PersonalDataInformation";
 import { dataPreferences, type DataKeys } from "./core/connections/PersonalInformations";
+import ServiceDescription from "../../services/manage/sub-component/ServiceDescription";
 
 
 type SensitiveDataKeys = "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS";
@@ -115,7 +115,9 @@ const ManageServiceConnection = ({
           <div className="manage__service__connection">
             <div className="manage__service__connection__header">
               <div className="manage__service__back">
-                <button className="tertiary-button" onClick={() => setService(null)}>
+                <button className="tertiary-button" onClick={() => {
+                  window.location.href = `/account/services`;
+                }}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     height="24px"
@@ -128,7 +130,8 @@ const ManageServiceConnection = ({
                   <span>Back to services</span>
                 </button>
               </div>
-              <BasicServiceBody service={newService} />
+              <ServiceDescription service={service} publicDisplay={true} />
+
             </div>
 
             <div className="manage__service__actions">

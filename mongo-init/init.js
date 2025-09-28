@@ -157,16 +157,41 @@ db.users.insertOne({
     id : "2",
     identifier : "100000:137db0ce6e8b0b238a304614ebc5dc33:64c94524560e67d1e78a96dc67ba92af545d490077fa2e5b13473107f6b7f5e7a6841f89eea8a7cd6ac740969b521f82fb88cd815d6b3f26d96677ef7c224dfe",
     password : "100000:137db0ce6e8b0b238a304614ebc5dc33:64c94524560e67d1e78a96dc67ba92af545d490077fa2e5b13473107f6b7f5e7a6841f89eea8a7cd6ac740969b521f82fb88cd815d6b3f26d96677ef7c224dfe",
-    email : "fraudetbenjamin@gmail.com",
+    email : "eadjjawn@gmail.com",
     username : "The Penguin",
     first_name : "Oswald",
     last_name : "Cobblepot",
     profile_picture : "https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse4.mm.bing.net%2Fth%2Fid%2FOIP.uIM2fG4I4rMhoGWm1PG0PgHaMD%3Fpid%3DApi&sp=1758813750T7b7eefd8e6cccadb8df319c8d18806d26d7f31e06337f3d6992a13e8301fcbcb",
     services : {
-        1 : {
+        "moo_deng_bar" : {
             rights : ["USER"],
             joined_at: new Date().getTime(),
-            active: true
+            active : true,
+            data_preferences : {
+                usage_data : "FULL",
+                personal_data : [
+                    "PHONE",
+                    "EMAIL",
+                    "FIRST AND LAST NAME",
+                    "ACCOUNT SECURITY MEASURES",
+                    "BILLING DETAILS"
+                ],
+            }
+        },
+        "the_pookie_shop" : {
+            rights : ["ADMINISTRATOR"],
+            joined_at: new Date().getTime(),
+            active : true,
+            data_preferences : {
+                usage_data : "FULL",
+                personal_data : [
+                    "PHONE",
+                    "EMAIL",
+                    "FIRST AND LAST NAME",
+                    "ACCOUNT SECURITY MEASURES",
+                    "BILLING DETAILS"
+                ],
+            }
         }
     },
     created_at : new Date().getTime(),
@@ -454,22 +479,37 @@ db.services.insertOne({
     created_by : "NASS",
     status : "ACTIVE",
     service_token : "moo_deng_bar_token",
-    storage : {
-        plan : "FREE",
-        type : "CLOUD",
-        used_space : 6512, // in MB
-        size : 32, // in GB
-    },
+    picture : "https://avatars.githubusercontent.com/u/188961317?s=200&v=4",
+    banner : "https://www.naflows.com/public/showcase/banners/nass-banner.png",
     settings : {
         rates : 1000, // 1000 requests per day
         allow_nass_payement_method : true, // Whether the service allows payment through NASS
         ram : "512MB", // RAM allocated to the service
         cpu : "1 CORE" // CPU allocated to the service
     },
+    plan : {
+        plan : "FREE",
+        type : "CLOUD",
+        used_space : 6512, // in MB
+        size : 32, // in GB
+    },
     public_settings : {
         allow_user_registration : true,
         allow_service_connection : true,
-        allow_public_visibility : true
+        allow_public_visibility : true,
+        required_data : [
+            "EMAIL",
+            "FIRST AND LAST NAME"
+        ]
+    },
+    details : {
+        users : 2, // Number of users in the service
+        official : false, // Whether the service is official or third-party
+    },
+    public : {
+        privacy_policy_url : "https://moo-deng-bar.naflows.com/privacy-policy",
+        terms_of_service_url : "https://moo-deng-bar.naflows.com/terms-of-service",
+        contact_email : "support@moo-deng-bar.naflows.com"
     }
 })
 
@@ -489,28 +529,44 @@ db.services.insertOne({
     dns : "the-pookie-shop.naflows.com",
     description : "The Pookie Shop Service for testing purposes.",
     created_at : new Date().getTime(),
-    created_by : "NASS",
+    created_by : "2",
     status : "INACTIVE",
     service_token : "the_pookie_shop_token",
-    storage : {
-        plan : "PRO",
-        type : "CLOUD",
-        used_space : 0, // in MB
-        size : 32, // in GB
-    },
+    picture : "https://avatars.githubusercontent.com/u/188961317?s=200&v=4",
+    banner : "https://www.naflows.com/public/showcase/banners/nass-banner.png",
     settings : {
         rates : 1000,
         allow_nass_payement_method : false, // Whether the service allows payment through NASS
         ram : "1GB", // RAM allocated to the service
         cpu : "2 CORES" // CPU allocated to the service
     },
+    plan : {
+        plan : "PRO",
+        type : "CLOUD",
+        used_space : 0, // in MB
+        size : 32, // in GB
+    },
     public_settings : {
         allow_user_registration : true,
         allow_service_connection : true,
-        allow_public_visibility : true
+        allow_public_visibility : true,
+        required_data : [
+            "PHONE",
+            "EMAIL",
+            "FIRST AND LAST NAME",
+            "BILLING DETAILS"
+        ]
+    },
+    details : {
+        users : 2, // Number of users in the service
+        official : false, // Whether the service is official or third-party
+    },
+    public : {
+        privacy_policy_url : "https://the-pookie-shop.naflows.com/privacy-policy",
+        terms_of_service_url : "https://the-pookie-shop.naflows.com/terms-of-service",
+        contact_email : "support@the-pookie-shop.naflows.com"
     }
 })
-
 
 db.service_tokens.insertOne({
     id : "the_pookie_shop_token",
