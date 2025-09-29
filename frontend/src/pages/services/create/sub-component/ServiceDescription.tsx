@@ -10,38 +10,44 @@ export interface ServiceDescriptionProps {
     description: string;
     profileImage: string;
     allow_public_visibility: boolean;
-    bannerImage? : string;
-    id : string;
+    bannerImage?: string;
+    id: string;
 }
 
 
 const CreateServiceDescription = ({
     serviceDescription,
-    setServiceDescription
+    setServiceDescription,
+    editMode = false
 }: {
     serviceDescription: ServiceDescriptionProps;
     setServiceDescription: React.Dispatch<React.SetStateAction<ServiceDescriptionProps>>;
+    editMode?: boolean;
 }) => {
 
     const [serviceID, setServiceID] = useState<string>("");
 
     useEffect(() => {
-        (async () => {
-            try {
-                const res = await axios.get(`${process.env.DUMMY_API_URL_DEV}/public/generate-api-id`);
-                console.log("Generated Service ID:", res.data);
-                setServiceID(res.data.data.key);
-            } catch (error) {
-                console.error("Error fetching service ID:", error);
-            }
-        })();
+        if (!editMode) {
+            (async () => {
+                try {
+                    const res = await axios.get(`${process.env.DUMMY_API_URL_DEV}/public/generate-api-id`);
+                    console.log("Generated Service ID:", res.data);
+                    setServiceID(res.data.data.key);
+                } catch (error) {
+                    console.error("Error fetching service ID:", error);
+                }
+            })();
+        } else {
+            setServiceID(serviceDescription.id);
+        }
     }, []);
 
     useEffect(() => {
         setServiceDescription({
             ...serviceDescription,
             name: serviceDescription ? serviceDescription.name : "",
-            id : serviceID
+            id: serviceID
         });
     }, [serviceID]);
 
@@ -90,12 +96,14 @@ const CreateServiceDescription = ({
                                     autoComplete={false}
                                     onChange={(value) => {
                                         if (value != serviceDescription.name) {
-                                            setServiceDescription({ ...serviceDescription, name: value.toString().slice(0, 50)});
+                                            setServiceDescription({ ...serviceDescription, name: value.toString().slice(0, 50) });
                                         }
                                     }}
                                     maxLength={50}
                                     maxChar={50}
                                     displayMaxChar={true}
+                                    onError={(m) => m.length <= 0}
+                                    errorMessage="Service name cannot be empty."
                                 />
                                 <Input
                                     label="Service Id"
@@ -122,6 +130,7 @@ const CreateServiceDescription = ({
                                     }}
                                     value={serviceDescription ? serviceDescription.description : ""}
                                     minHeight={200}
+
                                 />
                             </div>
                         </div>

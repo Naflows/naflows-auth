@@ -82,7 +82,9 @@ const ServicesComponent = ({
             className={`services__header__tab ${servicesType === "services" ? "primary-button" : "secondary-button"}`}
             onClick={() => setServicesType("services")}
           >
-            Your Services ({userServices.length})
+            Your Services ({
+              fetchedUserServices.length
+            })
           </button>
           <button
             className={`services__header__tab ${servicesType === "connections" ? "primary-button" : "secondary-button"}`}
@@ -148,8 +150,8 @@ const ServicesComponent = ({
           </div>
           <SearchService onSearch={setSearchQuery} />
           <div className="services__list__content">
-            {fetchedUserServices.length > 0 ? (
-              fetchedUserServices.map((service) => (
+            {userConnections.length > 0 ? (
+              userConnections.map((service) => (
                 <div key={service.id} className="service__item">
                   <CompactServiceDescription service={service} owned={false} />
                 </div>

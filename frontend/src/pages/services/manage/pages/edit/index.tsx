@@ -1,0 +1,134 @@
+import { useEffect, useState } from "react";
+import type { ServicesForUserProps } from "../../../../../types/ServicesForUserProps";
+import CreateServiceDescription, { type ServiceDescriptionProps } from "../../../create/sub-component/ServiceDescription";
+import SaveChanges from "../components/save";
+import Alert, { type AlertContentProps } from "../../../../../global/error-alert/Alert";
+import axios from "axios";
+import Loader from "../../../../../global/components/Loader";
+
+
+const ManageServiceEdition = ({
+    service
+}: {
+    service: ServicesForUserProps
+}) => {
+
+    const [newService, setNewService] = useState<ServiceDescriptionProps>({
+        name: service.name,
+        description: service.description || "",
+        profileImage: service.picture || "",
+        allow_public_visibility: service.public_settings.allow_public_visibility,
+        bannerImage: service.banner || "",
+        id: service.id
+    });
+
+    const [isDirty, setIsDirty] = useState(false);
+    const [alert, setAlert] = useState<AlertContentProps>({
+        status: 0,
+        message: "",
+        success: false,
+        closeAlert: true,
+    })
+
+    useEffect(() => {
+        if (service) {
+            setIsDirty(
+                newService.name !== service.name ||
+                newService.description !== (service.description || "") ||
+                newService.profileImage !== (service.picture || "") ||
+                newService.allow_public_visibility !== service.public_settings.allow_public_visibility ||
+                newService.bannerImage !== (service.banner || "")
+            )
+        }
+    }, [newService])
+
+
+    async function saveChangesToServer() {
+        setAlert({
+            status: 0,
+            success: true,
+            closeAlert: false,
+            message: (
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "15px",
+                    width: "100%",
+                }}>
+                    <span>Saving changes made to <strong>{newService.name}</strong></span>
+                    <Loader loading={true} />
+                </div>
+            )
+        })
+        try {
+            const response = await axios.put(`${process.env.DUMMY_API_URL_DEV}/user/secure/service/update`, {
+                serviceDetails: {
+                    name: newService.name,
+                    description: newService.description,
+                    profileImage: newService.profileImage,
+                    allow_public_visibility: newService.allow_public_visibility,
+                    bannerImage: newService.bannerImage,
+                    id: newService.id
+                }
+            }, {
+                withCredentials: true
+            });
+            if (response.status === 200) {
+                setAlert({
+                    status: 200,
+                    message: "Changes saved successfully.",
+                    success: true,
+                    closeAlert: false,
+                })
+                setIsDirty(false);
+            } else {
+                setAlert({
+                    status: response.status,
+                    message: "Failed to save changes. Please try again.",
+                    success: false,
+                    closeAlert: false,
+                })
+            }
+        } catch (error) {
+            console.error("Error saving changes:", error);
+            setAlert({
+                status: 500,
+                message: "An error occurred while saving changes. Please try again.",
+                success: false,
+                closeAlert: false,
+            })
+        }
+    }
+
+    return (
+        <>
+            <Alert alert={alert} setAlert={setAlert} />
+            <SaveChanges onChange={() => {
+                saveChangesToServer();
+            }}
+                appear={isDirty}
+            />
+            <div className="manage__service__body">
+                <div className="service__management__header">
+                    <div className="service__management__dir">
+                        <a href="/services" className="service__management__dir__link">Services</a>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z" /></svg>                    <a href={`/services/manage/${service.id}`} className="service__management__dir__link">{service.name}</a>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z" /></svg>                    <span className="service__management__dir__current">Edit</span>
+                    </div>
+                    <div className="service__management__header__content">
+                        <h2 className="service__management__title">Edit Service</h2>
+                        <p className="service__management__subtitle">Update your service details and settings to keep your service information accurate and up-to-date.</p>
+                    </div>
+                </div>
+
+
+                <div className="services__creation__body user__body__section">
+                    <CreateServiceDescription serviceDescription={newService} setServiceDescription={setNewService} editMode={true} />
+                </div>
+
+            </div>
+        </>
+    );
+}
+
+export default ManageServiceEdition;

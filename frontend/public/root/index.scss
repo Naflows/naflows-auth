@@ -19,7 +19,6 @@ body {
   padding: 0;
   height: 100vh;
   width: 100% !important;
-
 }
 
 .global__nass__form {
@@ -47,8 +46,6 @@ body {
   height: fit-content;
 }
 
-
-
 .global__nass__disclaimer {
   padding: 20px;
   border: 1px solid $da-secondary-hue;
@@ -60,11 +57,9 @@ body {
   width: fit-content;
   width: calc(100% - 40px);
 
-
   &.max-width {
     max-width: 600px !important;
   }
-
 
   .global__disclaimer__header {
     display: flex;
@@ -570,7 +565,18 @@ button * {
   align-items: center;
   text-wrap: nowrap;
   border: 2px solid $_2k25-background-hue-50-transparent;
-
+  &.enhanced {
+    border-color: $da-secondary-hue-transparent !important;
+    color: $da-secondary-hue-lighter-2 !important;
+    &:hover {
+      background-color: $da-secondary-hue-transparent !important;
+      color: $da-secondary-hue-lighter-2 !important;
+      border-color: $da-secondary-hue !important;
+      svg * {
+        fill: $da-secondary-hue-lighter-2 !important;
+      }
+    }
+  }
   svg,
   svg * {
     width: 20px;
@@ -722,8 +728,6 @@ button * {
   font-size: 20px;
 }
 
-
-
 .checkbox-container {
   display: flex;
   flex-direction: row;
@@ -739,8 +743,6 @@ button * {
     min-height: 15px;
   }
 }
-
-
 
 a {
   color: $_2k25-text;

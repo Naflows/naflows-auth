@@ -4,6 +4,7 @@ import { getPublicServiceDetails } from "./methods/get-public-details";
 import { getService } from "./methods/get-service";
 import { registerService } from "./methods/register.service";
 import { createService } from "./methods/service-create.user";
+import { updateService } from "./methods/update-service";
 import checkServiceToken from "./services-token/secure-tokenization/check.token";
 import { generateServiceToken } from "./services-token/secure-tokenization/generate.token";
 import getAPIToken from "./services-token/secure-tokenization/get-api.token";
@@ -19,6 +20,7 @@ export const services = {
         get : getService,
         build : createService,
         generateID : generateApiID,
+        update: updateService,
         user: {
             register : registerUserInAPI,
             isIn : isUserInService

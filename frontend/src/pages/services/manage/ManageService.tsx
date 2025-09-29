@@ -11,10 +11,12 @@ import Loader from "../../../global/components/Loader";
 import fetchServiceData from "../../../scripts/account/fetch-individual-service";
 import type { AxiosError, AxiosResponse } from "axios";
 import type { ServicesForUserProps } from "../../../types/ServicesForUserProps";
-import ServiceDescription from "./sub-component/ServiceDescription";
-import ServiceCapacities from "./sub-component/ServiceCapacities";
-import SecurityMeasures from "./sub-component/SecurityMeasures";
 import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert";
+import ManageServiceOverview from "./pages/overview";
+import ManageServiceEdition from "./pages/edit";
+
+
+type tabs = "overview" | "capacities" | "security" | "edit" | "network" | "settings" | "users";
 
 const ManageService = () => {
   const [serviceID, setServiceID] = useState<string | null>(null);
@@ -27,9 +29,17 @@ const ManageService = () => {
     closeAlert: true,
   });
 
+  const [tab, setTab] = useState<tabs>("overview");
+
   useEffect(() => {
     const pathParts = window.location.pathname.split("/");
     const id = pathParts[3];
+    const tab = pathParts[4] as tabs;
+    if (tab && ["overview", "capacities", "security", "edit", "network", "settings", "users"].includes(tab)) {
+      setTab(tab);
+    } else {
+      setTab("overview");
+    }
     if (id) {
       setServiceID(id);
     }
@@ -83,45 +93,24 @@ const ManageService = () => {
         <Loader loading={user == null} />
       </div>
     );
-  } else {
+  } else if (tab === "overview") {
     return (
       <div className="user__body__manage-service nass__page">
         <AccountHeader
           selectedTab="services"
           userFetch={user ? user : undefined}
         />
-
-        <div className="manage__service__body">
-          <div
-            className="parent__of__section row__layout service__manage__content"
-            style={{
-              width: "100%"
-            }}
-          >
-            <div className="parent__of__section column__layout first__row" style={{
-              flex: 1.5,
-              height: "max-content",
-              justifyContent: "space-between",
-              alignSelf: "stretch",
-              minHeight: "100%"
-            }}>
-              <div className="parent__of__section row__layout" style={{
-                flex: 1,
-
-              }}>
-                <ServiceDescription service={service} />
-              </div>
-            </div>
-              <SecurityMeasures service={service} />
-
-            <div className=" second__management__content" style={{
-              maxWidth: "350px",
-            }}>
-
-              <ServiceCapacities service={service} />
-            </div>
-          </div>
-        </div>
+        <ManageServiceOverview service={service} />
+      </div>
+    );
+  } else if (tab === "edit") {
+    return (
+      <div className="user__body__manage-service nass__page">
+        <AccountHeader
+          selectedTab="services"
+          userFetch={user ? user : undefined}
+        />
+        <ManageServiceEdition service={service} />
       </div>
     );
   }

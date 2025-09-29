@@ -34,7 +34,7 @@ createRoot(document.getElementById("root")!).render(
         }
       />
       <Route
-        path="/services/manage/:id"
+        path="/services/manage/:id/:tab?"
         element={
           <>
             <ManageService />

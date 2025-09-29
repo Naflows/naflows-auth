@@ -154,6 +154,32 @@ app.get('/public/services/:id/infos/:userID', async (req: Request, res: Response
     res.status(f.status).json(f.data.data.service);
 });
 
+app.put('/user/secure/service/update', async (req: Request, res: Response) => {
+    const { sessionID, token, uid } = getCookies(req);
+    const serviceDetails = req.body.serviceDetails;
+
+    const f = await axios.put(`${process.env.AUTH_API_URL_DEV}/client/secure/services/update`, {
+        user: {
+            ip: req.ip,
+            agent: req.headers['user-agent'],
+            device_fingerprint: req.fingerprint,
+            session_id: sessionID || null,
+            token: token || null,
+            user_id: uid || null,
+        },
+        service: serviceDetails,
+        request: {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        },
+        client: service
+    });
+    sendCookies(res, f.data);
+    delete f.data.data.middleware;
+    res.status(f.status).json(f.data);
+});
 
 app.post('/user/secure/service/register', async (req: Request, res: Response) => {
     const { sessionID, token, uid } = getCookies(req);

@@ -8,119 +8,118 @@
 .services__creation__section {
   width: 50% !important;
   box-shadow: 0 0 100px $da-secondary-hue-transparent;
+}
+.services__creation__body {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 
-  .services__creation__body {
+  .nass__services__creation__footer {
     display: flex;
+    gap: 15px;
     flex-direction: column;
-    gap: 30px;
-
-    .nass__services__creation__footer {
+    justify-content: center;
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: fit-content;
+    padding: 20px 30px;
+    background-color: $_2k25-background-hue-darker-transparent;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 2px solid $_2k25-background-hue-darker;
+    z-index: 10;
+    .buttons-container {
       display: flex;
-      gap: 15px;
-      flex-direction: column;
+      flex-direction: row;
+      gap: 10px;
       justify-content: center;
-      position: fixed;
-      bottom: 20px;
-      left: 0;
-      right: 0;
-      margin: auto;
-      width: fit-content;
-      padding: 20px 30px;
-      background-color: $_2k25-background-hue-darker-transparent;
-      border-radius: 10px;
-      backdrop-filter: blur(10px);
-      border: 2px solid $_2k25-background-hue-darker;
-      z-index: 10;
-      .buttons-container {
-        display: flex;
-        flex-direction: row;
-        gap: 10px;
-        justify-content: center;
+    }
+  }
+}
+
+.services__creation__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .image__upload__container {
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &.banner {
+      width: 100% !important;
+      height: 150px;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
     }
 
-    .services__creation__form {
+    border: 2px solid $_2k25-background-hue-40;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+
+    .image__upload__placeholder {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: absolute;
 
-      .image__upload__container {
-        width: 200px;
-        height: 200px;
-        border-radius: 8px;
-        overflow: hidden;
-        position: relative;
-        cursor: pointer;
+      span {
+        text-align: center;
+        width: 75%;
+      }
 
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+      &.with-image {
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        backdrop-filter: blur(5px);
+        flex-direction: row;
+        font-size: 13px;
+        gap: 5px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        bottom: 5px;
+        left: 5px;
+        max-width: calc(100% - 30px);
+
+        svg {
+          width: 16px;
+          height: 16px;
         }
 
-        &.banner {
-          width: 100% !important;
-          height: 150px;
-          border-radius: 8px;
+        span {
+          width: auto;
+          max-width: calc(100% - 16px);
           overflow: hidden;
-          position: relative;
-          cursor: pointer;
-
-          img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-          }
-        }
-
-        border: 2px solid $_2k25-background-hue-40;
-        margin-top: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        gap: 10px;
-        position: relative;
-
-        .image__upload__placeholder {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-          position: absolute;
-
-          span {
-            text-align: center;
-            width: 75%;
-          }
-
-          &.with-image {
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            backdrop-filter: blur(5px);
-            flex-direction: row;
-            font-size: 13px;
-            gap: 5px;
-            padding: 5px 10px;
-            border-radius: 5px;
-            bottom: 5px;
-            left: 5px;
-            max-width: calc(100% - 30px);
-
-            svg {
-              width: 16px;
-              height: 16px;
-            }
-
-            span {
-              width: auto;
-              max-width: calc(100% - 16px);
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-            }
-          }
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       }
     }
