@@ -22,7 +22,6 @@ createRoot(document.getElementById("root")!).render(
         element={
           <>
             <Account />
-            <AppFooter />
           </>
         }
       />
@@ -31,7 +30,6 @@ createRoot(document.getElementById("root")!).render(
         element={
           <>
             <Account />
-            <AppFooter />
           </>
         }
       />
@@ -40,7 +38,6 @@ createRoot(document.getElementById("root")!).render(
         element={
           <>
             <ManageService />
-            <AppFooter />
           </>
         }
       />
@@ -57,7 +54,6 @@ createRoot(document.getElementById("root")!).render(
         path="/services/join/:id"
         element={<>
           <JoinPage />
-          <AppFooter />
         </>}
       />
 

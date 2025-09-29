@@ -1,5 +1,7 @@
 @import "../variables.scss";
 
+
+
 #root {
     position: relative;
     min-height: 100vh;
@@ -7,19 +9,18 @@
     display: flex;
     flex-direction: column;
     gap: 25vh;
-    
+    width: 100%;
 }
 
 .nass__app__footer {
-    width: calc(100% - 15%);
+    width: calc(100% - 100px );
     background-color: $_2k25-background-hue-darker;
-    padding: 50px 10% 50px 5%;
+    padding: 50px 50px 30px 50px;
     display: flex;
     flex-direction: row;
+    margin-left:auto;
     justify-content: space-between;
     align-items: center;
-    margin-top: auto;
-
     .nass__naflows__informations {
         display: flex;
         flex-direction: column;
@@ -71,7 +72,7 @@
 
 
 @media screen and (max-width: 1200px) {
-    .nass__app__footer {
+    .nass__header_width {
         flex-direction: column;
         gap: 30px;
         align-items: start;

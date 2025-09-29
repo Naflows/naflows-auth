@@ -2,13 +2,13 @@
 
 .user__body__manage-service {
   .manage__service__body {
-    width: 75%;
-    margin: auto;
     display: flex;
     flex-direction: column;
     align-items: start;
     gap: 20px;
     justify-content: start;
+    min-height: 100vh;
+    margin-bottom: 10%;
   }
 
   .service__description__section {
@@ -55,7 +55,6 @@
   }
 
   .user__body__section {
-    width: fit-content !important;
     margin: unset !important;
 
     .service__storage {

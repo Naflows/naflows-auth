@@ -20,17 +20,12 @@ body {
   height: 100vh;
   width: 100% !important;
 
-  #root {
-    width: 100%;
-    padding-top: 200px;
-  }
 }
 
 .global__nass__form {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: -100px;
 }
 
 .nass__page__loader {
@@ -52,9 +47,7 @@ body {
   height: fit-content;
 }
 
-.nass__page {
-  width: 100%;
-}
+
 
 .global__nass__disclaimer {
   padding: 20px;

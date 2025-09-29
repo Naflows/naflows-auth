@@ -5,6 +5,8 @@ import type { ServicesCompleteBodyProps } from "../../../types/ServicesCompleteP
 import ManageServiceConnection from "./ManageConnection";
 import fetchServiceData from "../../../scripts/account/fetch-individual-service";
 import ServiceDescription from "../../services/manage/sub-component/ServiceDescription";
+import CompactServiceDescription from "../../services/manage/sub-component/ServiceCompactDescription";
+import SearchService from "./core/services/SearchBar";
 
 const ServicesComponent = ({
   servicesData,
@@ -16,13 +18,30 @@ const ServicesComponent = ({
       service.rights.includes("ADMINISTRATOR") ||
       service.rights.includes("DEVELOPER")
   );
+  const [fetchedUserServices, setFetchedUserServices] = useState<ServicesBodyProps[]>(userServices);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [serviceID, setServiceID] = useState<string | null>(null);
+  const [serviceData, setServiceData] =
+    useState<ServicesCompleteBodyProps | null>(null);
+
+  const [servicesType, setServicesType] = useState<"services" | "connections">("services");
+
+  
+  useEffect(() => {
+    const filteredServices = userServices.filter((service) =>
+      service.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFetchedUserServices(filteredServices);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    setSearchQuery("");
+  }, [servicesType])
+
   const userConnections = servicesData.filter((service) =>
     service.rights.includes("USER")
   );
 
-  const [serviceID, setServiceID] = useState<string | null>(null);
-  const [serviceData, setServiceData] =
-    useState<ServicesCompleteBodyProps | null>(null);
 
   useEffect(() => {
     const pathParts = window.location.pathname.split("/");
@@ -56,11 +75,27 @@ const ServicesComponent = ({
   }, [serviceData])
 
   return (
-    <div className="user__body__services" style={{
-      flexDirection: userServices.length > 0 ? "row" : "column"
-    }}>
+    <div className="user__body__services">
+      <div className="user__body__services__header">
+        <div className="services__header__tabs">
+          <button
+            className={`services__header__tab ${servicesType === "services" ? "primary-button" : "secondary-button"}`}
+            onClick={() => setServicesType("services")}
+          >
+            Your Services ({userServices.length})
+          </button>
+          <button
+            className={`services__header__tab ${servicesType === "connections" ? "primary-button" : "secondary-button"}`}
+            onClick={() => setServicesType("connections")}
+          >
+            Your Connections ({userConnections.length})
+          </button>
+        </div>
+      </div>
       <ManageServiceConnection service={serviceData} setService={setServiceData} />
-      <div className="user__body__section">
+      <div className="user__body__section" style={{
+        display: servicesType === "services" ? "block" : "none",
+      }}>
         <div className="services__list">
           <div className="service__actions__field no-padding">
             <div className="service__actions__field__header">
@@ -88,12 +123,11 @@ const ServicesComponent = ({
               <span>New service</span>
             </button>
           </div>
-          <div className="services__list__content" style={{
-            display: userServices.length > 0 ? "flex" : "none"
-          }}>
-            {userServices.length > 0 ? (
-              userServices.map((service) => (
-                <ServiceDescription service={service} smallBody={true} userManagement={true} owned={true} />
+          <SearchService onSearch={setSearchQuery} />
+          <div className="services__list__content">
+            {fetchedUserServices.length > 0 ? (
+              fetchedUserServices.map((service) => (
+                <CompactServiceDescription key={service.id} service={service} owned={true} />
               ))
             ) : (
               <p>No services found.</p>
@@ -102,7 +136,9 @@ const ServicesComponent = ({
         </div>
       </div>
 
-      <div className="user__body__section">
+      <div className="user__body__section" style={{
+        display: servicesType === "connections" ? "block" : "none",
+      }}>
         <div className="services__list">
           <div className="service__actions__field no-padding">
             <div className="service__actions__field__header">
@@ -110,11 +146,12 @@ const ServicesComponent = ({
               <p>Services you're connected to</p>
             </div>
           </div>
+          <SearchService onSearch={setSearchQuery} />
           <div className="services__list__content">
-            {userConnections.length > 0 ? (
-              userConnections.map((service) => (
+            {fetchedUserServices.length > 0 ? (
+              fetchedUserServices.map((service) => (
                 <div key={service.id} className="service__item">
-                  <ServiceDescription service={service} smallBody={true} userManagement={true} owned={false} />
+                  <CompactServiceDescription service={service} owned={false} />
                 </div>
               ))
             ) : (

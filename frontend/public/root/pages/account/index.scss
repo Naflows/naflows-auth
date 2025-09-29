@@ -5,20 +5,15 @@ body {
 }
 
 :root {
-  --nass-page-width: 100%;
+  --nass-page-width: calc(100% - $nass__header_width - 20px);
   --header-height: 50px;
-}
-
-.nass__page {
-  width: var(--nass-page-width) !important;
-  display: flex;
 }
 
 .user__body__section:not(.service__description__section) {
   background-color: $_2k25-background-hue-darker;
   padding: 20px 30px;
   border-radius: 20px;
-  width: calc(75% - 60px) !important;
+  width: calc(100% - 60px) !important;
   margin: auto;
   gap: 20px;
   display: flex;
@@ -45,124 +40,162 @@ body {
   gap: 20px;
   width: fit-content;
   justify-content: start;
-  width: 75%;
   margin: auto;
+  display: flex;
+  width: calc(100% - #{$nass__header_width + 100px}) !important;
+  padding-left: $nass__header_width + 20px;
+  padding-top: 20px;
+  min-height: 100vh;
+  height: fit-content !important;
 }
+.nass__account__page {
+  width: 100% !important;
+}
+.nass__account__page__header {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: $_2k25-background-hue-darker;
 
-  .nass__account__page__header {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 30px;
-    background-color: $_2k25-background-hue-darker;
-    width: calc(100% - 60px);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    z-index: 10;
-    transition: 0.3s;
-    border: 2px solid transparent;
-    height: fit-content;
+  width: calc($nass__header-width - 20px) !important;
+  height: calc(100% - 20px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: auto;
+  z-index: 10;
+  transition: 0.3s;
+  border: 2px solid transparent;
 
-    &.scrolled {
-      top: 10px;
-      width: calc(75% - 200px);
-      background-color: $_2k25-background-hue-darker-transparent;
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-
-      .header__tabs {
-        .tabs {
-          user-select: none;
-
-          .header__tab {
-            &.active {
-              background-color: $_2k25-background-hue-50-transparent;
-            }
-
-            &:not(.active):hover {
-              background-color: $_2k25-background-hue-50-transparent;
-            }
-          }
-        }
-      }
-
-      .user__header__visual__access {
-        border-color: transparent !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        &:hover {
-          background-color: $_2k25-background-hue-50-transparent !important;
-        }
-      }
-    }
+  &.collapsed {
+    width: 60px !important;
+    border: 2px solid $_2k25-background-hue-50-transparent;
+    padding: 10px;
+    gap: 15px !important;
 
     .header__tabs {
-      display: flex;
-      flex-direction: row;
-      gap: 50px;
-      align-items: center;
-
-      img {
-        height: 50px;
-        width: auto;
-      }
-
       .tabs {
-        display: flex;
-        flex-direction: row;
-        gap: 20px;
-        align-items: center;
-
         .header__tab {
-          cursor: pointer;
-          padding: 5px 10px;
-          border-radius: 10px;
-          transition: 0.3s;
-          font-size: 20px;
-          height: fit-content;
-          text-align: center;
-          text-decoration: none;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          gap: 10px;
-          border: 2px solid transparent;
-
-          .icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 20px;
-            height: 20px;
-            transition: 0.3s;
-
-            svg * {
-              transition: 0.3s;
-
-              fill: $Color !important;
-            }
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          svg:not(.tab__content svg) {
+            display: none !important;
           }
-
-          &.active,
-          &:hover {
-            background-color: $_2k25-background-hue-50-transparent;
+          .tab__content {
+            display: flex;
+            gap: 0 !important;
+            align-items: center !important;
+            justify-content: center !important;
+          }
+          .tab-label {
+            display: none;
           }
         }
       }
     }
 
     .header__account {
+      flex-direction: column-reverse !important;
+      .secondary-button {
+        width: calc(100%) !important;
+        height: fit-content !important;
+      }
+      .user__header__visual__access {
+        align-self: unset;
+        height: fit-content !important;
+        padding: 5px 10px !important;
+        width: fit-content !important;
+        width: calc(100% - 20px - 4px) !important;
+        justify-content: center !important;
+        .user__header__informations {
+          display: none;
+        }
+      }
+    }
+
+    .legal {
+      display: none;
+    }
+  }
+
+  .header__tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    align-items: center;
+    width: 100%;
+    img {
+      height: 50px;
+      width: auto;
+    }
+
+    .tabs {
       display: flex;
       flex-direction: column;
+      gap: 5px;
+      align-items: center;
+      width: 100%;
+      .header__tab {
+        align-items: start !important;
+        justify-content: space-between;
+        width: calc(100% - 30px) !important;
+        .tab__content {
+          width: fit-content;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 10px;
+          justify-content: start;
+        }
+      }
+    }
+  }
+  .header__footer__content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .legal {
+      font-size: 10px;
+      opacity: 0.5;
+      text-align: start;
+
+      p {
+        margin: 0;
+        padding: 0;
+      }
+      .footer__links {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        justify-content: start;
+        p {
+          white-space: nowrap;
+        }
+        a {
+          text-decoration: none;
+          color: $_2k25-text;
+          white-space: nowrap;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+    .header__account {
+      display: flex;
+      flex-direction: row;
       gap: 10px;
-      overflow: hidden;
+      align-items: center;
+      width: 100%;
+
+      button {
+        height: calc(100% - 2px) !important;
+      }
 
       .user__header__visual__access {
         display: flex;
@@ -176,6 +209,10 @@ body {
         border: 2px solid $_2k25-background-hue;
         border-radius: 15px;
 
+        align-self: stretch;
+        overflow: hidden;
+        width: calc(100% - 20px - 4px) !important;
+
         &:hover {
           background-color: $_2k25-background-hue;
         }
@@ -185,6 +222,9 @@ body {
           margin: 0;
           padding: 0;
           white-space: nowrap;
+          width: 100%;
+          text-overflow: ellipsis;
+          overflow: hidden;
         }
 
         .username {
@@ -209,71 +249,5 @@ body {
         }
       }
     }
-  }
-
-@media (max-width: 1200px) {
-  .nass__page {
-    width: calc(100% - 20px) !important;
-  }
-  .nass__account__page__header {
-    gap: 15px !important;
-    left: 0 !important;
-    padding: 10px 20px !important;
-    width: calc(100% - 40px) !important;
-    position: relative;
-
-    &.scrolled {
-      left: 0 !important;
-      right: 0 !important;
-      width: calc(90% - 40px) !important;
-    }
-
-    height: fit-content !important;
-
-    .header__account {
-      position: relative;
-      flex-direction: row !important;
-      justify-content: end !important;
-      align-items: center !important;
-      width: fit-content !important;
-      overflow: visible !important;
-
-      .user__header__visual__access {
-        width: fit-content !important;
-        padding: 5px 10px !important;
-      }
-
-      .user__header__informations {
-      }
-    }
-
-    .header__tabs {
-      width: 100%;
-      gap: 10px !important;
-
-      img {
-        display: none;
-      }
-
-      .tabs {
-        left: 0;
-        right: 0;
-        gap: 5px !important;
-        width: 100% !important;
-        flex-wrap: wrap;
-        justify-content: start !important;
-        align-items: start !important;
-
-        .header__tab {
-          font-size: 16px !important;
-          text-align: center;
-          width: fit-content !important;
-        }
-      }
-    }
-  }
-
-  .user__body__section {
-    width: calc(100% - 60px) !important;
   }
 }

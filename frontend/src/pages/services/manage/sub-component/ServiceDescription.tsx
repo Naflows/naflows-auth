@@ -5,9 +5,6 @@ import type { ServicesBodyProps } from "../../../../types/ServicesBodyProps";
 const ServiceDescription = ({
   service,
   publicDisplay = false,
-  smallBody = false,
-  userManagement = false,
-  owned = false
 }: {
   service: ServicesForUserProps | ServicesBodyProps | null;
   publicDisplay?: boolean;
@@ -79,7 +76,7 @@ const ServiceDescription = ({
               </div>
             </div>
             <div className="buttons-container" style={{
-              display: publicDisplay || smallBody ? "none" : "flex",
+              display: publicDisplay ? "none" : "flex",
             }}>
               <button className="secondary-button" onClick={() => {
                 window.open(`/services/join/${service.id}`, '_blank')?.focus();
@@ -97,7 +94,7 @@ const ServiceDescription = ({
             <div className="buttons-container" style={{
               flexDirection: "column",
               gap: "5px",
-              display: !publicDisplay || smallBody ? "none" : "flex",
+              display: !publicDisplay ? "none" : "flex",
             }}>
               <button className="primary-button width-100-auto" onClick={() => {
                 window.open(service?.public?.contact_email || "https://www.naflows.com/support", "_blank");
@@ -113,33 +110,6 @@ const ServiceDescription = ({
                 window.open(service?.public?.terms_of_service_url || "https://www.naflows.com/support", "_blank");
               }}>
                 <span>Terms of Service</span>
-              </button>
-            </div>
-
-
-            <div className="buttons-container" style={{
-              display: userManagement && owned ? "flex" : "none",
-            }}>
-              <button className="primary-button" onClick={() => {
-                window.location.href = `/services/manage/${service.id}`;
-              }}>Manage service</button>
-            </div>
-
-            <div className="buttons-container" style={{
-              display: userManagement && !owned ? "flex" : "none",
-            }}>
-              <button
-                className="primary-button"
-                onClick={() => {
-                  window.location.href = `/account/services/${service.id}`;
-                }}
-              >
-                Manage connection
-              </button>
-              <button className="secondary-button" style={{
-                display: service.user_active ? "block" : "none"
-              }}>
-                Quick disconnect
               </button>
             </div>
 

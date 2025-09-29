@@ -9,7 +9,6 @@
   max-width: 400px !important;
   min-width: 400px !important;
 
-
   .buttons-container {
     padding: 0 15px 0 15px;
     display: flex;
@@ -23,15 +22,12 @@
     width: calc(100% - 4px) !important;
     border-radius: 10px;
     background-color: $_2k25-background-hue-darker;
-    border-radius: 10px;
     border: 2px solid $_2k25-background-hue-50-transparent;
     display: flex;
     flex-direction: column;
     gap: 15px;
     overflow: hidden;
     padding-bottom: 15px;
-
-
 
     .service__banner {
       width: auto;
@@ -142,56 +138,6 @@
           object-fit: cover;
         }
       }
-      .service__description__name {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-        .service__description__details {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          column-gap: 10px;
-          row-gap: 5px;
-          flex-wrap: wrap;
-          span {
-            width: fit-content;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 5px;
-            svg {
-              height: 16px;
-              width: 16px;
-              fill: $da-secondary-hue-lighter-2;
-              opacity: 0.7;
-            }
-          }
-        }
-        h2 {
-          margin: 0;
-          padding: 0;
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          .service__name {
-            font-size: 24px;
-            font-weight: 600;
-            display: inline;
-            word-break: break-word;
-          }
-          .service__creation {
-            font-size: 13px;
-            opacity: 0.7;
-            display: inline;
-            font-weight: normal;
-          }
-        }
-        a {
-          padding: 0;
-          font-weight: normal;
-        }
-      }
     }
     .service__informations {
       display: flex;
@@ -202,6 +148,36 @@
         opacity: 0.8;
       }
     }
+  }
+}
+
+.service__description__name {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  h2 {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    .service__name {
+      font-size: 24px;
+      font-weight: 600;
+      display: inline;
+      word-break: break-word;
+    }
+    .service__creation {
+      font-size: 13px;
+      opacity: 0.7;
+      display: inline;
+      font-weight: normal;
+    }
+  }
+  a {
+    padding: 0;
+    font-weight: normal;
   }
 }
 
@@ -276,6 +252,28 @@
           color: $da-error-hue;
         }
       }
+    }
+  }
+}
+
+.service__description__details {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 5px;
+  flex-wrap: wrap;
+  span {
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    svg {
+      height: 16px;
+      width: 16px;
+      fill: $da-secondary-hue-lighter-2;
+      opacity: 0.7;
     }
   }
 }
