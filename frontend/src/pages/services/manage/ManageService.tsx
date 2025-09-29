@@ -14,9 +14,10 @@ import type { ServicesForUserProps } from "../../../types/ServicesForUserProps";
 import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert";
 import ManageServiceOverview from "./pages/overview";
 import ManageServiceEdition from "./pages/edit";
+import AccountDir from "./sub-component/ServiceDir";
 
 
-type tabs = "overview" | "capacities" | "security" | "edit" | "network" | "settings" | "users";
+export type accountTabs = "overview" | "capacities" | "security" | "edit" | "network" | "settings" | "users";
 
 const ManageService = () => {
   const [serviceID, setServiceID] = useState<string | null>(null);
@@ -29,12 +30,12 @@ const ManageService = () => {
     closeAlert: true,
   });
 
-  const [tab, setTab] = useState<tabs>("overview");
+  const [tab, setTab] = useState<accountTabs>("overview");
 
   useEffect(() => {
     const pathParts = window.location.pathname.split("/");
     const id = pathParts[3];
-    const tab = pathParts[4] as tabs;
+    const tab = pathParts[4] as accountTabs;
     if (tab && ["overview", "capacities", "security", "edit", "network", "settings", "users"].includes(tab)) {
       setTab(tab);
     } else {
@@ -100,6 +101,7 @@ const ManageService = () => {
           selectedTab="services"
           userFetch={user ? user : undefined}
         />
+        <AccountDir service={service} tab={tab} title="Service Overview" description="View and manage your service details, performance metrics, and recent activity." />
         <ManageServiceOverview service={service} />
       </div>
     );
@@ -110,6 +112,7 @@ const ManageService = () => {
           selectedTab="services"
           userFetch={user ? user : undefined}
         />
+        <AccountDir service={service} tab={tab} title="Edit Service" description="Update your service details and settings to keep your service information accurate and up-to-date." />
         <ManageServiceEdition service={service} />
       </div>
     );
