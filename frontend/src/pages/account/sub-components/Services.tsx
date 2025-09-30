@@ -3,7 +3,7 @@ import "../../../../public/root/pages/account/sub-components/AccountServicesBody
 import { useEffect, useState } from "react";
 import type { ServicesCompleteBodyProps } from "../../../types/ServicesCompleteProps";
 import ManageServiceConnection from "./ManageConnection";
-import fetchServiceData from "../../../scripts/account/fetch-individual-service";
+import fetchPublicServiceData from "../../../root/scripts/fetch/services/public-data";
 import ServiceDescription from "../../services/manage/sub-component/ServiceDescription";
 import CompactServiceDescription from "../../services/manage/sub-component/ServiceCompactDescription";
 import SearchService from "./core/services/SearchBar";
@@ -49,7 +49,7 @@ const ServicesComponent = ({
     if (id) {
       console.log("Found service ID in URL:", id);
       setServiceID(id);
-      fetchServiceData(id, setServiceData as (data: object) => void);
+      fetchPublicServiceData(id, setServiceData as (data: object) => void);
     }
   }, []);
 
@@ -57,7 +57,7 @@ const ServicesComponent = ({
   useEffect(() => {
     if (serviceID != null) {
       console.log("Fetching data for service ID:", serviceID);
-      fetchServiceData(serviceID, setServiceData as (data: object) => void);
+      fetchPublicServiceData(serviceID, setServiceData as (data: object) => void);
     }
   }, [serviceID]);
 

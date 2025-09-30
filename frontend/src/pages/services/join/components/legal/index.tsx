@@ -1,5 +1,5 @@
-import Switch from "../../../../global/components/Switch";
-import type { ServicesBodyProps } from "../../../../types/ServicesBodyProps";
+import Switch from "../../../../../global/components/Switch";
+import type { ServicesBodyProps } from "../../../../../types/ServicesBodyProps";
 
 
 const TermsAndRequirements = ({

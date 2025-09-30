@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import fetchData from "../../../scripts/account/get-user-info";
+import fetchData from "../../../root/scripts/fetch/informations";
 import type { AxiosResponse } from "axios";
 import type { UserBodyProps } from "../../../types/UserBodyProps";
 import Loader from "../../../global/components/Loader";

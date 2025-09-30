@@ -1,11 +1,11 @@
 import type { ServicesForUserProps } from "../../../../types/ServicesForUserProps"
-import type { accountTabs } from "../ManageService"
+import type { AccountTabs } from "./types/account-tab.type";
 
 
 
 const AccountDir = ({ service, tab, title, description  } : {
     service : ServicesForUserProps,
-    tab : accountTabs,
+    tab : AccountTabs,
     title : string,
     description : string
 }) => {

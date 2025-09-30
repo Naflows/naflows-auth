@@ -1,6 +1,6 @@
 import type { AxiosError } from "axios";
 import axios from "axios";
-import type { AlertContentProps } from "../../../../../global/error-alert/Alert";
+import type { AlertContentProps } from "../../../../global/error-alert/Alert";
 
 
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import fetchData from "../../../scripts/account/get-user-info";
+import fetchData from "../../../root/scripts/fetch/informations";
 import AccountHeader from "../../account/account-header/AccountHeader";
 import type { UserBodyProps } from "../../../types/UserBodyProps";
 import "../../../../public/root/index.scss";
@@ -8,16 +8,16 @@ import "../../../../public/root/pages/account/sub-components/AccountServicesBody
 import "../../../../public/root/pages/services/manage/index.scss";
 import "../../../../public/root/pages/account/index.scss";
 import Loader from "../../../global/components/Loader";
-import fetchServiceData from "../../../scripts/account/fetch-individual-service";
+import fetchPublicServiceData from "../../../root/scripts/fetch/services/public-data";
 import type { AxiosError, AxiosResponse } from "axios";
 import type { ServicesForUserProps } from "../../../types/ServicesForUserProps";
 import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert";
 import ManageServiceOverview from "./pages/overview";
 import ManageServiceEdition from "./pages/edit";
-import AccountDir from "./sub-component/ServiceDir";
+import AccountDir from "../components/service-directory";
+import type { AccountTabs } from "../components/service-directory/types/account-tab.type";
 
 
-export type accountTabs = "overview" | "capacities" | "security" | "edit" | "network" | "settings" | "users";
 
 const ManageService = () => {
   const [serviceID, setServiceID] = useState<string | null>(null);
@@ -30,12 +30,12 @@ const ManageService = () => {
     closeAlert: true,
   });
 
-  const [tab, setTab] = useState<accountTabs>("overview");
+  const [tab, setTab] = useState<AccountTabs>("overview");
 
   useEffect(() => {
     const pathParts = window.location.pathname.split("/");
     const id = pathParts[3];
-    const tab = pathParts[4] as accountTabs;
+    const tab = pathParts[4] as AccountTabs;
     if (tab && ["overview", "capacities", "security", "edit", "network", "settings", "users"].includes(tab)) {
       setTab(tab);
     } else {
@@ -52,7 +52,7 @@ const ManageService = () => {
       (async () => {
         try {
           const res = (await fetchData("user")) as AxiosResponse;
-          await fetchServiceData(
+          await fetchPublicServiceData(
             serviceID,
             setService as (data: object) => void
           );

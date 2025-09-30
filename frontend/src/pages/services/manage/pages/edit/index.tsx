@@ -5,6 +5,7 @@ import SaveChanges from "../components/save";
 import Alert, { type AlertContentProps } from "../../../../../global/error-alert/Alert";
 import axios from "axios";
 import Loader from "../../../../../global/components/Loader";
+import GlobalLoader from "../../../../../root/components/global-loader";
 
 
 const ManageServiceEdition = ({
@@ -49,15 +50,9 @@ const ManageServiceEdition = ({
             success: true,
             closeAlert: false,
             message: (
-                <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "15px",
-                    width: "100%",
-                }}>
-                    <span>Saving changes made to <strong>{newService.name}</strong></span>
-                    <Loader loading={true} />
-                </div>
+                <GlobalLoader loading={true} content={
+                    <>Saving changes made to <strong>{newService.name}</strong></>
+                } />
             )
         })
         try {

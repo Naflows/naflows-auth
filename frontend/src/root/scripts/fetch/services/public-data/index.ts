@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const fetchServiceData = async (id: string, setServiceData: (data : object) => void) : Promise<number | void> => {
+const fetchPublicServiceData = async (id: string, setServiceData: (data : object) => void) : Promise<number | void> => {
     try {
         const res = await axios.get(
             `${process.env.DUMMY_API_URL_DEV}/get-user-info/services/${id}/service-informations`,
@@ -23,4 +23,4 @@ const fetchServiceData = async (id: string, setServiceData: (data : object) => v
     }
 };
 
-export default fetchServiceData;
+export default fetchPublicServiceData;

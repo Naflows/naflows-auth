@@ -9,7 +9,7 @@ import "../../../public/root/pages/account/index.scss";
 import type { ServicesBodyProps } from "../../types/ServicesBodyProps";
 import AccountHeader from "./account-header/AccountHeader";
 import ServicesComponent from "./sub-components/Services";
-import fetchData from "../../scripts/account/get-user-info";
+import fetchData from "../../root/scripts/fetch/informations";
 
 const Account = () => {
   const [userFetch, setUserFetch] = useState<UserBodyProps | undefined>(
