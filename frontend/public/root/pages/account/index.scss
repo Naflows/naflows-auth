@@ -12,7 +12,7 @@ body {
 .user__body__section:not(.service__description__section) {
   background-color: $_2k25-background-hue-darker;
   padding: 20px 30px;
-  border-radius: 20px;
+  border-radius: 10px;
   width: calc(100% - 60px) !important;
   margin: auto;
   gap: 20px;

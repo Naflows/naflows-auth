@@ -15,6 +15,7 @@ const ServiceDescription = ({
   console.log("Rendering ServiceDescription with service:", service);
   if (service) {
     return (
+  
       <div className="user__body__section service__description__section">
         <div className="service__description">
           <div className="services__section__content description__content">

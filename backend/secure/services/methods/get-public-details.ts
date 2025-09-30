@@ -19,7 +19,6 @@ export async function getPublicServiceDetails(id: string, userId: string | null)
     delete service.plan;
     delete service.settings;
     delete service.service_token;
-    delete service.public_settings.allow_public_visibility;
     delete service.public_settings.allow_user_registration;
     delete service.public_settings.allow_service_connection;
 

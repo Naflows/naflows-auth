@@ -2,12 +2,16 @@
 
 .nass__connect__service {
   margin: auto;
-  width: 60%;
-  min-height: 80vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: center;
+
+  justify-content: center;
+  margin-left: 0;
+  width: 60%;
+  margin: auto;
 
   .user__profile__picture {
     width: 50px;
@@ -16,12 +20,24 @@
     object-fit: cover;
   }
 
+  &.user-not-connected {
+    justify-content: center;
+    margin-left: 0;
+    width: 60%;
+    margin: auto;
+  }
 
   &.user-connected-already-registered {
     flex-direction: row;
-    align-items: start;
     justify-content: center;
-    max-height: max-content;
+    width: calc(100% - $nass__header-width - 40px);
+    margin-left: calc($nass__header-width + 40px);
+    .registration__done__content {
+      max-width: calc(40% - 40px - 4px);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
     .disclaimer__content {
       padding: 20px;
       background-color: $_2k25-background-hue-darker;
@@ -29,7 +45,7 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      max-width: calc(40% - 40px - 4px);
+      max-width: calc(100% - 40px - 4px);
       .disclaimer__content__header {
         display: flex;
         flex-direction: row;
@@ -213,14 +229,8 @@
   }
 }
 
-
-
 @media screen and (max-width: 1400px) {
-  .nass__connect__service  {
+  .nass__connect__service {
     width: 90%;
   }
-
 }
-
-
-

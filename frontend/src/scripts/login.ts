@@ -45,8 +45,10 @@ export async function manageLogin(
                     "Something went wrong when logging in. The server encountered an issue. If the issue persists, please contact support.",
                 success: response.data.success,
                 closeAlert: false,
-                title: "Server Unreachable",
-                displayCode: true,
+                title: response.status === 202 ? "Action Required" : "Login Failed",
+                displayCode: response.status !== 202,
+                displaySuccess: response.status !== 200
+
             });
         } else {
             window.location.href = redirectOnSuccess;
@@ -54,7 +56,7 @@ export async function manageLogin(
     } catch (error: unknown) {
         console.error(error);
         const data = (error as AxiosError).response?.data as {
-            error : {
+            error: {
                 status: number;
                 message: string;
             }
@@ -68,6 +70,7 @@ export async function manageLogin(
             closeAlert: false,
             title: "Server Unreachable",
             displayCode: true,
+            displaySuccess: true
         });
     } finally {
         setLoading(false);

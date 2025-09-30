@@ -38,7 +38,8 @@
     flex-direction: column;
     width: 100%;
 
-    h2, p {
+    h2,
+    p {
       margin: 0;
       padding: 0;
     }
@@ -190,6 +191,17 @@
   }
 }
 
+@keyframes NewServicesButtonAppears {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
 .service__actions__field {
   display: flex;
   flex-direction: column;
@@ -205,6 +217,9 @@
     padding: 0;
   }
   height: fit-content !important;
+  .primary-button {
+    animation: NewServicesButtonAppears 0.3s ease forwards;
+  }
   .service__actions__buttons {
     display: flex;
     flex-direction: row;
@@ -242,12 +257,14 @@
     }
   }
 }
+
 .service__actions__field__header {
   display: flex;
   flex-direction: column;
   gap: 5px;
   align-items: start;
   user-select: none;
+
   .service__actions__field__title {
     display: flex;
     flex-direction: row;

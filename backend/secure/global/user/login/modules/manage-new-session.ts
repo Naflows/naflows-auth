@@ -92,7 +92,9 @@ export async function manageNewSession(
         const k = await secure.session.get(session.id, false);
         console.log("Session to confirm:", k);
 
-        return software.methods.serverReply(401, "An email has been sent with the confirmation code. You will be redirected to the confirmation page in a few moments.", {
+        const emailParts = _user.email.split("@");
+        const truncatedEmail = emailParts[0].slice(0, 2) + "****@" + emailParts[1];
+        return software.methods.serverReply(202, `An email has been sent to ${truncatedEmail} with the confirmation code.`, {
             session: session.id,
             token: token.token
         });

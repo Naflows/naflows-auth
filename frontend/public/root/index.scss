@@ -286,7 +286,7 @@ body {
 
     &.nass_switch__container--checked {
       .nass_switch__toggle {
-        transform: translateX(calc(-100% - 5px));
+        transform: translateX(calc(-100% - 10px));
         background-color: $da-secondary-hue;
       }
     }
@@ -330,6 +330,14 @@ body {
   flex-direction: column;
   gap: 10px;
   width: 100%;
+
+  .images__upload {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  
 
   &.form__parts__separated {
     gap: 50px;
@@ -399,6 +407,7 @@ body {
   border-radius: 20px;
   align-items: start;
   height: fit-content;
+  margin-top: 100px;
 
   .logo {
     margin-right: auto !important;

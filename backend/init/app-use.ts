@@ -14,7 +14,7 @@ export function useApp(app) {
     app.use(async (req, res, next) => {
         req.middleware = { data: {} } as any;
         console.log("\x1b[33m%s\x1b[0m", `Request received: ${req.method} ${req.path} with body: ${JSON.stringify(req.body)}`);
-        if (req.body.client.ip == undefined) {
+        if (req.body && req.body.client) {
             req.body.client.ip = req.ip;
         }
 
@@ -45,8 +45,9 @@ export function useApp(app) {
 
                 console.log('\x1b[32m%s\x1b[0m', `Public route accessed: ${req.path}`);
             }
-
             next();
+
+
         } else {
             middleware.main(req, res, next);
         }

@@ -5,9 +5,22 @@
   justify-content: center;
 }
 
+@keyframes ServiceCreationComponentAppears {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
+  
+}
+
 .services__creation__section {
-  width: 50% !important;
-  box-shadow: 0 0 100px $da-secondary-hue-transparent;
+  max-width: 75% !important;
+  width: 100% !important;  
+  animation: ServiceCreationComponentAppears 0.5s ease-in-out;
 }
 .services__creation__body {
   display: flex;
@@ -29,8 +42,9 @@
     background-color: $_2k25-background-hue-darker-transparent;
     border-radius: 10px;
     backdrop-filter: blur(10px);
-    border: 2px solid $_2k25-background-hue-darker;
+    border: 2px solid $_2k25-background-hue-50-transparent;
     z-index: 10;
+    left: $nass__header-width;
     .buttons-container {
       display: flex;
       flex-direction: row;
@@ -46,8 +60,12 @@
   gap: 20px;
 
   .image__upload__container {
-    width: 200px;
-    height: 200px;
+    min-width: 150px;
+    min-height: 150px;
+    width: 150px;
+    height: 150px;
+    max-width: 150px;
+    max-height: 150px;
     border-radius: 8px;
     overflow: hidden;
     position: relative;
@@ -61,6 +79,7 @@
 
     &.banner {
       width: 100% !important;
+      max-width: 700px;
       height: 150px;
       border-radius: 8px;
       overflow: hidden;

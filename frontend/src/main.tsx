@@ -46,7 +46,6 @@ createRoot(document.getElementById("root")!).render(
         element={
           <>
             <CreateService />
-            <AppFooter />
           </>
         }
       />

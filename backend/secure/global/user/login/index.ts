@@ -53,7 +53,10 @@ export default async function logUserIn(req: Request, res: Response) : Promise<R
                 const r: ReplyType = await acceptLogin(_user, associatedSession);
                 return r;
             } else {
-                return software.methods.serverReply(401, "Login failed - session is not active");
+                // Delete the inactive session
+                await db.collection("sessions").deleteOne({ id: associatedSession.id });
+                console.log("Deleted inactive session:", associatedSession.id);
+                return software.methods.serverReply(401, "Login failed, the session associated with this login request is no longer active. Please initiate a new login request.");
             }
         } else {
             const r: ReplyType = await manageNewSession(_user, user, client);

@@ -61,7 +61,12 @@ const CreateServiceDescription = ({
             </div>
 
             <div className="form">
-                <div className="banner__container">
+                <div className="inputs-container images__upload">
+                    <ImageUpload
+                        serviceDescription={serviceDescription}
+                        setServiceDescription={setServiceDescription}
+                        isBanner={false}
+                    />
                     <ImageUpload
                         serviceDescription={serviceDescription}
                         setServiceDescription={setServiceDescription}
@@ -79,11 +84,6 @@ const CreateServiceDescription = ({
                         alignItems: "start",
                         gap: "50px"
                     }}>
-                        <ImageUpload
-                            serviceDescription={serviceDescription}
-                            setServiceDescription={setServiceDescription}
-                            isBanner={false}
-                        />
                         <div className="inputs-container">
                             <div className="global__input__container two-columns">
                                 <Input
