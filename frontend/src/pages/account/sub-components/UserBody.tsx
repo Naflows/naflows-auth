@@ -3,7 +3,7 @@ import "../../../../public/root/pages/account/sub-components/AccountUserBody.scs
 import AccountDetails from "./AccountDetails";
 import UserPersonalInformations from "./UserPersonalInformations";
 import { useEffect, useState } from "react";
-import SaveChanges from "../../services/manage/pages/components/save";
+import SaveChanges from "../../../root/components/save";
 import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert";
 import axios from "axios";
 import Loader from "../../../global/components/Loader";

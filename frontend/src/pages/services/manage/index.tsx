@@ -1,28 +1,25 @@
 import { useEffect, useState } from "react";
-import fetchData from "../../../root/scripts/fetch/informations";
 import AccountHeader from "../../account/account-header/AccountHeader";
-import type { UserBodyProps } from "../../../types/UserBodyProps";
 import "../../../../public/root/index.scss";
 import "../../../../public/root/pages/account/sub-components/AccountUserBody.scss";
 import "../../../../public/root/pages/account/sub-components/AccountServicesBody.scss";
 import "../../../../public/root/pages/services/manage/index.scss";
 import "../../../../public/root/pages/account/index.scss";
-import Loader from "../../../global/components/Loader";
-import fetchPublicServiceData from "../../../root/scripts/fetch/services/public-data";
-import type { AxiosError, AxiosResponse } from "axios";
 import type { ServicesForUserProps } from "../../../types/ServicesForUserProps";
 import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert";
-import ManageServiceOverview from "./pages/overview";
-import ManageServiceEdition from "./pages/edit";
+import ManageServiceOverview from "./tabs/overview";
+import ManageServiceEdition from "./tabs/edit";
 import AccountDir from "../components/service-directory";
 import type { AccountTabs } from "../components/service-directory/types/account-tab.type";
+import { FetchUserData } from "../../../root/scripts/fetch/user";
+import fetchPublicServiceData from "../../../root/scripts/fetch/services/public-data";
+import type { UserBodyProps } from "../../../types/UserBodyProps";
+import GlobalLoader from "../../../root/components/global-loader";
 
 
 
 const ManageService = () => {
-  const [serviceID, setServiceID] = useState<string | null>(null);
   const [service, setService] = useState<ServicesForUserProps | null>(null);
-  const [user, setUser] = useState<UserBodyProps | null>(null);
   const [displayAlert, setDisplayAlert] = useState<AlertContentProps>({
     status: 0,
     message: "",
@@ -31,6 +28,8 @@ const ManageService = () => {
   });
 
   const [tab, setTab] = useState<AccountTabs>("overview");
+
+  const user : UserBodyProps | null = FetchUserData(setDisplayAlert);
 
   useEffect(() => {
     const pathParts = window.location.pathname.split("/");
@@ -41,29 +40,12 @@ const ManageService = () => {
     } else {
       setTab("overview");
     }
-    if (id) {
-      setServiceID(id);
-    }
-  }, []);
+    if (id != null) {
+      fetchPublicServiceData(id, setService);
 
-  useEffect(() => {
-    // Fetch user data from the backend
-    if (serviceID != null && service == null) {
-      (async () => {
-        try {
-          const res = (await fetchData("user")) as AxiosResponse;
-          await fetchPublicServiceData(
-            serviceID,
-            setService as (data: object) => void
-          );
-          if (res.data == null) {
-            throw new Error("Failed to fetch user data");
-          }
-          setUser(res.data.data.user as UserBodyProps);
-        } catch (error) {
-          console.log("Service data fetch returned status:", (error as AxiosError)?.response?.status);
+      if (!service) {
           setDisplayAlert({
-            status: (error as AxiosError)?.response?.status || 500,
+            status: 500,
             message: "Failed to fetch service data. Please try again. Make sure you have access to this service, or that it exists.",
             success: false,
             closeAlert: false,
@@ -71,10 +53,11 @@ const ManageService = () => {
             displayCode: true,
             customClose: { text: "Go to Services", action: () => { window.location.href = "/account/services"; } }
           });
-        }
-      })();
+      }
     }
-  }, [serviceID, service]);
+  }, []);
+
+
 
 
 
@@ -84,15 +67,7 @@ const ManageService = () => {
 
   if (!user || !service) {
     return (
-      <div
-        className="nass__page__loader"
-        style={{
-          display: user == null ? "flex" : "none",
-        }}
-      >
-        <h3>Loading services...</h3>
-        <Loader loading={user == null} />
-      </div>
+      <GlobalLoader loading={true} content={<span> Loading service information... </span>} />
     );
   } else if (tab === "overview") {
     return (

@@ -2,7 +2,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App.tsx";
 import Account from "./pages/account/Account.tsx";
-import ManageService from "./pages/services/manage/ManageService.tsx";
+import ManageService from "./pages/services/manage/index.tsx";
 import Home from "./root/home/index.tsx";
 import CreateService from "./pages/services/create/index.tsx";
 import AppFooter from "./global/components/AppFooter.tsx";
