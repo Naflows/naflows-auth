@@ -101,14 +101,17 @@ const Input = ({
         input.style.width = fitContent ? "auto" : `calc(100% - 90px)`;
       }
     }
-  }, [copyButtonRef, name, fitContent, isCopied, value, displayMaxChar]);
+  }, [copyButtonRef, name, fitContent, isCopied, displayMaxChar]);
 
   return (
     <div
       className={
         "inputs-container two-rows global__input"
       }
-
+      style={{
+        width: fitContent ? "fit-content" : "100%",
+      }}
+      id={`${name}-input-container`}
     >
       <div className={"global__input__content" + (allowCopy ? " allow-copy" : "") + (value || valueIn ? " filled" : "")}>
         <label htmlFor={name} className="text-size-20">
@@ -122,7 +125,7 @@ const Input = ({
           defaultValue={value}
           onInput={(e) => onChange && onChange(e.currentTarget.value)}
           style={{
-            width: fitContent ? "auto" : "calc(100% - 40px)",
+            width: fitContent ? "fit-content" : "calc(100% - 40px)",
           }}
           size={fitContent && inputValue ? inputValue.length : undefined}
           required={required}

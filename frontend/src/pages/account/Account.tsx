@@ -102,7 +102,7 @@ const Account = () => {
             selectedTab={selectedTab}
           />
           {selectedTab === "profile" && (
-            <AccountUserBody userData={userFetch} />
+            <AccountUserBody userData={userFetch} setUserData={setUserFetch} />
           )}
           {selectedTab === "services" && (
             <ServicesComponent servicesData={servicesFetch} />

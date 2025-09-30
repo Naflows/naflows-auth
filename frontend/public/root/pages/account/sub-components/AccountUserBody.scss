@@ -8,3 +8,42 @@
   margin: auto;
   width: 95%;
 }
+
+.user__details {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-between;
+  .location__informations, .address__informations {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+}
+
+.user__body__details__content {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  gap: 50px;
+  width: 100%;
+  .user__image__upload {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-self: stretch;
+    justify-content: space-between;
+    img,
+    .image__placeholder {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      background-color: $_2k25-background-hue-darker-2;
+    }
+    .secondary-button {
+      width: 100%;
+    }
+  }
+}

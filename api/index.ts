@@ -342,6 +342,37 @@ app.get('/get-user-info/user', async (req: Request, res: Response) => {
 
 });
 
+app.put('/set-user-info/user/update', async (req: Request, res: Response) => {
+    const { sessionID, token, uid } = getCookies(req);
+    const userDetails = req.body.userDetails;
+    console.log("User update details received:", userDetails);
+
+    const f = await axios.put(`${process.env.AUTH_API_URL_DEV}/client/secure/user/update`, {
+        user: {
+            ip: req.ip,
+            agent: req.headers['user-agent'],
+            device_fingerprint: req.fingerprint,
+            session_id: sessionID || null,
+            token: token || null,
+            user_id: uid || null,
+        },
+        userDetails,
+        request: {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        },
+        client: service
+    });
+
+    sendCookies(res, f.data);
+
+    delete f.data.data.middleware;
+
+    res.status(f.status).json(f.data);
+
+});
 
 app.post('/set-user-info/services/create', async (req: Request, res: Response) => {
     const { sessionID, token, uid } = getCookies(req);

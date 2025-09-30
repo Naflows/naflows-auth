@@ -34,7 +34,7 @@ export async function sendVerificationCode(userId: string, serviceID : string): 
     const mail = await mailing.send(
         service.name,
         user.email,
-        "Verification Code",
+        `Verification Code for ${service.name}`,
         (await mailing.patterns.customCode(user, service.name, codeNumber)) as string
     );
 

@@ -296,6 +296,35 @@ app.post('/client/secure/user/send-verification-code', async (req, res) => {
     });
 });
 
+app.put('/client/secure/user/update', async (req, res) => {
+    let user = await secure.user.manageConnection(req, res);
+    if (!user) {
+        return res.status(404).json(software.methods.serverReply(404, "User not found.", {
+            middleware: req.middleware.data,
+        }));
+    }
+    console.log("Updating user data for user:", user.username, user.id, "with data:", req.body.userDetails);
+    user.first_name = req.body.userDetails.first_name || user.first_name;
+    user.last_name = req.body.userDetails.last_name || user.last_name;
+    user.username = req.body.userDetails.username || user.username;
+    user.profile_picture = req.body.userDetails.profile_picture || user.profile_picture;
+    user.country = req.body.userDetails.country || user.country || "";
+    user.city = req.body.userDetails.city || user.city || "";
+    user.postal_code = req.body.userDetails.postal_code || user.postal_code || "";
+    user.address = req.body.userDetails.address || user.address || "";
+    user.address_complement = req.body.userDetails.address_complement || user.address_complement || "";
+
+    const change = await secure.user.update(user.id, user);
+    res.status(change.status).json({
+        status: change.status,
+        message: change.message,
+        success: change.success,
+        data: {
+            middleware: req.middleware.data,
+        }
+    });
+});
+
 app.put('/client/secure/services/update', async (req, res) => {
     const user = await secure.user.manageConnection(req, res);
     const serviceID = req.body.service.id;

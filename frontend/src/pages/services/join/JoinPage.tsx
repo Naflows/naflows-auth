@@ -14,6 +14,8 @@ import Loader from "../../../global/components/Loader";
 import TermsAndRequirements from "./sub-component/TermsAndRequirements";
 import ManageAlert from "./sub-component/ManageAlert";
 import Input from "../../../global/components/Input";
+import AccountDir from "../manage/sub-component/ServiceDir";
+import type { ServicesForUserProps } from "../../../types/ServicesForUserProps";
 
 
 
@@ -142,7 +144,9 @@ const JoinPage = () => {
         return (
             <>
                 <AccountHeader selectedTab="services" userFetch={userInfo ? userInfo : undefined} />
-                <div className="nass__join__page">
+                <div className="nass__join__page nass__page">
+                    <AccountDir service={service as ServicesForUserProps} tab="share" title="Share Service" description="Share this service with others." />
+
                     <div className={`nass__connect__service ${userInfo && "user-connected-already-registered"}`}>
                         <ServiceDescription service={service} publicDisplay={true} />
                         <div className="registration__done__content">
@@ -182,7 +186,7 @@ const JoinPage = () => {
                                     editMode={false}
                                     required={false}
                                     allowCopy={true}
-                                    name ="service_link"
+                                    name="service_link"
                                 />
                             </div>
                         </div>
@@ -196,106 +200,109 @@ const JoinPage = () => {
 
     return (
         <>
-            <div className="nass__join__page">
-                <div className={`nass__connect__service ${userInfo ? "user-connected" : "user-not-connected"}`}>
-                    <div className="user__headband">
-                        {
-                            userInfo && (
-                                <div className="user__info">
-                                    <div className="user__info__header">
-                                        <h3>Welcome, {userInfo.first_name}!</h3>
-                                        <p>
-                                            You are about to connect your Naflows account to the service <strong>{service ? service.name : "Loading..."}</strong>.
-                                        </p>
-                                    </div>
-                                </div>
-                            )
-                        }
-                    </div>
-                    <div className="nass__service__connection__body">
-                        <div className="service__informations">
-                            <ServiceDescription service={service} publicDisplay={true} />
-                            <Alert
-                                alert={displayAlertCode}
-                                setAlert={setDisplayAlertCode}
-                            />
-                            <button className={`primary-button connect-button ${!requirementsAccepted ? "inactive" : ""}`} disabled={!requirementsAccepted} onClick={() => {
-                                ManageAlert({
-                                    requirementsAccepted,
-                                    userInfo,
-                                    displayAlertCode,
-                                    setDisplayAlertCode,
-                                    service
-                                });
-                            }}>
-                                <span>Connect to {service ? service.name : "the service"}</span>
-                            </button>
-                        </div>
-
-
-
-                        <div className="service__connection__information">
-                            {!userInfo && (
-                                <div className="service__connection__info alert">
+            <div className="nass__page">
+                <AccountHeader selectedTab="services" userFetch={userInfo ? userInfo : undefined} />
+                <div className="nass__join__page ">
+                    <div className={`nass__connect__service ${userInfo ? "user-connected" : "user-not-connected"}`}>
+                        <div className="user__headband">
+                            {
+                                userInfo && (
                                     <div className="user__info">
-                                        <div className="service__actions__field__header">
-                                            <h3 className="service__actions__field__title">You are not connected</h3>
+                                        <div className="user__info__header">
+                                            <h3>Welcome, {userInfo.first_name}!</h3>
                                             <p>
-                                                Please log in to your Naflows account to connect to this service.
-                                                <br />
-                                                Connecting to your Naflows account will not automatically register you in the service if you don't have an account there yet.
+                                                You are about to connect your Naflows account to the service <strong>{service ? service.name : "Loading..."}</strong>.
                                             </p>
                                         </div>
-                                        <button className="primary-button" onClick={() => {
-                                            window.location.href = `/login?redirect=/services/join/${serviceID}`;
-                                        }}>
-                                            <span>Log in to Naflows</span>
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z" /></svg>
-                                        </button>
                                     </div>
-                                </div>
-                            )}
-
-                            <div className="service__connection__details">
-                                <img src={userInfo?.profile_picture || ""} alt="User profile" className="user__profile__picture small" style={{
-                                    display: userInfo && userInfo.profile_picture ? "block" : "none",
-                                }} />
-
-
-                                {service?.public_settings?.required_data && service.public_settings.required_data.length > 0 && (<div className="service__connection__detail__body">
-                                    <div className="service__actions__field__header">
-                                        <h3 className="service__actions__field__title">
-                                            <span>
-                                                Naflows will share this data with {
-                                                    service ? service.name : "the service"
-                                                }
-                                            </span>
-                                        </h3>
-                                        <p>You can always update these preferences late.</p>
-                                    </div>
-                                    <div className="service__connection__details__content">
-                                        {Object.entries(dataPreferences).map(([key, info]) => {
-                                            if (service.public_settings && service.public_settings.required_data && service.public_settings.required_data.includes(key)) {
-                                                return (
-                                                    <div className="data__item" key={key}>
-                                                        <div className="data__item__header">
-                                                            {info.svg}
-                                                        </div>
-                                                        <div className="data__item__content">
-                                                            <h4>{info.title}</h4>
-                                                            <p>{info.description}</p>
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        })}
-                                    </div>
-                                </div>)}
-                                <TermsAndRequirements
-                                    service={service}
-                                    acceptedRequirements={acceptedRequirements}
-                                    setAcceptedRequirements={setAcceptedRequirements}
+                                )
+                            }
+                        </div>
+                        <div className="nass__service__connection__body">
+                            <div className="service__informations">
+                                <ServiceDescription service={service} publicDisplay={true} />
+                                <Alert
+                                    alert={displayAlertCode}
+                                    setAlert={setDisplayAlertCode}
                                 />
+                                <button className={`primary-button connect-button ${!requirementsAccepted ? "inactive" : ""}`} disabled={!requirementsAccepted} onClick={() => {
+                                    ManageAlert({
+                                        requirementsAccepted,
+                                        userInfo,
+                                        displayAlertCode,
+                                        setDisplayAlertCode,
+                                        service
+                                    });
+                                }}>
+                                    <span>Connect to {service ? service.name : "the service"}</span>
+                                </button>
+                            </div>
+
+
+
+                            <div className="service__connection__information">
+                                {!userInfo && (
+                                    <div className="service__connection__info alert">
+                                        <div className="user__info">
+                                            <div className="service__actions__field__header">
+                                                <h3 className="service__actions__field__title">You are not connected</h3>
+                                                <p>
+                                                    Please log in to your Naflows account to connect to this service.
+                                                    <br />
+                                                    Connecting to your Naflows account will not automatically register you in the service if you don't have an account there yet.
+                                                </p>
+                                            </div>
+                                            <button className="primary-button" onClick={() => {
+                                                window.location.href = `/login?redirect=/services/join/${serviceID}`;
+                                            }}>
+                                                <span>Log in to Naflows</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z" /></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="service__connection__details">
+                                    <img src={userInfo?.profile_picture || ""} alt="User profile" className="user__profile__picture small" style={{
+                                        display: userInfo && userInfo.profile_picture ? "block" : "none",
+                                    }} />
+
+
+                                    {service?.public_settings?.required_data && service.public_settings.required_data.length > 0 && (<div className="service__connection__detail__body">
+                                        <div className="service__actions__field__header">
+                                            <h3 className="service__actions__field__title">
+                                                <span>
+                                                    Naflows will share this data with {
+                                                        service ? service.name : "the service"
+                                                    }
+                                                </span>
+                                            </h3>
+                                            <p>You can always update these preferences late.</p>
+                                        </div>
+                                        <div className="service__connection__details__content">
+                                            {Object.entries(dataPreferences).map(([key, info]) => {
+                                                if (service.public_settings && service.public_settings.required_data && service.public_settings.required_data.includes(key)) {
+                                                    return (
+                                                        <div className="data__item" key={key}>
+                                                            <div className="data__item__header">
+                                                                {info.svg}
+                                                            </div>
+                                                            <div className="data__item__content">
+                                                                <h4>{info.title}</h4>
+                                                                <p>{info.description}</p>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }
+                                            })}
+                                        </div>
+                                    </div>)}
+                                    <TermsAndRequirements
+                                        service={service}
+                                        acceptedRequirements={acceptedRequirements}
+                                        setAcceptedRequirements={setAcceptedRequirements}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

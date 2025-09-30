@@ -2,7 +2,6 @@
 
 .nass__connect__service {
   margin: auto;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -10,7 +9,6 @@
 
   justify-content: center;
   margin-left: 0;
-  width: 60%;
   margin: auto;
 
   .user__profile__picture {
@@ -25,13 +23,14 @@
     margin-left: 0;
     width: 60%;
     margin: auto;
+    height: 100vh;
   }
 
   &.user-connected-already-registered {
     flex-direction: row;
     justify-content: center;
-    width: calc(100% - $nass__header-width - 40px);
-    margin-left: calc($nass__header-width + 40px);
+    width: 100%;
+    height: 100%;
     .registration__done__content {
       max-width: calc(40% - 40px - 4px);
       display: flex;

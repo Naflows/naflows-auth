@@ -20,5 +20,6 @@ export interface UserBodyProps {
     phone_number?: string; // Phone number of the user, optional
     phone_verified?: boolean; // Whether the user's phone number is verified, optional
     email_verified?: boolean; // Whether the user's email is verified, optional
+    bio ?: string; // Short bio of the user, optional
 }
 

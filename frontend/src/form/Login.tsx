@@ -30,6 +30,9 @@ const LoginForm = ({
               name="customerID"
               required={true}
               maxLength={100}
+              fitContent={false}
+              editMode={true}
+              onChange={() => {}}
             />
           </div>
           <div className="inputs-container global__input">
@@ -39,6 +42,10 @@ const LoginForm = ({
               name="identifier"
               required={true}
               maxLength={9}
+              fitContent={false}
+              autoComplete={false}
+              editMode={true}
+              onChange={() => {}}
             />
           </div>
         </div>

@@ -198,6 +198,12 @@ body {
         margin: 0;
       }
 
+      &:autofill {
+        box-shadow: 0 0 0px 1000px $_2k25-background-hue-darker inset;
+        -webkit-text-fill-color: $Color !important;
+        transition: background-color 5000s ease-in-out 0s;
+      }
+
       &:disabled {
         cursor: not-allowed;
         opacity: 0.9;
