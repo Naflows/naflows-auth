@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
-import Input from "../../../global/components/Input";
+import Input from "../../../../global/components/Input";
 import Alert, {
   type AlertContentProps,
-} from "../../../global/error-alert/Alert";
+} from "../../../../global/error-alert/Alert";
 
 const Mailing = () => {
   const handleSubscribe = async (email: string) => {

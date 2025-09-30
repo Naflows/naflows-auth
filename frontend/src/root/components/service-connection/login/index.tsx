@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Input from "../global/components/Input";
-import Alert, { type AlertContentProps } from "../global/error-alert/Alert";
-import { manageLogin } from "../scripts/login";
-import Loader from "../global/components/Loader";
+import Input from "../../../../global/components/Input";
+import Alert, { type AlertContentProps } from "../../../../global/error-alert/Alert";
+import { manageLogin } from "../../../../scripts/login";
+import Loader from "../../../../global/components/Loader";
 
 const LoginForm = ({
   redirectOnSuccess = "/account",
@@ -66,11 +66,7 @@ const LoginForm = ({
           await manageLogin(setLoading, setAlert, redirectOnSuccess);
         }}
       >
-        <span
-          style={{
-            display: loading ? "none" : "block",
-          }}
-        >
+        <span style={{ display: loading ? "none" : "block" }}>
           Log in
         </span>
 

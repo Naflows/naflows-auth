@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App.tsx";
 import Account from "./pages/account/Account.tsx";
 import ManageService from "./pages/services/manage/ManageService.tsx";
-import Home from "./pages/home/Home.tsx";
+import Home from "./root/home/index.tsx";
 import CreateService from "./pages/services/create/CreateService.tsx";
 import AppFooter from "./global/components/AppFooter.tsx";
 import JoinPage from "./pages/services/join/JoinPage.tsx";

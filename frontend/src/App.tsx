@@ -1,8 +1,8 @@
 import NAFLOWS_LOGO from "../public/assets/naflows-green.svg";
 import "../public/root/index.scss";
-import LoginForm from "./form/Login";
+import LoginForm from "./root/components/service-connection/login";
 import { useEffect, useState } from "react";
-import RegisterForm from "./form/Register";
+import RegisterForm from "./root/components/service-connection/Register";
 import GlobalDisclaimer from "./global/components/GlobalDisclaimer";
 
 interface AppLoginBigButtonProps {

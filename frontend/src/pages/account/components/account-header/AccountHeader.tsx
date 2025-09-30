@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import type { UserBodyProps } from "../../../types/UserBodyProps";
-import AccountUserBodyProfilePicture from "../sub-components/ProfilePicture";
+import type { UserBodyProps } from "../../../../types/UserBodyProps";
+import AccountUserBodyProfilePicture from "../../sub-components/ProfilePicture";
 
 
 const icons = {
