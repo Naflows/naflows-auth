@@ -3,6 +3,7 @@ import sendEmail from "./methods/send-email";
 import transporter from "./nodemailer.config";
 import customCodePattern from "./pattern/custom-code";
 import customLinkPattern from "./pattern/custom-link";
+import customNotificationPattern from "./pattern/custom-notification";
 
 
 
@@ -17,7 +18,8 @@ const mailing = {
 
     patterns : {
         customLink : customLinkPattern,
-        customCode : customCodePattern
+        customCode : customCodePattern,
+        customNotification : customNotificationPattern
     },
     
     send : sendEmail

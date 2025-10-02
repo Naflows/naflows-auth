@@ -710,6 +710,9 @@ button * {
   gap: 20px;
   flex-wrap: wrap;
 }
+.row-no-wrap {
+  flex-wrap: nowrap;
+}
 
 .col-20 {
   display: flex;

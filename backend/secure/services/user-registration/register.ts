@@ -17,6 +17,7 @@ import { ReplyType } from "../../../types/.types/reply.type";
 import UCRType from "../../../types/.types/ucr.type";
 import secure from "../../global/dir";
 import { services } from "../dir";
+import notifications from "../../../software/notifications/dir";
 
 
 export default async function registerUserInAPI(user: User, apiID: string, codeNumber: string | null, force = false, rights: string[]): Promise<ReplyType> {
@@ -57,6 +58,23 @@ export default async function registerUserInAPI(user: User, apiID: string, codeN
 
         if (userDoc.modifiedCount === 0 && serviceActualize.modifiedCount === 0) {
             return software.methods.serverReply(404, "User not found.");
+        }
+
+        // Create a notification
+        const notification = await notifications.create(
+            user.id,
+            "INFO",
+            {
+                title: "Welcome to " + (service.data as Service).name + "!",
+                message: `You have been successfully registered to the ${ (service.data as Service).name } service. You can now access the service using your Naflows account.`,
+                link: "https://nass.naflows.com/account/services/" + apiID,
+                associated_service: apiID
+            },
+            true
+        );
+
+        if (!notification.success) {
+            console.error("Failed to create notification:", notification.message);
         }
 
         return software.methods.serverReply(200, "User credentials are valid for API registration.");

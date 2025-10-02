@@ -109,7 +109,7 @@ const Input = ({
         "inputs-container two-rows global__input"
       }
       style={{
-        width: fitContent ? "fit-content" : "100%",
+        width: fitContent ? "fit-content" : "calc(100% - 42px)",
       }}
       id={`${name}-input-container`}
     >
@@ -125,7 +125,7 @@ const Input = ({
           defaultValue={value}
           onInput={(e) => onChange && onChange(e.currentTarget.value)}
           style={{
-            width: fitContent ? "fit-content" : "calc(100% - 40px)",
+            width: fitContent ? "fit-content" : "calc(100% - 42px)",
           }}
           size={fitContent && inputValue ? inputValue.length : undefined}
           required={required}

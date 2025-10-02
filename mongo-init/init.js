@@ -15,6 +15,7 @@ db.createCollection('user_connections'); // Connections between users and servic
 
 db.createCollection('mailings'); // Mailing list for notifications and updates
 db.createCollection('security_codes'); // Security codes for actions like email verification, password reset, etc.
+db.createCollection('notifications'); // User notifications
 
 const users = db.getCollection('users');
 const sessions = db.getCollection('sessions');
@@ -27,7 +28,7 @@ const logs = db.getCollection('logs');
 const requests = db.getCollection('requests');
 const mailings = db.getCollection('mailings'); // Mailing list for notifications and updates
 const securityCodes = db.getCollection('security_codes'); // Security codes for actions like email verification, password reset, etc.
-
+const notifications = db.getCollection('notifications'); // User notifications
 
 const userConnections = db.getCollection('user_connections'); // Connections between users and services
 
@@ -84,6 +85,11 @@ db.security_codes.createIndex({ id: 1 }, { unique: true });
 db.security_codes.createIndex({ user_id: 1 });
 db.security_codes.createIndex({ code: 1 });
 db.security_codes.createIndex({ expires_at: 1 });
+
+db.notifications.createIndex({ id: 1 }, { unique: true });
+db.notifications.createIndex({ user_id: 1 });
+db.notifications.createIndex({ created_at: 1 });
+db.notifications.createIndex({ read: 1 });
 
 // See the .env file in the root directory of the naflows-system repository for the unhashed password
 db.users.insertOne({
@@ -157,7 +163,7 @@ db.users.insertOne({
     id : "2",
     identifier : "100000:137db0ce6e8b0b238a304614ebc5dc33:64c94524560e67d1e78a96dc67ba92af545d490077fa2e5b13473107f6b7f5e7a6841f89eea8a7cd6ac740969b521f82fb88cd815d6b3f26d96677ef7c224dfe",
     password : "100000:137db0ce6e8b0b238a304614ebc5dc33:64c94524560e67d1e78a96dc67ba92af545d490077fa2e5b13473107f6b7f5e7a6841f89eea8a7cd6ac740969b521f82fb88cd815d6b3f26d96677ef7c224dfe",
-    email : "eadjjawn@gmail.com",
+    email : "matys12laurent@gmail.com",
     username : "The Penguin",
     first_name : "Oswald",
     last_name : "Cobblepot",

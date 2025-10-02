@@ -11,8 +11,23 @@ import { software } from '../../../../software/dir';
 import { db } from '../../../..';
 import { acceptLogin } from './modules/accept-login';
 import { manageNewSession } from './modules/manage-new-session';
+import notifications from '../../../../software/notifications/dir';
 
-export default async function logUserIn(req: Request, res: Response) : Promise<ReplyType> {
+
+
+function readableUserAgent(userAgent: string): string {
+    // Basic parsing of user agent string to make it more readable
+    if (userAgent.includes("Firefox")) {
+        return "Mozilla Firefox";
+    } else if (userAgent.includes("Chrome")) {
+        return "Google Chrome";
+    } else if (userAgent.includes("Safari")) {
+        return "Apple Safari";
+    }
+    return "Unknown Browser";
+}
+
+export default async function logUserIn(req: Request, res: Response): Promise<ReplyType> {
     req.body.client.session_id = null; // Ensure no session is sent in the client data for login requests.
     const serviceOk = await middleware.process.scv(req, res);
 
@@ -48,6 +63,28 @@ export default async function logUserIn(req: Request, res: Response) : Promise<R
     console.log("Associated Session:", associatedSession);
 
     if (credentialsOk) {
+
+        if (associatedSession && associatedSession.active || (!associatedSession && process.env.DEV_SKIP_SESSION_CONFIRMATION === "true")) {
+            // Notify user
+            const notification = await notifications.create(
+                _user.id,
+                "INFO",
+                {
+                    title: "Someone just tried to log in to your account",
+                    message: `
+                            Here are the details of the login attempt:<br/>
+                            - IP Address: ${req.ip} <br/>
+                            - User Agent: ${readableUserAgent(req.headers['user-agent'] || 'Unknown')} <br/>
+                            - Time: ${new Date().toLocaleString('en-US', { timeZone: 'UTC', hour12: true })} UTC <br/>
+                            <br />
+                            If this was you, you can safely ignore this message. If you did not initiate this login, please secure your account immediately.
+                    `,
+                    link: 'https://nass.naflows.com/account/security'
+                },
+                true
+            );
+        }
+
         if (associatedSession) {
             if (associatedSession.active) {
                 const r: ReplyType = await acceptLogin(_user, associatedSession);

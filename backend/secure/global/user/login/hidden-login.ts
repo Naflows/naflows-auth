@@ -5,9 +5,12 @@ import { ReplyType } from "../../../../types/.types/reply.type";
 import secure from "../../dir";
 import { Request, Response } from 'express';
 import { acceptLogin } from "./modules/accept-login";
+import notifications from "../../../../software/notifications/dir";
 
 
-export async function hiddenLogin(req : Request, res : Response) : Promise<ReplyType> {
+
+
+export async function hiddenLogin(req: Request, res: Response): Promise<ReplyType> {
 
     // Verify all parameters: user, session, token 
     const tokenValue = req.body.user.token;
@@ -19,19 +22,19 @@ export async function hiddenLogin(req : Request, res : Response) : Promise<Reply
         return software.methods.serverReply(400, "Bad Request: Missing parameters.");
     }
 
-    const session : UserSession = await secure.session.get(session_id, false);
+    const session: UserSession = await secure.session.get(session_id, false);
 
     if (!session) {
         return software.methods.serverReply(401, "Unauthorized: Session not found.");
     }
 
-    const token : Tokens = await secure.token.get(session.token_id, true);
+    const token: Tokens = await secure.token.get(session.token_id, true);
 
     if (!token) {
         return software.methods.serverReply(401, "Unauthorized: Token not found.");
     }
 
-    const user : User = await secure.user.get(uid, false);
+    const user: User = await secure.user.get(uid, false);
 
     if (!user) {
         return software.methods.serverReply(401, "Unauthorized: User not found.");
@@ -41,6 +44,7 @@ export async function hiddenLogin(req : Request, res : Response) : Promise<Reply
     if (!secure.session.valid(token, session, user.id).success || !tokenValid.success) {
         return software.methods.serverReply(401, "Invalid token or session.");
     }
+
 
     return (await acceptLogin(user, session));
 }
