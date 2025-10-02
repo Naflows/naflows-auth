@@ -84,7 +84,7 @@ export async function manageNewSession(
             (await mailing.patterns.customLink(`${process.env.SELF_API_URL}/client/account/confirm?tokenid=${token.token_id}&tokenvalue=${token.token}`, _user, _service.name))
         );
 
-        if (!emailSent) {
+        if (!emailSent.success) {
             return software.methods.serverReply(500, "Failed to send confirmation email.");
         }
 

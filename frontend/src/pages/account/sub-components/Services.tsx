@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import type { ServicesCompleteBodyProps } from "../../../types/ServicesCompleteProps";
 import ManageServiceConnection from "./ManageConnection";
 import fetchServiceData from "../../../scripts/account/fetch-individual-service";
-import ServiceDescription from "../../services/manage/sub-component/ServiceDescription";
 import CompactServiceDescription from "../../services/manage/sub-component/ServiceCompactDescription";
 import SearchService from "./core/services/SearchBar";
 

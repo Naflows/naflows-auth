@@ -1,0 +1,39 @@
+import { useEffect, useState } from "react";
+import type { UserBodyProps } from "../../../../../types/UserBodyProps";
+import axios from "axios";
+import { type Notification } from "../types/notification.type";
+
+
+export function useGetNotifications(userData: UserBodyProps | null, updateNotifications: boolean) {
+    const [notifications, setNotifications] = useState<Notification[]>([]);
+
+
+
+
+    useEffect(() => {
+        async function fetchNotifications() {
+            axios.post(`${process.env.DUMMY_API_URL_DEV}/get-user-info/notifications`, {
+                start: 0,
+            }, {
+                withCredentials: true
+            }).then((response) => {
+                if (response.data.status === 200) {
+                    console.log("Fetched notifications:", response.data.data);
+                    setNotifications(response.data.data.notifications.sort((a: Notification, b: Notification) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
+                }
+            }).catch((error) => {
+                console.error("Failed to fetch notifications:", error);
+            });
+        }
+
+
+
+        if ((userData && userData.id)) {
+            fetchNotifications();
+        } 
+        
+    }, [userData, updateNotifications])
+
+
+    return { notifications };
+}

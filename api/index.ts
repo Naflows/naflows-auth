@@ -342,7 +342,38 @@ app.get('/get-user-info/user', async (req: Request, res: Response) => {
 
 });
 
-app.get('/get-user-info/notifications', async (req: Request, res: Response) => {
+app.post('/set-user-info/notifications/mark-as-read', async (req: Request, res: Response) => {
+    const { sessionID, token, uid } = getCookies(req);
+    const notificationId = req.body.notificationId;
+    
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/user/notifications/mark-as-read`, {
+        user: {
+            ip: req.ip,
+            agent: req.headers['user-agent'],
+            device_fingerprint: req.fingerprint,
+            session_id: sessionID || null,
+            token: token || null,
+            user_id: uid || null,
+        },
+        notificationId,
+        request: {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        },
+        client: service
+    });
+
+    sendCookies(res, f.data);
+
+    delete f.data.data.middleware;
+
+    res.status(f.status).json(f.data);
+
+}); 
+
+app.post('/get-user-info/notifications', async (req: Request, res: Response) => {
     const { sessionID, token, uid } = getCookies(req);
 
     const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/data/notifications`, {

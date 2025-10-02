@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import Input from "../../../global/components/Input";
 import type { UserBodyProps } from "../../../types/UserBodyProps";
-import axios from "axios";
+import Notifications from "./notifications";
+
 
 const UserPersonalInformations = ({
   userData,
@@ -10,30 +10,13 @@ const UserPersonalInformations = ({
   userData: UserBodyProps | undefined;
   setUserData: React.Dispatch<React.SetStateAction<UserBodyProps | undefined>>;
 }) => {
-  const [notifications, setNotifications] = useState([]);
-
-  useEffect(() => {
-    if (userData && userData.id) {
-      const res = axios.post(`${process.env.REACT_APP_API_URL}/client/secure/data/notifications`, {
-        start : 0,
-      }, {
-        withCredentials: true
-      }).then((response) => {
-        if (response.data.status === 200) {
-          setNotifications(response.data.data);
-        }
-      }).catch((error) => {
-        console.error("Failed to fetch notifications:", error);
-      });
-    }
-  }, [userData])
 
   if (userData) {
 
     return (
       <div className="user__body__personal-informations">
-        <div className="row-20 row-no-wrap">
-          <div className="user__body__section">
+        <div className="row-20 row-no-wrap" id="top-segment">
+          <div className="user__body__section" id="contact-informations">
             <div className="service__actions__field__header">
               <h3 className="service__actions__field__title">Contact Information</h3>
               <span>
@@ -85,22 +68,7 @@ const UserPersonalInformations = ({
               </span>
             </div>
             <div className="user__body__section__content">
-              <div className="notifications__list">
-                {notifications.length === 0 && (
-                  <span>No notifications available.</span>
-                )}
-                {notifications.map((notification: any) => (
-                  <div key={notification.id} className={`notification__item ${notification.read ? 'read' : 'unread'}`}>
-                    <div className="notification__item__header">
-                      <span className="notification__item__title">{notification.title}</span>
-                      <span className="notification__item__date">{new Date(notification.date).toLocaleString()}</span>
-                    </div>
-                    <div className="notification__item__body">
-                      <p>{notification.message}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <Notifications userData={userData} />
             </div>
           </div>
         </div>

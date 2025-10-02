@@ -163,7 +163,7 @@ db.users.insertOne({
     id : "2",
     identifier : "100000:137db0ce6e8b0b238a304614ebc5dc33:64c94524560e67d1e78a96dc67ba92af545d490077fa2e5b13473107f6b7f5e7a6841f89eea8a7cd6ac740969b521f82fb88cd815d6b3f26d96677ef7c224dfe",
     password : "100000:137db0ce6e8b0b238a304614ebc5dc33:64c94524560e67d1e78a96dc67ba92af545d490077fa2e5b13473107f6b7f5e7a6841f89eea8a7cd6ac740969b521f82fb88cd815d6b3f26d96677ef7c224dfe",
-    email : "matys12laurent@gmail.com",
+    email : "eadjjawn@gmail.com",
     username : "The Penguin",
     first_name : "Oswald",
     last_name : "Cobblepot",

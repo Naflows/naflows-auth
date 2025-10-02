@@ -297,6 +297,20 @@ app.post('/client/secure/user/send-verification-code', async (req, res) => {
     });
 });
 
+app.post('/client/secure/user/notifications/mark-as-read', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    const notificationId = req.body.notificationId;
+    const markAsRead : ReplyType = await notifications.setRead(user.id, notificationId);
+    res.status(markAsRead.status).json({
+        status: markAsRead.status,
+        message: markAsRead.message,
+        success: markAsRead.success,
+        data: {
+            middleware: req.middleware.data,
+        }
+    });
+});
+
 app.put('/client/secure/user/update', async (req, res) => {
     let user = await secure.user.manageConnection(req, res);
     if (!user) {
@@ -425,8 +439,7 @@ app.post('/client/secure/data/user', async (req, res) => {
 app.post('/client/secure/data/notifications', async (req, res) => {
     const user = await secure.user.manageConnection(req, res);
     const start = req.body.start || 0;
-    const notificationsCollection = mongoose.connection.collection('notifications');
-    const nos = await notifications.get(user.id, 20, req.body.offset || 0);
+    const nos = await notifications.get(user.id, 20, start);
 
     res.status(200).json({
         status: 200,
@@ -434,7 +447,7 @@ app.post('/client/secure/data/notifications', async (req, res) => {
         success: true,
         data: {
             middleware: req.middleware.data,
-            notifications: notifications
+            notifications: nos,
         }
     });
 })

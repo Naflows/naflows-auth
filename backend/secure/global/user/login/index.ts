@@ -70,7 +70,7 @@ export default async function logUserIn(req: Request, res: Response): Promise<Re
                 _user.id,
                 "INFO",
                 {
-                    title: "Someone just tried to log in to your account",
+                    title: "Someone tried to log in to your account",
                     message: `
                             Here are the details of the login attempt:<br/>
                             - IP Address: ${req.ip} <br/>
