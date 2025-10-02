@@ -16,6 +16,7 @@ import { Service, User } from "./types/.types/collections.type";
 import mailing from "./software/mailing/dir";
 import express from "express";
 import bodyParser from "body-parser";
+import notifications from "./software/notifications/dir";
 
 
 const app = express();
@@ -419,6 +420,23 @@ app.post('/client/secure/data/user', async (req, res) => {
             user: user
         }
     })
+})
+
+app.post('/client/secure/data/notifications', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    const start = req.body.start || 0;
+    const notificationsCollection = mongoose.connection.collection('notifications');
+    const nos = await notifications.get(user.id, 20, req.body.offset || 0);
+
+    res.status(200).json({
+        status: 200,
+        message: "Secure data access granted",
+        success: true,
+        data: {
+            middleware: req.middleware.data,
+            notifications: notifications
+        }
+    });
 })
 
 app.post('/public/services/service-informations', async (req, res) => {

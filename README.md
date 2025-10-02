@@ -24,3 +24,10 @@ Now, the NASS has to be extended to allow the following features:
 * **Service management**: Allow services to manage their own registrations, including updating service information and managing service tokens. Any user can register a service and manage it by themselves. The API key, also considered as a "service token", is used to authenticate the service with the NASS and is meant to be the sold product.
 
 
+## Production Notice
+See the following file before production deployment:
+* [`./mongo-init/init.js`](./mongo-init/init.js) - Contains dummy data that can cause security issues if not removed or modified before going live.
+* [`./.env`](./.env) - Contains sensitive environment variables that should be configured correctly for production use.
+* [`./TODO.TODO`](./TODO.TODO) - Contains a list of tasks that need to be completed before production deployment.
+* [`stv.ts`](./middleware/process/stv.ts) - The line `token.id === "3"` is a temporary condition to test the frozen token feature. This should be removed or modified before production deployment. It is made to exclude the other tokens from being frozen, and make the tests work.
+* [`ssv.ts`](./middleware/process/ssv.ts) - The variable `allInformationsCorrect` are to be compared with the **hashed values** in the database. This can be done later. 

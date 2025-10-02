@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../../../global/components/Input";
 import type { UserBodyProps } from "../../../types/UserBodyProps";
+import axios from "axios";
 
 const UserPersonalInformations = ({
   userData,
@@ -11,6 +12,21 @@ const UserPersonalInformations = ({
 }) => {
   const [notifications, setNotifications] = useState([]);
 
+  useEffect(() => {
+    if (userData && userData.id) {
+      const res = axios.post(`${process.env.REACT_APP_API_URL}/client/secure/data/notifications`, {
+        start : 0,
+      }, {
+        withCredentials: true
+      }).then((response) => {
+        if (response.data.status === 200) {
+          setNotifications(response.data.data);
+        }
+      }).catch((error) => {
+        console.error("Failed to fetch notifications:", error);
+      });
+    }
+  }, [userData])
 
   if (userData) {
 
@@ -73,6 +89,17 @@ const UserPersonalInformations = ({
                 {notifications.length === 0 && (
                   <span>No notifications available.</span>
                 )}
+                {notifications.map((notification: any) => (
+                  <div key={notification.id} className={`notification__item ${notification.read ? 'read' : 'unread'}`}>
+                    <div className="notification__item__header">
+                      <span className="notification__item__title">{notification.title}</span>
+                      <span className="notification__item__date">{new Date(notification.date).toLocaleString()}</span>
+                    </div>
+                    <div className="notification__item__body">
+                      <p>{notification.message}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
