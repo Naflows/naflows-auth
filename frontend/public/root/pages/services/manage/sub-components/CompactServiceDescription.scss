@@ -41,25 +41,30 @@
     height: 100%;
     display: flex;
     position: relative;
-    .connection__status {
+    .connection__tags {
       position: absolute;
-      bottom: -40px;
+      bottom: -35px;
       right: 10px;
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+    }
+    .connection__status, .activity__status {
       background-color: rgba(0, 0, 0, 0.5);
       color: white;
       padding: 5px 10px;
       border-radius: 5px;
-      font-size: 12px;
+      font-size: 10px;
       font-weight: bold;
       text-transform: uppercase;
       backdrop-filter: blur(10px);
-      border: 2px solid;
-      &.connected {
+      border: 1px solid;
+      &.connected, &.active {
         background-color: $da-confirm-hue-transparent; /* Green */
         color: $da-confirm-hue; /* Green */
         border-color: $da-confirm-hue; /* Green */
       }
-      &.disconnected {
+      &.disconnected, &.inactive {
         background-color: $da-error-hue-transparent; /* Red */
         color: $da-error-hue; /* Red */
         border-color: $da-error-hue; /* Red */

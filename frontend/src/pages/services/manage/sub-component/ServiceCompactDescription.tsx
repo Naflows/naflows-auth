@@ -21,10 +21,17 @@ const CompactServiceDescription = ({
                 <div className="service__compact__description__header">
                     <div className="service__compact__description__header__icon">
                         <img src={service.banner || "/default-service-banner.png"} alt="Service Banner" className="service__banner" />
-                        <div className={`connection__status ${service.user_active ? "connected" : "disconnected"}`}>
-                            <span>
-                                {service.user_active ? "Connected" : "Disconnected"}
-                            </span>
+                        <div className="connection__tags">
+                            <div className={`connection__status ${service.user_active ? "connected" : "disconnected"}`}>
+                                <span>
+                                    {service.user_active ? "Connected" : "Disconnected"}
+                                </span>
+                            </div>
+                            <div className={`activity__status ${service.status == "ACTIVE" ? "active" : "inactive"}`}>
+                                <span>
+                                    {service.status == "ACTIVE" ? "Active" : "Inactive"}
+                                </span>
+                            </div>
                         </div>
                         <div className="service__compact__description__pseudo__image">
                             {service.picture ? (

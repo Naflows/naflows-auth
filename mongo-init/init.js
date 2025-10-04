@@ -7,6 +7,7 @@ db.createCollection('sessions');
 db.createCollection('tokens'); // User tokens, used for authentication
 db.createCollection('services'); // Service connections for direct access to the NASS
 db.createCollection('service_tokens'); // Tokens for services to authenticate with the NASS
+db.createCollection('service_logs'); // Logs for services to log actions and events
 db.createCollection('nass_contracts');
 db.createCollection('blacklist');
 db.createCollection('logs');
@@ -32,8 +33,7 @@ const notifications = db.getCollection('notifications'); // User notifications
 
 const userConnections = db.getCollection('user_connections'); // Connections between users and services
 
-
-
+const serviceLogs = db.getCollection('service_logs'); // Logs for services to log actions and events
 
 // Create indexes for the collections to improve performance and ensure uniqueness where necessary
 db.users.createIndex({ id: 1 }, { unique: true });
@@ -90,6 +90,10 @@ db.notifications.createIndex({ id: 1 }, { unique: true });
 db.notifications.createIndex({ user_id: 1 });
 db.notifications.createIndex({ created_at: 1 });
 db.notifications.createIndex({ read: 1 });
+
+db.service_logs.createIndex({ id: 1 }, { unique: true });
+db.service_logs.createIndex({ service_id: 1 });
+db.service_logs.createIndex({ created_at: 1 });
 
 // See the .env file in the root directory of the naflows-system repository for the unhashed password
 db.users.insertOne({
@@ -472,6 +476,18 @@ db.service_tokens.insertOne({
     uses : 0
 })
 
+db.service_logs.insertOne({
+    id: "log_1",
+    service_id: "naflows_backend",
+    message: "Service started successfully.",
+    level: "INFO",
+    created_at: new Date().getTime(),
+    metadata: {
+        user_id: "1",
+        ip_address: "::ffff:172.18.0.2"
+    },
+    type: "STATUS"
+});
 
 
 /* TEST PURPOSES - TO BE REMOVED IN PRODUCTION */

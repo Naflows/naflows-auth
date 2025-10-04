@@ -143,7 +143,6 @@ export interface ServicePlan {
 export interface ServiceSettings {
   rates: 100 | 500 | 1000 | 10000;
   allow_nass_payement_method: boolean; // Whether the service allows payment through NASS
-
 }
 export interface Service {
   id: string; // Service ID
@@ -182,6 +181,16 @@ export interface Service {
       contact_email? : string;
     }
   },
+}
+
+export interface ServiceLog {
+  id: string; // Log ID
+  service_id: string; // Service ID, the service that owns the log
+  message: string; // Log message
+  type : "STATUS" | "ERROR" | "WARNING" | "INFO"; // Type of log
+  level: "INFO" | "WARNING" | "ERROR"; // Log level
+  created_at: number; // Date when the log was created
+  metadata?: object; // Additional metadata for the log, optional
 }
 
 export enum CONTRACTED {
