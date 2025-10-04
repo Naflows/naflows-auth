@@ -584,6 +584,21 @@ button * {
   align-items: center;
   text-wrap: nowrap;
   border: 2px solid $_2k25-background-hue-50-transparent;
+  position:relative;
+  
+
+  .button__text__hide {
+    position:absolute;
+    bottom: -30px;
+    padding: 2px 5px;
+    background-color: $_2k25-background-hue-darker;
+    border-radius: 5px;
+    border: 2px solid $_2k25-background-hue-50-transparent;
+    z-index: 10;
+    display: none;
+    transition: 0.3s;
+  }
+
   &.enhanced {
     border-color: $da-secondary-hue-transparent !important;
     color: $da-secondary-hue-lighter-2 !important;
@@ -610,6 +625,11 @@ button * {
     border-color: $da-secondary-hue-transparent;
     svg * {
       fill: $da-secondary-hue-lighter-2;
+    }
+    .button__text__hide {
+      display: block;
+      opacity: 1;
+      color : white !important;
     }
   }
 }

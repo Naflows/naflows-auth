@@ -1,5 +1,61 @@
 @import "../../../variables.scss";
 
+#left-side {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  gap: 5px;
+  .user__body__section:not(.service__description__section) {
+    width: calc(100% - 60px - 4px) !important;
+    border: 2px solid $_2k25-background-hue-50-transparent;
+  }
+  .service__quick__actions {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    .quick__actions {
+      display: flex;
+      width: 100%;
+      flex-direction: row;
+      gap: 10px;
+      justify-content: space-between;
+    }
+  }
+}
+
+#right-side {
+  width: calc(100% - 400px);
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  flex: 1;
+  min-height: calc(100vh - 130px - 100px);
+  .service__overview__tabs {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  .service__overview__tab__content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
+}
+
+.global__loader__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  max-width: 60%;
+  min-width: 50%;
+  margin: auto;
+}
+
 .service__management__header {
   width: calc(100% - 50px);
   display: flex;
@@ -78,7 +134,9 @@
   }
 
   .service__plans {
-    max-width: 350px;
+    align-items: stretch;
+    width: calc(100% - 60px - 2px) !important;
+    transition: 0.3s;
   }
 
   .plans__table {
@@ -109,34 +167,93 @@
 
   .user__body__section {
     margin: unset !important;
-
-    .service__storage {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-
-      .service__storage__usage {
-        width: 100%;
-        height: 20px;
-        border-radius: 50px;
-        background-color: $_2k25-background-hue-transparent;
-        overflow: hidden;
-
-        .storage__usage__bar {
-          height: 100%;
-          border-radius: 50px;
-          background-color: $_2k25-text;
-        }
-      }
-    }
   }
 
   .service__plan {
     flex: 1;
     width: fit-content;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
     gap: 20px;
+    width: 100%;
+    .service__plan__body {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      .plan__tags {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        align-items: center;
+        .plan__tag {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 7px;
+          padding: 5px 10px;
+          border-radius: 10px;
+          background-color: $_2k25-background-hue-50-transparent;
+          font-size: 13px;
+          color: $da-secondary-hue-lighter-2;
+
+          svg {
+            height: 16px;
+            width: 16px;
+            fill: $da-secondary-hue-lighter-2;
+          }
+        }
+      }
+      .rps__limitation {
+        font-size: 13px;
+        opacity: 0.8;
+        a {
+          color: $da-secondary-hue-lighter-2;
+          text-decoration: none;
+          transition: 0.3s;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+      .service__storage {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        position: relative;
+
+        .service__storage__usage__text {
+          position: absolute;
+          right: 5px;
+          padding: 3px 7px;
+          font-size: 12px;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+          height: fit-content;
+          background-color: $_2k25-background-hue-darker;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .service__storage__usage {
+          width: 100%;
+          height: 30px;
+          border-radius: 50px;
+          background-color: $_2k25-background-hue-transparent;
+          overflow: hidden;
+
+          .storage__usage__bar {
+            height: 100%;
+            border-radius: 50px;
+            background-color: $_2k25-text;
+          }
+        }
+      }
+    }
 
     .services__section__content {
       color: white;

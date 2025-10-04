@@ -1,14 +1,20 @@
 import type { ServicesForUserProps } from "../../../../../types/ServicesForUserProps"
-import SecurityMeasures from "../../sub-component/SecurityMeasures"
-import ServiceCapacities from "../../sub-component/ServiceCapacities"
+import ServiceCapacities from "../../sub-component/capacities"
 import ServiceDescription from "../../sub-component/ServiceDescription"
+import { useState } from "react"
+import { SERVICE_OVERVIEW_TABS, type ServiceOverviewTabs } from "./types/tabs.type"
+import ServiceSettings from "./components/settings"
+import QuickActions from "./components/quick-actions"
 
 
 const ManageServiceOverview = ({
     service,
-} : {
-    service : null | ServicesForUserProps
+}: {
+    service: null | ServicesForUserProps
 }) => {
+
+    const [serviceTabs, setServiceTabs] = useState<ServiceOverviewTabs>("settings");
+
     return (
         <div className="manage__service__body">
             <div
@@ -17,28 +23,34 @@ const ManageServiceOverview = ({
                     width: "100%"
                 }}
             >
-                <div className="parent__of__section column__layout first__row" style={{
-                    flex: 1.5,
-                    height: "max-content",
-                    justifyContent: "space-between",
-                    alignSelf: "stretch",
-                    minHeight: "100%"
-                }}>
-                    <div className="parent__of__section row__layout" style={{
-                        flex: 1,
 
-                    }}>
-                        <ServiceDescription service={service} />
+                <div className="parent__of__section row__layout" id="left-side">
+                    <ServiceDescription service={service} />
+                    <QuickActions service={service} />
+                    <ServiceCapacities service={service} />
+
+                </div>
+
+                <div className="parent__of__section row__layout user__body__section" id="right-side">
+                    <div className="service__overview__tabs">
+                        {SERVICE_OVERVIEW_TABS.map((tab) => (
+                            <button
+                                key={tab.id}
+                                className={`tab ${serviceTabs === tab.id ? "primary-button" : "secondary-button"}`}
+                                onClick={() => setServiceTabs(tab.id)}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="service__overview__tab__content">
+                        {serviceTabs === "settings" && <ServiceSettings service={service} />}
                     </div>
                 </div>
-                <SecurityMeasures service={service} />
 
-                <div className=" second__management__content" style={{
-                    maxWidth: "350px",
-                }}>
+                {/* <SecurityMeasures service={service} /> */}
 
-                    <ServiceCapacities service={service} />
-                </div>
+
             </div>
         </div>
     )
