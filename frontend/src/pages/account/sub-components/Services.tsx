@@ -2,7 +2,7 @@ import type { ServicesBodyProps } from "../../../types/ServicesBodyProps";
 import "../../../../public/root/pages/account/sub-components/AccountServicesBody.scss";
 import { useEffect, useState } from "react";
 import type { ServicesCompleteBodyProps } from "../../../types/ServicesCompleteProps";
-import ManageServiceConnection from "./ManageConnection";
+import ManageServiceConnection from "./manage-connection";
 import fetchServiceData from "../../../scripts/account/fetch-individual-service";
 import CompactServiceDescription from "../../services/manage/sub-component/ServiceCompactDescription";
 import SearchService from "./core/services/SearchBar";
@@ -17,7 +17,10 @@ const ServicesComponent = ({
       service.rights.includes("ADMINISTRATOR") ||
       service.rights.includes("DEVELOPER")
   );
-  const [fetchedUserServices, setFetchedUserServices] = useState<ServicesBodyProps[]>(userServices);
+  const userConnections = servicesData.filter(
+    (service: ServicesBodyProps) => service.rights.includes("USER")
+  );
+  const [displayedServices, setDisplayedServices] = useState<ServicesBodyProps[]>(userServices);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [serviceID, setServiceID] = useState<string | null>(null);
   const [serviceData, setServiceData] =
@@ -25,21 +28,11 @@ const ServicesComponent = ({
 
   const [servicesType, setServicesType] = useState<"services" | "connections">("services");
 
-  
-  useEffect(() => {
-    const filteredServices = userServices.filter((service) =>
-      service.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFetchedUserServices(filteredServices);
-  }, [searchQuery]);
 
   useEffect(() => {
     setSearchQuery("");
   }, [servicesType])
 
-  const userConnections = servicesData.filter((service) =>
-    service.rights.includes("USER")
-  );
 
 
   useEffect(() => {
@@ -73,6 +66,23 @@ const ServicesComponent = ({
     }
   }, [serviceData])
 
+  useEffect(() => {
+    let filteredServices;
+    console.log(`Search query: ${searchQuery}\n`, servicesType, userServices, userConnections);
+    if (servicesType === "services") {
+      filteredServices = userServices.filter((service) =>
+        (searchQuery != "" && service.name.toLowerCase().includes(searchQuery)) || searchQuery === ""
+      );
+    } else {
+      console.log(displayedServices);
+      filteredServices = userConnections.filter((service) =>
+        (searchQuery != "" && service.name.toLowerCase().includes(searchQuery)) || searchQuery === ""
+      );
+    }
+    setDisplayedServices(filteredServices);
+  }, [searchQuery, servicesType, servicesData]);
+
+
   return (
     <div className="user__body__services">
       <div className="user__body__services__header">
@@ -82,7 +92,7 @@ const ServicesComponent = ({
             onClick={() => setServicesType("services")}
           >
             Your Services ({
-              fetchedUserServices.length
+              userServices.length
             })
           </button>
           <button
@@ -126,8 +136,8 @@ const ServicesComponent = ({
           </div>
           <SearchService onSearch={setSearchQuery} />
           <div className="services__list__content">
-            {fetchedUserServices.length > 0 ? (
-              fetchedUserServices.map((service) => (
+            {displayedServices.length > 0 ? (
+              displayedServices.map((service) => (
                 <CompactServiceDescription key={service.id} service={service} owned={true} />
               ))
             ) : (
@@ -149,8 +159,8 @@ const ServicesComponent = ({
           </div>
           <SearchService onSearch={setSearchQuery} />
           <div className="services__list__content">
-            {userConnections.length > 0 ? (
-              userConnections.map((service) => (
+            {displayedServices.length > 0 ? (
+              displayedServices.map((service) => (
                 <div key={service.id} className="service__item">
                   <CompactServiceDescription service={service} owned={false} />
                 </div>

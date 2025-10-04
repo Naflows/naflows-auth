@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import type { ServicesCompleteBodyProps } from "../../../types/ServicesCompleteProps";
-import UsageDataCards from "./core/connections/UsageDataCards";
-import type { InformationKey } from "./core/connections/PersonalDataInformation";
-import { dataPreferences, type DataKeys } from "./core/connections/PersonalInformations";
-import ServiceDescription from "../../services/manage/sub-component/ServiceDescription";
+import type { ServicesCompleteBodyProps } from "../../../../types/ServicesCompleteProps";
+import UsageDataCards from "../core/connections/UsageDataCards";
+import type { InformationKey } from "../core/connections/PersonalDataInformation";
+import { dataPreferences, type DataKeys } from "../core/connections/PersonalInformations";
+import ServiceDescription from "../../../services/manage/sub-component/ServiceDescription";
+import { useHandleResize } from "./methods/useHandleResize";
 
 
 type SensitiveDataKeys = "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS";
@@ -31,12 +32,11 @@ const ManageServiceConnection = ({
 }) => {
   const [usageData, setUsageData] = useState<InformationKey | null>(null);
   const [personalData, setPersonalData] = useState<DataKeys[] | null>([]);
-  const detailledBodyRef = useRef<HTMLDivElement>(null);
+  const detailledBodyRef = useRef<HTMLDivElement | null>(null);
   const [detailledBodyHeight, setDetailledBodyHeight] = useState<number | null>(
     null
   );
-  const [newService, setNewService] =
-    useState<ServicesCompleteBodyProps | null>(service);
+  const [newService, setNewService] = useState<ServicesCompleteBodyProps | null>(service);
 
   useEffect(() => {
     if (service) {
@@ -44,37 +44,12 @@ const ManageServiceConnection = ({
     }
   }, [service]);
 
-  useEffect(() => {
-    const element = detailledBodyRef.current;
-    if (!element) return;
+  useHandleResize(
+    detailledBodyRef,
+    setDetailledBodyHeight,
+    usageData
+  );
 
-    const updateHeight = () => {
-      setDetailledBodyHeight(element.scrollHeight);
-    };
-
-    updateHeight();
-
-    const resizeObserver = new window.ResizeObserver(updateHeight);
-    resizeObserver.observe(element);
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [usageData]); // Add usageData as dependency
-
-  // Also update the height on resize
-  useEffect(() => {
-    const handleResize = () => {
-      if (detailledBodyRef.current) {
-        setDetailledBodyHeight(detailledBodyRef.current.scrollHeight);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   useEffect(() => {
     setUsageData(

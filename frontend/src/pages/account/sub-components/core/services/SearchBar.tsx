@@ -13,11 +13,12 @@ const SearchService = ({
                 type="text"
                 name="search"
                 autoComplete={false}
-                onChange={(value) => onSearch(value.toString())}
+                onChange={(value) => onSearch(value.toString().toLowerCase())}
                 editMode={true}
                 value=""
                 label="Search services"
                 required={false}
+                fitContent={false}
             />                
         </div>
     )
