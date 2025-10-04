@@ -60,17 +60,8 @@ const UserPersonalInformations = ({
               </div>
             </div>
           </div>
-          <div className="user__body__section">
-            <div className="service__actions__field__header">
-              <h3 className="service__actions__field__title">Notification</h3>
-              <span>
-                Manage your notification preferences, including email and SMS alerts
-              </span>
-            </div>
-            <div className="user__body__section__content">
-              <Notifications userData={userData} />
-            </div>
-          </div>
+          <Notifications userData={userData} />
+
         </div>
         <div className="user__body__section">
           <div className="service__actions__field__header">

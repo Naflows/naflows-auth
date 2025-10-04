@@ -4,7 +4,7 @@ import axios from "axios";
 import { type Notification } from "../types/notification.type";
 
 
-export function useGetNotifications(userData: UserBodyProps | null, updateNotifications: boolean) {
+export function useGetNotifications(userData: UserBodyProps | null, updateNotifications: boolean, setOnLoad : (e : boolean) => void) {
     const [notifications, setNotifications] = useState<Notification[]>([]);
 
 
@@ -29,7 +29,9 @@ export function useGetNotifications(userData: UserBodyProps | null, updateNotifi
 
 
         if ((userData && userData.id)) {
+            setOnLoad(true);
             fetchNotifications();
+            setOnLoad(false);
         } 
         
     }, [userData, updateNotifications])

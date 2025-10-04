@@ -1,9 +1,14 @@
 @import "../../../variables.scss";
 
-.notifications__content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.user__body__section#notifications-section {
+  .notifications__content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  &.empty {
+    max-width: 200px;
+  }
 }
 
 .notifications__list {
@@ -24,13 +29,11 @@
         display: none;
       }
 
-
-
       &:hover {
         background-color: $_2k25-background-hue-50-transparent;
         transform: translateY(-2px);
         .notification__item__read {
-            opacity: 1;
+          opacity: 1;
         }
       }
       .notification__body,

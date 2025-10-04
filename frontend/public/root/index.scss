@@ -337,6 +337,10 @@ body {
   gap: 10px;
   width: 100%;
 
+  #password-input-container {
+    width: 100% !important;
+  }
+
   .images__upload {
     display: flex;
     flex-direction: row;

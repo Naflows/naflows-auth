@@ -23,6 +23,18 @@ function readableUserAgent(userAgent: string): string {
         return "Google Chrome";
     } else if (userAgent.includes("Safari")) {
         return "Apple Safari";
+    } else if (userAgent.includes("Edge")) {
+        return "Microsoft Edge";
+    } else if (userAgent.includes("Opera") || userAgent.includes("OPR")) {
+        return "Opera";
+    } else if (userAgent.includes("Trident") || userAgent.includes("MSIE")) {
+        return "Internet Explorer";
+    } else if (userAgent.includes("Android")) {
+        return "Android Browser";
+    } else if (userAgent.includes("iPhone") || userAgent.includes("iPad")) {
+        return "iOS Safari";
+    } else if (userAgent.includes("Mozilla")) {
+        return "Mozilla";
     }
     return "Unknown Browser";
 }
@@ -66,6 +78,7 @@ export default async function logUserIn(req: Request, res: Response): Promise<Re
 
         if (associatedSession && associatedSession.active || (!associatedSession && process.env.DEV_SKIP_SESSION_CONFIRMATION === "true")) {
             // Notify user
+            console.log(req.body.request.headers)
             const notification = await notifications.create(
                 _user.id,
                 "INFO",
@@ -74,7 +87,7 @@ export default async function logUserIn(req: Request, res: Response): Promise<Re
                     message: `
                             Here are the details of the login attempt:<br/>
                             - IP Address: ${req.ip} <br/>
-                            - User Agent: ${readableUserAgent(req.headers['user-agent'] || 'Unknown')} <br/>
+                            - Device informations: ${readableUserAgent(req.body.request.headers['user-agent'] || 'Unknown')} on ${req.body.request.headers["sec-ch-ua-platform"]} <br/>
                             - Time: ${new Date().toLocaleString('en-US', { timeZone: 'UTC', hour12: true })} UTC <br/>
                             <br />
                             If this was you, you can safely ignore this message. If you did not initiate this login, please secure your account immediately.
