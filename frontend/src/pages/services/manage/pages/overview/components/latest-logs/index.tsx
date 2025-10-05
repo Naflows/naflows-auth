@@ -28,11 +28,6 @@ const LatestLogs = ({
                     <span className={`service__activity__text  ${service?.status == "ACTIVE" ? "ACTIVE" : "INACTIVE"}`}>
                         {service?.status === "ACTIVE" ? "Connected to the NASS" : "Disconnected from the NASS"}
                     </span>
-                    <p className="service__activity__subtext">
-                        {
-                            service?.status === "ACTIVE" ? `Naflows can successfully reach ${service?.dns}.` : `Naflows cannot reach ${service?.dns}.`
-                        }
-                    </p>
                 </div>
             </div>
             <div className="latest_log">
