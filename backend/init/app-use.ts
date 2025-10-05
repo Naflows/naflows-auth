@@ -5,6 +5,7 @@ import cors from 'cors';
 import secure from '../secure/global/dir';
 import { ReplyType } from '../types/.types/reply.type';
 import { software } from '../software/dir';
+import nass from '../nass/dir';
 
 export function useApp(app) {
     app.use(express.json());
@@ -12,6 +13,12 @@ export function useApp(app) {
     app.use(cors());
 
     app.use(async (req, res, next) => {
+
+        if (req.path.startsWith('/nass/dev')) {
+            next();
+            return;
+        }
+
         req.middleware = { data: {} } as any;
         console.log("\x1b[33m%s\x1b[0m", `Request received: ${req.method} ${req.path} with body: ${JSON.stringify(req.body)}`);
         if (req.body && req.body.client) {
@@ -19,9 +26,9 @@ export function useApp(app) {
         }
 
         // If the request path starts with "/client" or "/public"
-        if (req.path.startsWith('/client') || req.path.startsWith('/public')) {
+        if (req.path.startsWith('/client') || req.path.startsWith('/public') || req.path.startsWith('/nass/user')) {
             // Continue 
-            if (req.path.startsWith('/client/secure')) {
+            if (req.path.startsWith('/client/secure') || req.path.startsWith('/nass/user')) {
                 const secureLogin: ReplyType = (await secure.user.hiddenLogin(req, res));
                 const checkService: ReplyType = await middleware.process.scv(req, res);
                 if (!secureLogin.success) {

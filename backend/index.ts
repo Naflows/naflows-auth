@@ -19,6 +19,9 @@ import bodyParser from "body-parser";
 import notifications from "./software/notifications/dir";
 
 
+const nass = require('./nass/routes/index');
+
+
 const app = express();
 const router = express.Router();
 
@@ -28,6 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
 connectToDatabase();
 useApp(app);
+app.use('/nass', nass);
 
 
 
@@ -242,6 +246,7 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
         delete serviceInfo.created_by;
         delete serviceInfo.plan;
         delete serviceInfo.settings;
+        delete serviceInfo.apiKey;
     }
 
     if (!service.rights.includes('ADMINISTRATOR')) {
@@ -494,10 +499,14 @@ app.post('/public/services/plans', async (req, res) => {
 
 
 
+
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`NASS is running on http://localhost:${PORT}`);
 });
 
 export const db = mongoose.connection;
+export const appInstance = app;
 export const appRouter = router;

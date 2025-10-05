@@ -55,7 +55,20 @@ createRoot(document.getElementById("root")!).render(
           <JoinPage />
         </>}
       />
-
+      <Route 
+        path="/docs"
+        element={<>
+          <h1>Documentation</h1>
+        </>}
+      />
+      <Route
+        path="/support"
+        element={
+          <>
+            <h1>Support</h1>
+          </>
+        }
+      />
     </Routes>
   </BrowserRouter>
 );

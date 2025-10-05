@@ -10,8 +10,10 @@ import LatestLogs from "./components/latest-logs"
 
 const ManageServiceOverview = ({
     service,
+    setService
 }: {
-    service: null | ServicesForUserProps
+    service: null | ServicesForUserProps;
+    setService: (service: ServicesForUserProps) => void
 }) => {
 
     const [serviceTabs, setServiceTabs] = useState<ServiceOverviewTabs>("settings");
@@ -40,7 +42,7 @@ const ManageServiceOverview = ({
                 <div className="parent__of__section row__layout" id="right-side">
                     <div className="right__side__header">
                         <LatestLogs service={service} />
-                        <QuickActions service={service} />
+                        <QuickActions service={service} setService={setService} />
                         <ServiceCapacities service={service} />
                     </div>
                     <div className="user__body__section">
@@ -57,6 +59,19 @@ const ManageServiceOverview = ({
                         </div>
                         <div className="service__overview__tab__content">
                             {serviceTabs === "settings" && <ServiceSettings service={service} />}
+                            {serviceTabs === "safety" && 
+                                <>
+                                    <div className="api_key__container">
+                                        <h3>API Key</h3>
+                                        <p>This API key is used to authenticate requests to the service. Keep it secure and do not share it publicly.</p>
+                                        <div className="api_key__display">
+                                            <code>{service?.apiKey}</code>
+                                            <button className="secondary-button" onClick={() => navigator.clipboard.writeText(service?.apiKey || "")}>Copy</button>
+                                        </div>
+
+                                    </div>
+                                </>
+                            }
                         </div>
                     </div>
                 </div>

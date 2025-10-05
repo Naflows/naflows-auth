@@ -8,7 +8,7 @@ db.createCollection('tokens'); // User tokens, used for authentication
 db.createCollection('services'); // Service connections for direct access to the NASS
 db.createCollection('service_tokens'); // Tokens for services to authenticate with the NASS
 db.createCollection('service_logs'); // Logs for services to log actions and events
-db.createCollection('nass_contracts');
+db.createCollection('nass_api_keys');
 db.createCollection('blacklist');
 db.createCollection('logs');
 db.createCollection('requests'); // Logging requests to the NASS
@@ -23,7 +23,7 @@ const sessions = db.getCollection('sessions');
 const tokens = db.getCollection('tokens');
 const services = db.getCollection('services');
 const service_tokens = db.getCollection('service_tokens');
-const nass_contracts = db.getCollection('nass_contracts');
+const nass_api_keys = db.getCollection('nass_api_keys');
 const blacklist = db.getCollection('blacklist');
 const logs = db.getCollection('logs');
 const requests = db.getCollection('requests');
@@ -54,11 +54,9 @@ db.services.createIndex({ id: 1 }, { unique: true });
 db.services.createIndex({ ip_address: 1 });
 db.services.createIndex({ service_token: 1 }, { unique: true });
 
-db.nass_contracts.createIndex({ id: 1 }, { unique: true });
-db.nass_contracts.createIndex({ "signature.contractor_id": 1 });
-db.nass_contracts.createIndex({ "status.active": 1 });
-db.nass_contracts.createIndex({ "status.associated_contract ": 1 });
-
+db.nass_api_keys.createIndex({ id: 1 }, { unique: true });
+db.nass_api_keys.createIndex({ apiId: 1 }, { unique: true });
+db.nass_api_keys.createIndex({ key: 1 }, { unique: true });
 
 db.blacklist.createIndex({ id: 1 }, { unique: true });
 db.blacklist.createIndex({ ip: 1 }, { unique: true });
@@ -464,6 +462,15 @@ db.services.insertOne({
         terms_of_service_url : "https://www.naflows.com/legal/terms-of-service",
         contact_email : "support@naflows.com"
     }
+})
+
+db.nass_api_keys.insertOne({
+    id : "naflows_backend_key",
+    apiId : "naflows_backend",
+    issuerId: "1",
+    issuedAt : new Date().getTime(),
+    expiresAt : 1000000000000000000, // Never expires
+    key : "naflows_backend_key"
 })
 
 

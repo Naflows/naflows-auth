@@ -1,4 +1,4 @@
-import { Service } from "./collections.type";
+import { APIKey, Service, ServiceToken } from "./collections.type";
 
 export interface ReplyType {
     status : number;
@@ -6,6 +6,8 @@ export interface ReplyType {
     success: boolean;
     data? : {
         code? : string;
-        service? : Service
+        service? : Service,
+        key? : APIKey,
+        serviceToken? : ServiceToken
     };
 }

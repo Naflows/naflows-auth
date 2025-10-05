@@ -9,6 +9,7 @@ export interface ServicesCompleteBodyProps {
     joined_at: number; // Date when the user joined the service
     user_active: boolean; // Whether the user's account in the service is active
     created_at: number; // Date when the service was created
+    
     data_preferences: {
         usage_data: "NONE" | "BASIC" | "FULL"; // Level of usage data the service can access
         personal_data: Array<"PHONE" | "EMAIL" | "FIRST AND LAST NAME" | "ADDRESS" | "BIRTHDATE" | "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS">;

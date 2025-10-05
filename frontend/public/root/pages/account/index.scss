@@ -107,6 +107,9 @@ body {
       .secondary-button {
         width: calc(100%) !important;
         height: fit-content !important;
+        svg {
+          transform: rotate(180deg);
+        }
       }
       .user__header__visual__access {
         align-self: unset;

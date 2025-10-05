@@ -5,7 +5,6 @@ import cors from 'cors';
 const express = require('express');
 const fingerprint = require('express-fingerprint');
 const cookieParser = require('cookie-parser');
-const router = express.Router();
 const app = express();
 const bodyParser = require('body-parser');
 
@@ -83,6 +82,8 @@ const service = {
     service_token_birth: new Date("2025-09-26").getTime()
 }
 
+
+
 app.get('/public/status-check', async (req: Request, res: Response) => {
     const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/public/status`, {
         client: service
@@ -153,6 +154,35 @@ app.get('/public/services/:id/infos/:userID', async (req: Request, res: Response
 
     res.status(f.status).json(f.data.data.service);
 });
+
+
+app.post('/nass/instance/connect', async (req: Request, res: Response) => {
+    const { sessionID, token, uid } = getCookies(req);
+    const serviceID = req.body.serviceID;
+
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/nass/user/instance/connect`, {
+        user: {
+            ip: req.ip,
+            agent: req.headers['user-agent'],
+            device_fingerprint: req.fingerprint,
+            session_id: sessionID || null,
+            token: token || null,
+            user_id: uid || null,
+        },
+        serviceID: serviceID,
+        request: {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        },
+        client: service
+    });
+    sendCookies(res, f.data);
+    delete f.data.data.middleware;
+    res.status(f.status).json(f.data);
+});
+
 
 app.put('/user/secure/service/update', async (req: Request, res: Response) => {
     const { sessionID, token, uid } = getCookies(req);

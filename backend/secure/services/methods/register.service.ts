@@ -120,11 +120,15 @@ export async function registerService(
         }
     };
 
-    const token: ReplyType = await services.token.new(service.id, "AUTO");
 
-    if (!token) software.methods.serverReply(500, "Internal Server Error: Failed to generate service token.");
+    const apiKeyRT : ReplyType = await services.service.key.create(service.id, user.id);
 
-    service.service_token = (token.data as ServiceToken).token;
+    if (!apiKeyRT.success) return software.methods.serverReply(500, "Internal Server Error: Failed to create API key for the service.");
+
+    // const token: ReplyType = await services.token.new(service.id, "AUTO");
+
+    // if (!token) software.methods.serverReply(500, "Internal Server Error: Failed to generate service token.");
+    // service.service_token = (token.data as ServiceToken).token;
 
     await serviceCollection.insertOne(service);
 

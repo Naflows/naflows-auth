@@ -1,3 +1,6 @@
+import { createAPIKey } from "./keys/create";
+import { getKeyByIPID } from "./keys/get-by-api";
+import { getKeyByValue } from "./keys/get-by-value";
 import { generateApiID } from "./methods/generate-key";
 import { getPlans } from "./methods/get-plans";
 import { getPublicServiceDetails } from "./methods/get-public-details";
@@ -24,6 +27,11 @@ export const services = {
         user: {
             register : registerUserInAPI,
             isIn : isUserInService
+        },
+        key : {
+            getByApi : getKeyByIPID,
+            getByValue : getKeyByValue,
+            create : createAPIKey
         },
         getPlans: getPlans,
         getPublicDetails : getPublicServiceDetails

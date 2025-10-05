@@ -57,7 +57,8 @@ export async function generateServiceToken(api_id: string, method: "AUTO" | "MAN
         created_at: creation,
         lifespan: lifespan,
         expires_at: creation + lifespan * 1000,
-        creation_method: method
+        creation_method: method,
+        uses: 0,
     };
 
     const serviceToken: ServiceToken = {
@@ -69,8 +70,8 @@ export async function generateServiceToken(api_id: string, method: "AUTO" | "MAN
     try {
         await nassServiceTokens.insertOne(NassServiceToken);
         let x = serviceToken;
-        x.token = tokenValue; 
-        return software.methods.serverReply(200, "Service token inserted successfully.", x);
+        x.token = tokenValue;
+        return software.methods.serverReply(200, "Service token inserted successfully.", { serviceToken: x });
     } catch (error) {
         software.methods.serverReply(500, "Internal Server Error: Failed to insert service tokens with error: " + error.message);
     }

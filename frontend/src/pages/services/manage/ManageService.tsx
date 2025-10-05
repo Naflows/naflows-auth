@@ -102,7 +102,7 @@ const ManageService = () => {
           userFetch={user ? user : undefined}
         />
         <AccountDir service={service} tab={tab} title="Service Overview" description="View and manage your service details, performance metrics, and recent activity." />
-        <ManageServiceOverview service={service} />
+        <ManageServiceOverview service={service} setService={setService} />
       </div>
     );
   } else if (tab === "edit") {

@@ -156,6 +156,7 @@ export interface Service {
   service_token: string; // Service token, a secure way of connecting to the service
   plan: ServicePlan;
   settings: ServiceSettings;
+  apiKey?: string; // The API key associated with the service
   picture?: string; // URL to the service picture, optional
   banner?: string; // URL to the service banner, optional
   public_settings: {
@@ -193,59 +194,20 @@ export interface ServiceLog {
   metadata?: object; // Additional metadata for the log, optional
 }
 
-export enum CONTRACTED {
-  API = "API",
-  USER = "USER"
-}
-export enum CONTRACTOR {
-  API = "API",
-  NASS = "NASS"
-}
-export enum CONTRACT_TYPE {
-  TOKEN_RENEWAL = "TOKEN_RENEWAL",
-  USER_AUTHENTIFICATION = "USER_AUTHENTIFICATION",
-  DATA_MANIPULATION = "DATA_MANIPULATION",
-  USER_MANAGEMENT = "USER_MANAGEMENT",
-  SERVICE_MANAGEMENT = "SERVICE_MANAGEMENT",
-  BLACKLIST_MANAGEMENT = "BLACKLIST_MANAGEMENT",
-  REQUESTS_MANAGEMENT = "REQUESTS_MANAGEMENT",
-  SERVICE_CONNECTION = "SERVICE_CONNECTION"
-}
-export enum CONTRACT_ENDING_REASON {
-  COMPLETED = "COMPLETED",
-  CANCELED = "CANCELED",
-  EXPIRED = "EXPIRED",
-  FORCED = "FORCED"
-}
-export interface CentralContracts {
-  my_type: "ISSUER" | "RECEIVER";
-  id: string,
 
-  signature: {
-    contracted: CONTRACTED,
-    contractor: CONTRACTOR,
-    contractor_id: string,
-    associated_contract: string,
-    api_key: string | null,
-  },
-  details: {
-    route: string,
-    user: User | null, // User that is associated with the contract, if any
-    session: UserSession | null, // Session that is associated with the contract, if any
-    contract_type: CONTRACT_TYPE
-  },
-  status: {
-    active: boolean,
-    force_action: boolean, // Meaning the contracted has no choice but to execute the action (e.g. for token removal by administrator of any API)
-    ending_reason: CONTRACT_ENDING_REASON | null
-  },
-  time: {
-    issued_at: number,
-    completed_at: number | null
-    modified_at: number | null
-  }
-}
 
+
+export interface APIKey {
+  id: string;
+  key: string;
+  
+  issuerId: string;
+  apiId: string;
+    
+  // Timing
+  issuedAt: number;
+  expiresAt: number;  
+}
 // This service token type is only available in the NASS itself
 // NASS Service Token is found under the service_tokens collection
 export interface NassServiceToken {

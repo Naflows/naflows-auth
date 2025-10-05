@@ -63,6 +63,14 @@
         "path": "/forward"
     },
 
+    "/nass/instance/connect" : {
+        "rights" : ["NASS_INSTANCE_CONNECT"],
+        "method" : "POST",
+        "levels" : ["ADMINISTRATOR", "DEVELOPER"],
+        "open" : false,
+        "path": "/nass/instance/connect"
+    },
+
 
     "/logs/get" : {
         "rights" : ["NASS_LOGS_VIEW"],
