@@ -36,7 +36,9 @@ interface ServicesForUserProps {
         allow_public_visibility: boolean;
         required_data?: Array<"PHONE" | "EMAIL" | "FIRST AND LAST NAME" | "ADDRESS" | "BIRTHDATE" | "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS">; // What personal data is required for a user to register in the service
     },
+    apiKey?: string; // API key of the service, optional and may be omitted for non-admin users
     details: {
+        access_key?: string; // Developer access key, only present if the user is a developer
         users: number; // Number of users in the service
         official: boolean; // Whether the service is verified or not
         user_is_registered?: boolean; // Whether the user is registered in the service

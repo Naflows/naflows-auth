@@ -36,6 +36,7 @@ export async function initInstance(req : Request, res : Response) {
 
 
     if (service.status !== "ACTIVE") {
+        console.log("[initInstance] Service is not active.");
         return res.status(403).json({ success: false, message: "Service is not active." });
     }
 
