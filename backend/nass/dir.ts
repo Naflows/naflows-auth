@@ -1,5 +1,5 @@
 import { initInstance } from "./methods/init-instance";
-import { connectInstace } from "./methods/connect-instance";
+import { connectInstance } from "./methods/connect-instance";
 import { isServiceActive } from "./methods/activity";
 import { checkTokenValidity } from "./methods/check-token";
 
@@ -8,7 +8,7 @@ import { checkTokenValidity } from "./methods/check-token";
 const nass = {
     instance : {
         init : initInstance,
-        connection : connectInstace,
+        connection : connectInstance,
         isActive : isServiceActive
     },
     token : {

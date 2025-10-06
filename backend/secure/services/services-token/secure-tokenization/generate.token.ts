@@ -7,6 +7,7 @@ import { Service } from "ts-node";
 import { db } from "../../../..";
 import secure from "../../../global/dir";
 import { ReplyType } from "../../../../types/.types/reply.type";
+import { services } from "../../dir";
 
 /*
 
@@ -71,6 +72,7 @@ export async function generateServiceToken(api_id: string, method: "AUTO" | "MAN
         await nassServiceTokens.insertOne(NassServiceToken);
         let x = serviceToken;
         x.token = tokenValue;
+        await services.service.logs.create(api_id, `A service token was created.`, "DEVELOPERS", "WARNING", { creationMethod: method });
         return software.methods.serverReply(200, "Service token inserted successfully.", { serviceToken: x });
     } catch (error) {
         software.methods.serverReply(500, "Internal Server Error: Failed to insert service tokens with error: " + error.message);

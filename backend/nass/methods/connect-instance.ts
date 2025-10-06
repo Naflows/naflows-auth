@@ -6,7 +6,7 @@ import { Service } from "../../types/.types/collections.type";
 import { software } from "../../software/dir";
 import middleware from "../../middleware/dir";
 
-export async function connectInstace(req : Request, res : Response) {
+export async function connectInstance(req : Request, res : Response) {
     const user = await secure.user.manageConnection(req, res);
     if (!user) {
         return; // manageConnection already sent the response
@@ -33,12 +33,15 @@ export async function connectInstace(req : Request, res : Response) {
 
     service.status = service.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
 
-    const update = await services.service.update(serviceID, service);
+    const update = await services.service.global.update(serviceID, service);
     if (!update.success) {
         return res.status(500).json(software.methods.serverReply(500, "Failed to update service status.", {
             middleware: req.middleware.data
         }));
     }
+    
+
+    await services.service.logs.create(serviceID, `Service ${service.status === "ACTIVE" ? "started" : "stopped"}.`, "SYSTEM", "INFO", { user: user.id });
 
     return res.status(200).json(software.methods.serverReply(200, `Service ${service.status === "ACTIVE" ? "started" : "stopped"} successfully.`, {
         middleware: req.middleware.data

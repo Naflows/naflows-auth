@@ -42,6 +42,8 @@ export async function createService(userID : string, password : string, identifi
         //     return software.methods.serverReply(201, "Service created successfully.", service.data);
         // }
 
+        await services.service.logs.create("SYSTEM", `Service creation initiated`, "SYSTEM", "INFO", { user: userID, serviceName: details.name });
+
     } else {
         return software.methods.serverReply(401, "Unauthorized: Invalid credentials.");
     }

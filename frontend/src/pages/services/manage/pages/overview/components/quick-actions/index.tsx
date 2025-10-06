@@ -3,6 +3,7 @@ import type { ServicesForUserProps } from "../../../../../../../types/ServicesFo
 import StartService from "./methods/start-service";
 import type { AlertContentProps } from "../../../../../../../global/error-alert/Alert";
 import Alert from "../../../../../../../global/error-alert/Alert";
+import type { accountTabs } from "../../../../ManageService";
 
 
 const QuickActions = ({
@@ -11,6 +12,7 @@ const QuickActions = ({
 }: {
     service: null | ServicesForUserProps;
     setService?: (service: ServicesForUserProps) => void;
+    setTab?: (tab: accountTabs) => void;
 }) => {
     const [alert, setAlert] = useState<AlertContentProps>({
         message: "",
@@ -26,15 +28,23 @@ const QuickActions = ({
             <div className="user__body__section service__quick__actions">
                 <Alert alert={alert} setAlert={setAlert} />
                 <div className="quick__actions">
+                    <div className="service__status">
+                        <span className={`service__activity__status ${service?.active ? "ACTIVE" : "INACTIVE"}`}></span>
+                        <div className="service__status__header">
+                            <span className={`service__activity__text  ${service?.status == "ACTIVE" ? "ACTIVE" : "INACTIVE"}`}>
+                                {service?.status === "ACTIVE" ? "Connected to the NASS" : "Disconnected from the NASS"}
+                            </span>
+                        </div>
+                    </div>
                     <div className="buttons-container">
                         <button className={`width-fit ${service?.status === "ACTIVE" ? "secondary-button" : "primary-button"}`} disabled={!service} onClick={() => {
                             StartService({ service: service, setAlert: setAlert, setService: setService! });
                         }}>
                             {
-                                service?.status === "ACTIVE" ? <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M240-320v-320q0-33 23.5-56.5T320-720h320q33 0 56.5 23.5T720-640v320q0 33-23.5 56.5T640-240H320q-33 0-56.5-23.5T240-320Z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M320-200v-560l440 280-440 280Z"/></svg>
+                                service?.status === "ACTIVE" ? <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M240-320v-320q0-33 23.5-56.5T320-720h320q33 0 56.5 23.5T720-640v320q0 33-23.5 56.5T640-240H320q-33 0-56.5-23.5T240-320Z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M320-200v-560l440 280-440 280Z" /></svg>
                             }
                             <span>
-                               { service?.status === "ACTIVE" ? "Stop Service" : "Start Service" }
+                                {service?.status === "ACTIVE" ? "Stop Service" : "Start Service"}
                             </span>
                         </button>
                         <button className="primary-button width-fit" disabled={service?.active != "ACTIVE"}>
@@ -56,9 +66,6 @@ const QuickActions = ({
                             </span>
                         </button>
                     </div>
-                    <button className="secondary-button width-100-auto" disabled={!service}>
-                        View Logs
-                    </button>
                 </div>
 
             </div>

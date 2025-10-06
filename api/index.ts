@@ -136,7 +136,7 @@ app.get('/public/services/:id/infos/:userID', async (req: Request, res: Response
     const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/public/services/service-informations`, {
         service: {
             id: serviceID,
-            userID : userID || null
+            userID: userID || null
         },
         client: service,
         request: {
@@ -184,6 +184,9 @@ app.post('/nass/instance/connect', async (req: Request, res: Response) => {
 });
 
 
+
+
+
 app.put('/user/secure/service/update', async (req: Request, res: Response) => {
     const { sessionID, token, uid } = getCookies(req);
     const serviceDetails = req.body.serviceDetails;
@@ -208,6 +211,37 @@ app.put('/user/secure/service/update', async (req: Request, res: Response) => {
     });
     sendCookies(res, f.data);
     delete f.data.data.middleware;
+    res.status(f.status).json(f.data);
+});
+
+app.post('/user/secure/service/logs', async (req: Request, res: Response) => {
+    const { sessionID, token, uid } = getCookies(req);
+
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/services/get-logs`, {
+        user: {
+            ip: req.ip,
+            agent: req.headers['user-agent'],
+            device_fingerprint: req.fingerprint,
+            session_id: sessionID || null,
+            token: token || null,
+            user_id: uid || null,
+        },
+        service_id: req.body.service_id,
+        offset: req.body.offset || 0,
+        limit: req.body.limit || 50,
+        request: {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        },
+        client: service
+    });
+
+    sendCookies(res, f.data);
+
+    delete f.data.data.middleware;
+
     res.status(f.status).json(f.data);
 });
 
@@ -243,10 +277,11 @@ app.post('/user/secure/service/register', async (req: Request, res: Response) =>
     res.status(f.status).json(f.data);
 });
 
- 
+
+
 app.post('/user/secure/confirm-identity/send-code', async (req: Request, res: Response) => {
     const { sessionID, token, uid } = getCookies(req);
-    
+
     const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/user/send-verification-code`, {
         user: {
             ip: req.ip,
@@ -256,7 +291,7 @@ app.post('/user/secure/confirm-identity/send-code', async (req: Request, res: Re
             token: token || null,
             user_id: uid || null,
         },
-        serviceID : req.body.serviceID,
+        serviceID: req.body.serviceID,
         request: {
             method: req.method,
             url: req.originalUrl,
@@ -375,7 +410,7 @@ app.get('/get-user-info/user', async (req: Request, res: Response) => {
 app.post('/set-user-info/notifications/mark-as-read', async (req: Request, res: Response) => {
     const { sessionID, token, uid } = getCookies(req);
     const notificationId = req.body.notificationId;
-    
+
     const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/user/notifications/mark-as-read`, {
         user: {
             ip: req.ip,
@@ -401,7 +436,7 @@ app.post('/set-user-info/notifications/mark-as-read', async (req: Request, res: 
 
     res.status(f.status).json(f.data);
 
-}); 
+});
 
 app.post('/get-user-info/notifications', async (req: Request, res: Response) => {
     const { sessionID, token, uid } = getCookies(req);
@@ -415,7 +450,7 @@ app.post('/get-user-info/notifications', async (req: Request, res: Response) => 
             token: token || null,
             user_id: uid || null,
         },
-        start : req.query.start || 0,
+        start: req.query.start || 0,
         request: {
             method: req.method,
             url: req.originalUrl,

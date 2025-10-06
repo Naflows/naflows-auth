@@ -189,10 +189,18 @@ export interface ServiceLog {
   id: string; // Log ID
   service_id: string; // Service ID, the service that owns the log
   message: string; // Log message
-  type : "STATUS" | "ERROR" | "WARNING" | "INFO"; // Type of log
+  type : "USER" | "SERVICE" | "SECURITY" | "SYSTEM" | "OTHER" | "SETTINGS" | "DEVELOPERS"; // Type of log
   level: "INFO" | "WARNING" | "ERROR"; // Log level
   created_at: number; // Date when the log was created
-  metadata?: object; // Additional metadata for the log, optional
+  metadata?: {
+    user? : string;
+    userData? : {
+      username?: string;
+      picture?: string | null;
+      first_name?: string | null;
+      last_name?: string | null;
+    },
+  }; // Additional metadata for the log, optional
 }
 
 

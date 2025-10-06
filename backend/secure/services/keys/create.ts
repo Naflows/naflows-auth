@@ -23,5 +23,6 @@ export async function createAPIKey(apiID : string, userID : string) {
     };
 
     await keysCollection.insertOne(newKey);
+    await services.service.logs.create(apiID, `API Key created`, "DEVELOPERS", "INFO", { user: userID });
     return software.methods.serverReply(200, "API Key created.", { key: keyValue, keyId: newKey.id });
 }

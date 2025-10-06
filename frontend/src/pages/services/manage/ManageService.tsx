@@ -36,7 +36,7 @@ const ManageService = () => {
     const pathParts = window.location.pathname.split("/");
     const id = pathParts[3];
     const tab = pathParts[4] as accountTabs;
-    if (tab && ["overview", "capacities", "security", "edit", "network", "settings", "users"].includes(tab)) {
+    if (tab && ["overview", "capacities", "security", "edit", "network", "settings", "users","logs"].includes(tab)) {
       setTab(tab);
     } else {
       setTab("overview");

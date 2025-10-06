@@ -77,6 +77,8 @@ export default async function registerUserInAPI(user: User, apiID: string, codeN
             console.error("Failed to create notification:", notification.message);
         }
 
+        await services.service.logs.create(apiID, `User registered to the service.`, "USER", "INFO", { user: user.id });
+
         return software.methods.serverReply(200, "User credentials are valid for API registration.");
     }
 

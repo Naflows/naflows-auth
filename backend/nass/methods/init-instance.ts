@@ -46,6 +46,11 @@ export async function initInstance(req : Request, res : Response) {
         return res.status(tokenRT.status).json(tokenRT);
     }
     const token = tokenRT.data?.serviceToken as ServiceToken;
+
+    
+
+    await services.service.logs.create(apiID, `Instance initialized and token generated.`, "SYSTEM", "INFO");
+
     return res.status(200).json({ success: true, message: "Service initialized successfully.", data: { 
         token: token.token,
         token_birth : token.created_at,
