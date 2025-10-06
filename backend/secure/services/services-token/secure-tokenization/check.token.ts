@@ -17,6 +17,11 @@ export default async function checkServiceToken(
 
     const service : Service = await services.service.get(serviceID).then(res => res.data as Service);
 
+    if (!service) {
+        console.log(`Service with ID ${serviceID} not found.`);
+        return false;
+    }
+
     console.log(`Service found: ${JSON.stringify(service)}`);
 
     const _token : Tokens = await tokens.findOne({
