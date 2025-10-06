@@ -166,6 +166,7 @@ export interface Service {
     required_data?: UserDataPreferences["personal_data"]; // What personal data is required for a user to register in the service
   },
   details: {
+    access_key? : string; // Secure key for developer access
     users: number; // Number of users in the service
     official?: boolean; // Whether the service is verified or not, verified services are services that have been verified by the NASS team to be legitimate and secure
     user_is_registered? : boolean; // Whether the user is registered in the service

@@ -184,7 +184,7 @@ app.post('/client/secure/data/services', async (req, res) => {
                     user_active: userServices[key].active,
                     picture: service.picture,
                     banner: service.banner,
-                    details : service.details,
+                    details: service.details,
                 };
             }
             return null; // Return null for invalid services
@@ -239,9 +239,11 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
 
 
 
-
-    if (!service.rights.includes("ADMINISTRATOR") && !service.rights.includes("DEVELOPER")) {
-        // If the user is not an admin or developer, remove sensitive information
+    const isUserDev: ReplyType = await services.service.user.isDev(user.id, serviceInfo.id);
+    console.log("Is user a developer for this service?", isUserDev);
+    if (isUserDev.success) {
+        serviceInfo.details.access_key = isUserDev.data.access_key;
+    } else {
         delete serviceInfo.ip_address;
         delete serviceInfo.created_by;
         delete serviceInfo.plan;
@@ -291,7 +293,7 @@ app.post('/client/secure/user/register-in-api', async (req, res) => {
 app.post('/client/secure/user/send-verification-code', async (req, res) => {
     const user = await secure.user.manageConnection(req, res);
     const serviceID = req.body.serviceID || "Naflows Auth API";
-    const sendCode : ReplyType = await secure.user.sendVerificationCode(user.id, serviceID);
+    const sendCode: ReplyType = await secure.user.sendVerificationCode(user.id, serviceID);
     res.status(sendCode.status).json({
         status: sendCode.status,
         message: sendCode.message,
@@ -305,7 +307,7 @@ app.post('/client/secure/user/send-verification-code', async (req, res) => {
 app.post('/client/secure/user/notifications/mark-as-read', async (req, res) => {
     const user = await secure.user.manageConnection(req, res);
     const notificationId = req.body.notificationId;
-    const markAsRead : ReplyType = await notifications.setRead(user.id, notificationId);
+    const markAsRead: ReplyType = await notifications.setRead(user.id, notificationId);
     res.status(markAsRead.status).json({
         status: markAsRead.status,
         message: markAsRead.message,
@@ -355,7 +357,7 @@ app.put('/client/secure/services/update', async (req, res) => {
             middleware: req.middleware.data,
         }));
     }
-    
+
 
     const serviceData = await services.service.get(serviceID);
     if (!serviceData.success || !serviceData.data) {
@@ -370,7 +372,7 @@ app.put('/client/secure/services/update', async (req, res) => {
     serviceInfo.banner = req.body.service.bannerImage || serviceInfo.banner;
     serviceInfo.public_settings.allow_public_visibility = req.body.service.allow_public_visibility !== undefined ? req.body.service.allow_public_visibility : serviceInfo.public_settings.allow_public_visibility;
 
-    const update : ReplyType = await services.service.update(serviceID, serviceInfo);
+    const update: ReplyType = await services.service.update(serviceID, serviceInfo);
 
     res.status(update.status).json({
         status: update.status,
@@ -394,7 +396,7 @@ app.post('/client/secure/data/services/build', async (req, res) => {
         }));
     }
     const create: ReplyType = await services.service.register({
-        id : service.public.id ,
+        id: service.public.id,
         name: service.public.name,
         description: service.public.description || null,
         ip_address: service.configuration.config.ip_address,
@@ -407,7 +409,7 @@ app.post('/client/secure/data/services/build', async (req, res) => {
         allow_public_visibility: service.public.allow_public_visibility || false,
         allow_user_registration: service.public.allow_user_registration || false,
     }, {
-        id : service.configuration.plans
+        id: service.configuration.plans
     }, req, res);
     res.status(create.status).json({
         status: create.status,
@@ -461,11 +463,11 @@ app.post('/public/services/service-informations', async (req, res) => {
     const getter = await services.service.getPublicDetails(req.body.service.id, req.body.service.userID || null);
     console.log("Retrieved public service information:", getter.data);
     res.status(getter.status).json({
-        status : getter.status,
-        message : getter.message,
-        success : getter.success,
-        data : {
-            service : getter.data,
+        status: getter.status,
+        message: getter.message,
+        success: getter.success,
+        data: {
+            service: getter.data,
             middleware: req.middleware.data,
         }
     });

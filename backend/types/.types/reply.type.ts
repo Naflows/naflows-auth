@@ -8,6 +8,7 @@ export interface ReplyType {
         code? : string;
         service? : Service,
         key? : APIKey,
-        serviceToken? : ServiceToken
+        serviceToken? : ServiceToken,
+        access_key? : string,
     };
 }

@@ -131,9 +131,13 @@ export async function registerService(
     // service.service_token = (token.data as ServiceToken).token;
 
     await serviceCollection.insertOne(service);
+    await services.service.setup.basic(service.id, service.created_by);
 
 
     const u = await services.service.user.register(user, service.id, null, true, ["ADMINISTRATOR"]);
+    const d = await services.service.dev.register(service.id, user.id);
+    if (!d.success) return software.methods.serverReply(500, "Internal Server Error: Failed to register service developer.");
+
 
     if (!u.success) return software.methods.serverReply(500, "Internal Server Error: Failed to register service owner as user of the service.");
 

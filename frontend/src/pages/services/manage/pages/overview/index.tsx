@@ -59,16 +59,25 @@ const ManageServiceOverview = ({
                         </div>
                         <div className="service__overview__tab__content">
                             {serviceTabs === "settings" && <ServiceSettings service={service} />}
-                            {serviceTabs === "safety" && 
+                            {serviceTabs === "safety" &&
                                 <>
                                     <div className="api_key__container">
                                         <h3>API Key</h3>
                                         <p>This API key is used to authenticate requests to the service. Keep it secure and do not share it publicly.</p>
                                         <div className="api_key__display">
                                             <code>{service?.apiKey}</code>
-                                            <button className="secondary-button" onClick={() => navigator.clipboard.writeText(service?.apiKey || "")}>Copy</button>
                                         </div>
 
+                                        <button className="secondary-button">Regenerate API Key</button>
+
+                                        <div className="dev__key">
+                                            <h4>Developer Access Key</h4>
+                                            <p>This key is used by developers to access advanced features of the service. Keep it secure and do not share it publicly.</p>
+                                            <div className="api_key__display">
+                                                <code>{service?.details.access_key || "No developer access key available."}</code>
+                                            </div>
+                                            <button className="secondary-button">Regenerate Developer Access Key</button>
+                                        </div>
                                     </div>
                                 </>
                             }

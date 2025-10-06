@@ -1,6 +1,10 @@
 import { createAPIKey } from "./keys/create";
 import { getKeyByIPID } from "./keys/get-by-api";
 import { getKeyByValue } from "./keys/get-by-value";
+import { devLogin } from "./methods/dev/dev-check";
+import { isDevFromService } from "./methods/dev/is-dev";
+import { registerServiceDev } from "./methods/dev/register-dev";
+import { generateBasicServiceTunnels } from "./methods/generate-basic-service-tunnels";
 import { generateApiID } from "./methods/generate-key";
 import { getPlans } from "./methods/get-plans";
 import { getPublicServiceDetails } from "./methods/get-public-details";
@@ -26,12 +30,20 @@ export const services = {
         update: updateService,
         user: {
             register : registerUserInAPI,
-            isIn : isUserInService
+            isIn : isUserInService,
+            isDev : isDevFromService
+        },
+        dev : {
+            register : registerServiceDev,
+            login : devLogin
         },
         key : {
             getByApi : getKeyByIPID,
             getByValue : getKeyByValue,
             create : createAPIKey
+        },
+        setup : {
+            basic : generateBasicServiceTunnels
         },
         getPlans: getPlans,
         getPublicDetails : getPublicServiceDetails

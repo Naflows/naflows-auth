@@ -18,6 +18,13 @@ db.createCollection('mailings'); // Mailing list for notifications and updates
 db.createCollection('security_codes'); // Security codes for actions like email verification, password reset, etc.
 db.createCollection('notifications'); // User notifications
 
+
+db.createCollection('service_rights');
+db.createCollection('user_rights');
+db.createCollection('service_tunneling');
+db.createCollection('service_devs'); // Service developers
+
+
 const users = db.getCollection('users');
 const sessions = db.getCollection('sessions');
 const tokens = db.getCollection('tokens');
@@ -34,6 +41,11 @@ const notifications = db.getCollection('notifications'); // User notifications
 const userConnections = db.getCollection('user_connections'); // Connections between users and services
 
 const serviceLogs = db.getCollection('service_logs'); // Logs for services to log actions and events
+
+const serviceRights = db.getCollection('service_rights'); // Rights for services
+const userRights = db.getCollection('user_rights'); // Rights for users
+const serviceTunneling = db.getCollection('service_tunneling'); // Service tunneling configurations
+const serviceDevs = db.getCollection('service_devs'); // Service developers
 
 // Create indexes for the collections to improve performance and ensure uniqueness where necessary
 db.users.createIndex({ id: 1 }, { unique: true });
@@ -92,6 +104,20 @@ db.notifications.createIndex({ read: 1 });
 db.service_logs.createIndex({ id: 1 }, { unique: true });
 db.service_logs.createIndex({ service_id: 1 });
 db.service_logs.createIndex({ created_at: 1 });
+
+db.service_rights.createIndex({ id: 1 }, { unique: true });
+db.service_rights.createIndex({ service_id: 1 });
+
+db.user_rights.createIndex({ id: 1 }, { unique: true });
+db.user_rights.createIndex({ user_id: 1 });
+
+db.service_tunneling.createIndex({ id: 1 }, { unique: true });
+db.service_tunneling.createIndex({ service_id: 1 });
+db.service_tunneling.createIndex({ target_url: 1 });
+
+db.service_devs.createIndex({ id: 1 }, { unique: true });
+db.service_devs.createIndex({ service_id: 1 });
+
 
 // See the .env file in the root directory of the naflows-system repository for the unhashed password
 db.users.insertOne({

@@ -25,9 +25,11 @@ export async function initInstance(req : Request, res : Response) {
     const key = keyRT.data.key as APIKey;
 
     if (key.key !== apiKey) {
+        console.log("[initInstance] Invalid API Key provided.");
         return res.status(403).json({ success: false, message: "Invalid API Key." });
     }
     if (key.expiresAt < Date.now()) {
+        console.log("[initInstance] API Key has expired.");
         return res.status(403).json({ success: false, message: "API Key has expired." });
     }
 
