@@ -27,14 +27,14 @@ const QuickActions = ({
                 <Alert alert={alert} setAlert={setAlert} />
                 <div className="quick__actions">
                     <div className="buttons-container">
-                        <button className={`width-fit ${service?.active === "ACTIVE" ? "secondary-button" : "primary-button"}`} disabled={!service} onClick={() => {
+                        <button className={`width-fit ${service?.status === "ACTIVE" ? "secondary-button" : "primary-button"}`} disabled={!service} onClick={() => {
                             StartService({ service: service, setAlert: setAlert, setService: setService! });
                         }}>
                             {
-                                service?.active !== "ACTIVE" ? <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M240-320v-320q0-33 23.5-56.5T320-720h320q33 0 56.5 23.5T720-640v320q0 33-23.5 56.5T640-240H320q-33 0-56.5-23.5T240-320Z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M320-200v-560l440 280-440 280Z"/></svg>
+                                service?.status === "ACTIVE" ? <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M240-320v-320q0-33 23.5-56.5T320-720h320q33 0 56.5 23.5T720-640v320q0 33-23.5 56.5T640-240H320q-33 0-56.5-23.5T240-320Z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M320-200v-560l440 280-440 280Z"/></svg>
                             }
                             <span>
-                               { service?.active !== "ACTIVE" ? "Stop Service" : "Start Service" }
+                               { service?.status === "ACTIVE" ? "Stop Service" : "Start Service" }
                             </span>
                         </button>
                         <button className="primary-button width-fit" disabled={service?.active != "ACTIVE"}>
