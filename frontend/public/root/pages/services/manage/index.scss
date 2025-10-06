@@ -106,9 +106,13 @@
       }
       .log__icon {
         width: fit-content;
+        height: fit-content;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
-    border: 2px solid $_2k25-background-hue-50-transparent;
+    border: 5px solid $_2k25-background-hue-50-transparent;
     border-radius: 10px;
     overflow: hidden;
   }
@@ -119,8 +123,8 @@
     display: flex;
     padding: 10px 15px;
     flex-direction: row;
+    overflow: hidden;
     align-items: start;
-    background-color: $_2k25-background-hue-darker-transparent;
     gap: 20px;
     border-left: 2px solid transparent;
     transition: 0.3s;
@@ -155,6 +159,16 @@
     .log__timestamp {
       opacity: 0.8;
       white-space: nowrap;
+    }
+    .log__message {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      span:nth-child(2) {
+        font-size: 12px;
+        opacity: 0.7;
+        word-break: break-all;
+      }
     }
     .log__user {
       display: flex;

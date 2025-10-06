@@ -23,7 +23,6 @@ export async function updateService(serviceId: string, newServiceData: Service):
         return software.methods.serverReply(500, "Failed to update service details.");
     }
 
-    await services.service.logs.create(serviceId, `Service details updated.`, "SETTINGS", "INFO", { updatedFields: Object.keys(newServiceData) });
 
     return software.methods.serverReply(200, "Service details updated successfully.");
 }

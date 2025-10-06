@@ -29,6 +29,7 @@ const LatestLogs = ({
 }) => {
 
     const [logs, setLogs] = useState<Log[]>([]);
+    const [metadatas, setMetadatas] = useState<Record<string, Log["metadata"]>>({});
     const [isError, setIsError] = useState(false);
 
     useEffect(() => {
@@ -54,6 +55,21 @@ const LatestLogs = ({
         }
     }, [service]);
 
+    useEffect(() => {
+        if (logs.length > 0) {
+            for (const log of logs) {
+                setMetadatas(prevMetadatas => ({
+                    ...prevMetadatas,
+                    [log.id]: log.metadata
+                        ? Object.fromEntries(
+                            Object.entries(log.metadata).filter(([key]) => key !== "userData" && key !== "user")
+                        )
+                        : {}
+                }));
+            }
+        }
+    }, [logs]);
+
     return (
         <div className="logs__container">
             <div className="logs__content">
@@ -67,7 +83,7 @@ const LatestLogs = ({
                         </tr>
                     </thead>
                     <tbody>
-                        {logs.map((log,i) => (
+                        {logs.map((log, i) => (
                             <tr key={log.id} className={`log__entry status--${log.level.toLowerCase()}`}
                                 style={{
                                     animationDelay: `${i * 0.05}s`
@@ -100,7 +116,14 @@ const LatestLogs = ({
                                         <span>Unknown User</span>
                                     )}
                                 </td>
-                                <td className="log__message">{log.message}</td>
+                                <td className="log__message">
+                                    <span>{log.message}</span>
+                                    <span>
+                                        {metadatas[log.id] && Object.keys(metadatas[log.id] as object).length > 0
+                                            ? JSON.stringify(metadatas[log.id])
+                                            : "No additional metadata"}
+                                    </span>
+                                </td>
                                 <td className="log__timestamp">{createdAtToAgo(log.created_at)}</td>
                             </tr>
                         ))}

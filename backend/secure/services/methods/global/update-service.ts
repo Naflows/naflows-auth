@@ -22,6 +22,8 @@ export async function updateServiceRoute(req, res, user) {
             middleware: req.middleware.data,
         }));
     }
+
+
     const serviceInfo = serviceData.data as Service;
     serviceInfo.name = req.body.service.name || serviceInfo.name;
     serviceInfo.description = req.body.service.description || serviceInfo.description;
@@ -30,6 +32,7 @@ export async function updateServiceRoute(req, res, user) {
     serviceInfo.public_settings.allow_public_visibility = req.body.service.allow_public_visibility !== undefined ? req.body.service.allow_public_visibility : serviceInfo.public_settings.allow_public_visibility;
 
     const update: ReplyType = await services.service.global.update(serviceID, serviceInfo);
+    await services.service.logs.create(serviceID, `Service public details (${Object.keys(req.body.service).join(", ")}) updated.`, "SETTINGS", "INFO", { user: user.id });
 
     res.status(update.status).json({
         status: update.status,
