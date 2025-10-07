@@ -3,7 +3,7 @@
 export interface ServiceRights {
     id : string;
     service_id : string;
-    rights : ("MANAGE_TUNNELS" | "MANAGE_DEVS" | "VIEW_STATS" | "READ" | "WRITE" | "DELETE" | "MANAGE_USERS" | "MANAGE_ROLES" | "MANAGE_SERVICE" | "MANAGE_SETTINGS" | "VIEW_USERS" | "VIEW_ROLES" | "VIEW_SERVICE" | "VIEW_SETTINGS")[];
+    rights : ("MANAGE_TUNNELS" | "MANAGE_DEVS" | "VIEW_STATS" | "READ" | "WRITE" | "DELETE")[];
     created_at : number;
     updated_at : number;
     name : string; // Name of the rights set, e.g., "Default Rights"

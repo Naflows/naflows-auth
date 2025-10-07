@@ -6,9 +6,8 @@ import { SERVICE_OVERVIEW_TABS, type ServiceOverviewTabs } from "./types/tabs.ty
 import ServiceSettings from "./components/settings"
 import QuickActions from "./components/quick-actions"
 import LatestLogs from "./components/latest-logs"
-import Input from "../../../../../global/components/Input"
-import type { accountTabs } from "../../ManageService"
 import Safety from "./components/safety"
+import ServiceUsers from "./components/users"
 
 
 const ManageServiceOverview = ({
@@ -65,6 +64,9 @@ const ManageServiceOverview = ({
                             {serviceTabs === "settings" && <ServiceSettings service={service} />}
                             {serviceTabs === "safety" && <Safety service={service} />}
                             {serviceTabs === "logs" && <LatestLogs service={service} />}
+                            {serviceTabs === "users" && <ServiceUsers
+                                service={service}
+                            />}
                         </div>
                     </div>
                 </div>

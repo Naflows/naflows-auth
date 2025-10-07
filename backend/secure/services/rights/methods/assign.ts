@@ -29,7 +29,7 @@ export async function assignServiceRights(rightID : string, userID : string, ser
 
     const newUserRight : UserRights = {
         id: `rights-${secure.hash(userID)}-${serviceID}-${Date.now()}`,
-        user_id: secure.hash(userID),
+        user_id: secure.crypt(userID),
         service_id: serviceID,
         rights : [rightID],
         created_at: Date.now(),

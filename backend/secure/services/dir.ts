@@ -1,3 +1,4 @@
+import { get } from "mongoose";
 import { createAPIKey } from "./keys/create";
 import { getKeyByIPID } from "./keys/get-by-api";
 import { getKeyByValue } from "./keys/get-by-value";
@@ -21,65 +22,69 @@ import { updateService } from "./methods/update-service";
 import { assignServiceRights } from "./rights/methods/assign";
 import { createServiceRights } from "./rights/methods/create";
 import { getRight } from "./rights/methods/get";
+import { getAllRights } from "./rights/methods/get-all-rights";
 import checkServiceToken from "./services-token/secure-tokenization/check.token";
 import { generateServiceToken } from "./services-token/secure-tokenization/generate.token";
 import getAPIToken from "./services-token/secure-tokenization/get-api.token";
 import { isUserInService } from "./user-registration/isUserIn";
 import registerUserInAPI from "./user-registration/register";
 import isRegistrationTokenValid from "./user-registration/token-valid";
+import { getRights } from "./methods/global/get-rights";
 
 
 
 export const services = {
-    routes : {
-        update : updateServiceRoute,
-        logs : getLogsRoutes
+    routes: {
+        update: updateServiceRoute,
+        logs: getLogsRoutes,
+        getRights: getRights
     },
     service: {
-        register : registerService,
-        get : getService,
-        build : createService,
-        generateID : generateApiID,
-        global : {
-            update : updateService
+        register: registerService,
+        get: getService,
+        build: createService,
+        generateID: generateApiID,
+        global: {
+            update: updateService,
         },
         user: {
-            register : registerUserInAPI,
-            isIn : isUserInService,
-            isDev : isDevFromService,
-            getKeyByValue : getDevKeyByValue
+            register: registerUserInAPI,
+            isIn: isUserInService,
+            isDev: isDevFromService,
+            getKeyByValue: getDevKeyByValue
         },
-        logs : {
-            create : createServiceLogEntry,
-            get : getServiceLogs
+        logs: {
+            create: createServiceLogEntry,
+            get: getServiceLogs
         },
-        dev : {
-            register : registerServiceDev,
-            login : devLogin,
-            getUserByKey : getUserByKey
+        dev: {
+            register: registerServiceDev,
+            login: devLogin,
+            getUserByKey: getUserByKey
         },
-        key : {
-            getByApi : getKeyByIPID,
-            getByValue : getKeyByValue,
-            create : createAPIKey
+        key: {
+            getByApi: getKeyByIPID,
+            getByValue: getKeyByValue,
+            create: createAPIKey
         },
-        setup : {
-            basic : generateBasicServiceTunnels
+        setup: {
+            basic: generateBasicServiceTunnels
         },
-        rights : {
-            create : createServiceRights,
-            get : getRight,
-            assign : assignServiceRights
+        rights: {
+            create: createServiceRights,
+            get: getRight,
+            assign: assignServiceRights,
+            getAll: getAllRights
         },
         getPlans: getPlans,
-        getPublicDetails : getPublicServiceDetails
+        getPublicDetails: getPublicServiceDetails
     },
-    token : {
-        new : generateServiceToken,
-        get : getAPIToken,
-        check : checkServiceToken
+    token: {
+        new: generateServiceToken,
+        get: getAPIToken,
+        check: checkServiceToken
     },
-    userRegistration : {
-        isTokenValid : isRegistrationTokenValid
+    userRegistration: {
+        isTokenValid: isRegistrationTokenValid
     }
 }
