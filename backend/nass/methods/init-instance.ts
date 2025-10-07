@@ -3,9 +3,10 @@ import { APIKey, Service, ServiceToken } from '../../types/.types/collections.ty
 import { services } from '../../secure/services/dir';
 import { ReplyType } from '../../types/.types/reply.type';
 import { Token } from '@stripe/stripe-js';
+import secure from '../../secure/global/dir';
 
 export async function initInstance(req : Request, res : Response) {
-    const { apiKey, apiID } = req.body;
+    const { apiKey, apiID, devKey } = req.body;
 
     if (!apiKey || !apiID) {
         return res.status(400).json({ success: false, message: "apiKey and apiID are required." });
@@ -41,15 +42,19 @@ export async function initInstance(req : Request, res : Response) {
     }
 
 
-    const tokenRT : ReplyType = await services.token.new(apiID, "MANUAL");
+    const tokenRT : ReplyType = await services.token.new(apiID, devKey, "MANUAL");
     if (!tokenRT.success) {
         return res.status(tokenRT.status).json(tokenRT);
     }
     const token = tokenRT.data?.serviceToken as ServiceToken;
 
-    
+    const userRT : ReplyType = await services.service.dev.getUserByKey(devKey);
+    if (!userRT.success) {
+        return res.status(userRT.status).json(userRT);
+    }
+    const user = userRT.data?.user;
 
-    await services.service.logs.create(apiID, `Instance initialized and token generated.`, "SYSTEM", "INFO");
+    await services.service.logs.create(apiID, `Instance initialized and token generated.`, "SYSTEM", "INFO", { user: user?.id || "SYSTEM" });
 
     return res.status(200).json({ success: true, message: "Service initialized successfully.", data: { 
         token: token.token,

@@ -73,62 +73,70 @@ const LatestLogs = ({
     return (
         <div className="logs__container">
             <div className="logs__content">
-                <table className="logs__table">
-                    <thead>
-                        <tr>
-                            <th>Icon</th>
-                            <th>User</th>
-                            <th>Message</th>
-                            <th>Timestamp</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {logs.map((log, i) => (
-                            <tr key={log.id} className={`log__entry status--${log.level.toLowerCase()}`}
-                                style={{
-                                    animationDelay: `${i * 0.05}s`
-                                }}
-                            >
-                                <td className="log__icon">
-                                    {getSvgPerType(log.type)}
-                                </td>
-                                <td className={`log__user ${log.metadata && log.metadata.userData ? "known" : "unknown"}`}>
-                                    {log.metadata && log.metadata.userData ? (
-                                        <>
-                                            {log.metadata.userData.picture && (
-                                                <img
-                                                    src={log.metadata.userData.picture}
-                                                    alt={`${log.metadata.userData.first_name ?? ""} ${log.metadata.userData.last_name ?? ""}`}
-                                                    style={{ width: 32, height: 32, borderRadius: "50%", marginRight: 8 }}
-                                                />
+                {
+                    !isError ? (
+                        <table className="logs__table">
+                            <thead>
+                                <tr>
+                                    <th>Icon</th>
+                                    <th>User</th>
+                                    <th>Message</th>
+                                    <th>Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {logs.map((log, i) => (
+                                    <tr key={log.id} className={`log__entry status--${log.level.toLowerCase()}`}
+                                        style={{
+                                            animationDelay: `${i * 0.05}s`
+                                        }}
+                                    >
+                                        <td className="log__icon">
+                                            {getSvgPerType(log.type)}
+                                        </td>
+                                        <td className={`log__user ${log.metadata && log.metadata.userData ? "known" : "unknown"}`}>
+                                            {log.metadata && log.metadata.userData ? (
+                                                <>
+                                                    {log.metadata.userData.picture && (
+                                                        <img
+                                                            src={log.metadata.userData.picture}
+                                                            alt={`${log.metadata.userData.first_name ?? ""} ${log.metadata.userData.last_name ?? ""}`}
+                                                            style={{ width: 32, height: 32, borderRadius: "50%", marginRight: 8 }}
+                                                        />
+                                                    )}
+                                                    <div className="log__user__placeholder">
+                                                        <span className="log__user__name">
+                                                            {log.metadata.userData.first_name ?? ""}{" "}
+                                                            {log.metadata.userData.last_name ?? ""}
+                                                        </span>
+                                                        <span className="log__user__username">
+                                                            {log.metadata.userData.username || "Unknown User"}
+                                                        </span>
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <span>Unknown User</span>
                                             )}
-                                            <div className="log__user__placeholder">
-                                                <span className="log__user__name">
-                                                    {log.metadata.userData.first_name ?? ""}{" "}
-                                                    {log.metadata.userData.last_name ?? ""}
-                                                </span>
-                                                <span className="log__user__username">
-                                                    {log.metadata.userData.username || "Unknown User"}
-                                                </span>
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <span>Unknown User</span>
-                                    )}
-                                </td>
-                                <td className="log__message">
-                                    <span>{log.message}</span>
-                                    <span>
-                                        {metadatas[log.id] && Object.keys(metadatas[log.id] as object).length > 0
-                                            ? JSON.stringify(metadatas[log.id])
-                                            : "No additional metadata"}
-                                    </span>
-                                </td>
-                                <td className="log__timestamp">{createdAtToAgo(log.created_at)}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                        </td>
+                                        <td className="log__message">
+                                            <span>{log.message}</span>
+                                            <span>
+                                                {metadatas[log.id] && Object.keys(metadatas[log.id] as object).length > 0
+                                                    ? JSON.stringify(metadatas[log.id])
+                                                    : "No additional metadata"}
+                                            </span>
+                                        </td>
+                                        <td className="log__timestamp">{createdAtToAgo(log.created_at)}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    ) : (
+                        <div className="logs__error">
+                            <p>Error loading logs. Please try again later.</p>
+                        </div>
+                    )
+                }
             </div>
         </div>
     )

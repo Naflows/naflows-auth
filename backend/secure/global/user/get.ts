@@ -12,7 +12,7 @@ export default async function getUser(userID : string, hash : boolean = true) : 
     async function getUserByHashedID(hashedUserID : string) : Promise<User | null> {
         const allUsers = await usersCollection.find({}).toArray() as User[];
         for (const user of allUsers) {
-            if (secure.hash(user.id) === hashedUserID) {
+            if (secure.verify(user.id, hashedUserID)) {
                 return user;
             }
         }

@@ -1,4 +1,5 @@
-import { APIKey, Service, ServiceToken } from "./collections.type";
+import { APIKey, Service, ServiceToken, User } from "./collections.type";
+import { DeveloperSecureAccess } from "./tunneling.type";
 
 export interface ReplyType {
     status : number;
@@ -10,5 +11,7 @@ export interface ReplyType {
         key? : APIKey,
         serviceToken? : ServiceToken,
         access_key? : string,
+        devKey? : DeveloperSecureAccess;
+        user? : User;
     };
 }

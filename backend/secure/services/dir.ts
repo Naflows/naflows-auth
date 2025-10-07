@@ -4,7 +4,9 @@ import { getKeyByValue } from "./keys/get-by-value";
 import { createServiceLogEntry } from "./logs/create";
 import { getServiceLogs } from "./logs/get";
 import { devLogin } from "./methods/dev/dev-check";
+import { getUserByKey } from "./methods/dev/get-user-by-key";
 import { isDevFromService } from "./methods/dev/is-dev";
+import { getDevKeyByValue } from "./methods/dev/key-by-value";
 import { registerServiceDev } from "./methods/dev/register-dev";
 import { generateBasicServiceTunnels } from "./methods/generate-basic-service-tunnels";
 import { generateApiID } from "./methods/generate-key";
@@ -41,7 +43,8 @@ export const services = {
         user: {
             register : registerUserInAPI,
             isIn : isUserInService,
-            isDev : isDevFromService
+            isDev : isDevFromService,
+            getKeyByValue : getDevKeyByValue
         },
         logs : {
             create : createServiceLogEntry,
@@ -49,7 +52,8 @@ export const services = {
         },
         dev : {
             register : registerServiceDev,
-            login : devLogin
+            login : devLogin,
+            getUserByKey : getUserByKey
         },
         key : {
             getByApi : getKeyByIPID,

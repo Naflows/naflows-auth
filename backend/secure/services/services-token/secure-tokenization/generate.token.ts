@@ -17,7 +17,7 @@ import { services } from "../../dir";
 
 
 
-export async function generateServiceToken(api_id: string, method: "AUTO" | "MANUAL") : Promise<ReplyType> {
+export async function generateServiceToken(api_id: string, devKey : string, method: "AUTO" | "MANUAL"): Promise<ReplyType> {
     const nassServiceTokens: Collection<NassServiceToken> = await db.collection("service_tokens") as Collection<NassServiceToken>;
 
     if (!nassServiceTokens) software.methods.serverReply(500, "Internal Server Error: Service tokens collection not found.");
@@ -27,15 +27,15 @@ export async function generateServiceToken(api_id: string, method: "AUTO" | "MAN
         service_id: api_id
     }).toArray();
 
-   if (existingToken.length > 0) {
-       await nassServiceTokens.updateMany({
-           service_id: api_id
-       }, {
-           $set: {
-               invalidated: true
-           }
-       });
-   }
+    if (existingToken.length > 0) {
+        await nassServiceTokens.updateMany({
+            service_id: api_id
+        }, {
+            $set: {
+                invalidated: true
+            }
+        });
+    }
 
     const id = `${api_id}-${Date.now()}-${v4()}`;
     const tokenValue = crypto.randomBytes(32).toString("hex");
@@ -72,7 +72,14 @@ export async function generateServiceToken(api_id: string, method: "AUTO" | "MAN
         await nassServiceTokens.insertOne(NassServiceToken);
         let x = serviceToken;
         x.token = tokenValue;
-        await services.service.logs.create(api_id, `A service token was created.`, "DEVELOPERS", "WARNING", { creationMethod: method });
+
+        const userRT: ReplyType = await services.service.dev.getUserByKey(devKey);
+        if (!userRT.success) {
+            return userRT;
+        }
+        const user = userRT.data?.user;
+
+        await services.service.logs.create(api_id, `A service token was created.`, "DEVELOPERS", "WARNING", { creationMethod: method, user: user?.id || "SYSTEM" });
         return software.methods.serverReply(200, "Service token inserted successfully.", { serviceToken: x });
     } catch (error) {
         software.methods.serverReply(500, "Internal Server Error: Failed to insert service tokens with error: " + error.message);

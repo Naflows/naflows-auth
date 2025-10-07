@@ -11,19 +11,19 @@ export default async function getAPIToken(
     userID: string, serviceID: string, password: string, identifier: string
 ) {
 
-    const API: Service = await services.service.get(serviceID).then(res => res.data as Service);
+    // const API: Service = await services.service.get(serviceID).then(res => res.data as Service);
 
 
-    console.log(userID, password, identifier)
-    const credentialsValid = await secure.user.credentials(userID, password, identifier)
-    if (credentialsValid && API && API.created_by == userID) {
-        const token : ReplyType = await services.token.new(serviceID, "MANUAL") ;
-        if (token.success) {
-            return token;
-        } else {
-            return software.methods.serverReply(token.status, token.message);
-        }
-    } else {
-        return software.methods.serverReply(401, "Unauthorized: Invalid credentials.");
-    }
+    // console.log(userID, password, identifier)
+    // const credentialsValid = await secure.user.credentials(userID, password, identifier)
+    // if (credentialsValid && API && API.created_by == userID) {
+    //     const token : ReplyType = await services.token.new(serviceID,  "MANUAL") ;
+    //     if (token.success) {
+    //         return token;
+    //     } else {
+    //         return software.methods.serverReply(token.status, token.message);
+    //     }
+    // } else {
+    //     return software.methods.serverReply(401, "Unauthorized: Invalid credentials.");
+    // }
 }

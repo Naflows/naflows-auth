@@ -50,11 +50,11 @@ app.post('/client/build/service', async (req: Request, res: Response) => {
     res.status(200).json(builtService.data);
 })
 
-app.post('/contract-debug/get-api-key', async (req, res) => {
-    const { userID, serviceID, password, identifier } = req.body;
-    const token = await services.token.get(userID, serviceID, password, identifier)
-    res.status(token.status).json(token);
-})
+// app.post('/contract-debug/get-api-key', async (req, res) => {
+//     const { userID, serviceID, password, identifier } = req.body;
+//     const token = await services.token.get(userID, serviceID, password, identifier)
+//     res.status(token.status).json(token);
+// })
 app.post('/contract-debug/validate-token', async (req, res) => {
     const { serviceID, token, creation_date } = req.body;
     const t: boolean = await services.token.check(serviceID, token, creation_date)
