@@ -18,6 +18,9 @@ import { updateServiceRoute } from "./methods/global/update-service";
 import { registerService } from "./methods/register.service";
 import { createService } from "./methods/service-create.user";
 import { updateService } from "./methods/update-service";
+import { assignServiceRights } from "./rights/methods/assign";
+import { createServiceRights } from "./rights/methods/create";
+import { getRight } from "./rights/methods/get";
 import checkServiceToken from "./services-token/secure-tokenization/check.token";
 import { generateServiceToken } from "./services-token/secure-tokenization/generate.token";
 import getAPIToken from "./services-token/secure-tokenization/get-api.token";
@@ -62,6 +65,11 @@ export const services = {
         },
         setup : {
             basic : generateBasicServiceTunnels
+        },
+        rights : {
+            create : createServiceRights,
+            get : getRight,
+            assign : assignServiceRights
         },
         getPlans: getPlans,
         getPublicDetails : getPublicServiceDetails

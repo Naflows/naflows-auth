@@ -3,6 +3,7 @@ import type { ServicesForUserProps } from "../../../../../../../types/ServicesFo
 import { createdAtToAgo } from "../../../../../../account/sub-components/notifications/methods/createdAtToAgo";
 import axios from "axios";
 import getSvgPerType from "./methods/getSvg";
+import Loader from "../../../../../../../global/components/Loader";
 
 
 export interface Log {
@@ -72,9 +73,14 @@ const LatestLogs = ({
 
     return (
         <div className="logs__container">
-            <div className="logs__content">
-                {
-                    !isError ? (
+            {
+                logs.length === 0 && !isError && (
+                    <Loader loading={true} />
+                )
+            }
+            {
+                !isError ? (
+                    <div className="logs__content">
                         <table className="logs__table">
                             <thead>
                                 <tr>
@@ -131,13 +137,14 @@ const LatestLogs = ({
                                 ))}
                             </tbody>
                         </table>
-                    ) : (
-                        <div className="logs__error">
-                            <p>Error loading logs. Please try again later.</p>
-                        </div>
-                    )
-                }
-            </div>
+                    </div>
+
+                ) : (
+                    <div className="logs__error">
+                        <p>Error loading logs. Please try again later.</p>
+                    </div>
+                )
+            }
         </div>
     )
 };

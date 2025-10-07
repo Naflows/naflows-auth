@@ -186,6 +186,7 @@ const JoinPage = () => {
                                     editMode={false}
                                     required={false}
                                     allowCopy={true}
+                                    fitContent={false}
                                     name="service_link"
                                 />
                             </div>

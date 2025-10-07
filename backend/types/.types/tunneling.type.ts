@@ -3,15 +3,17 @@
 export interface ServiceRights {
     id : string;
     service_id : string;
-    rights : string[]; // e.g., ["READ", "WRITE", "DELETE"]
+    rights : ("MANAGE_TUNNELS" | "MANAGE_DEVS" | "VIEW_STATS" | "READ" | "WRITE" | "DELETE")[];
     created_at : number;
     updated_at : number;
+    name : string; // Name of the rights set, e.g., "Default Rights"
     deletable : boolean; // Whether this rights set can be deleted
 }
 
 export interface UserRights {
     id : string;
     user_id : string;
+    service_id : string;
     rights : string[]; // e.g., ["READ", "WRITE", "DELETE"] & must be a subset of the service rights
     created_at : number;
     updated_at : number;
