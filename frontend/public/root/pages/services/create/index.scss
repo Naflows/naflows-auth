@@ -436,8 +436,9 @@
   }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1400px) {
   .manage__service__body {
+
     width: calc(100% - 20px) !important;
     .services__section__content {
       height: fit-content !important;
@@ -471,3 +472,4 @@
     max-width: unset !important;
   }
 }
+

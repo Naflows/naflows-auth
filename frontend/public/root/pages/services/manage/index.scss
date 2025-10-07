@@ -73,11 +73,11 @@
 @keyframes LogsAppears {
   0% {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-20px) scale3d(0.95, 0.95, 1);
   }
   100% {
     opacity: 1;
-    transform: translateY(0px);
+    transform: translateY(0) scale3d(1, 1, 1);
   }
 }
 

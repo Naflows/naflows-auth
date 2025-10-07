@@ -1,5 +1,17 @@
 @import '../../../../variables.scss';
 
+
+@keyframes RightCardAppears {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px) scale3d(0.95, 0.95, 1);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale3d(1, 1, 1);
+    }
+}
+
 .rights__container {
     display: flex;
     flex-direction: column;
@@ -11,6 +23,8 @@
         border: 2px solid $_2k25-background-hue-50-transparent;
         background-color: $_2k25-background-hue-darker;
         transition: all 0.3s ease-in-out;
+        opacity: 0;
+        animation: RightCardAppears 0.3s ease-in-out forwards;
         cursor: pointer;
         &:hover {
             border: 2px solid $_2k25-background-hue-50;
@@ -41,13 +55,14 @@
             .right__header {
                 display: flex;
                 flex-direction: row;
+                gap: 10px;
                 .right__color {
                     min-width: 15px;
                     min-height: 15px;
                     max-width: 15px;
                     max-height: 15px;
-                    border-radius: 50%;
-                    margin-right: 10px;
+                    border-radius: 5px;
+                    margin-top: 2px;
                 }
                 .right__info {
                     display: flex;
