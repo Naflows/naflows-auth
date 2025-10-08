@@ -8,6 +8,7 @@ import QuickActions from "./components/quick-actions"
 import LatestLogs from "./components/latest-logs"
 import Safety from "./components/safety"
 import ServiceUsers from "./components/users"
+import ServiceNetwork from "./components/network"
 
 
 const ManageServiceOverview = ({
@@ -42,7 +43,7 @@ const ManageServiceOverview = ({
 
                 <div className="parent__of__section row__layout" id="right-side">
                     <div className="right__side__header">
-                        <QuickActions service={service} setService={setService}/>
+                        <QuickActions service={service} setService={setService} />
                         <ServiceCapacities service={service} />
                     </div>
                     <div className="user__body__section">
@@ -67,6 +68,7 @@ const ManageServiceOverview = ({
                             {serviceTabs === "users" && <ServiceUsers
                                 service={service}
                             />}
+                            {serviceTabs === "network" && <ServiceNetwork service={service} />}
                         </div>
                     </div>
                 </div>
