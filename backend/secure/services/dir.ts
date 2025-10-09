@@ -30,6 +30,7 @@ import { isUserInService } from "./user-registration/isUserIn";
 import registerUserInAPI from "./user-registration/register";
 import isRegistrationTokenValid from "./user-registration/token-valid";
 import { getRights } from "./methods/global/get-rights";
+import { getRightsByUser } from "./rights/methods/get-by-user";
 
 
 
@@ -51,7 +52,8 @@ export const services = {
             register: registerUserInAPI,
             isIn: isUserInService,
             isDev: isDevFromService,
-            getKeyByValue: getDevKeyByValue
+            getKeyByValue: getDevKeyByValue,
+            getRights : getRightsByUser
         },
         logs: {
             create: createServiceLogEntry,

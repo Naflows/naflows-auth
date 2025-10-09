@@ -199,6 +199,7 @@ export interface ServiceLog {
       picture?: string | null;
       first_name?: string | null;
       last_name?: string | null;
+      rights? : { id : string; name : string; hue : string; }[];
     },
   }; // Additional metadata for the log, optional
 }

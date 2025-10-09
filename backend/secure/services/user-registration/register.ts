@@ -18,6 +18,7 @@ import UCRType from "../../../types/.types/ucr.type";
 import secure from "../../global/dir";
 import { services } from "../dir";
 import notifications from "../../../software/notifications/dir";
+import mailing from "../../../software/mailing/dir";
 
 
 export default async function registerUserInAPI(user: User, apiID: string, codeNumber: string | null, force = false, rights: string[]): Promise<ReplyType> {
@@ -33,6 +34,7 @@ export default async function registerUserInAPI(user: User, apiID: string, codeN
             return software.methods.serverReply(404, "Service not found.");
         }
         console.log("Service data:", service.data);
+        const serviceData = service.data as Service;
 
         const userDoc = await usersCollection.updateOne(
             { id: user.id },
@@ -65,13 +67,24 @@ export default async function registerUserInAPI(user: User, apiID: string, codeN
             user.id,
             "INFO",
             {
-                title: "Welcome to " + (service.data as Service).name + "!",
-                message: `You have been successfully registered to the ${ (service.data as Service).name } service. You can now access the service using your Naflows account.`,
+                title: "Welcome to " + serviceData.name + "!",
+                message: `You have been successfully registered to the ${ serviceData.name } service. You can now access the service using your Naflows account.`,
                 link: "https://nass.naflows.com/account/services/" + apiID,
                 associated_service: apiID
             },
             true
         );
+
+        // const emailSent = await mailing.send(
+        //     serviceData.name + " Via Naflows",
+        //     user.email,
+        //     `Welcome to ${serviceData.name}!`,
+        //     await mailing.patterns.welcomeToService("https://nass.naflows.com/account/services/" + apiID, user, serviceData)
+        // );
+
+        // if (!emailSent.success) {
+        //     console.error("Failed to send welcome email:", emailSent.message);
+        // }
 
         if (!notification.success) {
             console.error("Failed to create notification:", notification.message);

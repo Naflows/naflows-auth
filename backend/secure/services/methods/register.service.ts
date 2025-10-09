@@ -111,7 +111,7 @@ export async function registerService(
         },
 
         details: {
-            users: 1, // The creator is the first user
+            users: 0, // The creator is the first user but is added after the service creation
             public: {
                 privacy_policy_url: "null",
                 terms_of_service_url: "null",

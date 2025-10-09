@@ -8,6 +8,9 @@ export async function getLogsRoutes(req, res, user) {
     const isUserDev = await services.service.user.isDev(user.id, serviceID);
     if (isUserDev.success) {
         const logs = await services.service.logs.get(serviceID, limit, offset);
+
+
+
         return res.status(200).json({
             status: 200,
             message: "Logs retrieved successfully.",

@@ -4,6 +4,7 @@ import { createdAtToAgo } from "../../../../../../account/sub-components/notific
 import axios from "axios";
 import getSvgPerType from "./methods/getSvg";
 import Loader from "../../../../../../../global/components/Loader";
+import LogUserDetails from "./components/user-details";
 
 
 export interface Log {
@@ -18,6 +19,8 @@ export interface Log {
             picture?: string | null;
             first_name?: string | null;
             last_name?: string | null;
+            rights?: { id: string; name: string; hue: string; }[];
+
         }
     };
     created_at: number;
@@ -32,6 +35,7 @@ const LatestLogs = ({
     const [logs, setLogs] = useState<Log[]>([]);
     const [metadatas, setMetadatas] = useState<Record<string, Log["metadata"]>>({});
     const [isError, setIsError] = useState(false);
+    const [hoveredLog, setHoveredLog] = useState<Log | null>(null);
 
     useEffect(() => {
         async function fetchLogs() {
@@ -79,15 +83,26 @@ const LatestLogs = ({
                 )
             }
             {
-                !isError ? (
+                !isError && logs.length > 0 ? (
                     <div className="logs__content">
+                        <div className="log__hover__content">
+                            <LogUserDetails log={hoveredLog} />
+                        </div>
                         <table className="logs__table">
                             <thead>
                                 <tr>
-                                    <th>Icon</th>
-                                    <th>User</th>
-                                    <th>Message</th>
-                                    <th>Timestamp</th>
+                                    <th style={{
+                                        width: "fit-content"
+                                    }}>Icon</th>
+                                    <th style={{
+                                        width: "fit-content"
+                                    }}>User</th>
+                                    <th style={{
+                                        width: "100%"
+                                    }}>Message</th>
+                                    <th style={{
+                                        width: "fit-content"
+                                    }}>Timestamp</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -100,7 +115,22 @@ const LatestLogs = ({
                                         <td className="log__icon">
                                             {getSvgPerType(log.type)}
                                         </td>
-                                        <td className={`log__user ${log.metadata && log.metadata.userData ? "known" : "unknown"}`}>
+                                        
+
+                                        <td className={`log__user ${log.metadata && log.metadata.userData ? "known" : "unknown"}`} id={`log__user__${log.id}`} onMouseEnter={(el : React.MouseEvent<HTMLTableCellElement>) => {
+                                            setHoveredLog(log);
+                                            const hoverElement = document.querySelector(".log__hover__content") as HTMLDivElement;
+                                            if (hoverElement) {
+                                                hoverElement.style.display = "flex";
+                                                const rect = el.currentTarget.getBoundingClientRect();
+                                                hoverElement.style.position = "fixed";
+                                                hoverElement.style.top = `${rect.top}px`;
+                                                hoverElement.style.left = `${rect.right + 5}px`;
+                                                hoverElement.style.zIndex = "1000";
+                                            }
+                                        }} onMouseLeave={() => {
+                                            setHoveredLog(null);
+                                        }}>
                                             {log.metadata && log.metadata.userData ? (
                                                 <>
                                                     {log.metadata.userData.picture && (
@@ -110,16 +140,9 @@ const LatestLogs = ({
                                                             style={{ width: 32, height: 32, borderRadius: "50%", marginRight: 8 }}
                                                         />
                                                     )}
-                                                    <div className="log__user__placeholder">
-                                                        <span className="log__user__name">
-                                                            {log.metadata.userData.first_name ?? ""}{" "}
-                                                            {log.metadata.userData.last_name ?? ""}
-                                                        </span>
-                                                        <span className="log__user__username">
-                                                            {log.metadata.userData.username || "Unknown User"}
-                                                        </span>
-                                                    </div>
+
                                                 </>
+
                                             ) : (
                                                 <span>Unknown User</span>
                                             )}
@@ -140,9 +163,15 @@ const LatestLogs = ({
                     </div>
 
                 ) : (
-                    <div className="logs__error">
-                        <p>Error loading logs. Please try again later.</p>
-                    </div>
+                    logs.length > 0 ? (
+                        <div className="logs__error">
+                            <p>Unable to retrieve {service?.name}{service?.name.endsWith("s") ? "'" : "'s"} logs</p>
+                        </div>
+                    ) : isError && (
+                        <div className="logs__error">
+                            <p>Error loading logs. Please try again later.</p>
+                        </div>
+                    )
                 )
             }
         </div>

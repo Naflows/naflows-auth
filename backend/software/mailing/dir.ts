@@ -4,6 +4,7 @@ import transporter from "./nodemailer.config";
 import customCodePattern from "./pattern/custom-code";
 import customLinkPattern from "./pattern/custom-link";
 import customNotificationPattern from "./pattern/custom-notification";
+import welcomeToServicePattern from "./pattern/welcome-to-service";
 
 
 
@@ -19,7 +20,8 @@ const mailing = {
     patterns : {
         customLink : customLinkPattern,
         customCode : customCodePattern,
-        customNotification : customNotificationPattern
+        customNotification : customNotificationPattern,
+        welcomeToService : welcomeToServicePattern
     },
     
     send : sendEmail

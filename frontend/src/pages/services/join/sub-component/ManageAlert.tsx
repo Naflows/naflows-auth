@@ -47,7 +47,7 @@ const ManageAlert = ({
         })
 
         const res = axios.post(`${process.env.DUMMY_API_URL_DEV}/user/secure/confirm-identity/send-code`, {
-            serviceID: "naflows_backend"
+            serviceID: service.id
         }, {
             withCredentials: true
         });

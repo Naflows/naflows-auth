@@ -2,6 +2,7 @@ import { Collection } from "mongoose";
 import { db } from "../../../..";
 import { ServiceRights, UserRights } from "../../../../types/.types/tunneling.type";
 import secure from "../../../global/dir";
+import { services } from "../../dir";
 
 export async function getAllRights(service_id: string): Promise<ServiceRights[]> {
     const serviceRightsDB = db.collection('service_rights') as Collection<ServiceRights>;
