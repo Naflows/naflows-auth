@@ -3,13 +3,15 @@
 export interface ServiceRights {
     id : string;
     service_id : string;
-    rights : ("MANAGE_TUNNELS" | "MANAGE_DEVS" | "VIEW_STATS" | "READ" | "WRITE" | "DELETE")[];
+    rights : string[];
     created_at : number;
     updated_at : number;
     name : string; // Name of the rights set, e.g., "Default Rights"
     deletable : boolean; // Whether this rights set can be deleted
     hue : string; // Color hue for UI representation
     usersPerRights? : { id: string; username: string; first_name: string; last_name: string; profile_picture: string | null }[]; // Added field to map rights to users
+    type : "SERVICE_BY_NASS" | "TUNNELING_BY_INSTANCE"; // Type of service rights, view documentation for more info
+    description? : string; // Optional description of the rights set
 }
 
 export interface UserRights {

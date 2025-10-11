@@ -13,7 +13,7 @@ router.post('/instance/init-test', async (req, res) => {
 
 
 router.post('/dev/instance/tunnel/create', async (req, res) => {
-    res.send({ success: true, message: "Not implemented yet." });
+    nass.tunnel.create(req, res);
 })
 
 router.post('/user/instance/connect', async (req, res) => {

@@ -9,6 +9,8 @@ import LatestLogs from "./components/latest-logs"
 import Safety from "./components/safety"
 import ServiceUsers from "./components/users"
 import ServiceNetwork from "./components/network"
+import ServiceRightsComponent from "./components/users/rights/components/rights"
+import ServiceRightsComponentGlobal from "./components/users/rights"
 
 
 const ManageServiceOverview = ({
@@ -37,12 +39,16 @@ const ManageServiceOverview = ({
                 }}
             >
 
-                <div className="parent__of__section row__layout" id="left-side">
+                <div className="parent__of__section row__layout" id="left-side" style={{
+                    display : serviceTabs == "rights" ? "none" : "flex"
+                }}>
                     <ServiceDescription service={service} />
                 </div>
 
                 <div className="parent__of__section row__layout" id="right-side">
-                    <div className="right__side__header">
+                    <div className="right__side__header" style={{
+                        display : serviceTabs == "rights" ? "none" : "flex"
+                    }}>
                         <QuickActions service={service} setService={setService} />
                         <ServiceCapacities service={service} />
                     </div>
@@ -66,9 +72,10 @@ const ManageServiceOverview = ({
                             {serviceTabs === "safety" && <Safety service={service} />}
                             {serviceTabs === "logs" && <LatestLogs service={service} />}
                             {serviceTabs === "users" && <ServiceUsers
-                                service={service}
+                                service={service} setTab={setServiceTabs}
                             />}
                             {serviceTabs === "network" && <ServiceNetwork service={service} />}
+                            {serviceTabs === "rights" && <ServiceRightsComponentGlobal service={service} />}
                         </div>
                     </div>
                 </div>

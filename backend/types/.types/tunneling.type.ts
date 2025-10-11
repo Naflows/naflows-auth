@@ -3,13 +3,18 @@
 export interface ServiceRights {
     id : string;
     service_id : string;
-    rights : ("MANAGE_TUNNELS" | "MANAGE_DEVS" | "VIEW_STATS" | "READ" | "WRITE" | "DELETE" | "MANAGE_USERS" | "MANAGE_ROLES" | "MANAGE_SERVICE" | "MANAGE_SETTINGS" | "VIEW_USERS" | "VIEW_ROLES" | "VIEW_SERVICE" | "VIEW_SETTINGS")[];
+    rights : (
+        "MANAGE_TUNNELS" | "MANAGE_DEVS" | "VIEW_STATS" | "READ" | "WRITE" | "DELETE" | "MANAGE_USERS" | "MANAGE_ROLES" | "MANAGE_SERVICE" | "MANAGE_SETTINGS" | "VIEW_USERS" | "VIEW_ROLES" | "VIEW_SERVICE" | "VIEW_SETTINGS" | "DEV_TOKEN_CREATION" | "PROD_TOKEN_CREATION"
+    )[] | string[]; // Warning: non-custom rights are ONLY for services with type "SERVICE_BY_NASS". Otherwise, custom rights can be used.
+    
     created_at : number;
     updated_at : number;
     name : string; // Name of the rights set, e.g., "Default Rights"
     deletable : boolean; // Whether this rights set can be deleted
     hue : string; // Color hue for UI representation
     usersPerRights? : { id: string; username: string; first_name: string; last_name: string; profile_picture: string | null }[]; // Added field to map rights to users
+
+    type : "SERVICE_BY_NASS" | "TUNNELING_BY_INSTANCE"; // Type of service rights, view documentation for more info
 }
 
 export interface UserRights {
@@ -19,7 +24,6 @@ export interface UserRights {
     rights : string[]; // e.g., ["READ", "WRITE", "DELETE"] & must be a subset of the service rights
     created_at : number;
     updated_at : number;
-
 }
 
 export interface DeveloperSecureAccess {

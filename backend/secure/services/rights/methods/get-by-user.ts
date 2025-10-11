@@ -4,7 +4,7 @@ import { db } from "../../../..";
 import secure from "../../../global/dir";
 import { services } from "../../dir";
 
-export async function getRightsByUser(user_id : string, service_id : string) : Promise<ServiceRights[]> {
+export async function getRightsByUser(user_id : string, service_id : string, sendRightsValue : boolean = false, type : ServiceRights["type"] | "ALL" = "ALL") : Promise<ServiceRights[]> {
     const userRightsDB = db.collection('user_rights') as Collection<UserRights>;
     const AllUserRights = await userRightsDB.find({service_id: service_id}).toArray();
     const userRights = AllUserRights.find((ur : UserRights) => secure.verify(user_id, ur.user_id));
@@ -19,13 +19,14 @@ export async function getRightsByUser(user_id : string, service_id : string) : P
     // Go throught userRights.rights and fetch the corresponding ServiceRights documents
     const rights = [];
     for (const right of userRights.rights) {
-        const rightContent : ServiceRights = await services.service.rights.get(right, service_id);
+        const rightContent : ServiceRights = await services.service.rights.get(right, service_id, type);
         console.log("Fetched right content for right ID", right, ":", rightContent);
         if (rightContent) {
             rights.push({
                 id: rightContent.id,
                 name: rightContent.name,
-                hue: rightContent.hue
+                hue: rightContent.hue,
+                rights : sendRightsValue ? rightContent.rights : []
             });
         }
     }

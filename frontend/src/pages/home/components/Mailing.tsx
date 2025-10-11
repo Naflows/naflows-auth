@@ -50,6 +50,7 @@ const Mailing = () => {
               type="email"
               name="email"
               required={true}
+              fitContent={false}
               value=""
             />
             <div className="nass_mailing__list__button_container">

@@ -149,7 +149,9 @@ const Input = ({
         ) : null}
 
         {maxChar && displayMaxChar ? (
-          <p className="character-count">{inputValue ? inputValue.length : 0}/{maxChar}</p>
+          <p className="character-count" style={{
+            right : fitContent ? "10px" : "20px"
+          }}>{inputValue ? inputValue.length : 0}/{maxChar}</p>
         ) : null}
         {displayError && errorMessage ? (
           <p className="error-message text-size-14">{errorMessage}</p>
@@ -157,7 +159,9 @@ const Input = ({
       </div>
 
       {aboutMode && aboutModeText ? (
-        <p className="about-mode text-size-14">{aboutModeText}</p>
+        <p className="about-mode text-size-14" style={{
+          marginTop: errorMessage && displayError ? "15px" : "0px"
+        }}>{aboutModeText}</p>
       ) : null}
 
 

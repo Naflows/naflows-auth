@@ -1,100 +1,212 @@
-@import '../../../../variables.scss';
-
+@import "../../../../variables.scss";
 
 @keyframes RightCardAppears {
-    0% {
-        opacity: 0;
-        transform: translateY(-20px) scale3d(0.95, 0.95, 1);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0) scale3d(1, 1, 1);
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(-20px) scale3d(0.95, 0.95, 1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale3d(1, 1, 1);
+  }
+}
+
+.users__container {
+  .content__container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
 }
 
 .rights__container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 2px solid $_2k25-background-hue-50-transparent;
+  background-color: $_2k25-background-hue-darker-2;
+  width: 100%;
+  .rights__container__header {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
-    .right__card {
-        padding: 10px;
-        width: calc(100% - 20px);
-        border-radius: 10px;
-        border: 2px solid $_2k25-background-hue-50-transparent;
-        background-color: $_2k25-background-hue-darker;
-        transition: all 0.3s ease-in-out;
-        opacity: 0;
-        animation: RightCardAppears 0.3s ease-in-out forwards;
-        cursor: pointer;
-        &:hover {
-            border: 2px solid $_2k25-background-hue-50;
-            background-color: $_2k25-background-hue-darker-2;
+    flex-direction: row;
+    gap: 50px;
+    align-items: start;
+    button {
+      height: fit-content;
+    }
+    .header__content {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      h3,
+      p {
+        margin: 0;
+        padding: 0;
+      }
+      .rights__container__title {
+        font-size: 20px;
+        font-weight: 600;
+      }
+    }
+
+    border-bottom: 2px solid $_2k25-background-hue-50-transparent;
+    padding-bottom: 10px;
+  }
+
+  .rights__content {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .right__card {
+    padding: 10px;
+    min-width: fit-content;
+    max-width: 200px;
+    border-radius: 10px;
+    border: 2px solid $_2k25-background-hue-50-transparent;
+    background-color: $_2k25-background-hue-darker;
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    animation: RightCardAppears 0.3s ease-in-out forwards;
+    cursor: pointer;
+    &:hover {
+      border: 2px solid $_2k25-background-hue-50;
+      background-color: $_2k25-background-hue-50-transparent;
+    }
+    .right__card__body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+      .right__users {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 5px;
+        margin-left: 20px;
+        .user__image__container {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          object-fit: cover;
+          img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+          }
         }
-        .right__card__body {
+      }
+      .right__header {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        .right__color {
+          min-width: 15px;
+          min-height: 15px;
+          max-width: 15px;
+          max-height: 15px;
+          border-radius: 50%;
+          margin-top: 2px;
+        }
+        .right__info {
+          display: flex;
+          flex-direction: row;
+          gap: 50px;
+          .right__info__main {
+            display: flex;
+            flex-direction: column;
+          }
+          h3 {
+            margin: 0;
+            padding: 0;
+            font-size: 18px;
+            font-weight: 600;
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
-            .right__users {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 5px;
-                .user__image__container {
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 50%;
-                    object-fit: cover;
-                    img {
-                        width: 100%;
-                        height: 100%;
-                        border-radius: 50%;
-                        object-fit: cover;
-                    }
-                }
+            gap: 20px;
+            align-items: center;
+            height: 30px;
+          }
+          .last__updated {
+            font-size: 12px;
+            opacity: 0.7;
+            font-weight: 500;
+          }
+          .rights__details {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 5px;
+            .right__tag {
+              white-space: nowrap;
+              height: fit-content;
+              border: 1px solid $_2k25-background-hue-50-transparent;
+              padding: 5px 10px;
+              border-radius: 50px;
+              font-size: 12px;
+              font-weight: 500;
             }
-            .right__header {
-                display: flex;
-                flex-direction: row;
-                gap: 10px;
-                .right__color {
-                    min-width: 15px;
-                    min-height: 15px;
-                    max-width: 15px;
-                    max-height: 15px;
-                    border-radius: 50%;
-                    margin-top: 2px;
-                }
-                .right__info {
-                    display: flex;
-                    flex-direction: column;
-                    h3 {
-                        margin: 0;
-                        padding: 0;
-                        font-size: 18px;
-                        font-weight: 600;
-                    }
-                    .last__updated {
-                        font-size: 12px;
-                        opacity: 0.7;
-                        font-weight: 500;
-                    }
-                    .rights__details {
-                        margin-top: 10px;
-                        display: flex;
-                        flex-direction: row;
-                        flex-wrap: wrap;
-                        gap: 5px;
-                        .right__tag {
-                            border: 1px solid $_2k25-background-hue-50-transparent;
-                            padding: 5px 10px;
-                            border-radius: 50px;
-                            font-size: 12px;
-                            font-weight: 500;
-                        }
-                    }
-
-                }
-            }
+          }
         }
+      }
     }
+  }
+}
+
+
+
+.rights__container__form__content {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+  .right__item {
+    padding: 10px;
+    min-width: fit-content;
+    max-width: 200px;
+    border-radius: 10px;
+    border: 2px solid $_2k25-background-hue-50-transparent;
+    background-color: $_2k25-background-hue-darker;
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    animation: RightCardAppears 0.3s ease-in-out forwards;
+    position:relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: fit-content;
+    white-space: nowrap;
+    .button-content {
+      display: flex;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: -1;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      backdrop-filter: blur(5px);
+      opacity: 0;
+      transition: all 0.3s ease-in-out;
+    }
+    &:hover {
+      .button-content {
+        display: flex;
+        z-index: 1;
+        opacity: 1;
+      }
+    }
+
+  }
 }
