@@ -20,8 +20,8 @@ export interface Log {
             first_name?: string | null;
             last_name?: string | null;
             rights?: { id: string; name: string; hue: string; }[];
-
-        }
+        },
+        message? : string
     };
     created_at: number;
 }
@@ -33,7 +33,6 @@ const LatestLogs = ({
 }) => {
 
     const [logs, setLogs] = useState<Log[]>([]);
-    const [metadatas, setMetadatas] = useState<Record<string, Log["metadata"]>>({});
     const [isError, setIsError] = useState(false);
     const [hoveredLog, setHoveredLog] = useState<Log | null>(null);
 
@@ -60,20 +59,7 @@ const LatestLogs = ({
         }
     }, [service]);
 
-    useEffect(() => {
-        if (logs.length > 0) {
-            for (const log of logs) {
-                setMetadatas(prevMetadatas => ({
-                    ...prevMetadatas,
-                    [log.id]: log.metadata
-                        ? Object.fromEntries(
-                            Object.entries(log.metadata).filter(([key]) => key !== "userData" && key !== "user")
-                        )
-                        : {}
-                }));
-            }
-        }
-    }, [logs]);
+
 
     return (
         <div className="logs__container">
@@ -150,9 +136,7 @@ const LatestLogs = ({
                                         <td className="log__message">
                                             <span>{log.message}</span>
                                             <span>
-                                                {metadatas[log.id] && Object.keys(metadatas[log.id] as object).length > 0
-                                                    ? JSON.stringify(metadatas[log.id])
-                                                    : "No additional metadata"}
+                                                {log.metadata?.message ? log.metadata.message : "No metadata"}
                                             </span>
                                         </td>
                                         <td className="log__timestamp">{createdAtToAgo(log.created_at)}</td>

@@ -60,7 +60,7 @@ export async function createServiceRights(service_id: string, name: string, righ
     }
 
     if (user_id) {
-        services.service.logs.create(service_id, `Service rights set "${name}" created by user.`, "DEVELOPERS", "INFO", { user: user_id });
+        services.service.logs.create(service_id, `Service right ${right.name} created and set to ${right.hue}`, "DEVELOPERS", "INFO", { user: user_id, message : `This right is used for ${right.type === "TUNNELING_BY_INSTANCE" ? "tunneling" : "service"} rights.` });
     }
 
     const u = await serviceRightsDB.insertOne(right);

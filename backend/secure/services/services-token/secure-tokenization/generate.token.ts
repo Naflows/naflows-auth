@@ -79,7 +79,7 @@ export async function generateServiceToken(api_id: string, devKey : string, meth
         }
         const user = userRT.data?.user;
 
-        await services.service.logs.create(api_id, `A service token was created.`, "DEVELOPERS", "WARNING", { creationMethod: method, user: user?.id || "SYSTEM" });
+        await services.service.logs.create(api_id, `A service token was created.`, "DEVELOPERS", "WARNING", { message : `Creation method: ${method}.`, user: user?.id || "SYSTEM" });
         return software.methods.serverReply(200, "Service token inserted successfully.", { serviceToken: x });
     } catch (error) {
         software.methods.serverReply(500, "Internal Server Error: Failed to insert service tokens with error: " + error.message);
