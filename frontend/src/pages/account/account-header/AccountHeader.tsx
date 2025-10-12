@@ -59,6 +59,8 @@ const AccountHeader = ({
     }
   }, [collapsed]);
 
+  const [displayMeny, setDisplayMeny] = useState(false);
+
 
 
 
@@ -102,16 +104,32 @@ const AccountHeader = ({
             }}>
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m432-480 156 156q11 11 11 28t-11 28q-11 11-28 11t-28-11L348-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 28-11t28 11q11 11 11 28t-11 28L432-480Z" /></svg>
             </button>
-            <div className="user__header__visual__access">
-              <AccountUserBodyProfilePicture
-                profilePictureUrl={userFetch.profile_picture}
-                altText={`Profile picture of ${userFetch.username}`}
-              />
-              <div className="user__header__informations">
-                <h3 className="name">
-                  {userFetch.first_name} {userFetch.last_name}
-                </h3>
-                <p className="username">@{userFetch.username}</p>
+            <div className="user__header__visual__access" onMouseEnter={() => {
+              setDisplayMeny(!displayMeny);
+            }} onMouseLeave={() => {
+              setDisplayMeny(!displayMeny);
+            }}>
+              <div className="user__header__visual__hover" style={{ display: displayMeny ? "flex" : "none" }}>
+                <button className="secondary-button width-100-auto" onClick={() => {
+                  // Remove current cookies and redirect to login page
+                  document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+                  window.location.href = "/login";
+                }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h240q17 0 28.5 11.5T480-800q0 17-11.5 28.5T440-760H200v560h240q17 0 28.5 11.5T480-160q0 17-11.5 28.5T440-120H200Zm487-320H400q-17 0-28.5-11.5T360-480q0-17 11.5-28.5T400-520h287l-75-75q-11-11-11-27t11-28q11-12 28-12.5t29 11.5l143 143q12 12 12 28t-12 28L669-309q-12 12-28.5 11.5T612-310q-11-12-10.5-28.5T613-366l74-74Z" /></svg>
+                  <span>Log Out</span>
+                </button>
+              </div>
+              <div className="user__header__content">
+                <AccountUserBodyProfilePicture
+                  profilePictureUrl={userFetch.profile_picture}
+                  altText={`Profile picture of ${userFetch.username}`}
+                />
+                <div className="user__header__informations">
+                  <h3 className="name">
+                    {userFetch.first_name} {userFetch.last_name}
+                  </h3>
+                  <p className="username">@{userFetch.username}</p>
+                </div>
               </div>
             </div>
           </div>

@@ -253,9 +253,6 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
         delete serviceInfo.apiKey;
     }
 
-    if (!service.rights.includes('ADMINISTRATOR')) {
-        delete serviceInfo.service_token;
-    }
 
 
     console.log("Sending service information for service:", serviceInfo.name, "to user:", user.username);

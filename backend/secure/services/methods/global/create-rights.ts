@@ -12,6 +12,15 @@ export async function createRights(req: Request, res: Response, user: User) {
         rights
     } = req.body;
 
+    const isUserDev = await services.service.user.isDev(user.id, service_id);
+    if (!isUserDev.success) {
+        return res.status(403).json({
+            success: false,
+            message: "User does not have permission to create rights."
+        });
+    }
+
+
     const re = await services.service.rights.create(service_id, name, rights, deletable, type, user.id);
     if (re.success) {
         return res.status(200).json({

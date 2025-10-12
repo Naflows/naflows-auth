@@ -76,6 +76,7 @@ const ServiceConfiguration = ({
                                 name="ip_address"
                                 value={serviceConfiguration && serviceConfiguration.config ? serviceConfiguration.config.ip_address : ""}
                                 autoComplete={false}
+                                fitContent={false}
                                 onChange={(value) => {
                                     if (serviceConfiguration) {
                                         setServiceConfiguration({
@@ -88,6 +89,8 @@ const ServiceConfiguration = ({
                                     }
                                 }}
                                 required={true}
+                                maxChar={15}
+                                displayMaxChar={true}
                                 errorMessage="Please enter a valid IP address."
                                 onError={(value) => {
                                     const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
@@ -99,6 +102,7 @@ const ServiceConfiguration = ({
                                 type="text"
                                 name="dns"
                                 value={serviceConfiguration && serviceConfiguration.config ? serviceConfiguration.config.dns : ""}
+                                fitContent={false}
                                 onChange={(value) => {
                                     if (serviceConfiguration) {
                                         setServiceConfiguration({

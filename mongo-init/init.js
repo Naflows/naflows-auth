@@ -68,7 +68,6 @@ db.tokens.createIndex({ session_id: 1 });
 
 db.services.createIndex({ id: 1 }, { unique: true });
 db.services.createIndex({ ip_address: 1 });
-db.services.createIndex({ service_token: 1 }, { unique: true });
 
 db.nass_api_keys.createIndex({ id: 1 }, { unique: true });
 db.nass_api_keys.createIndex({ apiId: 1 }, { unique: true });
@@ -123,7 +122,7 @@ db.user_rights.createIndex({ user_id: 1 });
 
 db.service_tunneling.createIndex({ id: 1 }, { unique: true });
 db.service_tunneling.createIndex({ service_id: 1 });
-db.service_tunneling.createIndex({ target_url: 1 });
+db.service_tunneling.createIndex({ target_url: 1}, { unique: true });
 
 db.service_devs.createIndex({ id: 1 }, { unique: true });
 db.service_devs.createIndex({ service_id: 1 });

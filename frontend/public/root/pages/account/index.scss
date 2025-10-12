@@ -198,7 +198,7 @@ body {
       display: flex;
       flex-direction: row;
       gap: 10px;
-      align-items: center;
+      align-items: end;
       width: 100%;
 
       button {
@@ -206,8 +206,19 @@ body {
       }
 
       .user__header__visual__access {
+        .user__header__visual__hover {
+          width: calc(100%) !important;
+          border-radius: 15px;
+          display: none;
+        }
+        &:hover {
+          .user__header__visual__hover {
+            display: flex;
+          }
+        }
         display: flex;
-        flex-direction: row;
+        position:relative;
+        flex-direction: column;
         gap: 10px;
         align-items: center;
         padding: 5px 15px 5px 10px;
@@ -218,8 +229,16 @@ body {
         border-radius: 15px;
 
         align-self: stretch;
-        overflow: hidden;
         width: calc(100% - 20px - 4px) !important;
+
+        .user__header__content {
+          display: flex;
+          flex-direction: row;
+          gap: 10px;
+          align-items: center;
+          justify-content: start;
+          width: 100%;
+        }
 
         .user__header__informations {
           width: calc(100% - 45px);

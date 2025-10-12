@@ -4,6 +4,12 @@ import mailing from "../dir";
 
 
 async function sendEmail(by = process.env.SMTP_USER, to, subject, content): Promise<ReplyType> {
+
+  if (process.env.DEV_SKIP_MAILING === 'true') {
+    console.log("DEV_SKIP_MAILING is enabled, skipping email sending.");
+    return software.methods.serverReply(200, "Email sending skipped in development mode.");
+  }
+
   try {
     const info = await mailing.config.transporter.sendMail({
       from: {

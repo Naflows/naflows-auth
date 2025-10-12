@@ -153,7 +153,6 @@ export interface Service {
   status: "ACTIVE" | "INACTIVE" | "DEPRECATED"; // Service status, ACTIVE means the service is running, INACTIVE means the service is not running, DEPRECATED means the service is no longer supported
   dns: string; // DNS of the service, used to identify the service
   ip_address: string; // IP address of the service
-  service_token: string; // Service token, a secure way of connecting to the service
   plan: ServicePlan;
   settings: ServiceSettings;
   apiKey?: string; // The API key associated with the service

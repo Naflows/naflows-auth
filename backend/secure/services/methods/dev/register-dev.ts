@@ -15,6 +15,7 @@ export async function registerServiceDev(service_id : string, developer_id : str
     }
 
     const ins = await serviceDevs.insertOne({
+        id : `dev-${service_id}-${crypto.randomBytes(16).toString('hex')}-${Date.now()}`,
         developer_id : secure.crypt(developer_id),
         service_id : service_id,
         created_at : Date.now(),

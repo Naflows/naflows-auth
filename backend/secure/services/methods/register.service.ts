@@ -84,7 +84,6 @@ export async function registerService(
 
         ip_address: pub.ip_address,
         dns: pub.dns,
-        service_token: 'unavailable',
         created_at: new Date().getTime(),
         status: "INACTIVE",
 

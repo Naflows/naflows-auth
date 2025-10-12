@@ -35,6 +35,7 @@ export interface UserRights {
 }
 
 export interface DeveloperSecureAccess {
+    id : string;
     developer_id : string;
     service_id : string;
     access_key : string; // Secure key for developer access
@@ -43,9 +44,9 @@ export interface DeveloperSecureAccess {
 }
 
 export interface ServiceTunneling {
+    id : string;
     service_id : string;
     target_url : string; // The URL to which requests will be tunneled
-    allowed_methods : string[]; // e.g., ["GET", "POST"]
     allowed_rights : string[]; // e.g., ["READ", "WRITE"] & must be a subset of the service rights
     created_at : number;
     updated_at : number;
