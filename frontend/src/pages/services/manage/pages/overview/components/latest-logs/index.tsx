@@ -139,7 +139,10 @@ const LatestLogs = ({
                                                 {log.metadata?.message ? log.metadata.message : "No metadata"}
                                             </span>
                                         </td>
-                                        <td className="log__timestamp">{createdAtToAgo(log.created_at)}</td>
+                                        <td className="log__timestamp">
+                                            <span>{createdAtToAgo(log.created_at)}</span>
+                                            <span>{new Date(log.created_at).toLocaleString()}</span>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

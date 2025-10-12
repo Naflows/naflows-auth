@@ -114,11 +114,23 @@ body {
       .user__header__visual__access {
         align-self: unset;
         height: fit-content !important;
-        padding: 5px 10px !important;
-        width: fit-content !important;
-        width: calc(100% - 20px - 4px) !important;
-        border-radius: 50% !important;
+        padding: 5px !important;
+        align-self: stretch;
+        flex:1;
+        min-width: calc(100% - 10px - 2px) !important;
+        border-radius: 5px !important;
         justify-content: center !important;
+        .user__header__content {
+          width: fit-content !important;
+        }
+        .user__header__visual__hover {
+          button {
+            padding: 5px 0px !important;
+            span {
+              display: none;
+            }
+          }
+        }
         .user__header__informations {
           display: none;
         }

@@ -119,7 +119,6 @@ const ManageService = () => {
           selectedTab="services"
           userFetch={user ? user : undefined}
         />
-        <AccountDir service={service} tab={tab} title={dirValues[tab].title} description={dirValues[tab].description} setTab={setTab} />
         <div className="service__overview__tabs">
           {SERVICE_OVERVIEW_TABS.map((tab_) => (
             <button
@@ -134,6 +133,8 @@ const ManageService = () => {
             </button>
           ))}
         </div>
+        <AccountDir service={service} tab={tab} title={dirValues[tab].title} description={dirValues[tab].description} setTab={setTab} />
+
         {tab === "overview" && <ManageServiceOverview service={service} setService={setService} setTab={setTab} tab={tab} />}
         {tab === "edit" && <ManageServiceEdition service={service} />}
         {tab === "logs" && <LatestLogs service={service} />}
