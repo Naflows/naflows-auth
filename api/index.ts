@@ -245,6 +245,58 @@ app.post('/user/secure/service/logs', async (req: Request, res: Response) => {
     res.status(f.status).json(f.data);
 });
 
+app.post('/user/secure/service/rights/create', async (req: Request, res: Response) => {
+    const { sessionID, token, uid } = getCookies(req);
+
+    await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/services/rights/create`, {
+        user: {
+            ip: req.ip,
+            agent: req.headers['user-agent'],
+            device_fingerprint: req.fingerprint,
+            session_id: sessionID || null,
+            token: token || null,
+            user_id: uid || null,
+        },
+        service_id: req.body.service_id,
+        name: req.body.name,
+        type: req.body.type,
+        deletable: req.body.deletable,
+        rights: req.body.rights,
+        request: {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        },
+        client: service
+    }).then((result) => {
+        const resultData = result.data.data;
+
+        if (result.status === 200) {
+            console.log("Rights created successfully:", resultData);
+
+            sendCookies(res, result.data);
+
+            delete resultData.middleware;
+
+            res.status(result.status).json(resultData);
+        } else {
+            console.error("Error creating rights:", resultData.message || "Unknown error");
+            sendCookies(res, result.data);
+            delete resultData.middleware;
+            res.status(result.status).json(resultData);
+        }
+    }).catch((error) => {
+        console.error("Error creating rights:", error.response ? error.response.data : error.message);
+        sendCookies(res, error.response.data);
+        const errorData = error.response ? error.response.data : { success: false, message: "Unknown error occurred." };
+        delete errorData.data.middleware;
+        res.status(error.response.status).json(errorData);
+    });
+
+
+});
+
 app.post('/user/secure/service/rights/get', async (req: Request, res: Response) => {
     const { sessionID, token, uid } = getCookies(req);
 

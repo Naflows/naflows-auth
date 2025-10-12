@@ -20,5 +20,10 @@ router.post('/secure/services/rights/get', async (req, res) => {
 });
 
 
+router.post('/secure/services/rights/create', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    services.routes.createRights(req, res, user);
+})
+
 
 module.exports = router;

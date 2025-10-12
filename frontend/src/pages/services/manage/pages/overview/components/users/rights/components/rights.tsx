@@ -5,11 +5,12 @@ import { createdAtToAgo } from "../../../../../../../../account/sub-components/n
 
 
 const ServiceRightsComponent = ({
-    rights, service
+    service, rights
 }: {
-    rights: ServiceRights[],
     service: ServicesForUserProps | null,
+    rights: ServiceRights[]
 }) => {
+
 
 
     if (!service) return <></>;
@@ -40,7 +41,7 @@ const ServiceRightsComponent = ({
                             </div>
                             <div className="right__users">
                                 {
-                                    right.usersPerRights && right.usersPerRights.length > 0 ? (
+                                    right.usersPerRights && right.usersPerRights.length > 0 && (
                                         right.usersPerRights.map((user, i) => {
                                             if (i < 5) {
                                                 return (
@@ -56,8 +57,6 @@ const ServiceRightsComponent = ({
                                                 )
                                             }
                                         })
-                                    ) : (
-                                        <p>No users found for this right.</p>
                                     )
                                 }
                             </div>

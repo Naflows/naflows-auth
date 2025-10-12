@@ -31,6 +31,7 @@ import registerUserInAPI from "./user-registration/register";
 import isRegistrationTokenValid from "./user-registration/token-valid";
 import { getRights } from "./methods/global/get-rights";
 import { getRightsByUser } from "./rights/methods/get-by-user";
+import { createRights } from "./methods/global/create-rights";
 
 
 
@@ -38,7 +39,8 @@ export const services = {
     routes: {
         update: updateServiceRoute,
         logs: getLogsRoutes,
-        getRights: getRights
+        getRights: getRights,
+        createRights : createRights
     },
     service: {
         register: registerService,

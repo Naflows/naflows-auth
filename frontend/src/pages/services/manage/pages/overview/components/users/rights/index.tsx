@@ -18,6 +18,7 @@ const ServiceRightsComponentGlobal = ({
     const [instanceRights, setInstanceRights] = useState<ServiceRights[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [createRightSet, setCreateRightSet] = useState<boolean>(false);
+    const [loadServices, setLoadServices] = useState<boolean>(true);
 
     useEffect(() => {
         async function fetchRights() {
@@ -37,19 +38,22 @@ const ServiceRightsComponentGlobal = ({
                 }).finally(() => {
                     setIsLoading(false);
                 });
+                setLoadServices(false);
             } catch (error) {
                 console.error("Error fetching rights:", error);
             }
         }
 
-        fetchRights();
-    }, [service])
+        if (loadServices) {
+            fetchRights();
+        }
+    }, [service, loadServices]);
 
     if (!service) return <></>;
 
     return (
         <div>
-            <CreateRightSet service={service} createRightSet={createRightSet} setCreateRightSet={setCreateRightSet} />
+            <CreateRightSet service={service} createRightSet={createRightSet} setCreateRightSet={setCreateRightSet} setLoadServices={setLoadServices} />
 
             <div className="users__container">
                 {

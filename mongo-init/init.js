@@ -20,6 +20,7 @@ db.createCollection('notifications'); // User notifications
 
 
 db.createCollection('service_rights');
+db.createCollectio('instance_tunneling_rights');
 db.createCollection('user_rights');
 db.createCollection('service_tunneling');
 db.createCollection('service_devs'); // Service developers
@@ -43,7 +44,10 @@ const userConnections = db.getCollection('user_connections'); // Connections bet
 const serviceLogs = db.getCollection('service_logs'); // Logs for services to log actions and events
 
 const serviceRights = db.getCollection('service_rights'); // Rights for services
+const instanceTunnelingRights = db.getCollection('instance_tunneling_rights'); // Rights for instance tunneling
+
 const userRights = db.getCollection('user_rights'); // Rights for users
+
 const serviceTunneling = db.getCollection('service_tunneling'); // Service tunneling configurations
 const serviceDevs = db.getCollection('service_devs'); // Service developers
 
@@ -107,6 +111,12 @@ db.service_logs.createIndex({ created_at: 1 });
 
 db.service_rights.createIndex({ id: 1 }, { unique: true });
 db.service_rights.createIndex({ service_id: 1 });
+db.service_rights.createIndex({ name: 1, service_id: 1 }, { unique: true });
+db.service_rights.createIndex({ type: 1 });
+db.instanceTunnelingRights.createIndex({ id: 1 }, { unique: true });
+db.instanceTunnelingRights.createIndex({ name: 1 }, { unique: true });
+db.instanceTunnelingRights.createIndex({ service_id: 1 }, { unique: true });
+
 
 db.user_rights.createIndex({ id: 1 }, { unique: true });
 db.user_rights.createIndex({ user_id: 1 });

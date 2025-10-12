@@ -10,6 +10,7 @@ const CreateRightsDefinition = ({
     setRightSetValue: React.Dispatch<React.SetStateAction<ServiceRights | null>>
 }) => {
     const [value, setValue] = useState<string>("");
+    const rightsMax = 10;
 
     useEffect(() => {
         // Set even "enter" key to move to next section if button enabled
@@ -17,9 +18,8 @@ const CreateRightsDefinition = ({
             // Tab key
             if (e.key === "Tab") {
                 e.preventDefault();
-                if (value.trim() !== "") {
-                    setRightSetValue({ ...rightSetValue, rights: [...rightSetValue.rights, value] });
-                    console.log("Tab key pressed, adding right:", value);
+                if (value.trim() !== "" && !rightSetValue.rights.includes(value.trim()) && rightSetValue.rights.length < rightsMax) {
+                    setRightSetValue({ ...rightSetValue, rights: [...rightSetValue.rights, value.toUpperCase()] });
                     setValue("");
                     // Reset value of input
                     const input = document.getElementById("rights-input") as HTMLInputElement;
@@ -87,6 +87,7 @@ const CreateRightsDefinition = ({
                 />
             </div>
             <div className="rights__container__form__content">
+                <span className="rights__container__form__title">Current Rights ({rightSetValue.rights.length}/{rightsMax})</span>
                 {
                     rightSetValue.rights.map((right, index) => (
                         <div key={index} className="right__item">
@@ -104,6 +105,7 @@ const CreateRightsDefinition = ({
                 }
             </div>
         </div>
+
     )
 }
 

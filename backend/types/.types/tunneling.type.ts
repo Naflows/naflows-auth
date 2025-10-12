@@ -1,4 +1,10 @@
-
+export interface TunnelingByInstanceRight {
+    name : string; // Name of the right, e.g., "READ", "WRITE", "DELETE", or custom right like "MANAGE_TUNNELS"
+    service_id : string; // The service this right belongs to
+    created_at : number;
+    updated_at : number;
+    created_by : string; // User ID of the creator
+}
 
 export interface ServiceRights {
     id : string;
@@ -9,11 +15,13 @@ export interface ServiceRights {
     
     created_at : number;
     updated_at : number;
+    created_by : string; // User ID of the creator, null if created by system
     name : string; // Name of the rights set, e.g., "Default Rights"
     deletable : boolean; // Whether this rights set can be deleted
     hue : string; // Color hue for UI representation
     usersPerRights? : { id: string; username: string; first_name: string; last_name: string; profile_picture: string | null }[]; // Added field to map rights to users
 
+    description?: string;
     type : "SERVICE_BY_NASS" | "TUNNELING_BY_INSTANCE"; // Type of service rights, view documentation for more info
 }
 

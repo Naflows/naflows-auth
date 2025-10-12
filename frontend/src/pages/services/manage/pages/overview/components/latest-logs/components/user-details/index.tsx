@@ -31,7 +31,7 @@ const LogUserDetails = ({
                 </div>
                 <div className="log__rights__content">
                     <span className="log__rights__title">Rights</span>
-                    <div className="rights__container">
+                    <div className="rights__container__list">
                         {log.metadata.userData.rights && log.metadata.userData.rights.length > 0 ? (
                             log.metadata.userData.rights.map((right) => (
                                 <div className="log__right">

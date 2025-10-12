@@ -56,7 +56,7 @@ const CreateRightDetails = ({
                         />
                     </div>
                 </div>
-            </div>
+            </div>  
             <div className="form__section">
                 <div className="global__input">
                     <Switch

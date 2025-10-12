@@ -160,13 +160,54 @@
 }
 
 
+#rights-process-done {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  &.success {
+    svg {fill: $da-confirm-hue;}
+  }
+  &.error {
+    svg {fill: $da-error-hue;}
+  }
+  svg {
+    width: 40px;
+    height: 40px;
+  }
+  .header__body {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    h3,
+    p {
+      margin: 0;
+      padding: 0;
+    }
+    h3 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    p {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+  }
+}
 
 .rights__container__form__content {
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  row-gap: 10px;
+  column-gap: 10px;
   flex-wrap: wrap;
   width: 100%;
+  .rights__container__form__title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    width: 100%;
+  }
   .right__item {
     padding: 10px;
     min-width: fit-content;
