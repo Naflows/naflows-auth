@@ -29,34 +29,15 @@ const ManageServiceOverview = ({
                     width: "100%"
                 }}
             >
-
-                <div className="parent__of__section row__layout" id="left-side">
-                    <ServiceDescription service={service} />
-                </div>
-
-                <div className="parent__of__section row__layout" id="right-side">
-                    <div className="right__side__header">
-                        <QuickActions service={service} setService={setService} />
-                        <ServiceCapacities service={service} />
+                <div className="global__content">
+                    <div className="parent__of__section row__layout" id="left-side">
+                        <ServiceDescription service={service} />
                     </div>
-                    <div className="user__body__section">
-                        <div className="service__overview__tabs">
-                            {SERVICE_OVERVIEW_TABS.map((tab_) => (
-                                <button
-                                    key={tab_.id}
-                                    className={`tab ${tab === tab_.id ? "primary-button" : "secondary-button"}`}
-                                    style={{
-                                        width: "100%"
-                                    }}
-                                    onClick={() => setTab(tab_.label.toLowerCase() as accountTabs)}
-                                >
-                                    {tab_.label}
-                                </button>
-                            ))}
-                        </div>
-                        <div className="service__overview__tab__content">
 
-
+                    <div className="parent__of__section row__layout" id="right-side">
+                        <div className="right__side__header">
+                            <QuickActions service={service} setService={setService} />
+                            <ServiceCapacities service={service} />
                         </div>
                     </div>
                 </div>

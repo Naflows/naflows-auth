@@ -7,6 +7,7 @@ async function sendEmail(by = process.env.SMTP_USER, to, subject, content): Prom
 
   if (process.env.DEV_SKIP_MAILING === 'true') {
     console.log("DEV_SKIP_MAILING is enabled, skipping email sending.");
+    console.log(`Email details - From: ${by}, To: ${to}, Subject: ${subject}, Content: ${content}`);
     return software.methods.serverReply(200, "Email sending skipped in development mode.");
   }
 

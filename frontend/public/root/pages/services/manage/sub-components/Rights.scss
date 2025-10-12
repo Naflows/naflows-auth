@@ -12,6 +12,14 @@
 }
 
 .users__container {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 2px solid $_2k25-background-hue-50-transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 20px;
+  background-color: $_2k25-background-hue-darker-2;
   .content__container {
     display: flex;
     flex-direction: row;
@@ -26,7 +34,8 @@
   padding: 10px 20px;
   border-radius: 10px;
   border: 2px solid $_2k25-background-hue-50-transparent;
-  background-color: $_2k25-background-hue-darker-2;
+  background-color: $_2k25-background-hue-darker;
+  
   width: 100%;
   .rights__container__header {
     display: flex;

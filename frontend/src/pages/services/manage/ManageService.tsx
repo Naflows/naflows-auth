@@ -21,6 +21,7 @@ import ServiceNetwork from "./pages/overview/components/network";
 import ServiceUsers from "./pages/overview/components/users";
 import ServiceSettings from "./pages/overview/components/settings";
 import Safety from "./pages/overview/components/safety";
+import { SERVICE_OVERVIEW_TABS } from "./pages/overview/types/tabs.type";
 
 
 export type accountTabs = "overview" | "capacities" | "security" | "edit" | "network" | "settings" | "users" | "logs" | "rights" | "safety";
@@ -119,6 +120,20 @@ const ManageService = () => {
           userFetch={user ? user : undefined}
         />
         <AccountDir service={service} tab={tab} title={dirValues[tab].title} description={dirValues[tab].description} setTab={setTab} />
+        <div className="service__overview__tabs">
+          {SERVICE_OVERVIEW_TABS.map((tab_) => (
+            <button
+              key={tab_.id}
+              className={`tab ${tab === tab_.id ? "primary-button" : "secondary-button"}`}
+              style={{
+                width: "100%"
+              }}
+              onClick={() => setTab(tab_.label.toLowerCase() as accountTabs)}
+            >
+              {tab_.label}
+            </button>
+          ))}
+        </div>
         {tab === "overview" && <ManageServiceOverview service={service} setService={setService} setTab={setTab} tab={tab} />}
         {tab === "edit" && <ManageServiceEdition service={service} />}
         {tab === "logs" && <LatestLogs service={service} />}

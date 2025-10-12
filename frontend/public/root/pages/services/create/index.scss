@@ -365,6 +365,10 @@
   }
 }
 
+.service__manage__content {
+  flex-direction: column !important;
+}
+
 @media screen and (max-width: 1200px) and (min-width: 900px) {
   .plans__content {
     flex-direction: column !important;
