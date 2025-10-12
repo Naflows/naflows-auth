@@ -15,9 +15,27 @@ import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert
 import ManageServiceOverview from "./pages/overview";
 import ManageServiceEdition from "./pages/edit";
 import AccountDir from "./sub-component/ServiceDir";
+import LatestLogs from "./pages/overview/components/latest-logs";
+import ServiceRightsComponentGlobal from "./pages/overview/components/users/rights";
+import ServiceNetwork from "./pages/overview/components/network";
+import ServiceUsers from "./pages/overview/components/users";
+import ServiceSettings from "./pages/overview/components/settings";
+import Safety from "./pages/overview/components/safety";
 
 
-export type accountTabs = "overview" | "capacities" | "security" | "edit" | "network" | "settings" | "users";
+export type accountTabs = "overview" | "capacities" | "security" | "edit" | "network" | "settings" | "users" | "logs" | "rights" | "safety";
+const dirValues = {
+  "overview": { title: "Service Overview", description: "View and manage your service details, performance metrics, and recent activity." },
+  "capacities": { title: "Service Capacities", description: "Monitor and manage the capacities associated with your service." },
+  "security": { title: "Service Security", description: "Review and enhance the security settings of your service to protect your data and resources." },
+  "edit": { title: "Edit Service", description: "Update your service details and settings to keep your service information accurate and up-to-date." },
+  "network": { title: "Service Network", description: "Manage the network settings and configurations for your service." },
+  "settings": { title: "Service Settings", description: "Adjust the settings and preferences for your service to optimize its performance." },
+  "users": { title: "Service Users", description: "Manage user access and permissions for your service." },
+  "logs": { title: "Service Logs", description: "View and analyze the logs associated with your service for monitoring and troubleshooting." },
+  "rights": { title: "Service Rights", description: "Manage the rights and permissions associated with your service." },
+  "safety": { title: "Service Safety", description: "Review and manage the safety settings of your service to ensure its integrity and reliability." },
+};
 
 const ManageService = () => {
   const [serviceID, setServiceID] = useState<string | null>(null);
@@ -35,16 +53,15 @@ const ManageService = () => {
   useEffect(() => {
     const pathParts = window.location.pathname.split("/");
     const id = pathParts[3];
-    const tab = pathParts[4] as accountTabs;
-    if (tab && ["overview", "capacities", "security", "edit", "network", "settings", "users","logs"].includes(tab)) {
-      setTab(tab);
-    } else {
-      setTab("overview");
-    }
     if (id) {
       setServiceID(id);
     }
   }, []);
+
+  useEffect(() => {
+    console.log("Service ID from URL:", serviceID ? serviceID : "No ID", tab);
+
+  }, [tab, serviceID])
 
   useEffect(() => {
     // Fetch user data from the backend
@@ -94,29 +111,28 @@ const ManageService = () => {
         <Loader loading={user == null} />
       </div>
     );
-  } else if (tab === "overview") {
+  } else {
     return (
       <div className="user__body__manage-service nass__page">
         <AccountHeader
           selectedTab="services"
           userFetch={user ? user : undefined}
         />
-        <AccountDir service={service} tab={tab} title="Service Overview" description="View and manage your service details, performance metrics, and recent activity." />
-        <ManageServiceOverview service={service} setService={setService} />
+        <AccountDir service={service} tab={tab} title={dirValues[tab].title} description={dirValues[tab].description} setTab={setTab} />
+        {tab === "overview" && <ManageServiceOverview service={service} setService={setService} setTab={setTab} tab={tab} />}
+        {tab === "edit" && <ManageServiceEdition service={service} />}
+        {tab === "logs" && <LatestLogs service={service} />}
+        {tab === "rights" && <ServiceRightsComponentGlobal service={service} />}
+        {tab === "network" && <ServiceNetwork service={service} />}
+        {tab === "users" && <ServiceUsers
+          service={service} setTab={setTab}
+        />}
+        {tab === "settings" && <ServiceSettings service={service} />}
+        {tab === "safety" && <Safety service={service} />}
       </div>
-    );
-  } else if (tab === "edit") {
-    return (
-      <div className="user__body__manage-service nass__page">
-        <AccountHeader
-          selectedTab="services"
-          userFetch={user ? user : undefined}
-        />
-        <AccountDir service={service} tab={tab} title="Edit Service" description="Update your service details and settings to keep your service information accurate and up-to-date." />
-        <ManageServiceEdition service={service} />
-      </div>
-    );
+    )
   }
+
 };
 
 export default ManageService;

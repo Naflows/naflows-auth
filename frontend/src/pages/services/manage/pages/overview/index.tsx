@@ -1,34 +1,25 @@
 import type { ServicesForUserProps } from "../../../../../types/ServicesForUserProps"
 import ServiceCapacities from "../../sub-component/capacities"
 import ServiceDescription from "../../sub-component/ServiceDescription"
-import { useEffect, useState } from "react"
-import { SERVICE_OVERVIEW_TABS, type ServiceOverviewTabs } from "./types/tabs.type"
-import ServiceSettings from "./components/settings"
+import { SERVICE_OVERVIEW_TABS } from "./types/tabs.type"
+import type { accountTabs } from "../../ManageService"
 import QuickActions from "./components/quick-actions"
-import LatestLogs from "./components/latest-logs"
-import Safety from "./components/safety"
-import ServiceUsers from "./components/users"
-import ServiceNetwork from "./components/network"
-import ServiceRightsComponent from "./components/users/rights/components/rights"
-import ServiceRightsComponentGlobal from "./components/users/rights"
 
 
 const ManageServiceOverview = ({
     service,
-    setService
+    setService,
+    setTab,
+    tab
 }: {
     service: null | ServicesForUserProps;
     setService: (service: ServicesForUserProps) => void;
+    setTab: (tab: accountTabs) => void;
+    tab: accountTabs;
 }) => {
 
-    const [serviceTabs, setServiceTabs] = useState<ServiceOverviewTabs>("settings");
 
-    useEffect(() => {
-        // Set URL params
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.set("tab", serviceTabs);
-        window.history.replaceState({}, "", `${window.location.pathname}?${urlParams}`);
-    }, [serviceTabs])
+
 
     return (
         <div className="manage__service__body">
@@ -39,43 +30,33 @@ const ManageServiceOverview = ({
                 }}
             >
 
-                <div className="parent__of__section row__layout" id="left-side" style={{
-                    display : serviceTabs == "rights" ? "none" : "flex"
-                }}>
+                <div className="parent__of__section row__layout" id="left-side">
                     <ServiceDescription service={service} />
                 </div>
 
                 <div className="parent__of__section row__layout" id="right-side">
-                    <div className="right__side__header" style={{
-                        display : serviceTabs == "rights" ? "none" : "flex"
-                    }}>
+                    <div className="right__side__header">
                         <QuickActions service={service} setService={setService} />
                         <ServiceCapacities service={service} />
                     </div>
                     <div className="user__body__section">
                         <div className="service__overview__tabs">
-                            {SERVICE_OVERVIEW_TABS.map((tab) => (
+                            {SERVICE_OVERVIEW_TABS.map((tab_) => (
                                 <button
-                                    key={tab.id}
-                                    className={`tab ${serviceTabs === tab.id ? "primary-button" : "secondary-button"}`}
+                                    key={tab_.id}
+                                    className={`tab ${tab === tab_.id ? "primary-button" : "secondary-button"}`}
                                     style={{
                                         width: "100%"
                                     }}
-                                    onClick={() => setServiceTabs(tab.id)}
+                                    onClick={() => setTab(tab_.label.toLowerCase() as accountTabs)}
                                 >
-                                    {tab.label}
+                                    {tab_.label}
                                 </button>
                             ))}
                         </div>
                         <div className="service__overview__tab__content">
-                            {serviceTabs === "settings" && <ServiceSettings service={service} />}
-                            {serviceTabs === "safety" && <Safety service={service} />}
-                            {serviceTabs === "logs" && <LatestLogs service={service} />}
-                            {serviceTabs === "users" && <ServiceUsers
-                                service={service} setTab={setServiceTabs}
-                            />}
-                            {serviceTabs === "network" && <ServiceNetwork service={service} />}
-                            {serviceTabs === "rights" && <ServiceRightsComponentGlobal service={service} />}
+
+
                         </div>
                     </div>
                 </div>
