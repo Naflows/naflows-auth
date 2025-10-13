@@ -7,6 +7,8 @@ import Home from "./pages/home/Home.tsx";
 import CreateService from "./pages/services/create/CreateService.tsx";
 import AppFooter from "./global/components/AppFooter.tsx";
 import JoinPage from "./pages/services/join/JoinPage.tsx";
+import DocsPage from "./pages/docs/index.tsx";
+import DocsPageDoc from "./pages/docs/page.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
@@ -16,6 +18,18 @@ createRoot(document.getElementById("root")!).render(
       </>} />
       <Route path="/login" element={<>
         <App /><AppFooter />
+      </>} />
+      <Route path="/docs" element={<>
+        <DocsPage />
+        <AppFooter />
+      </>} />
+      <Route path="/docs/:tab" element={<>
+        <DocsPageDoc />
+        <AppFooter />
+      </>} />
+      <Route path="/docs/:tab/:doc" element={<>
+        <DocsPageDoc />
+        <AppFooter />
       </>} />
       <Route
         path="/account/:tab?"
