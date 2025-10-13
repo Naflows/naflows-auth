@@ -6,6 +6,7 @@
     "content": [{
         "id": "1",
         "title": "Create a service",
+        "description": "Learn how to create and configure a service in NASS to manage access control and secure your applications.",
         "page": "create-service",
         "vocabulary": [{
                 "term": "Service, Instance, API",
@@ -52,6 +53,7 @@
         "title": "Connect your API",
         "page": "connect-api",
         "level": "intermediate",
+        "description": "Step-by-step guide to connect your application to the NASS API in development mode.",
         "vocabulary": [{
                 "term": "Development Mode",
                 "definition": "A mode that allows developers to test and connect their applications to the NASS API using developer credentials."
