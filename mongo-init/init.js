@@ -20,7 +20,7 @@ db.createCollection('notifications'); // User notifications
 
 
 db.createCollection('service_rights');
-db.createCollectio('instance_tunneling_rights');
+db.createCollection('instance_tunneling_rights');
 db.createCollection('user_rights');
 db.createCollection('service_tunneling');
 db.createCollection('service_devs'); // Service developers

@@ -250,7 +250,6 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
         delete serviceInfo.created_by;
         delete serviceInfo.plan;
         delete serviceInfo.settings;
-        delete serviceInfo.apiKey;
     }
 
 

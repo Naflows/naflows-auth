@@ -32,6 +32,7 @@ import isRegistrationTokenValid from "./user-registration/token-valid";
 import { getRights } from "./methods/global/get-rights";
 import { getRightsByUser } from "./rights/methods/get-by-user";
 import { createRights } from "./methods/global/create-rights";
+import { getApiKey } from "./methods/global/get-api-key";
 
 
 
@@ -40,7 +41,8 @@ export const services = {
         update: updateServiceRoute,
         logs: getLogsRoutes,
         getRights: getRights,
-        createRights : createRights
+        createRights : createRights,
+        serviceKey : getApiKey
     },
     service: {
         register: registerService,

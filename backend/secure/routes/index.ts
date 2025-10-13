@@ -24,6 +24,11 @@ router.post('/secure/services/rights/create', async (req, res) => {
     services.routes.createRights(req, res, user);
 })
 
+router.post('/secure/services/service/key', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    services.routes.serviceKey(req, res, user);
+});
+
 
 
 

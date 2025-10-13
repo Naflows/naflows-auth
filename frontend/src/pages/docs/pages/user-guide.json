@@ -36,7 +36,7 @@
             {
                 "id": "1.3",
                 "title": "Connecting Your Service",
-                "content": "<p>Please read <a href='/user-guide/connect-api'>this guide</a> for detailed instructions on implementing the connection with NASS' API.</p>"
+                "content": "<p>Please read <a href='/docs/user-guide/connect-api'>this guide</a> for detailed instructions on implementing the connection with NASS' API.</p>"
             }
         ],
         "references": [{

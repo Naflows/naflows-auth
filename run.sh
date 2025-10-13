@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Close active Git Bash terminals before running this script:
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
+    taskkill //F //IM bash.exe //FI "PID ne %$$%" 2>/dev/null
+fi
+# Usage: ./run.sh <test-parameter> <reset-environment>
+# test-parameter: "no-test", "global", "contracts", "all"
+
+
 
 TEST_PARAMETER=$1
 RESET_ENVIRONMENT=$2
@@ -29,6 +37,12 @@ else
         
     fi
 fi
+
+
+# cd ./frontend
+# start chrome http://localhost:8080/login
+# npm run dev
+# Open new link
 
 
 # Prevent terminal from closing for debugging errors

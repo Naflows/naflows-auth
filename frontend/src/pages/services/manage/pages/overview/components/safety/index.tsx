@@ -1,5 +1,7 @@
+import { useState } from "react";
 import Input from "../../../../../../../global/components/Input";
 import type { ServicesForUserProps } from "../../../../../../../types/ServicesForUserProps";
+import { getApiKey } from "./methods/fetchServiceAPIKey";
 
 
 
@@ -8,6 +10,9 @@ export const Safety = ({
 }: {
     service: null | ServicesForUserProps;
 }) => {
+    const [onLoadApiKeyGet, setOnLoadApiKeyGet] = useState<boolean>(false);
+
+
     return (
         <>
             <div className="service__overview__tab__content">
@@ -43,9 +48,20 @@ export const Safety = ({
                                 </h3>
                                 <p>This API key is used to authenticate requests to the service. Keep it secure and do not share it publicly.</p>
                             </div>
-                            <div className="buttons-container">
+                            <div className="buttons-container col-20">
                                 <button className="secondary-button" >Regenerate API Key</button>
-                                <button className="primary-button" onClick={() => navigator.clipboard.writeText(service?.apiKey || "")}>Copy</button>
+                                <button className={`primary-button ${onLoadApiKeyGet ? "inactive" : ""}`} onClick={async (e ) => {
+                                    setOnLoadApiKeyGet(true);
+                                    const key = await getApiKey(service?.id || "");
+                                    console.log("Fetched API Key:", key);
+                                    if (key) {
+                                        navigator.clipboard.writeText(key);
+                                    }
+                                    setOnLoadApiKeyGet(false);
+                                }}>
+                                    {onLoadApiKeyGet ? "Loading" : "Get & Copy"}
+
+                                </button>
                             </div>
                         </div>
                         <div className="key__container">
