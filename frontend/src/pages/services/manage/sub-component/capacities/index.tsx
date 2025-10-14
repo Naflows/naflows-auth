@@ -45,7 +45,7 @@ const ServiceCapacities = ({
                 ></div>
               </div>
             </div>
-            <span className="rps__limitation">Limited to {service.settings.rates} rps. <a href="https://nass.naflows.com/docs/rates">Learn more.</a></span>
+            <span className="rps__limitation">Limited to {service.settings.rates} rps. <a href="/docs/plans/rates">Learn more.</a></span>
           </div>
         </div>
       </div>

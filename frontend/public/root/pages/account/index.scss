@@ -51,6 +51,7 @@ body {
   padding-top: 20px;
   min-height: 100vh;
   height: fit-content !important;
+  transition: 0.3s;
 }
 .nass__account__page {
   width: 100% !important;
@@ -73,6 +74,31 @@ body {
   z-index: 10;
   transition: 0.3s;
   border: 2px solid transparent;
+
+
+  .global--loader--page {
+    position:fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: $_2k25-background-hue-darker;
+    display: flex;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    .loader--content {
+      background-color: $_2k25-background-hue-darker-2;
+      padding: 20px;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      font-size: 20px;
+      width: 30%;
+    }
+  }
 
   &.collapsed {
     width: 60px !important;
@@ -118,7 +144,7 @@ body {
         align-self: stretch;
         flex:1;
         min-width: calc(100% - 10px - 2px) !important;
-        border-radius: 5px !important;
+        border-radius: 10px !important;
         justify-content: center !important;
         .user__header__content {
           width: fit-content !important;

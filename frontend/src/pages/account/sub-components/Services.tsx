@@ -111,7 +111,7 @@ const ServicesComponent = ({
           <div className="service__actions__field no-padding">
             <div className="service__actions__field__header">
               <h3 className="service__actions__field__title">Your Services</h3>
-              <p>Services you own or manage</p>
+              <p>Services you own or manage. <a href="/docs/user-guide/about-services">Learn more</a>.</p>
             </div>
             <button
               className="primary-button"
@@ -154,7 +154,7 @@ const ServicesComponent = ({
           <div className="service__actions__field no-padding">
             <div className="service__actions__field__header">
               <h3 className="service__actions__field__title">Your Connections</h3>
-              <p>Services you're connected to</p>
+              <p>Services you're connected to. <a href="/docs/user-guide/about-connections">Learn more</a>.</p>
             </div>
           </div>
           <SearchService onSearch={setSearchQuery} />

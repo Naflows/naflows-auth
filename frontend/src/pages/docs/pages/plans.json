@@ -1,0 +1,23 @@
+{
+    "title": "Plans",
+    "description": "Comprehensive reference for all NASS API plans, including features and limitations.",
+    "link": "/docs/plans",
+    "level": "basic",
+    "content": [{
+        "id": "1",
+        "title": "Rates Limitation",
+        "page": "rates",
+        "description": "Details about the rates limitation for different NASS API plans.",
+        "vocabulary": [
+            {"term": "Rate Limitation", "definition": "The maximum number of requests per second (RPS) that a service can handle based on its subscription plan."},
+            {"term": "RPS", "definition": "Requests Per Second, a measure of how many requests a service can process in one second."},
+            {"term": "Burst Capacity", "definition": "The ability of a service to handle a sudden increase in traffic for a short period, beyond its standard rate limit."}
+        ],
+        "sections": [{
+            "id": "1.1",
+            "title": "Plan Rates Overview",
+            "content": "<p>Naflows is currently proposing a tiered pricing model for its API services, with different levels of access and usage limits based on the subscription plan.</p><p>Each plan comes with a specific rate limitation, which defines the maximum number of requests per second (RPS) that a service can handle. This limitation is crucial for ensuring optimal performance and preventing abuse of the API.</p><h3>Current Plans and Their Rate Limits</h3><ul><li><strong>Free Plan:</strong> Limited to 100 RPS. Suitable for small projects and testing purposes.</li><li><strong>Basic Plan:</strong> Limited to 1000 RPS. Ideal for small to medium-sized applications.</li><li><strong>Pro Plan:</strong> Limited to 200 RPS. Designed for larger applications with higher traffic demands.</li><li><strong>Enterprise Plan:</strong> Custom (min. 10000) RPS limits based on specific needs. Contact Naflows sales for more information.</li></ul><h3>Burst Capacity</h3><p>In addition to the standard rate limits, each plan includes a burst capacity feature that allows services to handle short-term spikes in traffic. The burst capacity is typically set at double the standard RPS limit for a duration of up to 60 seconds.</p><p>For example, a service on the Basic Plan (100 RPS) can handle up to 200 RPS during a burst period, allowing it to accommodate sudden increases in demand without immediate throttling.</p><h3>Upgrading Plans</h3><p>If your application requires higher rate limits or additional features, you can upgrade your subscription plan at any time through the Naflows dashboard. Upgrading will provide immediate access to the new plan's benefits, including increased RPS limits and enhanced support options.</p><p>Please note that all plans are subject to Naflows' terms of service and acceptable use policies. Excessive or abusive usage may result in temporary suspension or additional charges.</p>"
+        }]
+    }]
+
+}

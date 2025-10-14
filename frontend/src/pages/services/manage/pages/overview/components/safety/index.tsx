@@ -27,17 +27,9 @@ export const Safety = ({
                             <p>This is your unique service identifier. It is used to identify your service within the Naflows ecosystem. It is public.</p>
                         </div>
 
-                        <Input
-                            type="text"
-                            value={service?.id || ""}
-                            allowCopy={true}
-                            onChange={() => { }}
-                            editMode={false}
-                            label="Service ID"
-                            name="service-id"
-                            autoComplete={false}
-                            required={true}
-                        />
+                        <div className="buttons-container">
+                            <button className="primary-button width-100-auto" onClick={() => navigator.clipboard.writeText(service?.id || "")}>Copy</button>
+                        </div>
                     </div>
                     <div className="keys__container">
                         <div className="key__container">
@@ -49,8 +41,8 @@ export const Safety = ({
                                 <p>This API key is used to authenticate requests to the service. Keep it secure and do not share it publicly.</p>
                             </div>
                             <div className="buttons-container col-20">
-                                <button className="secondary-button" >Regenerate API Key</button>
-                                <button className={`primary-button ${onLoadApiKeyGet ? "inactive" : ""}`} onClick={async (e ) => {
+                                <button className="secondary-button width-100-auto" >Regenerate API Key</button>
+                                <button className={`primary-button width-100-auto ${onLoadApiKeyGet ? "inactive" : ""}`} onClick={async (e ) => {
                                     setOnLoadApiKeyGet(true);
                                     const key = await getApiKey(service?.id || "");
                                     console.log("Fetched API Key:", key);
@@ -73,8 +65,8 @@ export const Safety = ({
                                 <p>This key is yours to use for accessing the service's API. Keep it secure and do not share it publicly.</p>
                             </div>
                             <div className="buttons-container">
-                                <button className="secondary-button">Regenerate Access Key</button>
-                                <button className="primary-button" onClick={() => navigator.clipboard.writeText(service?.details.access_key || "")}>Copy</button>
+                                <button className="secondary-button width-100-auto">Regenerate Access Key</button>
+                                <button className="primary-button width-100-auto" onClick={() => navigator.clipboard.writeText(service?.details.access_key || "")}>Copy</button>
                             </div>
                         </div>
                     </div>

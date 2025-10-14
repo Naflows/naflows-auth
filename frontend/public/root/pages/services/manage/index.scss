@@ -417,11 +417,14 @@
 }
 
 .service__overview__tab__content {
-  width: 100%;
+  width: calc(100% - 40px);
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: $_2k25-background-hue-darker-2;
   .service__overview__tab__header {
     h2,
     p {
@@ -443,16 +446,23 @@
 
   #security-data {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items:center;
     gap: 20px;
+    
+
     .key__container {
       animation: KeysContainerAppear 0.3s ease forwards;
       padding: 10px 15px;
       border-radius: 10px;
-      background-color: $_2k25-background-hue-darker-2;
+      background-color: $_2k25-background-hue-darker;
       display: flex;
       flex-direction: column;
       gap: 20px;
+      justify-content: space-between;
+      .inputs-container {
+        max-width: 100%;
+      }
       .key__container__header {
         display: flex;
         flex-direction: column;

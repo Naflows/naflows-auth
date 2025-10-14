@@ -54,8 +54,12 @@ const ManageService = () => {
   useEffect(() => {
     const pathParts = window.location.pathname.split("/");
     const id = pathParts[3];
+    const tab = pathParts[4];
     if (id) {
       setServiceID(id);
+      if (tab && Object.keys(dirValues).includes(tab)) {
+        setTab(tab as accountTabs);
+      }
     }
   }, []);
 

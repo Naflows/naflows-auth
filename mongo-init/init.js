@@ -110,7 +110,6 @@ db.service_logs.createIndex({ created_at: 1 });
 
 db.service_rights.createIndex({ id: 1 }, { unique: true });
 db.service_rights.createIndex({ service_id: 1 });
-db.service_rights.createIndex({ name: 1, service_id: 1 }, { unique: true });
 db.service_rights.createIndex({ type: 1 });
 db.instanceTunnelingRights.createIndex({ id: 1 }, { unique: true });
 db.instanceTunnelingRights.createIndex({ name: 1 }, { unique: true });

@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import type { UserBodyProps } from "../../../types/UserBodyProps";
 import AccountUserBodyProfilePicture from "../sub-components/ProfilePicture";
 import axios from "axios";
+import { loadPreferenceFromLocalStorage, setPreferenceToLocalStorage } from "../../../scripts/localstorage";
+import Loader from "../../../global/components/Loader";
 
 
 const icons = {
@@ -42,33 +44,70 @@ const AccountHeader = ({
   const [collapsed, setCollapsed] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
   const [headerWidth, setHeaderWidth] = useState(300);
+  const [pageLoaded, setPageLoaded] = useState(false);
+
+  function updateHeaderWidth() {
+    if (headerRef.current) {
+      setHeaderWidth(headerRef.current.offsetWidth);
+      console.log("Header width updated:", headerRef.current.offsetWidth);
+    }
+  }
+
+  useEffect(() => {
+    const nassPage = document.querySelector(".nass__page") as HTMLElement;
+    if (nassPage) {
+      console.log("Updating nass page padding:", headerWidth);
+      nassPage.style.paddingLeft = `${headerWidth}px`;
+    }
+  }, [headerWidth])
+
+  useEffect(() => {
+    if (!loadPreferenceFromLocalStorage("header-collapsed")) {
+      setCollapsed(false);
+    } else {
+      setCollapsed(true);
+    }
+    setTimeout(() => {
+      updateHeaderWidth();
+    }, 300);
+    setTimeout(() => {
+      setPageLoaded(true);
+
+    }, 500);
+  }, [])
 
   // On mount, set the initial header width
   useEffect(() => {
     if (headerRef.current) {
       setHeaderWidth(headerRef.current.offsetWidth);
+      console.log("Initial header width set:", headerRef.current.offsetWidth);
     }
-  }, []);
+  }, [userFetch]);
+
+
 
   useEffect(() => {
-    if (headerRef.current) {
-      setHeaderWidth(headerRef.current.offsetWidth);
-      const nassPage = document.querySelector(".nass__page") as HTMLElement;
-      if (nassPage) {
-        nassPage.style.paddingLeft = `${headerWidth}px`;
-      }
-    }
-  }, [collapsed]);
+    setPreferenceToLocalStorage("header-collapsed", collapsed ? "true" : "");
+  }, [collapsed, headerWidth]);
 
-  const [displayMeny, setDisplayMeny] = useState(false);
+  const [displayMenu, setDisplayMenu] = useState(false);
 
 
 
 
 
   if (userFetch) {
+
     return (
       <div className={`nass__account__page__header ${collapsed ? "collapsed" : ""}`} ref={headerRef}>
+        <div className="global--loader--page" style={{
+          display: pageLoaded ? "none" : "flex"
+        }}>
+          <div className="loader--content">
+            <span>Loading frontend...</span>
+            <Loader loading={true} />
+          </div>
+        </div>
         <div className="header__tabs">
           <img
             src={
@@ -102,15 +141,18 @@ const AccountHeader = ({
           <div className="header__account">
             <button className="secondary-button" onClick={() => {
               setCollapsed(!collapsed);
+              setTimeout(() => {
+                updateHeaderWidth();
+              }, 200); /// ????? Bad practice but it works
             }}>
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m432-480 156 156q11 11 11 28t-11 28q-11 11-28 11t-28-11L348-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 28-11t28 11q11 11 11 28t-11 28L432-480Z" /></svg>
             </button>
             <div className="user__header__visual__access" onMouseEnter={() => {
-              setDisplayMeny(!displayMeny);
+              setDisplayMenu(true);
             }} onMouseLeave={() => {
-              setDisplayMeny(!displayMeny);
+              setDisplayMenu(false);
             }}>
-              <div className="user__header__visual__hover" style={{ display: displayMeny ? "flex" : "none" }}>
+              <div className="user__header__visual__hover" style={{ display: displayMenu ? "flex" : "none" }}>
                 <button className="secondary-button width-100-auto" onClick={async () => {
                   // Remove current cookies and redirect to login page
                   await axios.post(`${process.env.DUMMY_API_URL_DEV}/client/logout`, {}, { withCredentials: true });

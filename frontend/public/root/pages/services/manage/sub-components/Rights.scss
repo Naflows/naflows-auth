@@ -23,7 +23,8 @@
   .content__container {
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    gap: 10px;
+    width: 100%;
   }
 }
 
@@ -35,8 +36,8 @@
   border-radius: 10px;
   border: 2px solid $_2k25-background-hue-50-transparent;
   background-color: $_2k25-background-hue-darker;
-  
-  width: 100%;
+
+  width: calc(100%);
   .rights__container__header {
     display: flex;
     flex-direction: row;
