@@ -93,6 +93,26 @@
           margin-top: 10px;
           line-height: 1.6;
         }
+        pre {
+          background-color: $_2k25-background-hue-darker !important;
+          padding: 5px 10px;
+          border-radius: 5px;
+          font-family: "Courier New", Courier, monospace;
+          font-size: 0.9rem;
+          overflow-x: auto;
+          code {
+            background-color: transparent !important;
+            padding: 0;
+            border-radius: 0;
+          }
+        }
+        a {
+          color: $da-secondary-hue-lighter-2 !important;
+          text-decoration: none;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
       }
     }
     width: 100%;

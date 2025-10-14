@@ -164,6 +164,16 @@ app.post('/client/login', async (req, res) => {
 });
 
 
+app.post('/client/logout', async (req, res) => {
+    const lR: ReplyType = await secure.user.logout(req, res);
+    if (lR.status === 200) {
+        // Remove cookies
+        res.clearCookie("session");
+        res.clearCookie("token");
+        res.clearCookie("uid");
+    }
+    res.status(lR.status).json(lR);
+});
 
 
 app.post('/client/secure/data/services', async (req, res) => {

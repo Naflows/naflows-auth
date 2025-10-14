@@ -28,6 +28,8 @@ import { createSecurityCode } from "./security-code/methods/create-code";
 import { verifySecurityCode } from "./security-code/methods/verify-code";
 import { getSecurityCode } from "./security-code/methods/get-code";
 import { invalidateSecurityCode } from "./security-code/methods/invalidate-code";
+import { logout } from "./user/logout";
+import deleteSession from "./session/delete";
 
 
 const secure = {
@@ -61,7 +63,8 @@ const secure = {
         hiddenLogin : hiddenLogin,
         update : updateUser,
         manageConnection : manageConnection,
-        sendVerificationCode : sendVerificationCode
+        sendVerificationCode : sendVerificationCode,
+        logout : logout
     },
     session : {
         renew : renewSessionId,
@@ -70,7 +73,8 @@ const secure = {
         create : createSession,
         confirm : confirmSession,
         update : updateSession,
-        valid : isSessionValid
+        valid : isSessionValid,
+        delete : deleteSession
     }
 };
 

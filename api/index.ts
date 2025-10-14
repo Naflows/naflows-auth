@@ -717,6 +717,31 @@ app.post('/send-login-request', async (req: Request, res: Response) => {
     }
 });
 
+
+app.post('/client/logout', async (req: Request, res: Response) => {
+    const { sessionID, token, uid } = getCookies(req);
+
+    const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/logout`, {
+        user: {
+            ip: req.ip,
+            agent: req.headers['user-agent'],
+            device_fingerprint: req.fingerprint,
+            session_id: sessionID || null,
+            token: token || null,
+            user_id: uid || null,
+        },
+        request: {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        },
+        client: service
+    });
+
+    res.status(f.status).json(f.data);
+});
+
 const PORT = 3005;
 app.listen(PORT, () => {
     console.log(`Dummy API is running on http://localhost:${PORT}\nCommunication with NASS : ${process.env.AUTH_API_URL_DEV}\nLast update : 15:53 25/09/2025`);

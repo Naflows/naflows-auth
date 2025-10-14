@@ -74,12 +74,12 @@
         "sections": [{
                 "id": "2.1",
                 "title": "Introduction",
-                "content": "<p>This section provides an overview of how to connect your application to the NASS API.</p>"
+                "content": "<p>This section provides an overview of how to connect your application to the NASS API.</p><h3>Pre-requisites</h3><p>Before you can connect your application to the NASS API, ensure you have the following:</p><ul><li>A registered service in NASS with developer credentials (Private API Key and Private Developer Key).</li><li>Basic knowledge of making HTTP requests in your programming language of choice.</li><li>An understanding of your application's architecture and how it will interact with the NASS API.</li><li>A working environment for testing your API connections.</li></ul>"
             },
             {
                 "id": "2.2",
                 "title": "Connect in Development Mode",
-                "content": "<p>Instructions for connecting your application in development mode.</p><h3>Connect your service</h3><p>After creating a service, you can configure its settings such as access policies, rate limits, and allowed clients. Before starting to code tunnels and rights, you need to start the service on your Service Dashboard: <ul><li>Go to the 'Services' section.</li><li>Select your service.</li><li>Click on 'Start Service' in the 'Overview' tab.</li></ul></p><p>A success message should be displayed if the service starts successfully. Once started, you can begin implementing the necessary code to connect your application to the service.</p><h3>Get your developer credentials</h3><p>To connect your application to the service, you'll need your developer credentials. These include the Private API Key (unique for the service) and Private Developer Key provided when you created the service. Please note that each developer key is unique and private, and even the service's administrator cannot access a key that is not they own.  You can find these keys in the 'Safety' tab of your Service Dashboard.</p><p>Make sure to keep these keys secure and do not expose them in your client-side code on production. Use them only in your server-side code to authenticate requests to NASS.</p><h3>Implement the connection</h3><p>To connect your application to the NASS API, you need to implement the connection logic in your code. Below is a basic example of how to do this using Node.js and the Axios library:</p><pre><code>const axios = require('axios');"
+                "content": "<p>Instructions for connecting your application in development mode.</p><h3>Connect your service</h3><p>After creating a service, you can configure its settings such as access policies, rate limits, and allowed clients. Before starting to code tunnels and rights, you need to start the service on your Service Dashboard: <ul><li>Go to the 'Services' section.</li><li>Select your service.</li><li>Click on 'Start Service' in the 'Overview' tab.</li></ul></p><p>A success message should be displayed if the service starts successfully. Once started, you can begin implementing the necessary code to connect your application to the service.</p><h3>Get your developer credentials</h3><p>To connect your application to the service, you'll need your developer credentials. These include the Private API Key (unique for the service) and Private Developer Key provided when you created the service. Please note that each developer key is unique and private, and even the service's administrator cannot access a key that is not they own.  You can find these keys in the 'Safety' tab of your Service Dashboard.</p><p>Make sure to keep these keys secure and do not expose them in your client-side code on production. Use them only in your server-side code to authenticate requests to NASS.</p><h3>Implement the connection</h3><p>First, you need to install the Naflows API Package in the language of your choice.</p><p>Please refer to the following links for installation instructions depending on your project's language:</p><ul><li><a href=\"/docs/api-reference/connect-nodejs\">NodeJS Usage Guide</a></li></ul>"
             }
         ],
         "references": [{
@@ -88,7 +88,7 @@
             },
             {
                 "text": "NASS NPM API",
-                "link": "https://github.com/Naflows/nass-connection.npm.modules"
+                "link": "https://www.npmjs.com/package/nass-connection"
             }
         ]
     }]

@@ -70,7 +70,7 @@ const DocsPageDoc = () => {
                                 onClick={(() => { window.location.href = '/docs' })}
                             />
                             <button className='secondary-button' onClick={() => {
-                                window.location.href = "https://app.naflows.com";
+                                window.location.href = "/account";
                             }}>
                                 Open NASS App
                             </button>
