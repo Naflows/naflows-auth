@@ -91,7 +91,7 @@ export async function registerService(
         banner: pub.banner,
 
         settings: {
-            rates: settings.rates,
+            rates: planData["RPS"],
             allow_nass_payement_method: false
         },
 
