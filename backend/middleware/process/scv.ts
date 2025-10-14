@@ -3,7 +3,7 @@ import { ReplyType } from "../../types/.types/reply.type";
 import middleware from "../dir";
 import { Request, Response } from "express";
 
-export async function scv(req: Request, res: Response): Promise<ReplyType> {
+export async function scv(req: Request, res: Response, naflowsFrontendOnly : boolean = false): Promise<ReplyType> {
   if (process.env.NASS_UCR_ENABLED === "true") {
     const isUCRCorrect: boolean = middleware.check.ucr(req.body);
     if (!isUCRCorrect) {
@@ -33,7 +33,8 @@ export async function scv(req: Request, res: Response): Promise<ReplyType> {
 
   if (process.env.NASS_SERVICE_FILTER === "true") {
     const isRequestOriginValid: ReplyType = await middleware.check.origin(
-      req.body.client
+      req.body.client,
+      naflowsFrontendOnly
     );
     if (!isRequestOriginValid.success) {
       return isRequestOriginValid;

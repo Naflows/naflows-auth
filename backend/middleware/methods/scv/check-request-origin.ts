@@ -10,7 +10,7 @@ export async function checkRequestOrigin(client: {
   service: string;
   service_token: string;
   service_token_birth: number;
-}): Promise<ReplyType> {
+}, naflowsFrontendOnly : boolean = false): Promise<ReplyType> {
   /*
 
         This function checks the origin of the request by validating the client origin in the UCR.
@@ -34,6 +34,12 @@ export async function checkRequestOrigin(client: {
     if (queriedService && queriedService.status === "ACTIVE") {
       //console.log(`Service ${queriedService.name} is active, checking service token...`);
       //console.log(`Token parameters are:\nService ID: ${queriedService.id}\nToken: ${UCR.client.service_token}\nCreated at: ${UCR.client.service_token_birth}`);
+
+      if (naflowsFrontendOnly && queriedService.details && queriedService.details.official !== true) {
+        console.log("\x1b[31m%s\x1b[0m", `Service ${queriedService.name} is not marked as official, rejecting request from Naflows frontend.`);
+        return software.methods.serverReply(403,"This service is not authorized to access this endpoint.");
+      }
+
       const serviceToken = (await servicesToken.findOne({
         service_id: queriedService.id,
         token: client.service_token,

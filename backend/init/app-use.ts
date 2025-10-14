@@ -41,6 +41,8 @@ export function useApp(app) {
             if (req.path.startsWith('/client/secure') || req.path.startsWith('/nass/user')) {
                 const secureLogin: ReplyType = (await secure.user.hiddenLogin(req, res));
                 const checkService: ReplyType = await middleware.process.scv(req, res);
+
+
                 if (!secureLogin.success) {
                     return res.status(secureLogin.status).json(secureLogin);
                 } else if (!checkService.success) {
