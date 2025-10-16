@@ -40,6 +40,30 @@ createRoot(document.getElementById("root")!).render(
         }
       />
       <Route
+        path="/services/manage/:id/:tab"
+        element={
+          <>
+            <ManageService />
+          </>
+        }
+      />
+      <Route
+        path="/services/manage/:id/"
+        element={
+          <>
+            <ManageService />
+          </>
+        }
+      />
+      <Route
+        path="/account/services/:id/:tab"
+        element={
+          <>
+            <ManageService />
+          </>
+        }
+      />
+      <Route
         path="/account/services/:id?"
         element={
           <>
@@ -47,14 +71,7 @@ createRoot(document.getElementById("root")!).render(
           </>
         }
       />
-      <Route
-        path="/services/manage/:id/:tab?"
-        element={
-          <>
-            <ManageService />
-          </>
-        }
-      />
+
       <Route
         path="/services/new"
         element={
@@ -69,7 +86,7 @@ createRoot(document.getElementById("root")!).render(
           <JoinPage />
         </>}
       />
-      <Route 
+      <Route
         path="/docs"
         element={<>
           <h1>Documentation</h1>

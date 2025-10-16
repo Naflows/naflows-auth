@@ -109,6 +109,11 @@ const ManageService = () => {
 
   useEffect(() => {
     console.log("Service ID from URL:", serviceID ? serviceID : "No ID", tab);
+    // Change URL without reloading the page
+    if (serviceID != null) {
+      const newUrl = `/account/services/${serviceID}/${tab}`;
+      window.history.replaceState(null, "", newUrl);
+    }
 
   }, [tab, serviceID])
 
