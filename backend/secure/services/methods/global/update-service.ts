@@ -10,17 +10,13 @@ export async function updateServiceRoute(req, res, user) {
     console.log("Request to update service received for service ID:", serviceID, "by user:", user.username);
     const service = user.services ? user.services[serviceID] : null;
     if (!service || !service.rights.includes("ADMINISTRATOR")) {
-        return res.status(403).json(software.methods.serverReply(403, "You do not have permission to update this service.", {
-            middleware: req.middleware.data,
-        }));
+        return software.methods.directResponse(403, "You do not have permission to update this service.", res, req);
     }
 
 
     const serviceData = await services.service.get(serviceID);
     if (!serviceData.success || !serviceData.data) {
-        return res.status(404).json(software.methods.serverReply(404, "Service not found.", {
-            middleware: req.middleware.data,
-        }));
+        return software.methods.directResponse(404, "Service not found.", res, req);
     }
 
 
@@ -34,12 +30,5 @@ export async function updateServiceRoute(req, res, user) {
     const update: ReplyType = await services.service.global.update(serviceID, serviceInfo);
     await services.service.logs.create(serviceID, `Service public details (${Object.keys(req.body.service).join(", ")}) updated.`, "SETTINGS", "INFO", { user: user.id });
 
-    res.status(update.status).json({
-        status: update.status,
-        message: update.message,
-        success: update.success,
-        data: {
-            middleware: req.middleware.data,
-        }
-    });
+    return software.methods.directResponse(update.status, update.message, res, req);
 }

@@ -1,3 +1,4 @@
+import { software } from "../../../../software/dir";
 import { services } from "../../dir";
 
 export async function getLogsRoutes(req, res, user) {
@@ -10,19 +11,10 @@ export async function getLogsRoutes(req, res, user) {
         const logs = await services.service.logs.get(serviceID, limit, offset);
 
 
-
-        return res.status(200).json({
-            status: 200,
-            message: "Logs retrieved successfully.",
-            success: true,
-            data: {
-                logs,
-                middleware: req.middleware.data,
-            }
+        return software.methods.directResponse(200, "Logs retrieved successfully.", res, req, {
+            logs
         });
     }
-    return res.status(403).json({
-        status: 403,
-        message: "You do not have permission to view logs for this service.",
-    });
+
+    return software.methods.directResponse(403, "You do not have permission to view logs for this service.", res, req);
 }

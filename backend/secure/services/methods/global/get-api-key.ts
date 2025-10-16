@@ -1,3 +1,4 @@
+import { software } from "../../../../software/dir";
 import { User } from "../../../../types/.types/collections.type";
 import { services } from "../../dir";
 import { Request, Response } from "express";
@@ -6,30 +7,22 @@ export async function getApiKey(req : Request, res : Response, user : User) {
 
     const { service_id } = req.body;
     if (!service_id) {
-        return res.status(400).json({ success: false, message: "Bad request. 'service_id' is required.", status : 400, data : {
-            middleware: req.middleware.data
-        } });
+        return software.methods.directResponse(400, "Bad request. 'service_id' is required.", res, req);
     }
 
     const service = await services.service.get(service_id);
     if (!service.success) {
-        return res.status(404).json({ success: false, message: "Service not found.", status : 404, data : {
-            middleware: req.middleware.data
-        } });
+        return software.methods.directResponse(404, "Service not found.", res, req);
     }
 
     const isUserDev = await services.service.user.isDev(user.id, service_id);
     if (!isUserDev.success) {
-        return res.status(403).json({ success: false, message: "Forbidden. You do not have permission to access this service's API key.", status : 403, data : {
-            middleware: req.middleware.data
-        } });
+        return software.methods.directResponse(403, "Forbidden. You do not have permission to access this service's API key.", res, req);
     }
 
     const apiKey = await services.service.key.getByApi(service_id);
     if (!apiKey.success) {
-        res.status(500).json({ success: false, message: "Internal server error. API Key not found for the service.", status : 500, data : {
-            middleware: req.middleware.data
-        } });
+        return software.methods.directResponse(500, "Internal server error. API Key not found for the service.", res, req);
     }
 
     await services.service.logs.create(
@@ -41,8 +34,7 @@ export async function getApiKey(req : Request, res : Response, user : User) {
         }
     );
 
-    return res.status(200).json({ success: true, message: "API Key retrieved successfully.", status : 200, data : {
-        middleware: req.middleware.data,
-        key: apiKey.data.key.key
-    } });
+    return software.methods.directResponse(200, "API Key retrieved successfully.", res, req, {
+        key : apiKey.data.key.key
+    });
 }

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { User } from "../../../../types/.types/collections.type";
 import { services } from "../../dir";
+import { software } from "../../../../software/dir";
 
 
 export async function createRights(req: Request, res: Response, user: User) {
@@ -14,31 +15,16 @@ export async function createRights(req: Request, res: Response, user: User) {
 
     const isUserDev = await services.service.user.isDev(user.id, service_id);
     if (!isUserDev.success) {
-        return res.status(403).json({
-            success: false,
-            message: "User does not have permission to create rights."
-        });
+        return software.methods.directResponse(403, "Forbidden: User does not have permission to create rights.", res, req);
+        return;
     }
 
 
     const re = await services.service.rights.create(service_id, name, rights, deletable, type, user.id);
     if (re.success) {
-        return res.status(200).json({
-            success: true,
-            message: "Rights set created successfully.",
-            data: {
-                right: res.data,
-                middleware: req.middleware.data,
-            }
-        });
+        return software.methods.directResponse(200, "Rights set created successfully.", res, req);
     } else {
-        return res.status(re.status).json({
-            success: false,
-            message: re.message || "Failed to create rights set.",
-            data: {
-                middleware: req.middleware.data,
-            }
-        });
+        return software.methods.directResponse(re.status, re.message || "Failed to create rights set.", res, req);
     }
 
 }
