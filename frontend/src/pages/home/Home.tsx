@@ -9,24 +9,79 @@ const Home = () => {
     null
   );
 
+
+
   return (
     <div className="nass__home__page">
-      <div className="nass__home__head">
-        <div className="nass__home__logos">
+
+      <div className="global__home__header">
+        <div className="header__head">
           <img
-            src="/assets/NASS-logotype.png"
-            alt="NASS Logo"
-            className="nass__home__logo"
+            src="https://naflows.com/public/assets/naflows_full_logotype.png"
+            alt="Naflows Logo"
           />
-          <div className="nass__author">
-            <span>BY</span>
-            <img
-              src="/assets/naflows-logotype.svg"
-              alt="Naflows Logo"
-              className="nass__home__logo naf-logo"
+        </div>
+
+        <div className="header__navigation">
+          <button className="secondary-button" onClick={() => {
+            window.location.href = "/docs";
+          }}>Documentation</button>
+          <button className="secondary-button" onClick={() => {
+            window.location.href = "https://github.com/Naflows/naflows-auth";
+          }}>
+            Source Code
+          </button>
+          <button className="secondary-button" onClick={() => {
+            window.location.href = "https://discord.gg/5k8aFS9DbK";
+          }}>
+            Join the commmunity
+          </button>
+          <button className="secondary-button inactive" onClick={() => {
+            window.location.href = "/docs";
+          }}>
+            Demo
+          </button>
+        </div>
+        <div className="header__actions">
+          <button className="primary-button" onClick={() => {
+            window.location.href = "/login";
+          }}>Login to the NASS</button>
+
+          <div className="status__container">
+            <Status
+              serviceStatus={serviceStatus}
+              setServiceStatus={setServiceStatus}
             />
           </div>
         </div>
+      </div>
+      <div className="head__global__title">
+
+        <div className="title__headers">
+          <h3 className="moving--lighted--title">
+            {"Backend Solution via SSO for Devs'".split(" ").map((word, wordIndex, arr) => (
+              <span key={wordIndex} className="word" style={{
+                animationDelay: `${wordIndex * 0.3}s`
+              }}>
+                {word.split("").map((char, charIndex) => (
+                  <span key={charIndex} className="char">{char}</span>
+                ))}
+                {wordIndex < arr.length - 1 && <span className="char">&nbsp;</span>}
+              </span>
+            ))}
+          </h3>
+
+          <h5>Built by <span className="nass__author">Naflows</span> with transparency and scalability in mind</h5>
+        </div>
+      </div>
+
+
+      <div className="naflows__logo__separator">
+        <img className="nass__home__background" src="/public/assets/backgrounds/nass-home.png" alt="Home Background" />
+
+      </div>
+
+      <div className="nass__home__head">
 
         <div className="nass_welcome__informations">
           <div className="nass_homepage__box">
@@ -47,56 +102,10 @@ const Home = () => {
               and discover how the NASS can enhance your digital experience with a <span id="colorful">single-account solution for multiple services</span>.
             </p>
           </div>
-          <div className="nass_homepage__box nass__connect">
-            <div className="nass_homepage__box__header">
-              <div className="nass_home__box__header__subtitle">
-                <span className="nass_service__info__item__title">
-                  Already a customer?
-                </span>
-                <span className="nass_service__info__item__title__subtitle">
-                  If you are, you can access your account
-                </span>
-              </div>
-            </div>
-            <div className="nass_homepage__buttons">
-              <button className="primary-button width-100-auto" onClick={() => {
-                window.location.href = "/login";
-              }}>Login</button>
-              <button className="secondary-button width-100-auto" onClick={() => {
-                window.location.href = "/account/services";
-              }}>View services</button>
-            </div>
-          </div>
         </div>
 
         <div className="nass_home__activity">
-          <div className="nass_homepage__box nass_discord__box">
-            <div className="nass_homepage__box__header">
-              <div className="nass_home__box__header__subtitle">
-                <span className="nass_service__info__item__title">We have a Discord!</span>
-                <span className="nass_service__info__item__title__subtitle">
-                  Join our community on Discord to stay updated with the latest
-                  news, get support, and connect with other users.
-                </span>
-              </div>
-            </div>
-            <button
-              className="primary-button"
-              style={{
-                width: "100%",
-              }}
-              onClick={() => {
-                window.open("https://discord.gg/5k8aFS9DbK");
-              }}
-            >
-              Join our Discord
-            </button>
-          </div>
           {serviceStatus != null && <Mailing />}
-          <Status
-            serviceStatus={serviceStatus}
-            setServiceStatus={setServiceStatus}
-          />
         </div>
       </div>
 

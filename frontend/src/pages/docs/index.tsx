@@ -38,10 +38,6 @@ const DocsPage = () => {
                     <div className="docs__page__features__list directories">
                         <SmallPageVisual title="User Guide" description="Comprehensive guide for users." link="/docs/user-guide" level="basic" />
                         <SmallPageVisual title="API Reference" description="Detailed API reference documentation." link="/docs/api-reference" level="advanced" />
-                        <SmallPageVisual title="Tutorials" description="Step-by-step tutorials to get you started." link="/docs/tutorials" level="intermediate" />
-                        <SmallPageVisual title="FAQ" description="Frequently Asked Questions." link="/docs/faq" level="basic" />
-                        <SmallPageVisual title="Troubleshooting" description="Common issues and how to resolve them." link="/docs/troubleshooting" level="intermediate" />
-                        <SmallPageVisual title="Release Notes" description="Latest updates and changes." link="/docs/release-notes" level="basic" />
                     </div>
                 </div>
             </div>

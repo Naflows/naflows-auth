@@ -1,5 +1,144 @@
 @import "../../variables.scss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
+.global__home__header {
+  width: calc(100% - 100px);
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding: 0 50px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: $_2k25-background-hue-darker-transparent;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+
+  gap: 50px;
+
+  .header__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .header__navigation {
+    width: 100%;
+    align-items: center;
+    justify-content: start;
+    display: flex;
+    gap: 20px;
+  }
+
+  .header__head {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    img {
+      height: 60px;
+    }
+  }
+}
+
+.naflows__logo__separator {
+  width: 60%;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 50px 0 0 0;
+  .nass__home__background {
+    height: 100%;
+    opacity: 0.1;
+    user-select: none;
+    pointer-events: none;
+  }
+}
+
+.head__global__title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 100px;
+  width: 100%;
+
+  .title__headers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    max-width: 50%;
+
+    h3 {
+      font-family: "Inter", sans-serif !important;
+      margin: 0 auto;
+      font-size: 50px;
+      text-align: center;
+    }
+    h5 {
+      font-family: "Inter", sans-serif !important;
+      margin: 0 auto;
+      font-size: 15px;
+      opacity: 0.8;
+      text-align: center;
+      font-weight: normal;
+
+      .nass__author {
+        color: $da-secondary-hue-lighter-2;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translate3d(0);
+  }
+}
+
+.moving--lighted--title {
+  .word {
+    display: inline-block;
+    background: linear-gradient(
+      270deg,
+      $da-secondary-hue-lighter-2,
+      $da-main-hue-lighter,
+      $da-secondary-hue-lighter-2,
+      $da-main-hue-lighter
+    );
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientAnimation 5s ease infinite;
+    opacity: 0;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+}
 
 .nass_home__activity,
 .nass_welcome__informations,
@@ -30,8 +169,6 @@
     }
   }
 
-
-
   .nass_service__informations {
     max-width: 350px !important;
   }
@@ -48,7 +185,6 @@
     flex-direction: column;
     justify-content: space-between;
   }
-
 }
 
 .nass__home__page {
@@ -66,8 +202,6 @@
     align-items: center;
     justify-content: center;
     gap: 50px;
-
-
 
     .nass__home__logos {
       display: flex;
@@ -271,8 +405,6 @@
   }
 }
 
-
-
 .nass_homepage__box {
   #colorful {
     color: $da-secondary-hue-lighter-2 !important;
@@ -373,27 +505,37 @@
 }
 
 .nass_service__informations {
-  width: 25%;
-  background-color: $_2k25-background-hue-darker-transparent;
-
+  width: fit-content;
   .nass_service__info__item {
-    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 20px;
     justify-content: space-between;
-    height: 100%;
+    .nass_service__info__header {
+      width: fit-content;
+      .nass_service__info__item__value {
+        width: fit-content;
+        height: fit-content;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+        gap: 5px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        svg {
+          width: 25px;
+          height: 25px;
+        }
+      }
+    }
   }
 
-  .nass_service__info__item__title {
-    p {
-      margin: 0;
-      padding: 0;
-    }
-
-    .nass_service__info__item__title__subtitle {
-      color: $da-confirm-hue;
-    }
+  #version__value {
+    font-size: 0.7rem;
+    opacity: 0.7;
+    font-weight: normal;
+    text-align: center;
   }
 
   // Active state
@@ -409,8 +551,6 @@
         fill: $da-confirm-hue;
       }
     }
-
-
   }
 
   // Inactive state
@@ -424,12 +564,6 @@
 
       svg * {
         fill: $da-error-hue;
-      }
-    }
-
-    .nass_service__info__item__title {
-      .nass_service__info__item__title__subtitle {
-        color: $da-error-hue;
       }
     }
   }
@@ -486,9 +620,7 @@
   }
 }
 
-
 @media screen and (max-width: 1200px) {
-
   .nass_home__activity,
   .nass_welcome__informations,
   .nass__connect {
@@ -496,7 +628,6 @@
     align-items: center !important;
     gap: 30px !important;
     align-self: unset !important;
-
 
     height: fit-content !important;
 
@@ -529,10 +660,9 @@
   }
 
   .nass_homepage__content {
-      width: calc(var(--nass-page-width) * 0.9) !important;
+    width: calc(var(--nass-page-width) * 0.9) !important;
     .nass_advantages {
       display: flex;
-
 
       .nass_advantage {
         flex-direction: column-reverse !important;
@@ -574,7 +704,7 @@
   .mailing__input__container {
     flex-direction: column !important;
     .nass_mailing__list__button_container {
-      width: 100% !important
+      width: 100% !important;
     }
   }
 }
