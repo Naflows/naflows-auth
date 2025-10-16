@@ -33,6 +33,7 @@ import { getRights } from "./methods/global/get-rights";
 import { getRightsByUser } from "./rights/methods/get-by-user";
 import { createRights } from "./methods/global/create-rights";
 import { getApiKey } from "./methods/global/get-api-key";
+import { checkUserAccess } from "./methods/global/check-user-access";
 
 
 
@@ -42,7 +43,8 @@ export const services = {
         logs: getLogsRoutes,
         getRights: getRights,
         createRights : createRights,
-        serviceKey : getApiKey
+        serviceKey : getApiKey,
+        canAccess : checkUserAccess
     },
     service: {
         register: registerService,
@@ -57,7 +59,7 @@ export const services = {
             isIn: isUserInService,
             isDev: isDevFromService,
             getKeyByValue: getDevKeyByValue,
-            getRights : getRightsByUser
+            getRights : getRightsByUser,
         },
         logs: {
             create: createServiceLogEntry,

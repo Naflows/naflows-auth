@@ -22,6 +22,7 @@ import ServiceUsers from "./pages/overview/components/users";
 import ServiceSettings from "./pages/overview/components/settings";
 import Safety from "./pages/overview/components/safety";
 import { SERVICE_OVERVIEW_TABS } from "./pages/overview/types/tabs.type";
+import axios from "axios";
 
 
 export type accountTabs = "overview" | "capacities" | "security" | "edit" | "network" | "settings" | "users" | "logs" | "rights" | "safety";
@@ -49,6 +50,8 @@ const ManageService = () => {
     closeAlert: true,
   });
 
+  const [canUserAccess, setCanUserAccess] = useState<boolean | null>(null);
+
   const [tab, setTab] = useState<accountTabs>("overview");
 
   useEffect(() => {
@@ -63,6 +66,47 @@ const ManageService = () => {
     }
   }, []);
 
+
+  useEffect(() => {
+    if (serviceID != null) {
+
+      async function checkAccess() {
+        console.log("Checking access for service ID:", serviceID);
+        await axios.post(`${process.env.DUMMY_API_URL_DEV}/user/secure/services/can-access`, {
+          service_id: serviceID
+        }, {
+          withCredentials: true,
+        }).then((res) => {
+          if (!res.data.success) {
+            console.log("Access check failed:", res);
+            setDisplayAlert({
+              status: res.data.status || 500,
+              message: res.data.message || "Failed to check access.",
+              success: false,
+              closeAlert: false,
+              title: "Access Denied",
+              displayCode: true,
+              customClose: { text: "Go to Services", action: () => { window.location.href = "/account/services"; } }
+            });
+          } else {
+            setCanUserAccess(true);
+          }
+        }).catch((err) => {
+          setDisplayAlert({
+            status: err.response?.status || 500,
+            message: err.response?.data?.message || "Failed to check access.",
+            success: false,
+            closeAlert: false,
+            title: "Access Denied",
+            displayCode: true,
+            customClose: { text: "Go to Services", action: () => { window.location.href = "/account/services"; } }
+          });
+        });
+      }
+      checkAccess();
+    }
+  }, [serviceID])
+
   useEffect(() => {
     console.log("Service ID from URL:", serviceID ? serviceID : "No ID", tab);
 
@@ -70,7 +114,7 @@ const ManageService = () => {
 
   useEffect(() => {
     // Fetch user data from the backend
-    if (serviceID != null && service == null) {
+    if (serviceID != null && service == null && canUserAccess) {
       (async () => {
         try {
           const res = (await fetchData("user")) as AxiosResponse;
@@ -96,7 +140,7 @@ const ManageService = () => {
         }
       })();
     }
-  }, [serviceID, service]);
+  }, [serviceID, service, canUserAccess]);
 
 
 

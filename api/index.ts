@@ -403,7 +403,43 @@ app.post('/user/secure/service/register', async (req: Request, res: Response) =>
     res.status(f.status).json(f.data);
 });
 
+app.post('/user/secure/services/can-access', async (req: Request, res: Response) => {
+    const { sessionID, token, uid } = getCookies(req);
 
+    await axios.post(`${process.env.AUTH_API_URL_DEV}/client/secure/services/user/check-access`, {
+        user: {
+            ip: req.ip,
+            agent: req.headers['user-agent'],
+            device_fingerprint: req.fingerprint,
+            session_id: sessionID || null,
+            token: token || null,
+            user_id: uid || null,
+        },
+        service_id: req.body.service_id,
+        request: {
+            method: req.method,
+            url: req.originalUrl,
+            headers: req.headers,
+            request_date: Date.now()
+        },
+        client: service
+    }).then((result) => {
+        const resultData = result.data.data;
+
+
+        sendCookies(res, result.data);
+        delete resultData.middleware;
+        console.log(`--- User access check result for service ${req.body.service_id}:`, resultData);
+        res.status(result.status).json(resultData);
+
+    }).catch((error) => {
+        sendCookies(res, error.response.data);
+        const errorData = error.response ? error.response.data : { success: false, message: "Unknown error occurred." };
+        delete errorData.data.middleware;
+        res.status(error.response.status).json(errorData);
+    });
+
+});
 
 app.post('/user/secure/confirm-identity/send-code', async (req: Request, res: Response) => {
     const { sessionID, token, uid } = getCookies(req);
@@ -741,6 +777,7 @@ app.post('/client/logout', async (req: Request, res: Response) => {
 
     res.status(f.status).json(f.data);
 });
+
 
 const PORT = 3005;
 app.listen(PORT, () => {

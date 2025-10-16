@@ -30,6 +30,12 @@ router.post('/secure/services/service/key', async (req, res) => {
 });
 
 
+// Can user access the whole service management?
+router.post('/secure/services/user/check-access', async (req,res) => {
+    const user = await secure.user.manageConnection(req, res);
+    services.routes.canAccess(req, res, user);
+})
+
 
 
 module.exports = router;

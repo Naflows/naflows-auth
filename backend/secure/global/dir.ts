@@ -30,6 +30,7 @@ import { getSecurityCode } from "./security-code/methods/get-code";
 import { invalidateSecurityCode } from "./security-code/methods/invalidate-code";
 import { logout } from "./user/logout";
 import deleteSession from "./session/delete";
+import { getUserByUsername } from "./user/get-by-username";
 
 
 const secure = {
@@ -64,7 +65,8 @@ const secure = {
         update : updateUser,
         manageConnection : manageConnection,
         sendVerificationCode : sendVerificationCode,
-        logout : logout
+        logout : logout,
+        getByUsername : getUserByUsername
     },
     session : {
         renew : renewSessionId,
