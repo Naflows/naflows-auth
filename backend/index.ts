@@ -31,6 +31,12 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 
 
 connectToDatabase();
+
+// Keep this before app.use 
+app.get('/client', (req, res) => {
+    res.send('Welcome to the Auth API');
+});
+
 useApp(app);
 app.use('/nass', nass);
 app.use('/client', servicesRoutes);
@@ -92,9 +98,7 @@ app.post('/test', (req: Request, res: Response) => {
 });
 
 
-app.get('/client', (req, res) => {
-    res.send('Welcome to the Auth API');
-});
+
 
 
 /*
