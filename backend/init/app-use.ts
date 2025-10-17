@@ -59,9 +59,11 @@ export function useApp(app) {
             } else if (req.path.startsWith('/public/nass')) {
                 // Continue
             } else if (req.path.startsWith('/public')) {
-                const serviceOk = await middleware.check.origin(req.body.client);
-                if (!serviceOk.success || req.body.client.service !== process.env.AUTH_API_SERVICE_NAME) {
-                    return res.status(403).json(software.methods.serverReply(403, "Forbidden: Invalid client origin."));
+                if (process.env.NASS_SERVICE_FILTER == "true") {
+                    const serviceOk = await middleware.check.origin(req.body.client);
+                    if (!serviceOk.success || req.body.client.service !== process.env.AUTH_API_SERVICE_NAME) {
+                        return res.status(403).json(software.methods.serverReply(403, "Forbidden: Invalid client origin."));
+                    }
                 }
 
                 console.log('\x1b[32m%s\x1b[0m', `Public route accessed: ${req.path}`);

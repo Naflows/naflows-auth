@@ -454,8 +454,8 @@ db.service_tokens.insertOne({
 db.services.insertOne({
     id : "naflows_backend",
     name : "Naflows Backend Structure",
-    ip_address : "::ffff:172.18.0.2", 
-    dns : "naflows.com",
+    ip_address : "::ffff:172.18.0.2", // ::ffff:172.18.0.2
+    dns : "nass.naflows.com",
     description : "The Naflows Backend Structure for secure API communication.",
     created_at : new Date().getTime(),
     created_by : "1",
