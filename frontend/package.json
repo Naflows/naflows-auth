@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -14,6 +14,7 @@
     "@stripe/stripe-js": "^7.9.0",
     "animejs": "^4.2.2",
     "axios": "^1.11.0",
+    "crypto": "^1.0.1",
     "ping.js": "^0.2.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

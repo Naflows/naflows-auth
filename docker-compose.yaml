@@ -6,6 +6,8 @@ services:
     profiles: ["mongo-nass"]
     container_name: mongo-nass
     hostname: mongo-nass
+    networks:
+      - nass-network
     ports:
       - "27017:27017"
     expose:
@@ -37,6 +39,8 @@ services:
     restart: always
     profiles: ["auth-api"]
     container_name: auth-api-1
+    networks:
+      - nass-network
     environment:
       - AUTH_API_PORT=3000
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
@@ -68,6 +72,8 @@ services:
     image: mongo-express
     container_name: mongo-express
     profiles: ["mongo-express"]
+    networks:
+      - nass-network
     ports:
       - "8081:8081"
     expose:
@@ -94,6 +100,8 @@ services:
     restart: always
     profiles: ["dummy-api"]
     container_name: dummy-api
+    networks:
+      - nass-network
     ports:
       - "3005:3005"
     expose:
@@ -108,7 +116,25 @@ services:
           cpus: '1.5'
           memory: 512M
         
-
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        DUMMY_API_URL: http://localhost/api/dummy
+        AUTH_API_URL: http://localhost/api/auth
+    restart: always
+    profiles: ["frontend"]
+    container_name: nass-frontend
+    networks:
+      - nass-network
+    ports:
+      - "80:3000"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 512M
 
   global-tests:
     build: 
@@ -149,3 +175,7 @@ volumes:
     driver: local
   captcha-data:
     driver: local
+
+networks:
+  nass-network:
+    driver: bridge

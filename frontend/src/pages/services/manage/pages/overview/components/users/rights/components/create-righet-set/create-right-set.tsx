@@ -110,10 +110,9 @@ const CreateRightSet = ({
     useCreateRight(
         rightSetValue,
         section,
-        setRightSetValue,
-        loading,
         setLoading,
         setSuccess
+        
     );
 
 

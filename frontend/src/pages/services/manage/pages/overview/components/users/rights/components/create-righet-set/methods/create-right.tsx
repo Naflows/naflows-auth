@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import type { ServiceRights } from "../../../../../../../../../../../types/TunnelingTypes";
 import { useEffect } from "react";
 
@@ -6,8 +6,6 @@ import { useEffect } from "react";
 const useCreateRight = (
     right : ServiceRights | null,
     section : number,
-    setRight : React.Dispatch<React.SetStateAction<ServiceRights | null>>,
-    loading : boolean,
     setLoading : React.Dispatch<React.SetStateAction<boolean>>,
     setSuccess : React.Dispatch<React.SetStateAction<{
         success : boolean,
@@ -45,9 +43,19 @@ const useCreateRight = (
             }
         } catch (error) {
             console.error('Error creating right:', error);
+            let errorMessage = "Error creating right.";
+            const axiosError = error as AxiosError;
+            if (
+                axiosError.response &&
+                axiosError.response.data &&
+                typeof axiosError.response.data === "object" &&
+                "message" in axiosError.response.data
+            ) {
+                errorMessage = (axiosError.response.data as { message?: string }).message || errorMessage;
+            }
             setSuccess({
                 success: false,
-                message: error.response?.data?.message || "Error creating right.",
+                message: errorMessage,
                 status: 500
             });
             setLoading(false);

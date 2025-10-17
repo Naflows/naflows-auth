@@ -83,7 +83,7 @@ const DocsPageDoc = () => {
                         </div>
 
                         {
-                            page != null ? (
+                            page != null  && pageContent ? (
                                 <>
                                     <div key={pageContent.id} className="docs__page__content">
                                         <div className="docs__page__menu">

@@ -35,7 +35,7 @@ const UserPersonalInformations = ({
                     maxLength={100}
                     autoComplete={false}
                     fitContent={false}
-                    onChange={(value) => { }}
+                    onChange={() => { }}
                   />
                   <button className="secondary-button" style={{ height: '40px', alignSelf: 'center' }}>
                     Change Email
@@ -51,7 +51,7 @@ const UserPersonalInformations = ({
                     maxLength={100}
                     autoComplete={false}
                     fitContent={false}
-                    onChange={(value) => { }}
+                    onChange={() => { }}
                   />
                   <button className="secondary-button" style={{ height: '40px', alignSelf: 'center' }}>
                     Change Phone

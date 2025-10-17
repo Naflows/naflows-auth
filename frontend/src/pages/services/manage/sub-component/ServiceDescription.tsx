@@ -1,12 +1,13 @@
 import type { ServicesForUserProps } from "../../../../types/ServicesForUserProps";
 import "../../../../../public/root/pages/services/manage/sub-components/ServiceDescription.scss";
 import type { ServicesBodyProps } from "../../../../types/ServicesBodyProps";
+import type { ServicesCompleteBodyProps } from "../../../../types/ServicesCompleteProps";
 
 const ServiceDescription = ({
   service,
   publicDisplay = false,
 }: {
-  service: ServicesForUserProps | ServicesBodyProps | null;
+  service: ServicesForUserProps | ServicesBodyProps | ServicesCompleteBodyProps | null;
   publicDisplay?: boolean;
   smallBody?: boolean;
   userManagement?: boolean;

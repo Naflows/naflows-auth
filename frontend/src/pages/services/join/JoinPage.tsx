@@ -145,7 +145,7 @@ const JoinPage = () => {
             <>
                 <AccountHeader selectedTab="services" userFetch={userInfo ? userInfo : undefined} />
                 <div className="nass__join__page nass__page">
-                    <AccountDir service={service as ServicesForUserProps} tab="share" title="Share Service" description="Share this service with others." />
+                    <AccountDir service={service as ServicesForUserProps} tab="share" title="Share Service" description="Share this service with others." setTab={() => {}} />
 
                     <div className={`nass__connect__service ${userInfo && "user-connected-already-registered"}`}>
                         <ServiceDescription service={service} publicDisplay={true} />
@@ -282,7 +282,7 @@ const JoinPage = () => {
                                         </div>
                                         <div className="service__connection__details__content">
                                             {Object.entries(dataPreferences).map(([key, info]) => {
-                                                if (service.public_settings && service.public_settings.required_data && service.public_settings.required_data.includes(key)) {
+                                                if (service.public_settings && service.public_settings.required_data && service.public_settings.required_data.includes((    key as keyof typeof dataPreferences))) {
                                                     return (
                                                         <div className="data__item" key={key}>
                                                             <div className="data__item__header">

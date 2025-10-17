@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Input from "../../../../../../../global/components/Input";
 import type { ServicesForUserProps } from "../../../../../../../types/ServicesForUserProps";
 import { getApiKey } from "./methods/fetchServiceAPIKey";
 
@@ -42,7 +41,7 @@ export const Safety = ({
                             </div>
                             <div className="buttons-container col-20">
                                 <button className="secondary-button width-100-auto" >Regenerate API Key</button>
-                                <button className={`primary-button width-100-auto ${onLoadApiKeyGet ? "inactive" : ""}`} onClick={async (e ) => {
+                                <button className={`primary-button width-100-auto ${onLoadApiKeyGet ? "inactive" : ""}`} onClick={async () => {
                                     setOnLoadApiKeyGet(true);
                                     const key = await getApiKey(service?.id || "");
                                     console.log("Fetched API Key:", key);

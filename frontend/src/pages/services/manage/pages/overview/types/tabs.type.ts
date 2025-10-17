@@ -1,6 +1,6 @@
 
 
-export type ServiceOverviewTabs = "settings" | "users" | "network" | "safety" | "logs" | "rights";
+export type ServiceOverviewTabs = "settings" | "users" | "network" | "safety" | "logs" | "rights" | "overview";
 export const SERVICE_OVERVIEW_TABS: { id: ServiceOverviewTabs; label: string }[] = [
     { id : "overview", label: "Overview" },
     { id: "settings", label: "Settings" },

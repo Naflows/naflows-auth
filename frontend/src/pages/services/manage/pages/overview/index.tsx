@@ -1,16 +1,13 @@
 import type { ServicesForUserProps } from "../../../../../types/ServicesForUserProps"
 import ServiceCapacities from "../../sub-component/capacities"
 import ServiceDescription from "../../sub-component/ServiceDescription"
-import { SERVICE_OVERVIEW_TABS } from "./types/tabs.type"
 import type { accountTabs } from "../../ManageService"
 import QuickActions from "./components/quick-actions"
 
 
 const ManageServiceOverview = ({
     service,
-    setService,
-    setTab,
-    tab
+    setService
 }: {
     service: null | ServicesForUserProps;
     setService: (service: ServicesForUserProps) => void;

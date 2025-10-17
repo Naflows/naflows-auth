@@ -11,7 +11,7 @@ const bodyParser = require('body-parser');
 
 app.use(cookieParser());
 app.use(cors({
-    origin: ['http://localhost:8080', 'https://nass.naflows.com', 'http://localhost:3005'  // Add this
+    origin: ['http://localhost:8080', 'https://nass.naflows.com', 'http://localhost:3005', "http://localhost"  // Add this
     ],
     credentials: true
 }));

@@ -14,7 +14,7 @@ const ServiceUsers = ({
 
     return (
         <div>
-
+            <h2>Users for {service?.name}</h2>
             <div className="users__container">
                 <button className="primary-button" onClick={() => {
                     setTab("rights");

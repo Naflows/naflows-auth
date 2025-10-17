@@ -1,24 +1,18 @@
-# BUILD FRONTEND FOR PRODUCTION
-FROM node:alpine AS build-stage
-WORKDIR /app/frontend
-
+FROM node:18-alpine AS build
+WORKDIR /app
+ARG DUMMY_API_URL=http://localhost:3005
+ARG AUTH_API_URL=http://localhost:3001
+ENV VITE_DUMMY_API_URL=$DUMMY_API_URL
+ENV VITE_AUTH_API_URL=$AUTH_API_URL
+ENV DUMMY_API_URL_DEV=$DUMMY_API_URL
+COPY package.json package-lock.json ./
+RUN npm install --frozen-lockfile
 COPY . .
-RUN npm install
 RUN npm run build
 
-# RUN PRODUCTION SERVER WITH NGINX
-FROM nginx:alpine
-COPY --from=build-stage /app/frontend/dist /usr/share/nginx/html
-
-# Create nginx config for SPA routing
-RUN echo 'server { \
-    listen 8080; \
-    location / { \
-        root /usr/share/nginx/html; \
-        index index.html index.htm; \
-        try_files $uri $uri/ /index.html; \
-    } \
-}' > /etc/nginx/conf.d/default.conf
-
-EXPOSE 8080
-CMD ["nginx", "-g", "daemon off;"]
+FROM node:18-alpine
+WORKDIR /app
+RUN npm install -g serve
+COPY --from=build /app/dist ./dist
+EXPOSE 3000
+CMD ["serve", "-s", "dist", "-l", "3000"]

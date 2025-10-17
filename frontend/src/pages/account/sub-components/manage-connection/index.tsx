@@ -24,11 +24,9 @@ const sensitiveDataPreferences: Record<
 };
 
 const ManageServiceConnection = ({
-  service,
-  setService
+  service
 }: {
-  service: ServicesCompleteBodyProps | null;
-  setService: (service: ServicesCompleteBodyProps | null) => void;
+  service: ServicesCompleteBodyProps | null
 }) => {
   const [usageData, setUsageData] = useState<InformationKey | null>(null);
   const [personalData, setPersonalData] = useState<DataKeys[] | null>([]);

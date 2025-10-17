@@ -103,7 +103,7 @@ const ServicesComponent = ({
           </button>
         </div>
       </div>
-      <ManageServiceConnection service={serviceData} setService={setServiceData} />
+      <ManageServiceConnection service={serviceData}  />
       <div className="user__body__section" style={{
         display: servicesType === "services" ? "block" : "none",
       }}>

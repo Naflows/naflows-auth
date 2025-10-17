@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import SaveChanges from "../../services/manage/pages/components/save";
 import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert";
 import axios from "axios";
-import Loader from "../../../global/components/Loader";
 
 const AccountUserBody = ({
   userData,
