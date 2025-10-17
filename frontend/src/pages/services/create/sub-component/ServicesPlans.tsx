@@ -1,14 +1,14 @@
 import type { ServiceConfigurationProps } from "./ServiceConfiguration";
 
 const icons = {
-    "token": "/public/assets/icons/token.svg",
-    "analytics": "/public/assets/icons/analytics.svg",
-    "community": "/public/assets/icons/community.svg",
-    "users": "/public/assets/icons/users.svg",
-    "support": "/public/assets/icons/support.svg",
-    "integration": "/public/assets/icons/integration.svg",
-    "security": "/public/assets/icons/security.svg",
-    "storage": "/public/assets/icons/storage.svg",
+    "token": "/assets/icons/token.svg",
+    "analytics": "/assets/icons/analytics.svg",
+    "community": "/assets/icons/community.svg",
+    "users": "/assets/icons/users.svg",
+    "support": "/assets/icons/support.svg",
+    "integration": "/assets/icons/integration.svg",
+    "security": "/assets/icons/security.svg",
+    "storage": "/assets/icons/storage.svg",
 }
 
 

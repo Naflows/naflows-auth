@@ -91,13 +91,7 @@ services:
       - "3005"
   
      
-    # DEVELOPMENT ONLY
-    # REMOVE IN PRODUCTION
-    deploy:
-      resources:
-        limits:
-          cpus: '1.5'
-          memory: 512M
+
         
   frontend:
     build:

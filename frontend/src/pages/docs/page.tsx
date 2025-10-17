@@ -36,7 +36,7 @@ const DocsPageDoc = () => {
 
     useEffect(() => {
         if (dir) {
-            fetch(`/src/pages/docs/pages/${dir}.json`).then(res => res.json()).then(data => {
+            fetch(`/pages/${dir}.json`).then(res => res.json()).then(data => {
                 console.log(data);
                 setContent(data);
                 if (page) {

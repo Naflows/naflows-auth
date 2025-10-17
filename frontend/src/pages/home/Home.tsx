@@ -77,7 +77,7 @@ const Home = () => {
 
 
       <div className="naflows__logo__separator">
-        <img className="nass__home__background" src="/public/assets/backgrounds/nass-home.png" alt="Home Background" />
+        <img className="nass__home__background" src="/assets/backgrounds/nass-home.png" alt="Home Background" />
 
       </div>
 
