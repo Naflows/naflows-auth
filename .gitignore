@@ -1,6 +1,6 @@
 node_modules
 dist/
 auth-data
-
+production-build.sh
 .env*
 *.env

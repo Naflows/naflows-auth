@@ -5,9 +5,14 @@
 rm -rf ./naflows-auth
 
 # Clone repo
+echo "Cloning repository..."
+git clone https://github.com/naflows/naflows-auth.git
 
 
+cd ./naflows-auth
 # Create .env (note: EOF not E0F)
+echo -e "Creating environment configuration files..."
+echo -e "Setting up .env for production..."
 cat > .env << 'EOF'
 MONGO_INITDB_ROOT_USERNAME=admin
 MONGO_INITDB_ROOT_PASSWORD=secret
@@ -16,14 +21,19 @@ MONGO_URL='mongodb://admin:secret@mongo-nass:27017/NASS?authSource=admin'
 SMTP_HOST=ssl0.ovh.net
 SMTP_PORT=465
 SMTP_USER=noreply-nass@naflows.com
-SMTP_PASS=TVw_&2dB.4WMq/@
+SMTP_PASS=eH#M3#Gv+b5a!3a
 SMTP_SECURE=true
 EOF
 
-cat > ./api/.env << 'EOF'
-AUTH_API_URL_DEV=http://auth-api-1:3000
+
+cd ./api
+echo -e "Setting up API .env for production..."
+cat > .env << 'EOF'
+AUTH_API_URL_DEV=https://nass.naflows.com/api
 EOF
 
+cd ../frontend
+echo -e "Setting up Frontend Vite config for production..."
 cat > ./frontend/vite.config.ts << 'EOF'
     import { defineConfig } from 'vite'
     import react from '@vitejs/plugin-react'
@@ -46,6 +56,17 @@ cat > ./frontend/vite.config.ts << 'EOF'
     }
     })
 EOF
+
+echo "All configuration files set up."
+
+echo "Generating production build..."
+echo "-----------------------------------"
+echo "1. Installing dependencies..."
+cd ./api && npm install
+cd ../backend && npm install
+cd ../frontend && npm install
+echo "2. Building frontend..."
+echo "Starting production build..."
 
 # Make build script executable and run it
 chmod +x ./build.sh
