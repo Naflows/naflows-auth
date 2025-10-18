@@ -29,7 +29,7 @@ export async function createService(userID : string, password : string, identifi
         const userServices : Array<Service> = await servicesCollection.find({ userID }).toArray();
 
         // TODO: Implement rates for plans
-        const sameServices = userServices.find((s : Service) => s.name === details.name || s.ip_address === details.ip_address || s.dns === details.dns);
+        const sameServices = userServices.find((s : Service) => s.name === details.name || s.ip_address.includes(details.ip_address) || s.dns === details.dns);
 
         if (sameServices) {
             return software.methods.serverReply(409, "Conflict: Service with same name, IP address or DNS already exists.");

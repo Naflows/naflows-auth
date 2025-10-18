@@ -45,7 +45,6 @@ export async function registerService(
         $or: [
             { id: pub.id },
             { name: pub.name },
-            { ip_address: pub.ip_address },
             { dns: pub.dns }
         ]
     });
@@ -82,7 +81,7 @@ export async function registerService(
 
         created_by: user.id,
 
-        ip_address: pub.ip_address,
+        ip_address: [pub.ip_address],
         dns: pub.dns,
         created_at: new Date().getTime(),
         status: "INACTIVE",

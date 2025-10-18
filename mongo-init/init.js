@@ -454,7 +454,7 @@ db.service_tokens.insertOne({
 db.services.insertOne({
     id : "naflows_backend",
     name : "Naflows Backend Structure",
-    ip_address : "::ffff:172.18.0.2", // ::ffff:172.18.0.2
+    ip_address : ["172.18.0.2","193.70.115.114"], // ::ffff:172.18.0.2
     dns : "nass.naflows.com",
     description : "The Naflows Backend Structure for secure API communication.",
     created_at : new Date().getTime(),
@@ -537,7 +537,7 @@ db.service_logs.insertOne({
 db.services.insertOne({
     id : "moo_deng_bar",
     name : "Moo Deng Bar",
-    ip_address : "dummy-api", 
+    ip_address : ["dummy-api"], 
     dns : "moo-deng-bar.naflows.com",
     description : "Moo Deng Bar Service for testing purposes.",
     created_at : new Date().getTime(),
@@ -590,7 +590,7 @@ db.service_tokens.insertOne({
 db.services.insertOne({
     id : "the_pookie_shop",
     name : "The Pookie Shop",
-    ip_address : "dummy-api",
+    ip_address : ["dummy-api"],
     dns : "the-pookie-shop.naflows.com",
     description : "The Pookie Shop Service for testing purposes.",
     created_at : new Date().getTime(),

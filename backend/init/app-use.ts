@@ -69,7 +69,7 @@ export function useApp(app) {
                 console.log('\x1b[32m%s\x1b[0m', `Public route accessed: ${req.path}`);
             }
             next();
-
+            
 
         } else {
             middleware.main(req, res, next);

@@ -28,7 +28,7 @@ interface ServicesForUserProps {
         ram: string; // RAM allocated to the service
         cpu: string; // CPU allocated to the service
     };
-    ip_address?: string; // IP address of the service, optional and may be omitted for non-admin users
+    ip_address?: string[]; // IP address of the service, optional and may be omitted for non-admin users
     picture?: string; // URL to the service picture, optional
     public_settings: {
         allow_user_registration: boolean;

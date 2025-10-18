@@ -29,12 +29,12 @@ EOF
 cd ./api
 echo -e "Setting up API .env for production..."
 cat > .env << 'EOF'
-AUTH_API_URL_DEV=https://nass.naflows.com/api
+AUTH_API_URL_DEV=http://auth-api-1:3000
 EOF
 
 cd ../frontend
 echo -e "Setting up Frontend Vite config for production..."
-cat > ./frontend/vite.config.ts << 'EOF'
+cat > ./vite.config.ts << 'EOF'
     import { defineConfig } from 'vite'
     import react from '@vitejs/plugin-react'
 
@@ -57,14 +57,31 @@ cat > ./frontend/vite.config.ts << 'EOF'
     })
 EOF
 
+
+
 echo "All configuration files set up."
 
 echo "Generating production build..."
 echo "-----------------------------------"
 echo "1. Installing dependencies..."
-cd ./api && npm install
-cd ../backend && npm install
-cd ../frontend && npm install
+# install in each project folder without changing the script's current working directory
+if [ -d "./api" ]; then
+    (cd ./api && npm install)
+else
+    echo "Warning: ./api not found, skipping npm install for api"
+fi
+
+if [ -d "./backend" ]; then
+    (cd ./backend && npm install)
+else
+    echo "Warning: ./backend not found, skipping npm install for backend"
+fi
+
+if [ -d "./frontend" ]; then
+    (cd ./frontend && npm install)
+else
+    echo "Warning: ./frontend not found, skipping npm install for frontend"
+fi
 echo "2. Building frontend..."
 echo "Starting production build..."
 

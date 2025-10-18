@@ -3,9 +3,9 @@ import type { ServicesForUserProps } from "../../../../../../../../../types/Serv
 
 
 const ServiceNetworkIdentity = ({
-    service 
-} : {
-    service : ServicesForUserProps | null
+    service
+}: {
+    service: ServicesForUserProps | null
 }) => {
     return (
         <div id="left">
@@ -20,9 +20,20 @@ const ServiceNetworkIdentity = ({
                         <h4>IP Address</h4>
                     </div>
                     <div className="network__component__body">
-                        <p className="network__component__value">{service?.ip_address || "Not configured"}</p>
-                        <button className="primary-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M160-120q-17 0-28.5-11.5T120-160v-97q0-16 6-30.5t17-25.5l505-504q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L313-143q-11 11-25.5 17t-30.5 6h-97Zm544-528 56-56-56-56-56 56 56 56Z" /></svg>
+                        <div className="information__container">
+                            {
+                                service?.ip_address && service.ip_address.length > 0 ? service?.ip_address.map((ip, index) => (
+                                    <div className="component">
+                                        <p className="network__component__value">{ip || "Not configured"}</p>
+                                        <button className="primary-button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M160-120q-17 0-28.5-11.5T120-160v-97q0-16 6-30.5t17-25.5l505-504q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L313-143q-11 11-25.5 17t-30.5 6h-97Zm544-528 56-56-56-56-56 56 56 56Z" /></svg>
+                                        </button>
+                                    </div>
+                                )) : <p className="network__component__value">Not configured</p>
+                            }
+                        </div>
+                        <button className="primary-button width-100-auto">
+                            Register IP
                         </button>
                     </div>
                 </div>
@@ -33,10 +44,14 @@ const ServiceNetworkIdentity = ({
 
                     </div>
                     <div className="network__component__body">
-                        <p className="network__component__value">{service?.dns || "Not configured"}</p>
-                        <button className="primary-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M160-120q-17 0-28.5-11.5T120-160v-97q0-16 6-30.5t17-25.5l505-504q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L313-143q-11 11-25.5 17t-30.5 6h-97Zm544-528 56-56-56-56-56 56 56 56Z" /></svg>
-                        </button></div>
+                        <div className="information__container">
+                            <div className="component">
+                                <p className="network__component__value">{service?.dns || "Not configured"}</p>
+                                <button className="primary-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M160-120q-17 0-28.5-11.5T120-160v-97q0-16 6-30.5t17-25.5l505-504q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L313-143q-11 11-25.5 17t-30.5 6h-97Zm544-528 56-56-56-56-56 56 56 56Z" /></svg>
+                                </button></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

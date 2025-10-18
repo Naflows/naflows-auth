@@ -66,7 +66,7 @@ const ServiceConfiguration = ({
                 <div className="form__part">
                     <div className="form__part__header">
                         <h4>Network Configuration</h4>
-                        <p>Specify the network settings for your service. These settings are crucial for ensuring that your service is accessible to users and other services.</p>
+                        <p>Specify the network settings for your service. These settings are crucial for ensuring that your service is accessible to users and other services. You will be able to add more IP addresses later.</p>
                     </div>
                     <div className="form__content">
                         <div className="inputs__container two-columns">
