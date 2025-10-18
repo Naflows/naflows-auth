@@ -10,6 +10,9 @@ git clone https://github.com/naflows/naflows-auth.git
 
 
 cd ./naflows-auth
+
+
+sleep 2
 # Create .env (note: EOF not E0F)
 echo -e "Creating environment configuration files..."
 echo -e "Setting up .env for production..."
@@ -25,12 +28,15 @@ SMTP_PASS=eH#M3#Gv+b5a!3a
 SMTP_SECURE=true
 EOF
 
+sleep 1
 
 cd ./api
 echo -e "Setting up API .env for production..."
 cat > .env << 'EOF'
 AUTH_API_URL_DEV=http://auth-api-1:3000
 EOF
+
+sleep 1
 
 cd ../frontend
 echo -e "Setting up Frontend Vite config for production..."
@@ -58,6 +64,9 @@ cat > ./vite.config.ts << 'EOF'
 EOF
 
 
+sleep 1
+# Go back to root folder
+cd ../
 
 echo "All configuration files set up."
 
@@ -71,11 +80,15 @@ else
     echo "Warning: ./api not found, skipping npm install for api"
 fi
 
+sleep 1
+
 if [ -d "./backend" ]; then
     (cd ./backend && npm install)
 else
     echo "Warning: ./backend not found, skipping npm install for backend"
 fi
+
+sleep 1
 
 if [ -d "./frontend" ]; then
     (cd ./frontend && npm install)

@@ -897,7 +897,8 @@ a {
   }
 
   :root {
-    width: 100%;
+    max-width: 100vw !important;
+    width: 100vw !important;
   }
 
   .nass_switch {
@@ -909,13 +910,19 @@ a {
 
   .global__nass__form {
     width: 100% !important;
+    
   }
 
   .panel {
     height: calc(100% - 40px) !important;
 
+    padding: 20px;
+    width: calc(95% - 40px);
+
     img {
-      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      object-fit: cover !important;
     }
 
     .form {

@@ -87,4 +87,23 @@
 
 
     }
+
+    .nass__app__footer {
+        flex-direction: column;
+        gap: 30px;
+        align-items: start;
+        padding: 30px 5% 30px 5%;
+        width: calc(100% - 10%);
+        .nass__naflows__informations {
+            .naflows__logotype {
+                width: 35%;
+            }
+        }
+        .nass__app__useful__links {
+            flex-wrap: wrap;
+            row-gap: 30px;
+            column-gap: 50px;
+
+        }
+    }
 }

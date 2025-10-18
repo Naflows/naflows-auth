@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../../../public/root/pages/home/index.scss";
 import Mailing from "./components/Mailing";
 import Status, { type ServiceStatus } from "./components/Status";
@@ -9,49 +9,73 @@ const Home = () => {
     null
   );
 
+  const [displayMenu, setDisplayMenu] = useState<boolean>(false);
 
+  useEffect(() => {
+    const root = document.querySelector('#root');
+    if (displayMenu) {
+      root?.classList.add('menu--active');
+      document.body.style.overflow = "hidden";
+    } else {
+      root?.classList.remove('menu--active');
+      document.body.style.overflow = "auto";
+    }
+  }, [displayMenu])
 
   return (
-    <div className="nass__home__page">
+    <div className={`nass__home__page ${displayMenu ? "menu--active" : ""}`}>
 
-      <div className="global__home__header">
+      <div className={`global__home__header ${displayMenu ? "active" : ""}`}>
         <div className="header__head">
           <img
             src="https://naflows.com/public/assets/naflows_full_logotype.png"
             alt="Naflows Logo"
           />
+          <div className="button-display--header--phone" onClick={() => {
+            setDisplayMenu(!displayMenu);
+          }}>
+            {!displayMenu ? (
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M160-240q-17 0-28.5-11.5T120-280q0-17 11.5-28.5T160-320h640q17 0 28.5 11.5T840-280q0 17-11.5 28.5T800-240H160Zm0-200q-17 0-28.5-11.5T120-480q0-17 11.5-28.5T160-520h640q17 0 28.5 11.5T840-480q0 17-11.5 28.5T800-440H160Zm0-200q-17 0-28.5-11.5T120-680q0-17 11.5-28.5T160-720h640q17 0 28.5 11.5T840-680q0 17-11.5 28.5T800-640H160Z" /></svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" /></svg>
+            )}
+          </div>
+
         </div>
 
-        <div className="header__navigation">
-          <button className="secondary-button" onClick={() => {
-            window.location.href = "/docs";
-          }}>Documentation</button>
-          <button className="secondary-button" onClick={() => {
-            window.location.href = "https://github.com/Naflows/naflows-auth";
-          }}>
-            Source Code
-          </button>
-          <button className="secondary-button" onClick={() => {
-            window.location.href = "https://discord.gg/5k8aFS9DbK";
-          }}>
-            Join the commmunity
-          </button>
-          <button className="secondary-button inactive" onClick={() => {
-            window.location.href = "/docs";
-          }}>
-            Demo
-          </button>
-        </div>
-        <div className="header__actions">
-          <button className="primary-button" onClick={() => {
-            window.location.href = "/login";
-          }}>Login to the NASS</button>
 
-          <div className="status__container">
-            <Status
-              serviceStatus={serviceStatus}
-              setServiceStatus={setServiceStatus}
-            />
+        <div className={`buttons-content`}>
+          <div className="header__navigation">
+            <button className="secondary-button" onClick={() => {
+              window.location.href = "/docs";
+            }}>Documentation</button>
+            <button className="secondary-button" onClick={() => {
+              window.location.href = "https://github.com/Naflows/naflows-auth";
+            }}>
+              Source Code
+            </button>
+            <button className="secondary-button" onClick={() => {
+              window.location.href = "https://discord.gg/5k8aFS9DbK";
+            }}>
+              Join the commmunity
+            </button>
+            <button className="secondary-button inactive" onClick={() => {
+              window.location.href = "/docs";
+            }}>
+              Demo
+            </button>
+          </div>
+          <div className="header__actions">
+            <button className="primary-button" onClick={() => {
+              window.location.href = "/login";
+            }}>Login to the NASS</button>
+
+            <div className="status__container">
+              <Status
+                serviceStatus={serviceStatus}
+                setServiceStatus={setServiceStatus}
+              />
+            </div>
           </div>
         </div>
       </div>

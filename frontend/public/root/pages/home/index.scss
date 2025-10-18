@@ -18,6 +18,18 @@
 
   gap: 50px;
 
+  .button-display--header--phone {
+    display: none;
+  }
+
+  .buttons-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+  }
+
   .header__actions {
     display: flex;
     align-items: center;
@@ -621,6 +633,97 @@
 }
 
 @media screen and (max-width: 1200px) {
+  .head__global__title {
+    width: 90% !important;
+    .title__headers {
+      max-width: 100% !important;
+
+      h3 {
+        font-size: 32px !important;
+      }
+    }
+  }
+  .naflows__logo__separator {
+    width: 90% !important;
+    img {
+      width: 100% !important;
+      height: auto !important;
+    }
+  }
+
+  .menu--active {
+    overflow: hidden;
+    max-height: 100vh;
+  }
+
+  .global__home__header {
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    padding: 10px 20px;
+    width: calc(100% - 40px);
+    .button-display--header--phone {
+      display: flex;
+    }
+
+    &.active {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: calc(100vh - 20px);
+      width: calc(100vw - 40px);
+      background-color: $_2k25-background-hue-darker-transparent;
+      backdrop-filter: blur(10px);
+      flex-direction: column;
+      align-items: start;
+      justify-content: start;
+      .buttons-content {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 30px;
+        margin-top: 50px;
+        align-items: start;
+        width: 100%;
+        .header__actions {
+          padding-bottom: 10px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          width: 100%;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .header__navigation {
+          flex-direction: column;
+          gap: 5px;
+          align-items: start;
+          button {
+            background-color: $_2k25-background-hue-darker-2;
+            width: 100%;
+          }
+        }
+      }
+    }
+    .header__head {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      img {
+        height: 40px;
+      }
+    }
+
+    .buttons-content {
+      display: none;
+    }
+
+    .header__navigation {
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+  }
+
   .nass_home__activity,
   .nass_welcome__informations,
   .nass__connect {
