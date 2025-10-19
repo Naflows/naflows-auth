@@ -29,8 +29,7 @@ const ServiceRightsComponentGlobal = ({
                 }, {
                     withCredentials: true
                 }).then((response) => {
-                    console.log("Fetched rights:", response.data.data);
-                    const fetchedRights: ServiceRights[] = response.data.data.rights;
+                    const fetchedRights: ServiceRights[] = response.data.rights;
                     const nassRights = fetchedRights.filter(r => r.type === "SERVICE_BY_NASS");
                     const instanceRights = fetchedRights.filter(r => r.type === "TUNNELING_BY_INSTANCE");
                     setNassRights(nassRights);

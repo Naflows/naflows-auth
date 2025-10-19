@@ -31,52 +31,6 @@
 }
 #right {
   width: 70%;
-  .network__traffic__placeholder {
-    width: calc(100% - 20px);
-    background-color: rgba(255, 255, 255, 0.05);
-    height: 100%;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-
-    align-items: center;
-    justify-content: center;
-
-    .network__information__container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: 100%;
-    }
-
-    .network__information {
-      padding: 5px 10px;
-      text-align: center;
-      border: 1px solid;
-      font-size: 13px;
-      width: calc(100% - 22px);
-      border-radius: 5px;
-      p {
-        margin: 0;
-      }
-      &.normal {
-        border-color: $da-confirm-hue;
-        background-color: $da-confirm-hue-transparent;
-        color: $da-confirm-hue;
-      }
-      &.warning {
-        border-color: $da-warning-hue;
-        background-color: $da-warning-hue-transparent;
-        color: $da-warning-hue;
-      }
-      &.shutdown {
-        border-color: $da-error-hue;
-        background-color: $da-error-hue-transparent;
-        color: $da-error-hue;
-      }
-    }
-  }
 }
 .network__components {
   display: flex;

@@ -39,15 +39,23 @@ export function useApp(app) {
         // If the request path starts with "/client" or "/public"
         if (req.path.startsWith('/client') || req.path.startsWith('/public') || req.path.startsWith('/nass/user')) {
             // Continue 
-            if (req.path.startsWith('/client/secure') || req.path.startsWith('/nass/user')) {
-                const secureLogin: ReplyType = (await secure.user.hiddenLogin(req, res));
+
+            async function checkService() {
                 const checkService: ReplyType = await middleware.process.scv(req, res);
 
+                console.log("NASS SCV Process result:", checkService);
+
+                if (!checkService.success) {
+                    return res.status(checkService.status).json(checkService);
+                }
+            }
+
+            if (req.path.startsWith('/client/secure') || req.path.startsWith('/nass/user')) {
+                await checkService();
+                const secureLogin: ReplyType = (await secure.user.hiddenLogin(req, res));
 
                 if (!secureLogin.success) {
                     return res.status(secureLogin.status).json(secureLogin);
-                } else if (!checkService.success) {
-                    return res.status(checkService.status).json(checkService);
                 } else {
                     console.log('\x1b[32m%s\x1b[0m', `Secure route accessed: ${req.path}`);
                     req.middleware.data = {
@@ -65,15 +73,16 @@ export function useApp(app) {
             } else if (req.path.startsWith('/public')) {
                 if (process.env.NASS_SERVICE_FILTER == "true") {
                     const serviceOk = await middleware.check.origin(req.body.client);
-                    if (!serviceOk.success || req.body.client.service !== process.env.AUTH_API_SERVICE_NAME) {
-                        return res.status(403).json(software.methods.serverReply(403, "Forbidden: Invalid client origin."));
+                    if (!serviceOk.success) {
+                        return res.status(serviceOk.status).json(serviceOk);
                     }
                 }
 
                 console.log('\x1b[32m%s\x1b[0m', `Public route accessed: ${req.path}`);
             }
+
             next();
-            
+
 
         } else {
             middleware.main(req, res, next);

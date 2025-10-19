@@ -34,14 +34,15 @@ const StartService = ({
         }, {
             withCredentials: true
         }).then((res) => {
-            if (res.data.success) {
+            console.log("Connecting response:", res.data);
+            if (res.status === 200) {
                 console.log("Service started successfully:", res.data);
                 setService({
                     ...service,
                     status: service.status === "ACTIVE" ? "INACTIVE" : "ACTIVE"
                 });
                 setAlert({
-                    message : res.data.message,
+                    message : `Service ${service.name} ${service.status === "ACTIVE" ? "stopped" : "started"} successfully.`,
                     title:  "Operation Successful",
                     success: true,
                     displayCode: false,

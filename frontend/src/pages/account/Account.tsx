@@ -39,10 +39,10 @@ const Account = () => {
         window.location.href = "/login?redirect=" + window.location.pathname;
         return;
       }
-      console.log(userData.data.data.user)
-      setUserFetch(userData.data.data.user as UserBodyProps);
+      console.log(userData.data.user)
+      setUserFetch(userData.data.user as UserBodyProps);
       if (selectedTab === "services") {
-        setServicesFetch(res.data.data.services as ServicesBodyProps[]);
+        setServicesFetch(res.data.services as ServicesBodyProps[]);
       }
       setSuccessfulFetch(true);
     } catch (error) {

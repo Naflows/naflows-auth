@@ -12,9 +12,9 @@ const fetchServiceData = async (id: string, setServiceData: (data : object) => v
             }
         );
         console.log(res.data);
-        if (res.data.success) {
-            console.log(res.data.data.service, "service data");
-            setServiceData(res.data.data.service);
+        if (res.status === 200) {
+            console.log(res.data.service, "service data");
+            setServiceData(res.data.service);
             return void 0;
         }
     } catch (error) {

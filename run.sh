@@ -3,6 +3,7 @@
 
 TEST_PARAMETER=$1
 RESET_ENVIRONMENT=$2
+RESET_DB=$3
 
 
 
@@ -16,6 +17,17 @@ if [ "$RESET_ENVIRONMENT" = "true" ]; then
     echo -e "\033[1;32mStarting MongoDB...\033[0m"
     COMPOSE_PROFILES="mongo-nass" docker-compose up -d mongo-nass
 
+
+else
+    echo -e "\033[1;32mStopping and removing existing containers, volumes, and networks...\033[0m"
+    COMPOSE_PROFILES="auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down
+fi
+
+if [ "$RESET_DB" = "true" ]; then
+    echo -e "\033[1;32mResetting database...\033[0m"
+    COMPOSE_PROFILES="mongo-nass" docker compose down -v
+    echo -e "\033[1;32mStarting MongoDB...\033[0m"
+    COMPOSE_PROFILES="mongo-nass" docker-compose up -d mongo-nass
     # Wait for MongoDB to be ready
     sleep 5
 
@@ -24,10 +36,6 @@ if [ "$RESET_ENVIRONMENT" = "true" ]; then
     docker exec -i mongo-nass mongosh -u admin -p secret --authenticationDatabase admin < ./mongo-init/init.js
 
     echo -e "\033[1;32mStarting other services...\033[0m"
-
-else
-    echo -e "\033[1;32mStopping and removing existing containers, volumes, and networks...\033[0m"
-    COMPOSE_PROFILES="auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down
 fi
 
 

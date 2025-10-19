@@ -16,7 +16,7 @@ export async function manageNewSession(
     _user: User, user: any, service: any
 ) {
 
-    
+
     const s: ReplyType = await services.service.get(service.service) as ReplyType;
 
     if (!s.success) {
@@ -97,6 +97,7 @@ export async function manageNewSession(
         return software.methods.serverReply(202, `An email has been sent to ${truncatedEmail} with the confirmation code.`, {
             session: session.id,
             token: token.token
+
         });
     }
 

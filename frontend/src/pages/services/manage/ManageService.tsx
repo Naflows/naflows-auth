@@ -131,7 +131,7 @@ const ManageService = () => {
           if (res.data == null) {
             throw new Error("Failed to fetch user data");
           }
-          setUser(res.data.data.user as UserBodyProps);
+          setUser(res.data.user as UserBodyProps);
         } catch (error) {
           console.log("Service data fetch returned status:", (error as AxiosError)?.response?.status);
           setDisplayAlert({

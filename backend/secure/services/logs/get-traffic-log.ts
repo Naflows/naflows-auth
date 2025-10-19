@@ -13,5 +13,9 @@ export async function getTrafficLog(service_id : string) : Promise<ReplyType> {
         return software.methods.serverReply(404, "Traffic log not found for the specified service ID.");
     }
 
+    // Get all trafic log requests made within the last hour only
+    const oneHourAgo = Date.now() - (60 * 60 * 1000);
+    trafficLog.requests = trafficLog.requests.filter(request => request.timestamp >= oneHourAgo);
+
     return software.methods.serverReply(200, "Traffic log retrieved successfully.", trafficLog);
 }

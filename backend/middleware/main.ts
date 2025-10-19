@@ -15,7 +15,7 @@ export async function NASS_Verification_Process(req, res, next) {
       } else {
         // Executing the Secure Connection Verification Process
         const scv: ReplyType = await middleware.process.scv(req, res);
-
+        console.log("NASS SCV Process result:", scv);
         if (!scv.success) {
           console.error("\x1b[31m%s\x1b[0m", `NASS SCV Process failed: ${scv.message}`);
           return software.methods.manageErrorCode(scv, res);

@@ -46,8 +46,8 @@ const LatestLogs = ({
                 }, {
                     withCredentials: true
                 });
-                console.log("Fetched logs:", response.data.data.logs);
-                setLogs(response.data.data.logs);
+                console.log("Fetched logs:", response.data.logs);
+                setLogs(response.data.logs);
             } catch (error) {
                 console.error("Error fetching logs:", error);
                 setIsError(true);

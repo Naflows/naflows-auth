@@ -26,7 +26,7 @@ const CreateService = () => {
                 if (res.data == null) {
                     throw new Error("Failed to fetch user data");
                 }
-                setUser(res.data.data.user as UserBodyProps);
+                setUser(res.data.user as UserBodyProps);
             } catch (error) {
                 console.error("Error initializing page:", error);
                 window.location.href = "/login?redirect=" + window.location.pathname;
@@ -128,8 +128,8 @@ const CreateService = () => {
                 withCredentials: true
             });
             create.then((res) => {
-                console.log(res.data);
-                if (res.data.success) {
+                console.log(res);
+                if (res.status === 200) {
                     setDisplayAlert({
                         status: 200,
                         message: "Service created successfully! You will be redirected to the service page shortly.",

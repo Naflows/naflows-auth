@@ -2,21 +2,17 @@ import axios from "axios";
 import { useEffect } from "react";
 
 export interface ServiceStatus {
-  data: {
-    memory: { usagePercent: string };
-    cpu: { load: number; model: string; cores: number };
-    disk: { usagePercent: string };
-    software: {
-      version: string;
-      environment: string;
-      platform: string;
-      architecture: string;
-      name: string;
-      author: string;
-    };
+  memory: { usagePercent: string };
+  cpu: { load: number; model: string; cores: number };
+  disk: { usagePercent: string };
+  software: {
+    version: string;
+    environment: string;
+    platform: string;
+    architecture: string;
+    name: string;
+    author: string;
   };
-  status: number;
-  message: string;
 }
 
 const Status = ({
@@ -53,7 +49,7 @@ const Status = ({
 
   return (
     <div
-      className={`nass_service__informations  ${serviceStatus && serviceStatus.status == 200
+      className={`nass_service__informations  ${serviceStatus && serviceStatus.disk.usagePercent
         ? "nass_service__info__item__value--active"
         : "nass_service__info__item__value--inactive"
         }`}
@@ -64,7 +60,7 @@ const Status = ({
       >
         <div className="nass_service__info__header">
           <div className={`nass_service__info__item__value`}>
-            {serviceStatus && serviceStatus.status == 200 ? (
+            {serviceStatus && serviceStatus.disk.usagePercent ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="24px"
@@ -86,8 +82,8 @@ const Status = ({
               </svg>
             )}
             <span id="version__value" style={{
-              display : serviceStatus && serviceStatus.status == 200 ? 'inline' : 'none'
-            }}> V.{serviceStatus?.data.software.version}</span>
+              display: serviceStatus && serviceStatus.disk.usagePercent ? 'inline' : 'none'
+            }}> V.{serviceStatus?.software.version}</span>
           </div>
 
         </div>

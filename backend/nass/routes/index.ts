@@ -1,7 +1,13 @@
+import { nassMiddleware } from "../../init/nass-middleware";
 import nass from "../dir";
 
 const express = require('express');
 const router = express.Router();
+
+
+router.use(async (req, res, next) => {
+    nassMiddleware(req, res, next);
+});
 
 router.post('/dev/instance/init', async (req, res) => {
     nass.instance.init(req, res);

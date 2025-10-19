@@ -467,7 +467,6 @@ db.services.insertOne({
     created_at : new Date().getTime(),
     created_by : "1",
     status : "ACTIVE",
-    service_token : "naflows_backend_token",
     picture : "https://avatars.githubusercontent.com/u/188961317?s=200&v=4",
     banner : "https://www.naflows.com/public/showcase/banners/nass-banner.png",
     settings : {
@@ -516,15 +515,6 @@ db.nass_api_keys.insertOne({
 
 
 
-
-db.service_tokens.insertOne({
-    id : "naflows_backend_token",
-    service_id : "naflows_backend",
-    token : "naflows_backend_token",
-    created_at : new Date("2025-09-26").getTime(),
-    lifespan: 1000 * 60 * 60 * 24 * 1000000000000000000, // Infinite
-    uses : 0
-})
 
 db.service_logs.insertOne({
     id: "log_1",
