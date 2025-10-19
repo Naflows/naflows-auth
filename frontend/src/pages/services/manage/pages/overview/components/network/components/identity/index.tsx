@@ -22,7 +22,7 @@ const ServiceNetworkIdentity = ({
                     <div className="network__component__body">
                         <div className="information__container">
                             {
-                                service?.ip_address && service.ip_address.length > 0 ? service?.ip_address.map((ip, index) => (
+                                service?.ip_address && service.ip_address.length > 0 ? service?.ip_address.map((ip) => (
                                     <div className="component">
                                         <p className="network__component__value">{ip || "Not configured"}</p>
                                         <button className="primary-button">

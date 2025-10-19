@@ -13,7 +13,6 @@ services:
     expose:
       - "27017"
     volumes:
-      - mongo-data:/data/db
       - ./mongo-init:/docker-entrypoint-initdb.d
 
     environment:
@@ -47,8 +46,6 @@ services:
       - "3000"
     depends_on:
       - mongo-nass
-    volumes:
-      - ./backend:/app/backend
 
 
   mongo-express:
@@ -84,7 +81,8 @@ services:
     profiles: ["dummy-api"]
     container_name: dummy-api
     networks:
-      - nass-network
+      nass-network:
+        ipv4_address: 172.28.0.10
     ports:
       - "3005:3005"
     expose:
@@ -119,7 +117,7 @@ services:
       - mongo-nass
       - mongo-express
     volumes:
-      - ./backend:/app/backend
+      - ./backend:/app
     environment:
       - NODE_ENV=test
       - AUTH_API_URL=${AUTH_API_URL}
@@ -133,10 +131,9 @@ services:
       - mongo-nass
       - mongo-express
     volumes:
-      - ./backend:/app/backend
+      - ./backend:/app
     environment:
       - NODE_ENV=test
-      - SERVICES_API_URL=${SERVICES_API_URL}
 
 volumes:
   auth-data:
@@ -147,7 +144,11 @@ volumes:
     driver: local
   captcha-data:
     driver: local
-
 networks:
   nass-network:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+          gateway: 172.28.0.1

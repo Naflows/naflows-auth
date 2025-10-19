@@ -111,9 +111,9 @@ db.service_logs.createIndex({ created_at: 1 });
 db.service_rights.createIndex({ id: 1 }, { unique: true });
 db.service_rights.createIndex({ service_id: 1 });
 db.service_rights.createIndex({ type: 1 });
-db.instanceTunnelingRights.createIndex({ id: 1 }, { unique: true });
-db.instanceTunnelingRights.createIndex({ name: 1 }, { unique: true });
-db.instanceTunnelingRights.createIndex({ service_id: 1 }, { unique: true });
+db.instance_tunneling_rights.createIndex({ id: 1 }, { unique: true });
+db.instance_tunneling_rights.createIndex({ name: 1 }, { unique: true });
+db.instance_tunneling_rights.createIndex({ service_id: 1 }, { unique: true });
 
 
 db.user_rights.createIndex({ id: 1 }, { unique: true });
@@ -454,7 +454,7 @@ db.service_tokens.insertOne({
 db.services.insertOne({
     id : "naflows_backend",
     name : "Naflows Backend Structure",
-    ip_address : ["172.18.0.2","193.70.115.114"], // ::ffff:172.18.0.2
+    ip_address : ["172.28.0.10","193.70.115.114"], // ::ffff:172.18.0.4
     dns : "nass.naflows.com",
     description : "The Naflows Backend Structure for secure API communication.",
     created_at : new Date().getTime(),
@@ -527,7 +527,7 @@ db.service_logs.insertOne({
     created_at: new Date().getTime(),
     metadata: {
         user_id: "1",
-        ip_address: "::ffff:172.18.0.2"
+        ip_address: "::ffff:172.18.0.4"
     },
     type: "STATUS"
 });
