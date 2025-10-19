@@ -15,6 +15,7 @@
 
 import { v4 } from "uuid";
 import { Service, ServiceSettings, ServiceToken } from "../../../types/.types/collections.type";
+import { ServiceTraffic } from "../../../types/.types/traffic.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import { software } from "../../../software/dir";
 import { services } from "../dir";
@@ -39,6 +40,7 @@ export async function registerService(
 ): Promise<ReplyType> {
 
     const serviceCollection: Collection<Service> = db.collection("services");
+    const serviceTrafficCollection: Collection<ServiceTraffic> = db.collection("service_traffic");
 
     // Check if the service id, name, ip address or dns already exists
     const existingService: Service | null = await serviceCollection.findOne({
@@ -118,6 +120,12 @@ export async function registerService(
         }
     };
 
+    const newTraffic : ServiceTraffic = {
+        id: v4(),
+        service_id: service.id,
+        requests: []
+    };
+
 
     const apiKeyRT : ReplyType = await services.service.key.create(service.id, user.id);
 
@@ -129,6 +137,7 @@ export async function registerService(
     // service.service_token = (token.data as ServiceToken).token;
 
     await serviceCollection.insertOne(service);
+    await serviceTrafficCollection.insertOne(newTraffic);
     await services.service.setup.basic(service.id, service.created_by);
 
 

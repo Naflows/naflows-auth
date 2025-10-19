@@ -47,7 +47,6 @@ export async function checkIncomingDevData(apiKey : string, apiID : string, devK
 
     const userRightsValue : ServiceRights[] = await services.service.user.getRights(userRT.data?.user.id, apiID,true,"SERVICE_BY_NASS");
 
-    console.log("User rights fetched:", userRightsValue);
 
     if (userRightsValue.length === 0) {
         return software.methods.serverReply(403, "Developer does not have any rights in this service.");

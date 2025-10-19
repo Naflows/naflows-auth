@@ -264,3 +264,7 @@ export interface Notification {
   type: "INFO" | "WARNING" | "ALERT"; // Type of the notification
   associated_service?: string; // Service ID, the service that generated the notification, if any
 }
+
+
+
+

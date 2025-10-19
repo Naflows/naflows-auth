@@ -67,6 +67,8 @@ export async function checkRequestOrigin(client: {
         if (serviceToken && !expiredToken) {
           serviceToken.uses++;
           await servicesToken.updateOne({ id: serviceToken.id }, { $set: { uses: serviceToken.uses } });
+
+
           return software.methods.serverReply(200, "Service access granted.");
         } else if (expiredToken && serviceToken) {
           console.error(

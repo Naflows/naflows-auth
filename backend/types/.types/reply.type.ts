@@ -1,4 +1,5 @@
 import { APIKey, Service, ServiceToken, User } from "./collections.type";
+import { ServiceTraffic } from "./traffic.type";
 import { DeveloperSecureAccess, ServiceRights } from "./tunneling.type";
 
 export interface ReplyType {
@@ -14,5 +15,6 @@ export interface ReplyType {
         devKey? : DeveloperSecureAccess;
         user? : User;
         right? : ServiceRights;
+        trafficLog? : ServiceTraffic;
     };
 }

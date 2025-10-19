@@ -51,6 +51,10 @@ const userRights = db.getCollection('user_rights'); // Rights for users
 const serviceTunneling = db.getCollection('service_tunneling'); // Service tunneling configurations
 const serviceDevs = db.getCollection('service_devs'); // Service developers
 
+
+const service_traffic = db.getCollection('service_traffic'); // Service traffic logs
+
+
 // Create indexes for the collections to improve performance and ensure uniqueness where necessary
 db.users.createIndex({ id: 1 }, { unique: true });
 db.users.createIndex({ identifier: 1 }, { unique: true });
@@ -125,6 +129,9 @@ db.service_tunneling.createIndex({ target_url: 1}, { unique: true });
 
 db.service_devs.createIndex({ id: 1 }, { unique: true });
 db.service_devs.createIndex({ service_id: 1 });
+
+db.service_traffic.createIndex({ id: 1 }, { unique: true });
+db.service_traffic.createIndex({ service_id: 1 });
 
 
 // See the .env file in the root directory of the naflows-system repository for the unhashed password
@@ -547,7 +554,7 @@ db.services.insertOne({
     picture : "https://avatars.githubusercontent.com/u/188961317?s=200&v=4",
     banner : "https://www.naflows.com/public/showcase/banners/nass-banner.png",
     settings : {
-        rates : 1000, // 1000 requests per day
+        rates : 1000, // 1000 requests per second
         allow_nass_payement_method : true, // Whether the service allows payment through NASS
         ram : "512MB", // RAM allocated to the service
         cpu : "1 CORE" // CPU allocated to the service

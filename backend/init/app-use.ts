@@ -7,6 +7,7 @@ import { ReplyType } from '../types/.types/reply.type';
 import { software } from '../software/dir';
 import nass from '../nass/dir';
 import { services } from '../secure/services/dir';
+import { v4 } from 'uuid';
 
 export function useApp(app) {
     app.use(express.json());
@@ -54,6 +55,9 @@ export function useApp(app) {
                         token: (secureLogin.data as any)?.token,
                         user_id: (secureLogin.data as any)?.user_id
                     };
+
+
+
                     console.log('\x1b[33m%s\x1b[0m', `Middleware access granted for secure route - Sending back middleware data: ${JSON.stringify(req.middleware.data)}`);
                 }
             } else if (req.path.startsWith('/public/nass')) {
