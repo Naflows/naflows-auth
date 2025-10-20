@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test-global": "jest global.test.ts --runInBand --no-cache --verbose",
-    "test-services": "jest services.test.ts --runInBand --no-cache --verbose"
+    "test-services": "jest services.test.ts --runInBand --no-cache --verbose",
+    "methods-test": "jest /tests/methods/methods.test.ts --runInBand --no-cache --verbose"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +26,7 @@
     "querystring": "^0.2.1",
     "stripe": "^18.5.0",
     "systeminformation": "^5.27.10",
+    "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",
     "uuid": "^11.1.0"
   },

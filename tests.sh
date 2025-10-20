@@ -1,11 +1,8 @@
 #!/bin/bash
 
-
 RESET_ENVIRONMENT=$1
 RESET_DB=$2
-
-
-
+TEST_PARAMETER=$3
 
 if [ "$RESET_ENVIRONMENT" = "true" ]; then
     echo -e "\033[1;32mCleaning up existing Docker containers and volumes...\033[0m"
@@ -15,8 +12,6 @@ if [ "$RESET_ENVIRONMENT" = "true" ]; then
     COMPOSE_PROFILES="auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down -v
     echo -e "\033[1;32mStarting MongoDB...\033[0m"
     COMPOSE_PROFILES="mongo-nass" docker-compose up -d mongo-nass
-
-
 else
     echo -e "\033[1;32mStopping and removing existing containers, volumes, and networks...\033[0m"
     COMPOSE_PROFILES="auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down
@@ -28,24 +23,33 @@ if [ "$RESET_DB" = "true" ]; then
     echo -e "\033[1;32mStarting MongoDB...\033[0m"
     COMPOSE_PROFILES="mongo-nass" docker-compose up -d mongo-nass
     # Wait for MongoDB to be ready
-    sleep 5
+    sleep 2
 
     # Initialize database manually
     echo -e "\033[1;32mInitializing database...\033[0m"
     docker exec -i mongo-nass mongosh -u admin -p secret --authenticationDatabase admin < ./mongo-init/init.js
 
+    sleep 5
+
     echo -e "\033[1;32mStarting other services...\033[0m"
 fi
 
+if [ "$TEST_PARAMETER" = "methods" ]; then
+    echo -e "\033[1;32mStarting Docker containers for contract tests...\033[0m"
+    COMPOSE_PROFILES="mongo-nass,auth-api,dummy-api" docker-compose up --build -d
 
-echo -e "\033[1;32mStarting Docker containers for no-test...\033[0m"
-COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,dummy-api" docker-compose up --build -d
+    # Wait for services to start and MongoDB to be ready
+    echo -e "\033[1;32mWaiting for services to start...\033[0m"
+    sleep 2
 
+    # Run tests inside the auth-api container
+    echo -e "\033[1;32mRunning methods tests inside auth-api container...\033[0m"
+    docker exec auth-api-1 sh -c "cd /app && npm run methods-test"
 
-
-echo -e "\033[1;32mWaiting for services to initialize...\033[0m"
-sleep 10
-
-# Prevent terminal from closing for debugging errors
-echo -e "\033[1;32mClosing terminal in 20 seconds...\033[0m"
-sleep 20
+    # Keep container running to view logs if needed
+    echo -e "\033[1;32mTests completed. Container still running. Press Ctrl+C to stop.\033[0m"
+    docker logs -f auth-api-1
+else
+    echo -e "\033[1;32mStarting Docker containers for no-test...\033[0m"
+    COMPOSE_PROFILES="mongo-nass,auth-api,dummy-api" docker-compose up --build -d
+fi

@@ -107,34 +107,22 @@ services:
     ports:
       - "8080:3000"
 
-  global-tests:
+  methods-tests:
     build: 
       context: ./backend
       dockerfile: Dockerfile
-    profiles: ["test-global"]
-    command: npm run test-global
+    profiles: ["methods-tests"]
+    command: npm run methods-test
     depends_on:
-      - auth-api
       - mongo-nass
-      - mongo-express
+      - auth-api
     volumes:
       - ./backend:/app
     environment:
       - NODE_ENV=test
       - AUTH_API_URL=${AUTH_API_URL}
 
-  services-tests:
-    build: ./backend
-    profiles: ["test-services"]
-    command: npm run test-services
-    depends_on:
-      - auth-api
-      - mongo-nass
-      - mongo-express
-    volumes:
-      - ./backend:/app
-    environment:
-      - NODE_ENV=test
+
 
 volumes:
   auth-data:
