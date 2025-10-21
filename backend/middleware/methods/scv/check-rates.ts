@@ -13,20 +13,17 @@ export async function checkRates(UCR: UCRType): Promise<ReplyType> {
     console.log(`Searching for service ${UCR.client.service}`)
     const service: Service = (await services.service.get(UCR.client.service) as ReplyType).data as Service;
     const reqRates = await ratesCollection.findOne({
-      associated_service: UCR.client.service,
-      associated_service_key: service.service_token,
+      associated_service: UCR.client.service
     });
 
 
     if (!reqRates) {
       // If no rates found, create a new one
-
       await ratesCollection.insertOne({
         id: v4(),
         device_fingerprint: UCR.user.device_fingerprint,
         requests: [{ last_requests: [Date.now()], request_number: 1, ip: UCR.user.ip, userAgent: UCR.user.agent }],
-        associated_service: UCR.client.service,
-        associated_service_key: service.service_token
+        associated_service: service.id,
       });
     } else {
       const requestsArray: Array<UserRequest> = reqRates.requests;

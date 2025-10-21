@@ -37,6 +37,7 @@ import { checkUserAccess } from "./methods/global/check-user-access";
 import { setTrafficLogs } from "./logs/set-traffic-log";
 import { getTrafficLogRoute } from "./methods/global/get-traffic-log";
 import { getTrafficLog } from "./logs/get-traffic-log";
+import { getKeyByUser } from "./methods/dev/key-by-user";
 
 
 
@@ -74,7 +75,8 @@ export const services = {
         dev: {
             register: registerServiceDev,
             login: devLogin,
-            getUserByKey: getUserByKey
+            getUserByKey: getUserByKey,
+            getKey : getKeyByUser
         },
         key: {
             getByApi: getKeyByIPID,

@@ -227,7 +227,8 @@ export interface NassServiceToken {
   expires_at: number; // Date when the token expires, if not set, it never expires
   lifespan: number; // How long the token is valid for, in seconds, if not set, it never expires
   creation_method: "AUTO" | "MANUAL";
-  uses: number
+  uses: number,
+  invalidated?: boolean; // Whether the token has been invalidated or not
 }
 
 // This service token type is only available for the NASS services, which are aware of their token but not the death of it

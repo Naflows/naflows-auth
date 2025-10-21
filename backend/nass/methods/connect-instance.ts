@@ -7,6 +7,7 @@ import { software } from "../../software/dir";
 import middleware from "../../middleware/dir";
 
 export async function connectInstance(req : Request, res : Response) {
+    // This function is exclusive to service owners to start/stop their services
     const user = await secure.user.manageConnection(req, res);
     if (!user) {
         return; // manageConnection already sent the response

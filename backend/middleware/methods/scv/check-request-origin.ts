@@ -69,7 +69,7 @@ export async function checkRequestOrigin(client: {
     }
 
     const queriedService = serviceData.data as Service;
-    const isOriginValid = queriedService && (queriedService.ip_address.includes(client.ip.replace("::ffff:", "")));
+    const isOriginValid = queriedService && (queriedService.ip_address.includes(client.ip.replace("::ffff:", ""))) && (queriedService.dns === client.dns);
 
     if (isOriginValid && queriedService.status === "ACTIVE") {
       if (naflowsFrontendOnly && queriedService.details && queriedService.details.official !== true) {
@@ -94,7 +94,7 @@ export async function checkRequestOrigin(client: {
         |-------------|----------------------------|-------------------------------
         | Service ID  | ${serviceToken.service_id} | ${client.service}
         | Uses        | ${serviceToken.uses}       |
-        | Created at  | ${serviceToken.created_at} | ${client.service_token_birth}
+        | Created at  | ${serviceToken.created_at} ${typeof serviceToken.created_at} | ${client.service_token_birth} ${typeof client.service_token_birth}
         | Lifespan    | ${serviceToken.lifespan}   | ${Date.now()}
         
         | Label       | Value

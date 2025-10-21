@@ -36,7 +36,7 @@ fi
 
 if [ "$TEST_PARAMETER" = "methods" ]; then
     echo -e "\033[1;32mStarting Docker containers for contract tests...\033[0m"
-    COMPOSE_PROFILES="mongo-nass,auth-api,dummy-api" docker-compose up --build -d
+    COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker-compose up --build -d
 
     # Wait for services to start and MongoDB to be ready
     echo -e "\033[1;32mWaiting for services to start...\033[0m"
@@ -49,7 +49,19 @@ if [ "$TEST_PARAMETER" = "methods" ]; then
     # Keep container running to view logs if needed
     echo -e "\033[1;32mTests completed. Container still running. Press Ctrl+C to stop.\033[0m"
     docker logs -f auth-api-1
+
+    sleep 10
+
+
+    # After tests, bring down the containers
+    echo -e "\033[1;32mBringing down Docker containers after tests...\033[0m"
+    COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker-compose down
+
+    sleep 10
+
+    # Close immediately after tests
+    exit 0
 else
     echo -e "\033[1;32mStarting Docker containers for no-test...\033[0m"
-    COMPOSE_PROFILES="mongo-nass,auth-api,dummy-api" docker-compose up --build -d
+    COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker-compose up --build -d
 fi

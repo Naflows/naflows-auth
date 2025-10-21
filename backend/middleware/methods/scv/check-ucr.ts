@@ -1,6 +1,6 @@
 import UCRType from "../../../types/.types/ucr.type";
 
-export function isUCRType(obj: any): obj is UCRType {
+export function isUCRType(obj: any): boolean {
     function isValidUser(user : any) {
         return (
             user != undefined &&
