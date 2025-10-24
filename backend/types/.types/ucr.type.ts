@@ -11,7 +11,7 @@ interface UCRType {
         identifier? : string; // PRE-HASHED
         password? : string; // PRE-HASHED
 
-        device_fingerprint : string;
+        device_fingerprint : object;
     };
 
     client : {

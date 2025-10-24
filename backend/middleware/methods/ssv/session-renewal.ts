@@ -10,10 +10,11 @@ import * as crypto from "crypto";
 import { executeSessionRenewal } from "./create.renewal";
 
 
-export async function sessionRenewal(ucr: UCRType, collections: {
-  sessionsCollection: Collection<UserSession>;
-  tokensCollection: Collection<Tokens>;
-}, user: User, session: UserSession): Promise<ReplyType> {
+export async function sessionRenewal(ucr: UCRType, user: User, session: UserSession): Promise<ReplyType> {
+  const sessionsCollection = db.collection("sessions") as Collection<UserSession>;
+  const tokensCollection = db.collection("tokens") as Collection<Tokens>;
+
+
   console.log(`Trying to renew session ${JSON.stringify(session)} for user ${JSON.stringify(user)} with UCR ${JSON.stringify(ucr)}`);
   const renewalToken = ucr.data ? ucr.data["session-renewal-token"] : undefined;
   let token: Tokens | undefined = undefined;
@@ -47,12 +48,12 @@ export async function sessionRenewal(ucr: UCRType, collections: {
 
 
 
-    const updateToken = await collections.tokensCollection.updateMany(
+    const updateToken = await tokensCollection.updateMany(
       { id: token.id },
       { $set: { session_id: secure.hash(newSession.id), updated_at: Date.now() } }
     )
     console.log("Update token result:", updateToken);
-    const updateResult = await collections.sessionsCollection.updateOne(
+    const updateResult = await sessionsCollection.updateOne(
       { id: session.id },
       { $set: newSession }
     );
@@ -65,7 +66,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
       return software.methods.serverReply(500, "Failed to renew the session.");
     }
 
-    await collections.tokensCollection.deleteMany({
+    await tokensCollection.deleteMany({
       user_id: ucr.user.user_id,
       rights: ["SESSION_RENEWAL"],
     });
@@ -80,7 +81,7 @@ export async function sessionRenewal(ucr: UCRType, collections: {
 
   } else {
     console.log("Session renewal failed due to invalid token or credentials.");
-    return (await executeSessionRenewal(credentialsValidity, ucr, user, session, collections.tokensCollection));
+    return (await executeSessionRenewal(credentialsValidity, ucr, user, session));
   }
 
 }

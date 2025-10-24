@@ -513,7 +513,14 @@ db.nass_api_keys.insertOne({
     key : "naflows_backend_key"
 })
 
-
+db.service_tokens.insertOne({
+    id : "naflows_backend_token",
+    service_id : "naflows_backend",
+    token : "naflows_backend_token",
+    created_at : new Date().getTime(),
+    lifespan: 1000 * 60 * 60 * 24 * 1000000000000000000, // Infinite
+    uses : 0
+});
 
 
 db.service_logs.insertOne({

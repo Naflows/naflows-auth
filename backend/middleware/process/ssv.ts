@@ -122,7 +122,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
               return software.methods.serverReply(500, "Internal server error. UCR should be valid but no credentials found.");
             }
           } else {
-            const sessionRenewal: ReplyType = await middleware.session.renewal(ucr, { sessionsCollection: sessionsCollection, tokensCollection: tokensCollection }, user, session);
+            const sessionRenewal: ReplyType = await middleware.session.renewal(ucr, user, session);
 
             if (!sessionRenewal.success || !sessionRenewal.data || !(sessionRenewal.data as { session?: string }).session) {
               return sessionRenewal;

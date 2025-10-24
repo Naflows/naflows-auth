@@ -2,13 +2,15 @@ import { describe, test, expect, beforeAll } from "@jest/globals";
 import middleware from "../../middleware/dir";
 import secure from "../../secure/global/dir";
 import mongoose, { Collection } from "mongoose";
-import { fakeRes, fakeUCR, sleep } from "./utils";
+import { getFakeRes, fakeUCR, fakeUserSession, getFakeReq, sleep } from "./utils";
 import { services } from "../../secure/services/dir";
 import { getPlans } from "../../secure/services/methods/get-plans";
 import { db } from "../..";
 import { ReplyType } from "../../types/.types/reply.type";
 import { NassServiceToken, Service, ServiceToken } from "../../types/.types/collections.type";
 import nass from "../../nass/dir";
+import { before } from "node:test";
+import { sessionRenewal } from "../../middleware/methods/ssv/session-renewal";
 
 
 beforeAll(async () => {
@@ -27,19 +29,33 @@ describe("Test NASS Secure Verification Methods", () => {
         }
     }
 
+    let serviceUCRData: {
+        ip: string;
+        dns: string;
+        service: string;
+        service_token: string;
+        service_token_birth: number;
+    } = {
+        ip: "::ffff:172.18.0.6",
+        dns: "local.nass.com",
+        service: "1",
+        service_token: "test-service-token",
+        service_token_birth: 1750658147765
+    }
+
     describe("Check Blacklist Middleware", () => {
         test("Non-Blacklisted IP", async () => {
             const req: any = {
                 ip: "123.456.789.000"
             };
             // Excluding res because it is only used to serve the blacklist page
-            const result = await middleware.check.blacklist(fakeRes, req.ip);
+            const result = await middleware.check.blacklist(getFakeRes(), req.ip);
             expect(result.success).toBe(true);
             expect(result.status).toBe(200);
             expect(result.message).toBe("IP is not blacklisted.");
         });
         test("Add BlackListed IP", async () => {
-            const result = await secure.blacklist(mongoose, blacklistedIP as any, fakeRes, "Testing blacklist");
+            const result = await secure.blacklist(mongoose, blacklistedIP as any, getFakeRes(), "Testing blacklist");
             expect(result.success).toBe(false);
             expect(result.status).toBe(403);
             expect(result.message).toBe("Your IP has been blacklisted.");
@@ -50,7 +66,7 @@ describe("Test NASS Secure Verification Methods", () => {
                 ip: blacklistedIP.ip
             };
 
-            const result = await middleware.check.blacklist(fakeRes, req.ip);
+            const result = await middleware.check.blacklist(getFakeRes(), req.ip);
             expect(result.success).toBe(false);
             expect(result.status).toBe(403);
             expect(result.message).toBe("Your IP is blacklisted.");
@@ -103,7 +119,7 @@ describe("Test NASS Secure Verification Methods", () => {
             }, {
                 middleware: { data: { user_id: "2" } },
                 body: {}
-            }, fakeRes);
+            }, getFakeRes());
             expect(d.success).toBe(true);
             expect(d.status).toBe(200);
             expect(d.message).toBe("Service registered successfully.");
@@ -120,6 +136,10 @@ describe("Test NASS Secure Verification Methods", () => {
                 serviceData = d.data as Service;
                 expect(serviceData).toBeDefined();
                 expect(serviceData.id).toBe("test-scv-service");
+
+                serviceUCRData.ip = serviceData.ip_address[0];
+                serviceUCRData.dns = serviceData.dns;
+                serviceUCRData.service = serviceData.id;
             });
 
             test("Get Non-Existing Service", async () => {
@@ -189,6 +209,9 @@ describe("Test NASS Secure Verification Methods", () => {
                 expect(newToken?.invalidated).toBeFalsy();
 
                 serviceToken = { id: newToken.id, token: regenerateResult.data.serviceToken.token, created_at: newToken.created_at };
+
+                serviceUCRData.service_token = serviceToken.token;
+                serviceUCRData.service_token_birth = serviceToken.created_at;
             });
         });
 
@@ -213,7 +236,7 @@ describe("Test NASS Secure Verification Methods", () => {
                         serviceID: serviceData.id
                     },
                     middleware: { data: { user_id: "2" } }
-                } as any, fakeRes);
+                } as any, getFakeRes());
 
                 sleep(1000); // Wait a second for the status to update
 
@@ -323,5 +346,90 @@ describe("Test NASS Secure Verification Methods", () => {
                 expect(result).toBe(false);
             });
         });
-    })
+    });
+
+
+    describe("Secure Session Validation", () => {
+
+        let user;
+        let newSessionID: string = "";
+        let newSessionToken: string = "";
+        beforeAll(async () => {
+            user = await secure.user.get("2", false);
+            if (user == undefined) {
+                throw new Error("User with ID 2 not found for session renewal tests.");
+            }
+        });
+
+
+        describe("Session is invalid", () => {
+            test("Cannot renew session with invalid credentials", async () => {
+                const ucr = fakeUCR({ identifier: "jest-test-identifier", password: "jest-test-password" });
+                delete ucr.user.token;
+                const renew = await sessionRenewal(ucr, user, fakeUserSession);
+                expect(renew.success).toBe(false);
+                expect(renew.status).toBe(401);
+                expect(renew.message).toBe("Invalid credentials provided.");
+            });
+
+            describe("Renew session with valid credentials", () => {
+                let renewalToken: string = "";
+
+                test("Get Renewal Token", async () => {
+                    const ucr = fakeUCR();
+                    ucr.client = serviceUCRData;
+                    delete ucr.user.token;
+                    const renew = await sessionRenewal(ucr, user, fakeUserSession);
+                    expect(renew.success).toBe(false);
+                    expect(renew.status).toBe(401);
+                    expect(renew.message).toBe("Session is outdated.");
+                    expect(renew.data).toBeDefined();
+                    expect((renew.data as any).token).toBeDefined();
+
+                    renewalToken = (renew.data as any).token;
+
+                    expect(renewalToken).toBeDefined();
+                });
+
+                test("Renew Session Successfully", async () => {
+                    const ucr = fakeUCR();
+                    ucr.client = serviceUCRData;
+                    delete ucr.user.token;
+                    ucr.data["session-renewal-token"] = renewalToken;
+                    const renew = await sessionRenewal(ucr, user, fakeUserSession);
+                    expect(renew.success).toBe(true);
+                    expect(renew.status).toBe(201);
+                    expect(renew.message).toBe("Session renewed successfully with code 201.");
+                    expect(renew.data).toBeDefined();
+                    expect((renew.data as any).session).toBeDefined();
+
+                    newSessionID = (renew.data as any).session;
+
+                    expect(newSessionID).toBeDefined();
+                });
+
+                test("New Session Works with Token", async () => {
+                    const ucr = fakeUCR();
+                    delete ucr.user.token;
+                    ucr.user.session_id = newSessionID;
+                    ucr.client = serviceUCRData;
+
+                    const fakeReq = getFakeReq(ucr);
+
+
+                    const renew = await middleware.process.ssv(fakeReq, getFakeRes());
+                    expect(renew.success).toBe(true);
+                    expect(renew.status).toBe(200);
+                    expect(renew.message).toBe("SSV Process completed successfully.");
+
+                    expect(renew.data).toBeDefined();
+                    expect((renew.data as any).session).toBeDefined();
+                    
+                    newSessionID = (renew.data as any).session;
+                    expect(newSessionID).toBeDefined();
+                });
+            });
+        });
+
+    });
 });

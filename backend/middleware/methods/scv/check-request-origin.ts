@@ -69,7 +69,7 @@ export async function checkRequestOrigin(client: {
     }
 
     const queriedService = serviceData.data as Service;
-    const isOriginValid = queriedService && (queriedService.ip_address.includes(client.ip.replace("::ffff:", ""))) && (queriedService.dns === client.dns);
+    const isOriginValid = queriedService && (queriedService.ip_address.includes(client.ip.replace("::ffff:", "")));
 
     if (isOriginValid && queriedService.status === "ACTIVE") {
       if (naflowsFrontendOnly && queriedService.details && queriedService.details.official !== true) {

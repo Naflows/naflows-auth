@@ -24,12 +24,8 @@ if [ "$RESET_DB" = "true" ]; then
     COMPOSE_PROFILES="mongo-nass" docker-compose up -d mongo-nass
     # Wait for MongoDB to be ready
     sleep 2
+    
 
-    # Initialize database manually
-    echo -e "\033[1;32mInitializing database...\033[0m"
-    docker exec -i mongo-nass mongosh -u admin -p secret --authenticationDatabase admin < ./mongo-init/init.js
-
-    sleep 5
 
     echo -e "\033[1;32mStarting other services...\033[0m"
 fi
