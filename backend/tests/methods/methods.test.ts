@@ -28,6 +28,13 @@ describe("Test NASS Secure Verification Methods", () => {
             'user-agent': 'jest-test-agent'
         }
     }
+    let developerKey: string = "";
+    let serviceKey: string = "";
+    let user;
+    let newSessionID: string = "";
+    let newSessionToken: string = "";
+    let serviceToken: ServiceToken;
+    let serviceData: Service;
 
     let serviceUCRData: {
         ip: string;
@@ -93,12 +100,7 @@ describe("Test NASS Secure Verification Methods", () => {
             expect(result.message).toBe("Rate limit exceeded. Too many requests.");
         });
     });
-
-
     describe("Services", () => {
-        let developerKey: string = "";
-        let serviceToken: ServiceToken;
-        let serviceData: Service;
 
         test("Create Service", async () => {
             const d = await services.service.register({
@@ -184,6 +186,9 @@ describe("Test NASS Secure Verification Methods", () => {
                 expect(devKey).toBeDefined();
 
                 developerKey = devKey;
+
+                expect(developerKey).toBeDefined();
+                
             })
         });
 
@@ -333,6 +338,7 @@ describe("Test NASS Secure Verification Methods", () => {
                 expect(result.status).toBe(200);
                 expect(result.message).toBe("SCV Process completed successfully.");
             });
+
         });
     });
 
@@ -371,11 +377,7 @@ describe("Test NASS Secure Verification Methods", () => {
     });
 
 
-    describe("Secure Session Validation", () => {
-
-        let user;
-        let newSessionID: string = "";
-        let newSessionToken: string = "";
+    describe("Secure Session Verification", () => {
         beforeAll(async () => {
             user = await secure.user.get("2", false);
             if (user == undefined) {
@@ -446,12 +448,146 @@ describe("Test NASS Secure Verification Methods", () => {
 
                     expect(renew.data).toBeDefined();
                     expect((renew.data as any).session).toBeDefined();
-                    
+
                     newSessionID = (renew.data as any).session;
                     expect(newSessionID).toBeDefined();
                 });
             });
         });
-
     });
+
+    test("Get API Key for Service", async () => {
+        const ucr = fakeUCR();
+        ucr.user.session_id = newSessionID;
+        ucr.client = {
+            ip: serviceData.ip_address[0],
+            dns: serviceData.dns,
+            service: serviceData.id,
+            service_token: serviceToken.token,
+            service_token_birth: serviceToken.created_at
+        };
+        delete ucr.user.token;
+        const req = getFakeReq({
+            ...ucr,
+            service_id: serviceData.id
+        });
+    
+        const res = getFakeRes();
+
+
+        const a = await services.routes.serviceKey(req, res, (await secure.user.get("2", false))!);
+        const apiKeyResult = a.data;
+        expect(apiKeyResult.success).toBe(true);
+        expect(apiKeyResult.status).toBe(200);
+        expect(apiKeyResult.message).toBe("API Key retrieved successfully.");
+
+        const apiKey = apiKeyResult.data.key;
+        expect(apiKey).toBeDefined();
+        serviceKey = apiKey;
+    });
+
+
+    describe("Secure Token Verification", () => {
+        describe("Tunneling Rights Check", () => {
+            const rightsIds = {
+                admin: "",
+                dev: "",
+                noWork: ""
+            }
+            const devKey = developerKey;
+
+            beforeAll(() => {
+                expect(serviceKey).toBeDefined();
+                expect(serviceData).toBeDefined();
+            })
+
+            test("Create Right 'admin', 'dev', 'no-work' for tunneling", async () => {
+                const admin = await services.service.rights.create("test-scv-service", "admin", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_ROLES", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_ROLES", "VIEW_SERVICE", "VIEW_SETTINGS", "DEV_TOKEN_CREATION", "PROD_TOKEN_CREATION"],false,"TUNNELING_BY_INSTANCE");
+                const dev = await services.service.rights.create("test-scv-service", "dev", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "DEV_TOKEN_CREATION"],false,"TUNNELING_BY_INSTANCE");
+                const nowork = await services.service.rights.create("test-scv-service", "no-work", ["NO_WORK_RIGHT"],false,"TUNNELING_BY_INSTANCE");
+
+                expect(admin.success).toBe(true);
+                expect(dev.success).toBe(true);
+                expect(nowork.success).toBe(true);
+                expect(admin.data.right).toBeDefined();
+                expect(dev.data.right).toBeDefined();
+                expect(nowork.data.right).toBeDefined();
+                rightsIds.admin = admin.data.right.id;
+                rightsIds.dev = dev.data.right.id;
+                rightsIds.noWork = nowork.data.right.id;
+                expect(rightsIds.admin).toBeDefined();
+                expect(rightsIds.dev).toBeDefined();
+                expect(rightsIds.noWork).toBeDefined();
+            });
+
+            test("Rights Created Exist", async () => {
+                const adminRight = await services.service.rights.get(rightsIds.admin, "test-scv-service","TUNNELING_BY_INSTANCE");
+                const devRight = await services.service.rights.get(rightsIds.dev, "test-scv-service","TUNNELING_BY_INSTANCE");
+                const noWorkRight = await services.service.rights.get(rightsIds.noWork, "test-scv-service","TUNNELING_BY_INSTANCE");
+
+                expect(adminRight).toBeDefined();
+                expect(devRight).toBeDefined();
+                expect(noWorkRight).toBeDefined();
+            });
+
+            test("Cannot create a role with name that already exists", async () => {
+                const duplicateRight = await services.service.rights.create("test-scv-service", "admin", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_ROLES", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_ROLES", "VIEW_SERVICE", "VIEW_SETTINGS", "DEV_TOKEN_CREATION", "PROD_TOKEN_CREATION"],false,"TUNNELING_BY_INSTANCE");
+                expect(duplicateRight.success).toBe(false);
+                expect(duplicateRight.status).toBe(409);
+                expect(duplicateRight.message).toBe("A rights set with this name already exists in the service.");
+            });
+
+            // Note : any method queried from the nass doesn't use res directly, but returns data instead.
+            test("Create a Tunnel", async() => {
+                const fakeReq = getFakeReq({
+                    apiKey : serviceKey,
+                    apiID : serviceData.id,
+                    devKey : await services.service.dev.getKey("2", "test-scv-service"),
+                    route : "/test-tunnel-route",
+                    service_rights : [rightsIds.admin, rightsIds.dev]
+                });
+
+                const res = getFakeRes();
+
+                const r = await nass.tunnel.create(fakeReq, res);
+                const result = r.data;
+                expect(result.success).toBe(true);
+                expect(result.message).toBe("Tunnel created successfully.");
+            });
+
+            test("Create a Tunnel with Non-Existing Right", async() => {
+                const fakeReq = getFakeReq({
+                    apiKey : serviceKey,
+                    apiID : serviceData.id,
+                    devKey : await services.service.dev.getKey("2", "test-scv-service"),
+                    route : "/test-tunnel-route-2",
+                    service_rights : [rightsIds.admin, "non-existing-right-id"]
+                });
+                const res = getFakeRes();
+
+                const r = await nass.tunnel.create(fakeReq, res);
+                const result = r.data;
+                expect(result.success).toBe(false);
+                expect(result.message).toBe('Right "non-existing-right-id" does not exist.');
+            });
+
+            test("Create a Tunnel that Already Exists", async() => {
+                const fakeReq = getFakeReq({
+                    apiKey : serviceKey,
+                    apiID : serviceData.id,
+                    devKey : await services.service.dev.getKey("2", "test-scv-service"),
+                    route : "/test-tunnel-route",
+                    service_rights : [rightsIds.admin, rightsIds.dev]
+                });
+                const res = getFakeRes();
+
+                const r = await nass.tunnel.create(fakeReq, res);
+                const result = r.data;
+                expect(result.success).toBe(false);
+                expect(result.message).toBe('A tunnel already exists for this target URL.');
+            });
+
+            
+        });
+    })
 });

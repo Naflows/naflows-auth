@@ -117,7 +117,6 @@ db.service_rights.createIndex({ service_id: 1 });
 db.service_rights.createIndex({ type: 1 });
 db.instance_tunneling_rights.createIndex({ id: 1 }, { unique: true });
 db.instance_tunneling_rights.createIndex({ name: 1 }, { unique: true });
-db.instance_tunneling_rights.createIndex({ service_id: 1 }, { unique: true });
 
 
 db.user_rights.createIndex({ id: 1 }, { unique: true });

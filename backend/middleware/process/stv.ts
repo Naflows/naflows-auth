@@ -78,7 +78,7 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
                             );
                         }
 
-                        const checkRights = await middleware.token.rights(token,ucr);
+                        const checkRights = await middleware.token.rights(ucr);
                         if (!checkRights.success) {
                             return checkRights;
                         }

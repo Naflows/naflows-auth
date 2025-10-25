@@ -4,46 +4,41 @@ import { software } from "../../../software/dir";
 import { Tokens, User } from "../../../types/.types/collections.type";
 import UCRType from "../../../types/.types/ucr.type";
 import secure from "../../../secure/global/dir";
+import { services } from "../../../secure/services/dir";
+import nass from "../../../nass/dir";
 
 
 
-export async function checkTokenRights(token: Tokens, ucr: UCRType) {
+export async function checkTokenRights(ucr: UCRType) {
     try {
 
-        const routes = await software.methods.getRoutesRights();
-        const requestRoute = ucr.request.url;
+        const serviceId = ucr.client.service;
+        const serviceRoute = ucr.request.url;
 
-        if (!routes || typeof routes !== 'object' || Object.keys(routes).length === 0) {
-            return software.methods.serverReply(500, "Failed to fetch routes rights.");
+        const tunnel = await nass.tunnel.get(serviceId, serviceRoute);
+
+        if (!tunnel) {
+            return software.methods.serverReply(404, "No tunneling route found for this service and route.");
         }
 
-        console.log(`Checking rights for route: ${requestRoute}`);
-        if (!routes[requestRoute]) {
-            return software.methods.serverReply(404, "Route not found.");
+
+        const user : User = await secure.user.get(ucr.user.user_id, false);
+
+        if (!user) {
+            return software.methods.serverReply(404, "User not found.");
         }
 
-        if (!routes[requestRoute].open) {
-            const usersCollection = db.collection("users") as Collection<User>;
-            const user = await usersCollection.findOne({ id: ucr.user.user_id }) as unknown as User;
-            if (!user) {
-                return software.methods.serverReply(404, "User not found.");
-            }
+        const userRights = await services.service.user.getRights(user.id, serviceId, true,"TUNNELING_BY_INSTANCE");
 
-            const areRightsValid = routes[requestRoute].rights.every(right =>
-                token.rights.includes(right)
-            );
+        const rightOk = userRights.find((right) => {
+            return tunnel.allowed_rights.includes(right.id);
+        });
 
 
-            const areUserRightsValid = routes[requestRoute].levels.some(level =>
-                user.services[ucr.client.service].rights.includes(level)
-            );
-
-            if (!areUserRightsValid || !areRightsValid) {
-                return software.methods.serverReply(
-                    403,
-                    "Insufficient rights to access this route.",
-                );
-            }
+        if (!rightOk) {
+            return software.methods.serverReply(403, "User does not have the required rights for this tunneling route.", {
+                success: false,
+            });
         }
 
         return software.methods.serverReply(200, "Token rights checked successfully.", {
