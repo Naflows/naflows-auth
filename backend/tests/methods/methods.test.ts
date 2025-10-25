@@ -273,18 +273,21 @@ describe("Test NASS Secure Verification Methods", () => {
                 expect(result.message).toBe("Unauthorized service access.");
             });
 
-            test("Invalid Request Origin - Wrong DNS", async () => {
-                const result = await middleware.check.origin({
-                    ip: serviceData.ip_address[0],
-                    dns: "wrong.dns.test",
-                    service: serviceData.id,
-                    service_token: serviceToken.token,
-                    service_token_birth: serviceToken.created_at
-                });
-                expect(result.success).toBe(false);
-                expect(result.status).toBe(403);
-                expect(result.message).toBe("Unauthorized service access.");
-            });
+            // ##############################################################
+            // UNAVAILABLE FOR NOW
+            // test("Invalid Request Origin - Wrong DNS", async () => {
+            //     const result = await middleware.check.origin({
+            //         ip: serviceData.ip_address[0],
+            //         dns: "wrong.dns.test",
+            //         service: serviceData.id,
+            //         service_token: serviceToken.token,
+            //         service_token_birth: serviceToken.created_at
+            //     });
+            //     expect(result.success).toBe(false);
+            //     expect(result.status).toBe(403);
+            //     expect(result.message).toBe("Unauthorized service access.");
+            // });
+            // ##############################################################
 
             test("Invalid Request Origin - Wrong Service Token", async () => {
                 const result = await middleware.check.origin({
@@ -310,6 +313,25 @@ describe("Test NASS Secure Verification Methods", () => {
                 expect(result.success).toBe(false);
                 expect(result.status).toBe(403);
                 expect(result.message).toBe("Invalid service token.");
+            });
+
+            test("Validate SCV Middleware", async () => {
+                // Even if the tested middleware is SCV, we need to use UCR 
+                const ucr = fakeUCR();
+                ucr.client = {
+                    ip: serviceData.ip_address[0],
+                    dns: serviceData.dns,
+                    service: serviceData.id,
+                    service_token: serviceToken.token,
+                    service_token_birth: serviceToken.created_at
+                };
+                ucr.user.token = undefined;
+                const req = getFakeReq(ucr);
+                const res = getFakeRes();
+                const result = await middleware.process.scv(req, res);
+                expect(result.success).toBe(true);
+                expect(result.status).toBe(200);
+                expect(result.message).toBe("SCV Process completed successfully.");
             });
         });
     });

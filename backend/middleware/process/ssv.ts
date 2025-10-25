@@ -46,6 +46,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
           //session.device_fingerprint === ucr.user.device_fingerprint &&
           session.agent === ucr.user.agent &&
           session.user_id == secure.hash(ucr.user.user_id);
+      
 
 
         if (!session.active) {

@@ -60,6 +60,13 @@ const getFakeReq = (bodyContent: any): Request => {
         range: () => undefined,
         param: () => undefined,
         is: () => false,
+        socket : {
+            remoteAddress: '127.0.0.1',
+            remotePort: 12345,
+            localAddress: '127.0.0.1',
+            localPort: 54321,
+            // Add any other properties or methods you need for testing
+        },
         protocol: 'http',
         secure: false,
         ip: '127.0.0.1',

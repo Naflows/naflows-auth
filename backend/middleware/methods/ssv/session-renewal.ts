@@ -42,9 +42,9 @@ export async function sessionRenewal(ucr: UCRType, user: User, session: UserSess
       expires_at: Date.now() + (
         process.env.SESSION_RENEWAL_LIFESPAN ? parseInt(process.env.SESSION_RENEWAL_LIFESPAN) : 3600000 // Default to 1 hour
       ),
+      user_id : secure.hash(user.id),
     };
 
-    console.log(`Renewing session ${session.id} with new session ID ${newSession.id} and user ID ${user.id}. Associated token is ${token.id} (${token.token}) with rights ${token.rights}.`);
 
 
 
