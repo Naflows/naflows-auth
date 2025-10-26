@@ -3,6 +3,7 @@ import "../../../public/root/pages/home/index.scss";
 import Mailing from "./components/Mailing";
 import Status, { type ServiceStatus } from "./components/Status";
 import HomeAdvantage from "./components/HomeAdvantage";
+import WelcomeOverlay from "./components/WelcomeOverlay";
 
 const Home = () => {
   const [serviceStatus, setServiceStatus] = useState<ServiceStatus | null>(
@@ -26,6 +27,12 @@ const Home = () => {
     <div className={`nass__home__page ${displayMenu ? "menu--active" : ""}`}>
 
       <div className={`global__home__header ${displayMenu ? "active" : ""}`}>
+
+        <div className="header__navigation">
+          <button className="secondary-button" onClick={() => {
+            window.location.href = "/docs";
+          }}>Documentation</button>
+        </div>
         <div className="header__head">
           <img
             src="https://naflows.com/public/assets/naflows_full_logotype.png"
@@ -40,70 +47,37 @@ const Home = () => {
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" /></svg>
             )}
           </div>
-
         </div>
 
-
-        <div className={`buttons-content`}>
-          <div className="header__navigation">
-            <button className="secondary-button" onClick={() => {
-              window.location.href = "/docs";
-            }}>Documentation</button>
-            <button className="secondary-button" onClick={() => {
-              window.location.href = "https://github.com/Naflows/naflows-auth";
-            }}>
-              Source Code
-            </button>
-            <button className="secondary-button" onClick={() => {
-              window.location.href = "https://discord.gg/5k8aFS9DbK";
-            }}>
-              Join the commmunity
-            </button>
-            <button className="secondary-button inactive" onClick={() => {
-              window.location.href = "/docs";
-            }}>
-              Demo
-            </button>
-          </div>
-          <div className="header__actions">
+        <div className="header__actions">
+          <div className="buttons__container">
             <button className="primary-button" onClick={() => {
               window.location.href = "/login";
-            }}>Login to the NASS</button>
+            }}>
+              <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{
+                display: "block",
+              }}>
+                <mask id="uniqueMaskId-login-icon" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+                  <rect width="100" height="100" rx="50" fill="#D9D9D9" />
+                </mask>
+                <g mask="url(#uniqueMaskId-login-icon)">
+                  <path d="M0 100.5C0 77.5802 18.5802 59 41.5 59H58.5C81.4198 59 100 77.5802 100 100.5H0Z" fill="#D9D9D9" />
+                  <rect x="25" y="4" width="50" height="50" rx="25" fill="#D9D9D9" />
+                </g>
+              </svg>
+            </button>
+          </div>
 
-            <div className="status__container">
-              <Status
-                serviceStatus={serviceStatus}
-                setServiceStatus={setServiceStatus}
-              />
-            </div>
+          <div className="status__container">
+            <Status
+              serviceStatus={serviceStatus}
+              setServiceStatus={setServiceStatus}
+            />
           </div>
         </div>
       </div>
-      <div className="head__global__title">
-
-        <div className="title__headers">
-          <h3 className="moving--lighted--title">
-            {"Backend Solution via SSO for Devs'".split(" ").map((word, wordIndex, arr) => (
-              <span key={wordIndex} className="word" style={{
-                animationDelay: `${wordIndex * 0.3}s`
-              }}>
-                {word.split("").map((char, charIndex) => (
-                  <span key={charIndex} className="char">{char}</span>
-                ))}
-                {wordIndex < arr.length - 1 && <span className="char">&nbsp;</span>}
-              </span>
-            ))}
-          </h3>
-
-          <h5>Built by <span className="nass__author">Naflows</span> with transparency and scalability in mind</h5>
-        </div>
-      </div>
-
-
-      <div className="naflows__logo__separator">
-        <img className="nass__home__background" src="/assets/backgrounds/nass-home.png" alt="Home Background" />
-
-      </div>
+          
+      <WelcomeOverlay />
 
       <div className="nass__home__head">
 

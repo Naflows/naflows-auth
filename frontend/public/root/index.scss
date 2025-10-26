@@ -703,8 +703,7 @@ button * {
       }
     }
   }
-  svg,
-  svg * {
+  svg {
     width: 20px;
     height: 20px;
     fill: $_2k25-text;
@@ -776,7 +775,6 @@ button * {
   width: fit-content;
   height: fit-content;
   text-wrap: nowrap;
-  max-height: 42px;
   border: 2px solid $_2k25-background-hue-50-transparent;
   svg,
   svg * {

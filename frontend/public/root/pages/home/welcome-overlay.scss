@@ -1,0 +1,87 @@
+@import "../../variables.scss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+.global__welcome__screen__overlay {
+  height: 100vh;
+  width: calc(100% - 200px);
+  padding: 0 100px;
+
+  .global__welcome__screen__overlay__left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 40%;
+
+    h1 {
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 0px;
+      font-family: "Inter", sans-serif !important;
+      .title {
+        font-size: 48px;
+      }
+      .subtitle {
+        font-size: 15px;
+        font-weight: 500;
+        opacity: 0.8;
+      }
+    }
+
+    p {
+      font-size: 20px;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+
+    .launch__countdown__container {
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background-color: $_2k25-background-hue-darker;
+      border: 2px solid $_2k25-background-hue-darker-transparent;
+      display: flex;
+      flex-direction: column;
+      min-width: 50%;
+      max-width: 50%;
+      gap: 20px;
+
+      .launch__countdown__container__body {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .launch__countdown__label {
+        font-size: 12px;
+        margin-bottom: 3px;
+        font-weight: 600;
+        opacity: 0.8;
+      }
+
+      .launch__countdown__value {
+        color : $da-secondary-hue-lighter-2;
+        font-weight: 700;
+        width: 100%;
+        text-align: center;
+    }
+
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+
+      font-size: 14px;
+      font-weight: 500;
+      width: fit-content;
+      margin-bottom: 20px;
+
+      .launch__countdown__actions {
+        display: flex;
+        gap: 10px;
+
+      }
+    }
+  }
+}
