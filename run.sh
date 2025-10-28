@@ -42,10 +42,7 @@ echo -e "\033[1;32mStarting Docker containers for no-test...\033[0m"
 COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,dummy-api" docker compose up --build -d
 
 
-
-echo -e "\033[1;32mWaiting for services to initialize...\033[0m"
-sleep 10
-
-# Prevent terminal from closing for debugging errors
-echo -e "\033[1;32mClosing terminal in 20 seconds...\033[0m"
-sleep 20
+echo -e "\033[1;32mAll services are up and running.\033[0m"
+echo -e "\033[1;32mStarting Naflows Authentication Secure System's Frontend\033[0m"
+cd ./frontend || exit
+npm run dev
