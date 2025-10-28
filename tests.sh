@@ -11,7 +11,7 @@ if [ "$RESET_ENVIRONMENT" = "true" ]; then
     docker system prune -a -f --volumes
     COMPOSE_PROFILES="auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down -v
     echo -e "\033[1;32mStarting MongoDB...\033[0m"
-    COMPOSE_PROFILES="mongo-nass" docker-compose up -d mongo-nass
+    COMPOSE_PROFILES="mongo-nass" docker compose up -d mongo-nass
 else
     echo -e "\033[1;32mStopping and removing existing containers, volumes, and networks...\033[0m"
     COMPOSE_PROFILES="auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down
@@ -21,7 +21,7 @@ if [ "$RESET_DB" = "true" ]; then
     echo -e "\033[1;32mResetting database...\033[0m"
     COMPOSE_PROFILES="mongo-nass" docker compose down -v
     echo -e "\033[1;32mStarting MongoDB...\033[0m"
-    COMPOSE_PROFILES="mongo-nass" docker-compose up -d mongo-nass
+    COMPOSE_PROFILES="mongo-nass" docker compose up -d mongo-nass
     # Wait for MongoDB to be ready
     sleep 2
     
@@ -32,7 +32,7 @@ fi
 
 if [ "$TEST_PARAMETER" = "methods" ]; then
     echo -e "\033[1;32mStarting Docker containers for contract tests...\033[0m"
-    COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker-compose up --build -d
+    COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker compose up --build -d
 
     # Wait for services to start and MongoDB to be ready
     echo -e "\033[1;32mWaiting for services to start...\033[0m"
@@ -51,7 +51,7 @@ if [ "$TEST_PARAMETER" = "methods" ]; then
 
     # After tests, bring down the containers
     echo -e "\033[1;32mBringing down Docker containers after tests...\033[0m"
-    COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker-compose down
+    COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker compose down
 
     sleep 10
 
@@ -59,5 +59,5 @@ if [ "$TEST_PARAMETER" = "methods" ]; then
     exit 0
 else
     echo -e "\033[1;32mStarting Docker containers for no-test...\033[0m"
-    COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker-compose up --build -d
+    COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker compose up --build -d
 fi

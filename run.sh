@@ -14,7 +14,7 @@ if [ "$RESET_ENVIRONMENT" = "true" ]; then
     docker system prune -a -f --volumes
     COMPOSE_PROFILES="auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down -v
     echo -e "\033[1;32mStarting MongoDB...\033[0m"
-    COMPOSE_PROFILES="mongo-nass" docker-compose up -d mongo-nass
+    COMPOSE_PROFILES="mongo-nass" docker compose up -d mongo-nass
 
 
 else
@@ -26,7 +26,7 @@ if [ "$RESET_DB" = "true" ]; then
     echo -e "\033[1;32mResetting database...\033[0m"
     COMPOSE_PROFILES="mongo-nass" docker compose down -v
     echo -e "\033[1;32mStarting MongoDB...\033[0m"
-    COMPOSE_PROFILES="mongo-nass" docker-compose up -d mongo-nass
+    COMPOSE_PROFILES="mongo-nass" docker compose up -d mongo-nass
     # Wait for MongoDB to be ready
     sleep 5
 
@@ -39,7 +39,7 @@ fi
 
 
 echo -e "\033[1;32mStarting Docker containers for no-test...\033[0m"
-COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,dummy-api" docker-compose up --build -d
+COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,dummy-api" docker compose up --build -d
 
 
 
