@@ -98,7 +98,7 @@ const Input = ({
       const input = document.getElementById(name + "-input") as HTMLInputElement;
       if (input) {
         input.style.paddingRight = 60 + "px";
-        input.style.width = fitContent ? "auto" : `calc(100% - 90px)`;
+        input.style.width = fitContent ? "auto" : `calc(100% - 82px)`;
       }
     }
   }, [copyButtonRef, name, fitContent, isCopied, displayMaxChar]);

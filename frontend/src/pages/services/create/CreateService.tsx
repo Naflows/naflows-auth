@@ -14,7 +14,24 @@ import axios from "axios";
 import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert";
 
 
-
+const stepContent = {
+    "disclaimer" : {
+        title: "Service Creation Guidelines",
+        description: "Please read and accept the service creation guidelines before proceeding."
+    },
+    "wizard-init" : {
+        title: "Service Details",
+        description: "Provide the basic details for your new service."
+    },
+    "wizard-configure" : {
+        title: "Service Configuration",
+        description: "Configure the technical settings of your service."
+    },
+    "wizard-payement" : {
+        title: "Review & Create",
+        description: "Review your service details and create your service."
+    }   
+}
 
 const CreateService = () => {
     const [user, setUser] = useState<UserBodyProps | null>(null);
@@ -186,8 +203,10 @@ const CreateService = () => {
                     <div className="user__body__section services__creation__section">
                         <div className="services__section__header">
                             <div className="section__header__content">
-                                <h3 className="services__header__title">Services Creation</h3>
-                                <p>Create a new service.</p>
+                                <h3 className="services__header__title">{
+                                    stepContent[serviceCreationStep].title    
+                                }</h3>
+                                <p>{stepContent[serviceCreationStep].description}</p>
                             </div>
                         </div>
                         {component}

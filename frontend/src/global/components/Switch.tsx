@@ -24,8 +24,12 @@ const Switch = ({
             <div className={`nass_switch__container ${ch ? "nass_switch__container--checked" : ""}`}>
                 <div className="nass_switch__toggle"></div>
             </div>
+
             <div className="nass_switch__label">
-                <h5>{label}</h5>
+                <h5>
+                    {label}
+                    <span className={`nass_switch__label__state ${ch ? "nass_switch__label__state--on" : "nass_switch__label__state--off"}`}>{ch ? "On" : "Off"}</span>
+                </h5>
                 <p>{description}</p>
             </div>
         </div>

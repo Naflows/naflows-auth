@@ -1,6 +1,17 @@
 @import "../../variables.scss";
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
+@keyframes GlobalHeaderAppears {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .global__home__header {
   width: calc(100% - 200px);
   height: 100px;
@@ -15,6 +26,7 @@
   background-color: $_2k25-background-hue-darker-transparent;
   backdrop-filter: blur(10px);
   z-index: 10;
+  animation: GlobalHeaderAppears 1s ease forwards;
 
   gap: 50px;
 
@@ -500,6 +512,17 @@
 
 .nass_mailing__list {
   width: calc(100% - 40px);
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .nass_service__info__item__title {
+    font-size: 12px;
+    opacity: 0.8;
+  }
 
   .nass_homepage__box__content {
     display: flex;

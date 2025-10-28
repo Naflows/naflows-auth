@@ -33,14 +33,10 @@ const Mailing = () => {
   return (
     <>
       <Alert alert={alert} setAlert={setAlert} />
-      <div className="nass_homepage__box nass_mailing__list">
+      <div className="nass_mailing__list">
         <div className="nass_homepage__box__header">
           <div className="nass_home__box__header__subtitle">
-            <span className="nass_service__info__item__title">Join our mailing list</span>
-            <span className="nass_service__info__item__title__subtitle">
-              Be notified when we open up for beta testing and get updates on
-              the NASS
-            </span>
+            <span className="nass_service__info__item__title">Join our mailing list to be notified about updates and new features</span>
           </div>
         </div>
         <div className="nass_homepage__box__content">
