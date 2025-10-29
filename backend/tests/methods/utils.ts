@@ -1,5 +1,7 @@
 import { json } from "stream/consumers";
 import { UserSession } from "../../types/.types/collections.type";
+import { sessionRenewal } from "../../middleware/methods/ssv/session-renewal";
+import { ReplyType } from "../../types/.types/reply.type";
 
 
 /* Fake Response object for testing purposes */
@@ -48,10 +50,10 @@ const getFakeReq = (bodyContent: any): Request => {
         query: {},
         url: '/test',
         path: '/test',
-        get: function(headerName: string) {
+        get: function (headerName: string) {
             return this.headers?.[headerName.toLowerCase()];
         },
-        header: function(headerName: string) {
+        header: function (headerName: string) {
             return this.get(headerName);
         },
         accepts: () => false,
@@ -61,7 +63,7 @@ const getFakeReq = (bodyContent: any): Request => {
         range: () => undefined,
         param: () => undefined,
         is: () => false,
-        socket : {
+        socket: {
             remoteAddress: '127.0.0.1',
             remotePort: 12345,
             localAddress: '127.0.0.1',
@@ -141,7 +143,7 @@ const fakeUCR = (userOverride = {}) => ({
     data: {}
 });
 
-const fakeUserSession : UserSession = {
+const fakeUserSession: UserSession = {
     id: "1",
     user_id: "2",
     ip: "1.1.1.2",
@@ -157,5 +159,4 @@ const fakeUserSession : UserSession = {
 
 
 
-
-export { getFakeRes, fakeUCR, sleep, fakeUserSession, getFakeReq };
+export { getFakeRes, fakeUCR, sleep, fakeUserSession, getFakeReq }

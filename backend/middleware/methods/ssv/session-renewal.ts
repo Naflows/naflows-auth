@@ -25,7 +25,7 @@ export async function sessionRenewal(ucr: UCRType, user: User, session: UserSess
 
   const credentialsValidity = secure.verify(ucr.user.password, user.password) && secure.verify(ucr.user.identifier, user.identifier)
 
-  const isTokenValid = await secure.token.valid(token, session, ucr.user.user_id);
+  const isTokenValid = await secure.token.valid(token, session, ucr.user.user_id, secure.verify(ucr.user.password, user.password) && secure.verify(ucr.user.identifier, user.identifier));
 
 
   if (
@@ -73,7 +73,7 @@ export async function sessionRenewal(ucr: UCRType, user: User, session: UserSess
 
 
     return software.methods.serverReply(201, "Session renewed successfully with code 201.", {
-      session: newSession.id,
+      session: newSession
     });
 
 

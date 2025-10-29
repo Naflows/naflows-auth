@@ -25,9 +25,6 @@ if [ "$RESET_ENVIRONMENT" = "true" ]; then
     COMPOSE_PROFILES="auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down -v
     echo -e "\033[1;32mStarting MongoDB...\033[0m"
     COMPOSE_PROFILES="mongo-nass" docker compose up -d mongo-nass
-else
-    echo -e "\033[1;32mStopping and removing existing containers, volumes, and networks...\033[0m"
-    COMPOSE_PROFILES="auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down
 fi
 
 
@@ -35,7 +32,7 @@ fi
 if [ "$TEST_PARAMETER" = "methods" ]; then
     reset_db
 
-    echo -e "\033[1;32mStarting Docker containers for contract tests...\033[0m"
+    echo -e "\033[1;32mStarting Docker containers for methods tests...\033[0m"
     COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker compose up --build -d
 
     # Wait for services to start and MongoDB to be ready

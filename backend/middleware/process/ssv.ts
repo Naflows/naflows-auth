@@ -6,6 +6,7 @@ import secure from "../../secure/global/dir";
 import middleware from "../dir";
 import { Collection } from "mongoose";
 import { software } from "../../software/dir";
+import { executeSessionRenewal } from "../methods/ssv/create.renewal";
 
 // For evident reasons, there are no environment variables to enable / disable the SSV process.
 
@@ -27,17 +28,45 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
   const usersCollection = db.collection("users");
 
   if (sessionsCollection && tokensCollection && usersCollection) {
-
+    let newSessionID: ReplyType;
 
     console.log("\x1b[33m%s\x1b[0m", "Starting SSV process...");
     console.log("Looking for user with ID:", ucr.user.user_id, "and session ID:", ucr.user.session_id);
     const user = (await usersCollection.findOne({
       id: ucr.user.user_id,
     })) as unknown as User;
-    
-    const session = await sessionsCollection.findOne({
+
+    let session = await sessionsCollection.findOne({
       id: ucr.user.session_id
     }) as unknown as UserSession;
+
+    if (ucr.data["session-renewal-token"]) {
+      // Execute session renewal process
+      console.log("Session renewal token found in UCR data - executing session renewal process.");
+      const sessionRenewal: ReplyType = await middleware.session.renewal(ucr, user, session);
+
+      if (!sessionRenewal.success) {
+        return sessionRenewal;
+      } else {
+        console.log("\x1b[32m%s\x1b[0m", "Session renewed successfully during SSV process -- proceeding.");
+
+        session.id = sessionRenewal.data.session.id || session.id;
+        session.last_activity = Date.now();
+
+        const sessionUpdate = await sessionsCollection.updateOne(
+          { id: session.id },
+          { $set: session }
+        );
+
+        if (!sessionUpdate) {
+          return software.methods.serverReply(500, "Failed to update session after renewal.");
+        }
+
+        return sessionRenewal;
+      }
+    }
+
+
     if (user != undefined) {
       if (session) {
         console.log("Session found:", session);
@@ -46,7 +75,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
           //session.device_fingerprint === ucr.user.device_fingerprint &&
           session.agent === ucr.user.agent &&
           session.user_id == secure.hash(ucr.user.user_id);
-      
+
 
 
         if (!session.active) {
@@ -125,15 +154,22 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
           } else {
             const sessionRenewal: ReplyType = await middleware.session.renewal(ucr, user, session);
 
-            if (!sessionRenewal.success || !sessionRenewal.data || !(sessionRenewal.data as { session?: string }).session) {
+            if (!sessionRenewal.success) {
               return sessionRenewal;
             } else {
               console.log("\x1b[32m%s\x1b[0m", "Session renewed successfully during SSV process -- proceeding.");
-              
-              session.id = (sessionRenewal.data as { session?: string }).session || session.id;
+
+              session.id = sessionRenewal.data.session.id || session.id;
               session.last_activity = Date.now();
 
+              const sessionUpdate = await sessionsCollection.updateOne(
+                { id: session.id },
+                { $set: session }
+              );
 
+              if (!sessionUpdate) {
+                return software.methods.serverReply(500, "Failed to update session after renewal.");
+              }
 
             }
           }
@@ -141,14 +177,44 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
           return software.methods.serverReply(401, "Invalid session informations.");
         }
       } else {
-        return software.methods.serverReply(401, "Session not found.");
+        // If there is no session, check if the user provided valid credentials to create a new session
+
+        if (
+          ucr.user.password != undefined &&
+          ucr.user.identifier != undefined &&
+          secure.verify(ucr.user.password, user.password) &&
+          secure.verify(ucr.user.identifier, user.identifier)
+        ) {
+          console.log("No session found, but valid credentials provided - creating new session.");
+          // Create a new session
+          const newSession: ReplyType = await secure.session.create(
+            user,
+            ucr.user.device_fingerprint,
+            ucr.user.agent,
+            ucr.user.ip,
+            ucr.client.service,
+          );
+          if (!newSession.success || !newSession.data.session) {
+            return newSession;
+          } else {
+            console.log("\x1b[32m%s\x1b[0m", "New session created successfully during SSV process -- proceeding.");
+            session = newSession.data.session;
+            const token: ReplyType = await executeSessionRenewal(true, ucr, user, session);
+            // Error 401 is expected here to indicate that a new session has been created but has no token yet
+            if (!token.success && token.status === 401) {
+              return token;
+            }
+          }
+        } else {
+          return software.methods.serverReply(401, "Invalid user credentials.");
+        }
       }
     } else {
       return software.methods.serverReply(401, "Unknown user credentials.");
     }
 
 
-    const newSessionID: ReplyType = await secure.session.renew(session.id, { sessionsCollection: sessionsCollection, tokensCollection: tokensCollection });
+    newSessionID = await secure.session.renew(session.id, { sessionsCollection: sessionsCollection, tokensCollection: tokensCollection });
 
     if (!newSessionID.success) {
       return newSessionID;
@@ -156,7 +222,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
 
 
     return software.methods.serverReply(200, "SSV Process completed successfully.", {
-      session: (newSessionID.data as { session?: string }).session || session.id
+      session: newSessionID.data.session.id || session.id
     });
   } else {
     return software.methods.serverReply(

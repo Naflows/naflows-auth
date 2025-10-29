@@ -9,7 +9,7 @@ import crypto from "crypto";
 
 export async function createSession(
     user: User,
-    device_fingerprint: string,
+    device_fingerprint: object,
     user_agent: string,
     ip : string,
     service_id: string,
@@ -37,6 +37,8 @@ export async function createSession(
         return software.methods.serverReply(500, "Failed to create session.");
     }
 
-    return software.methods.serverReply(201, "Session created successfully.", session);
+    return software.methods.serverReply(201, "Session created successfully.", {
+        session : session
+    });
 }
 

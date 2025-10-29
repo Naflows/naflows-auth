@@ -7,6 +7,9 @@ import secure from "../../../secure/global/dir";
 import { services } from "../../../secure/services/dir";
 import nass from "../../../nass/dir";
 
+// WARNING : THIS FUNCTION IS TO BE USED WITH A TOKEN AND NOT WITH USER CREDENTIALS.
+// The token feature is made for users to access services without re-sending their credentials each time.
+// Therefore, this function checks the rights associated with the token, not with the user directly. Also, the token is checked directly in the STV process before this function is called.
 
 
 export async function checkTokenRights(ucr: UCRType) {
@@ -27,6 +30,8 @@ export async function checkTokenRights(ucr: UCRType) {
         if (!user) {
             return software.methods.serverReply(404, "User not found.");
         }
+
+        
 
         const userRights = await services.service.user.getRights(user.id, serviceId, true,"TUNNELING_BY_INSTANCE");
 

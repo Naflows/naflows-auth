@@ -37,6 +37,7 @@ export async function executeSessionRenewal(
 
     return software.methods.serverReply(401, "Session is outdated.", {
       token: (newToken.data as { token?: string }).token,
+      session: session.id
     });
   }
 }
