@@ -7,7 +7,7 @@ import secure from "../dir";
 
 export async function confirmSession(tokenValue: string, tokenID: string): Promise<ReplyType> {
 
-    const token: Tokens = await secure.token.get(tokenID);
+    const token: Tokens = await secure.token.get(tokenID,false);
     if (!token) return software.methods.serverReply(404, "Token not found");
 
     console.log(token);

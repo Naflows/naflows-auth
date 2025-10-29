@@ -19,7 +19,7 @@ export async function createSession(
 
     const session = {
         id : crypto.randomUUID(),
-        user_id : secure.hash(user.id),
+        user_id : secure.crypt(user.id),
         created_at : new Date().getTime(),
         last_activity : new Date().getTime(),
         expires_at : process.env.SESSION_RENEWAL_LIFESPAN,

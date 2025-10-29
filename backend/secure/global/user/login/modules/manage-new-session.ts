@@ -34,7 +34,7 @@ export async function manageNewSession(
         _service.id
     );
 
-    const session: UserSession = data.data as UserSession;
+    const session: UserSession = data.data.session as UserSession;
 
     if (!data.success || !session) {
         return software.methods.serverReply(401, "Failed creating the session, please try again.");
@@ -44,8 +44,13 @@ export async function manageNewSession(
     if (process.env.DEV_SKIP_SESSION_CONFIRMATION === "true") {
         // If skipping confirmation, create a full access token
         tokenData = await secure.token.create(
-            _user, session, ["USER_EDIT_OWN", "USER_READ_OWN"], true, parseInt(process.env.STV_MAXIMAL_USE_RATES), null, parseInt(process.env.SESSION_TOKEN_DURATION)
+            _user, session, [], true, parseInt(process.env.STV_MAXIMAL_USE_RATES), null, parseInt(process.env.SESSION_TOKEN_DURATION)
         );
+
+        if (!tokenData.success) {
+            return software.methods.serverReply(500, "Failed to create token for session.");
+        }
+
         // Associate the token with the session
         session.token_id = secure.hash((tokenData.data as any).token_id);
         // Update the session in the database
