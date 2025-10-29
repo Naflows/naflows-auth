@@ -42,7 +42,7 @@ export async function sessionRenewal(ucr: UCRType, user: User, session: UserSess
       expires_at: Date.now() + (
         process.env.SESSION_RENEWAL_LIFESPAN ? parseInt(process.env.SESSION_RENEWAL_LIFESPAN) : 3600000 // Default to 1 hour
       ),
-      user_id : secure.hash(user.id),
+      user_id : secure.crypt(user.id),
     };
 
 
@@ -73,7 +73,7 @@ export async function sessionRenewal(ucr: UCRType, user: User, session: UserSess
 
 
     return software.methods.serverReply(201, "Session renewed successfully with code 201.", {
-      session: newSession
+      session: newSession.id
     });
 
 

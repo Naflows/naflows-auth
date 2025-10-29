@@ -2,7 +2,7 @@ import { describe, test, expect, beforeAll } from "@jest/globals";
 import middleware from "../../middleware/dir";
 import secure from "../../secure/global/dir";
 import mongoose, { Collection } from "mongoose";
-import { getFakeRes, fakeUCR, fakeUserSession, getFakeReq, sleep } from "./utils";
+import { getFakeRes, fakeUCR, fakeUserSession, getFakeReq, sleep, getFakeNext } from "./utils";
 import { services } from "../../secure/services/dir";
 import { getPlans } from "../../secure/services/methods/get-plans";
 import { db } from "../..";
@@ -12,7 +12,7 @@ import nass from "../../nass/dir";
 import { before } from "node:test";
 import { sessionRenewal } from "../../middleware/methods/ssv/session-renewal";
 import { checkTokenRights } from "../../middleware/methods/stv/check-rights";
-import logUserIn from "../../secure/global/user/login";
+import { software } from "../../software/dir";
 
 
 beforeAll(async () => {
@@ -468,6 +468,9 @@ describe("Test NASS Secure Verification Methods", () => {
     });
 
 
+    let sessionID = "";
+    newSessionToken = "";
+
     describe("Secure Token Verification", () => {
         // First, create rights for tunneling in order to test SCV with tunneling rights
         const rightsIds = {
@@ -708,6 +711,7 @@ describe("Test NASS Secure Verification Methods", () => {
         });
 
 
+
         describe("STV Middleware", () => {
 
             beforeAll(async () => {
@@ -715,14 +719,18 @@ describe("Test NASS Secure Verification Methods", () => {
                 await db.collection("sessions").deleteMany({ service: serviceData.id });
             })
 
-            let ssvRT : ReplyType = {
+            let ssvRT: ReplyType = {
                 success: true,
                 status: 200,
                 message: "SSV Process completed successfully.",
                 data: {}
             }
 
-            let renewalToken : string = "";
+
+            // The thing with STV is that it is called AFTER SSV, and cannot be called alone. So first we need to get SSV to fail, get the renewal token, and then call SSV again with the renewal token to get a new session created.
+
+
+            let renewalToken: string = "";
             test("SSV Fails : querying session renewal token", async () => {
                 const ucr = fakeUCR();
                 ucr.client = serviceUCRData;
@@ -731,27 +739,29 @@ describe("Test NASS Secure Verification Methods", () => {
 
                 const fakeReq = getFakeReq(ucr);
                 const res = getFakeRes();
-                const result : ReplyType = await middleware.process.ssv(fakeReq, res);
+                const result: ReplyType = await middleware.process.ssv(fakeReq, res);
                 expect(result.success).toBe(false);
                 expect(result.status).toBe(401);
                 expect(result.message).toBe("Session is outdated.");
 
+                console.log("SSV Failure Data:", result.data);
+
                 renewalToken = result.data.token;
                 expect(renewalToken).toBeDefined();
 
-                newSessionID = result.data.session as any as string;
+                sessionID = result.data.session as any as string;
             });
 
-            test("SSV Works : using session renewal token to create new session", async () => {
+            test("SSV Works : using session renewal token to create new session (code 201 for new session & token creation)", async () => {
                 const ucr = fakeUCR();
                 ucr.client = serviceUCRData;
                 delete ucr.user.token;
-                ucr.user.session_id = newSessionID;
+                ucr.user.session_id = sessionID;
                 ucr.data["session-renewal-token"] = renewalToken;
 
                 const fakeReq = getFakeReq(ucr);
                 const res = getFakeRes();
-                const result : ReplyType = await middleware.process.ssv(fakeReq, res);
+                const result: ReplyType = await middleware.process.ssv(fakeReq, res);
                 expect(result.success).toBe(true);
                 expect(result.status).toBe(201);
                 expect(result.message).toBe("Session renewed successfully with code 201.");
@@ -759,17 +769,83 @@ describe("Test NASS Secure Verification Methods", () => {
                 expect(result.data).toBeDefined();
                 expect(result.data.session).toBeDefined();
 
-                newSessionID = (result.data.session as any);
-                expect(newSessionID).toBeDefined();
+                sessionID = (result.data.session as any);
+                expect(sessionID).toBeDefined();
+                // Expect sessionID to be a string
+                expect(typeof sessionID).toBe("string");
 
                 ssvRT = result;
                 expect(ssvRT).toBeDefined();
+            });
 
+            test("STV Creates New Token for New Session", async () => {
+                const ucr = fakeUCR();
+                ucr.client = serviceUCRData;
+                delete ucr.user.token;
+                ucr.user.session_id = sessionID;
+                ucr.request.url = "/test-tunnel-route";
+
+                const fakeReq = getFakeReq(ucr);
+                const res = getFakeRes();
+                const result: ReplyType = await middleware.process.stv(fakeReq, res, ssvRT);
+                expect(result.success).toBe(true);
+                expect(result.status).toBe(200);
+                expect(result.message).toBe("STV Process completed successfully.");
+
+                expect(result.data).toBeDefined();
+                expect(result.data.token).toBeDefined();
+
+                newSessionToken = result.data.token;
+                expect(newSessionToken).toBeDefined();
 
             });
 
+            test("STV Fails with Invalid Session Token", async () => {
+                const ucr = fakeUCR();
+                ucr.client = serviceUCRData;
+                ucr.user.session_id = sessionID;
+                ucr.request.url = "/test-tunnel-route";
+                ucr.user.token = "invalid-session-token-value";
+                delete ucr.user.password;
+                delete ucr.user.identifier;
 
-            
+                const fakeReq = getFakeReq(ucr);
+                const res = getFakeRes();
+                const result: ReplyType = await middleware.process.stv(fakeReq, res, ssvRT);
+                expect(result.success).toBe(false);
+                expect(result.status).toBe(401);
+                expect(result.message).toBe("Invalid token or credentials provided.");
+
+                
+            });
         });
     })
+
+
+    // describe("NASS Three-Layers System" , () => {
+    //     test("Complete Request Cycle", async () => {
+    //         const ucr = fakeUCR();
+
+    //         expect(newSessionID).toBeDefined();
+    //         expect(newSessionToken).toBeDefined();
+
+    //         ucr.client = serviceUCRData;
+    //         ucr.user.session_id = newSessionID;
+    //         ucr.user.token = newSessionToken;
+    //         delete ucr.user.password;
+    //         delete ucr.user.identifier;
+    //         ucr.request.url = "/test-tunnel-route";
+
+    //         const fakeReq = getFakeReq(ucr);
+    //         const res = getFakeRes();
+
+    //         const result = await middleware.main(fakeReq, res, () => {
+    //             return software.methods.serverReply(200,"Tunnel request processed successfully.");
+    //         });
+
+    //         expect(result.success).toBe(true);
+    //         expect(result.status).toBe(200);
+    //         expect(result.message).toBe("Tunnel request processed successfully.");
+    //     });
+    // })
 });

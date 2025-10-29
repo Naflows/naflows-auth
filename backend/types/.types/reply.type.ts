@@ -18,5 +18,6 @@ export interface ReplyType {
         trafficLog? : ServiceTraffic;
         session: UserSession;
         token? : string;
+        token_id? : string;
     };
 }

@@ -74,7 +74,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
           session.ip === ucr.user.ip &&
           //session.device_fingerprint === ucr.user.device_fingerprint &&
           session.agent === ucr.user.agent &&
-          session.user_id == secure.hash(ucr.user.user_id);
+          secure.verify(ucr.user.user_id, session.user_id);
 
 
 
@@ -222,7 +222,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
 
 
     return software.methods.serverReply(200, "SSV Process completed successfully.", {
-      session: newSessionID.data.session.id || session.id
+      session: newSessionID.data.session || session.id
     });
   } else {
     return software.methods.serverReply(

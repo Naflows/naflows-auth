@@ -106,6 +106,13 @@ const getFakeReq = (bodyContent: any): Request => {
     return req;
 };
 
+const getFakeNext = () => {
+    // Processing next() should return 200 so that tests can continue
+    return () => {
+        return { code: 200 }
+    };
+};
+
 
 
 const sleep = (ms: number) => {
@@ -159,4 +166,4 @@ const fakeUserSession: UserSession = {
 
 
 
-export { getFakeRes, fakeUCR, sleep, fakeUserSession, getFakeReq }
+export { getFakeRes, fakeUCR, sleep, fakeUserSession, getFakeReq, getFakeNext };

@@ -24,33 +24,33 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
             let tokenID : string = undefined;
 
             if (ssv && ssv.data && ssv.status === 201) {
-                const tokenRenewal: ReplyType = await middleware.token.renewal(ssv);
+                const tokenRenewal: ReplyType = await middleware.token.renewal(req,ssv);
                 console.log("Token renewal result:", tokenRenewal);
                 if (tokenRenewal.success) {
-                    console.log("\x1b[32m%s\x1b[0m", "New session token created successfully.");
-                    // Save token and then check the following 
-                    tokenID = tokenRenewal.data.token;
+                    console.log("\x1b[32m%s\x1b[0m", "New session token created successfully : " + tokenRenewal.data.token_id);
+                    tokenID = tokenRenewal.data.token_id;
                 } else {
                     console.error("\x1b[31m%s\x1b[0m", "Failed to create new session token:", tokenRenewal.message);
                 }
-                return tokenRenewal;
             }
             console.log("\x1b[33m%s\x1b[0m", "No new session issued, proceeding with existing session.");
 
-            const sessionID = ssv.data ? (ssv.data as unknown as { session?: string }).session : ucr.user.session_id;
-            console.log(`SessionID = ${(ssv.data as unknown as { session?: string }).session} | ucr.user.session_id = ${ucr.user.session_id}`);
-            const session = await secure.session.get(sessionID);
+            const sessionID = ssv.data ? (ssv.data.session as unknown as string) : ucr.user.session_id;
+            console.log(`SessionID = ${sessionID} | ucr.user.session_id = ${ucr.user.session_id}`);
+            console.log("All sessions:  ", await sessionsCollection.find({}).toArray());
+            const session = await secure.session.get(sessionID,false);
             if (session) {
                 // The token ID is queried directly FROM the session that has been recovered in the database, so its ID is already hashed.
                 if (!tokenID) {
                     tokenID = session.token_id;
                 }
 
-                const token = await secure.token.get(tokenID, true);
+                const token = await secure.token.get(tokenID);
 
 
                 console.log(`TokenID = ${tokenID}`);
                 console.log("Token found:", token);
+                console.log("UCR User:", ucr.user);
 
                 if (token && (
                     // Checks if the token is valid for the session
