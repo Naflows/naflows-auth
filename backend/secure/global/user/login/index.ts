@@ -72,6 +72,27 @@ export default async function logUserIn(req: Request, res: Response): Promise<Re
         user.agent
     );
 
+    if (associatedSession.token_id === '') {
+        console.log("No token associated with the session.");
+        const token: ReplyType = await secure.token.create(
+            _user,
+            associatedSession,
+            [], // Rights are deprecated here
+            true,
+            parseInt(process.env.STV_MAXIMAL_USE_RATES) // Default to 1 use if not specified
+        );
+        if (token.success) {
+            // Update the session with the new token ID
+            await db.collection("sessions").updateOne(
+                { id: associatedSession.id },
+                { $set: { token_id: secure.hash((token.data as any).token_id) } }
+            );
+            console.log("New token created and associated with the session:", token.data);
+        } else {
+            console.error("Failed to create token for the session during login process:", token.message);
+        }
+    }
+
     console.log("Associated Session:", associatedSession);
 
     if (credentialsOk) {

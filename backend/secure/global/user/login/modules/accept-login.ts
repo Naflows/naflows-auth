@@ -9,6 +9,7 @@ import secure from "../../../dir";
 export async function acceptLogin(
     _user: User, associatedSession: UserSession
 ) {
+    console.log(`Accepting login for user ${JSON.stringify(_user)} with session ${JSON.stringify(associatedSession)}`);
     const token = await secure.token.get(associatedSession.token_id, true);
 
     if (!token) {

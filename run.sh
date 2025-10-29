@@ -43,6 +43,6 @@ COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,dummy-api" docker compose up
 
 
 echo -e "\033[1;32mAll services are up and running.\033[0m"
-echo -e "\033[1;32mStarting Naflows Authentication Secure System's Frontend\033[0m"
-cd ./frontend || exit
-npm run dev
+
+# Open logs for auth-api
+docker logs -f auth-api-1
