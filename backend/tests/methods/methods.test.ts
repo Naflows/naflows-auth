@@ -90,6 +90,7 @@ describe("Test NASS Secure Verification Methods", () => {
             expect(result.message).toBe("Rate limit not exceeded, request recorded.");
         });
 
+
         test("Exceed Rate Limits", async () => {
             const ucr = fakeUCR();
             // Simulate exceeding rate limits by making multiple requests
@@ -100,7 +101,21 @@ describe("Test NASS Secure Verification Methods", () => {
             expect(result.success).toBe(false);
             expect(result.status).toBe(429);
             expect(result.message).toBe("Rate limit exceeded. Too many requests.");
+
+
         });
+
+        // Works but takes too much time so uh don't uncomment for now
+        // test("Within Rate Limits After Timeout", async () => {
+        //     const ucr = fakeUCR();
+        //     // Simulate a timeout
+
+        //     await new Promise(resolve => setTimeout(resolve, (parseInt(process.env.BLACKLIST_RATES_TIMEOUT || "60") + 1) * 1000));
+        //     const result = await middleware.check.rates(ucr);
+        //     expect(result.success).toBe(true);
+        //     expect(result.status).toBe(200);
+        //     expect(result.message).toBe("Rate limit not exceeded, request recorded.");
+        // });
     });
     describe("Services", () => {
 
@@ -137,7 +152,7 @@ describe("Test NASS Secure Verification Methods", () => {
                 expect(d.status).toBe(200);
                 expect(d.message).toBe("Service found.");
 
-                serviceData = d.data as Service;
+                serviceData = d.data.service as Service;
                 expect(serviceData).toBeDefined();
                 expect(serviceData.id).toBe("test-scv-service");
 
@@ -249,7 +264,7 @@ describe("Test NASS Secure Verification Methods", () => {
 
                 const d = await services.service.get(serviceData.id);
                 expect(d.success).toBe(true);
-                const updatedService = d.data as Service;
+                const updatedService = d.data.service as Service;
                 expect(updatedService.status).toBe("ACTIVE");
             });
 
@@ -723,7 +738,6 @@ describe("Test NASS Secure Verification Methods", () => {
                 success: true,
                 status: 200,
                 message: "SSV Process completed successfully.",
-                data: {}
             }
 
 

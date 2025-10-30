@@ -25,7 +25,7 @@ export async function connectInstance(req : Request, res : Response) {
         return res.status(404).json({ success: false, message: "Service not found.", middleware: req.middleware.data });
     }
 
-    const service = serviceRT.data as Service;
+    const service = serviceRT.data.service as Service;
     if (service.created_by !== user.id) {
         return res.status(403).json(software.methods.serverReply(403, "Forbidden: You do not own this service.", {
             middleware: req.middleware.data

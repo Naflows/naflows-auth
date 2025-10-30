@@ -23,7 +23,7 @@ export async function manageNewSession(
         return software.methods.serverReply(404, "Unable to find the service you are looking for. Are you sure it exists?");
     }
 
-    const _service: Service = s.data as Service;
+    const _service: Service = s.data.service as Service;
 
 
     const data: ReplyType = await secure.session.create(

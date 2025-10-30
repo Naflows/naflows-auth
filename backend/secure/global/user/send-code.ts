@@ -2,7 +2,7 @@ import { all } from "axios";
 import { db } from "../../..";
 import { software } from "../../../software/dir";
 import mailing from "../../../software/mailing/dir";
-import { SecurityCode, User } from "../../../types/.types/collections.type";
+import { SecurityCode, Service, User } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import { services } from "../../services/dir";
 import secure from "../dir";
@@ -21,8 +21,8 @@ export async function sendVerificationCode(userId: string, serviceID : string): 
     if (!serviceRT.success) {
         return software.methods.serverReply(404, "Service not found.");
     }
-    const service = serviceRT.data as any;
-
+    const service : Service = serviceRT.data.service;
+    
 
     const codeSuccess = await secure.code.create(user, service, "SELF_SERVICE_MANAGEMENT");
     if (!codeSuccess.success || codeSuccess.status === 201) {

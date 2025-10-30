@@ -68,7 +68,7 @@ export async function checkRequestOrigin(client: {
       return software.methods.serverReply(403, "Service not found.");
     }
 
-    const queriedService = serviceData.data as Service;
+    const queriedService = serviceData.data.service as Service;
     const isOriginValid = queriedService && (queriedService.ip_address.includes(client.ip.replace("::ffff:", "")));
 
     if (isOriginValid && queriedService.status === "ACTIVE") {

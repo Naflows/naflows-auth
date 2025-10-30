@@ -78,7 +78,7 @@ function reset_db {
     echo -e "\033[1;32mResetting database...\033[0m"
     COMPOSE_PROFILES="mongo-nass" docker compose down -v
     echo -e "\033[1;32mStarting MongoDB...\033[0m"
-    COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express" docker compose up -d
+    COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express" docker compose up -d --build
     # Wait for MongoDB to be ready
     sleep 5
 
@@ -100,8 +100,6 @@ if [ "$RESET_ENVIRONMENT" = "true" ]; then
     docker volume rm $(docker volume ls -q)
     docker system prune -a -f --volumes
     COMPOSE_PROFILES="auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down -v
-    echo -e "\033[1;32mStarting MongoDB...\033[0m"
-    COMPOSE_PROFILES="mongo-nass" docker compose up -d mongo-nass
 fi
 
 
@@ -121,7 +119,6 @@ if [ "$TEST_PARAMETER" = "methods" ]; then
     TEST_EXIT_CODE=$?
 
     if [ $TEST_EXIT_CODE -eq 0 ]; then
-        clear_terminal
         echo -e "\033[1;32m✓ All tests passed successfully.\033[0m"
     else
         echo -e "\033[1;31m✗ Some tests failed (Exit code: $TEST_EXIT_CODE).\033[0m"

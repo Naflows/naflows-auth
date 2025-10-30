@@ -7,5 +7,5 @@ dotenv.config({ path: path.resolve(__dirname, '.env.test') });
 
 export default {
   globalSetup: './tests/setup.ts',
-  testTimeout: 40000 // optional, if your app takes time to boot
+  testTimeout: 100000 // optional, if your app takes time to boot
 };

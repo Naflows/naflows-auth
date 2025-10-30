@@ -21,7 +21,7 @@ export async function checkIncomingDevData(apiKey : string, apiID : string, devK
         return software.methods.serverReply(404, "API Key not found for this service.");
     }
 
-    const service = serviceRT.data as Service;
+    const service = serviceRT.data.service as Service;
     const key = keyRT.data.key as APIKey;
 
     if (key.key !== apiKey) {

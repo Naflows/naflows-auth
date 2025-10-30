@@ -20,7 +20,7 @@ export async function updateServiceRoute(req, res, user) {
     }
 
 
-    const serviceInfo = serviceData.data as Service;
+    const serviceInfo = serviceData.data.service as Service;
     serviceInfo.name = req.body.service.name || serviceInfo.name;
     serviceInfo.description = req.body.service.description || serviceInfo.description;
     serviceInfo.picture = req.body.service.profileImage || serviceInfo.picture;
