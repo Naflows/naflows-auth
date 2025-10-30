@@ -5,8 +5,6 @@ RESET_ENVIRONMENT=$1
 RESET_DB=$2
 
 
-
-
 if [ "$RESET_ENVIRONMENT" = "true" ]; then
     echo -e "\033[1;32mCleaning up existing Docker containers and volumes...\033[0m"
     rm -rf ./backend/auth-data
