@@ -26,7 +26,7 @@ import axios from "axios";
 
 
 export type accountTabs = "overview" | "capacities" | "security" | "edit" | "network" | "settings" | "users" | "logs" | "rights" | "safety" | "share";
-const dirValues : Record<accountTabs, { title: string; description: string }> = {
+const dirValues: Record<accountTabs, { title: string; description: string }> = {
   "overview": { title: "Service Overview", description: "View and manage your service details, performance metrics, and recent activity." },
   "capacities": { title: "Service Capacities", description: "Monitor and manage the capacities associated with your service." },
   "security": { title: "Service Security", description: "Review and enhance the security settings of your service to protect your data and resources." },
@@ -173,32 +173,35 @@ const ManageService = () => {
           selectedTab="services"
           userFetch={user ? user : undefined}
         />
-        <div className="service__overview__tabs">
-          {SERVICE_OVERVIEW_TABS.map((tab_) => (
-            <button
-              key={tab_.id}
-              className={`tab ${tab === tab_.id ? "primary-button" : "secondary-button"}`}
-              style={{
-                width: "100%"
-              }}
-              onClick={() => setTab(tab_.label.toLowerCase() as accountTabs)}
-            >
-              {tab_.label}
-            </button>
-          ))}
-        </div>
-        <AccountDir service={service} tab={tab} title={dirValues[tab].title} description={dirValues[tab].description} setTab={setTab} />
 
-        {tab === "overview" && <ManageServiceOverview service={service} setService={setService} setTab={setTab} tab={tab} />}
-        {tab === "edit" && <ManageServiceEdition service={service} />}
-        {tab === "logs" && <LatestLogs service={service} />}
-        {tab === "rights" && <ServiceRightsComponentGlobal service={service} />}
-        {tab === "network" && <ServiceNetwork service={service} />}
-        {tab === "users" && <ServiceUsers
-          service={service} setTab={setTab}
-        />}
-        {tab === "settings" && <ServiceSettings service={service} />}
-        {tab === "safety" && <Safety service={service} />}
+        <div className="nass__service__page">
+          <div className="service__overview__tabs">
+            {SERVICE_OVERVIEW_TABS.map((tab_) => (
+              <button
+                key={tab_.id}
+                className={`tab ${tab === tab_.id ? "primary-button" : "secondary-button"}`}
+                style={{
+                  width: "100%"
+                }}
+                onClick={() => setTab(tab_.label.toLowerCase() as accountTabs)}
+              >
+                {tab_.label}
+              </button>
+            ))}
+          </div>
+          <AccountDir service={service} tab={tab} title={dirValues[tab].title} description={dirValues[tab].description} setTab={setTab} />
+
+          {tab === "overview" && <ManageServiceOverview service={service} setService={setService} setTab={setTab} tab={tab} />}
+          {tab === "edit" && <ManageServiceEdition service={service} />}
+          {tab === "logs" && <LatestLogs service={service} />}
+          {tab === "rights" && <ServiceRightsComponentGlobal service={service} />}
+          {tab === "network" && <ServiceNetwork service={service} />}
+          {tab === "users" && <ServiceUsers
+            service={service} setTab={setTab}
+          />}
+          {tab === "settings" && <ServiceSettings service={service} />}
+          {tab === "safety" && <Safety service={service} />}
+        </div>
       </div>
     )
   }
