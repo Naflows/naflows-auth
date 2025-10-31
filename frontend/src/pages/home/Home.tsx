@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "../../../public/root/pages/home/index.scss";
 import Status, { type ServiceStatus } from "./components/Status";
-import HomeAdvantage from "./components/HomeAdvantage";
 import WelcomeOverlay from "./components/welcome-overlay/WelcomeOverlay";
 
 const Home = () => {

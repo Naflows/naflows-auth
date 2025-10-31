@@ -107,6 +107,13 @@
       flex-direction: column;
       gap: 20px;
 
+      .subtitle-informations {
+        font-size: 14px;
+        font-weight: 500;
+        opacity: 0.7;
+
+      }
+
       .service__connection__details__content {
         display: flex;
         flex-direction: row;

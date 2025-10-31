@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 
 const Switch = ({
     label, checked,
-    onChange, description
+    onChange, description,
+    mandatory = false
 }: {
     label: string;
     checked: boolean;
     onChange: (checked: boolean) => void;
     description: string;
+    mandatory?: boolean;
 }) => {
     const [ch, setChecked] = useState<boolean>(checked ? checked : false);
 
@@ -29,6 +31,7 @@ const Switch = ({
                 <h5>
                     {label}
                     <span className={`nass_switch__label__state ${ch ? "nass_switch__label__state--on" : "nass_switch__label__state--off"}`}>{ch ? "On" : "Off"}</span>
+                    {mandatory && <span className={`nass_switch__label__mandatory ${!ch ? "nass_switch__label__mandatory--inactive" : ""}`}>*</span>}
                 </h5>
                 <p>{description}</p>
             </div>

@@ -6,7 +6,7 @@ const TermsAndRequirements = ({
     service,
     acceptedRequirements,
     setAcceptedRequirements,
-} : {
+}: {
     service: ServicesBodyProps | null;
     acceptedRequirements: {
         terms_of_service: boolean;
@@ -42,6 +42,7 @@ const TermsAndRequirements = ({
                                 });
                             }
                         }}
+                        mandatory={true}
                         description="I have read and agree to the service's terms of service."
                     />
                     <button className="primary-button" onClick={() => {
@@ -62,6 +63,7 @@ const TermsAndRequirements = ({
                                 });
                             }
                         }}
+                        mandatory={true}
                         description="I have read and agree to the service's privacy policy."
                     />
                     <button className="primary-button" onClick={() => {
@@ -82,10 +84,15 @@ const TermsAndRequirements = ({
                                 });
                             }
                         }}
+                        mandatory={true}
                         description="I accept that my personal data will be shared with the service as described above."
                     />
                 </div>
             </div>
+            <p className="subtitle-informations">
+                By joining this service, you agree to comply with its terms and conditions. Failure to adhere to these terms may result in suspension or termination of your access to the service.
+                If you have any questions or concerns regarding these terms, please contact the service provider directly for clarification before proceeding.
+            </p>
         </div>
     )
 }

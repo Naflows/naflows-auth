@@ -308,9 +308,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(5px);
   .manage__connection__body {
-    background-color: $_2k25-background-hue-darker;
+    background-color: $_2k25-background-hue-50-transparent;
+    border:2px solid $_2k25-background-hue-darker-2;
+    backdrop-filter: blur(10px);
     padding: 20px;
     border-radius: 20px;
     width: 400px;
@@ -361,6 +362,17 @@
       gap: 20px;
       overflow-y: auto;
       max-height: fit-content;
+      padding: 20px 30px;
+      width: calc(100% - 60px);
+      height: calc(100% - 40px);
+      border-radius: 10px;
+      background-color: $_2k25-background-hue-darker;
+      position:relative;
+      .save__content__button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
       .service__details__header {
         display: flex;
         flex-direction: column;

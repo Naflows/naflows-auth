@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Input from "../global/components/Input";
 import Alert, { type AlertContentProps } from "../global/error-alert/Alert";
 import { manageLogin } from "../scripts/login";
@@ -17,6 +17,23 @@ const LoginForm = ({
     closeAlert: true,
   });
 
+  const loginRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    // On enter, click login button
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        loginRef.current?.click();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [])
+
   return (
     <>
       <Alert alert={alert} setAlert={setAlert} />
@@ -32,7 +49,7 @@ const LoginForm = ({
               maxLength={100}
               fitContent={false}
               editMode={true}
-              onChange={() => {}}
+              onChange={() => { }}
             />
           </div>
           <div className="inputs-container global__input">
@@ -45,7 +62,7 @@ const LoginForm = ({
               fitContent={false}
               autoComplete={false}
               editMode={true}
-              onChange={() => {}}
+              onChange={() => { }}
             />
           </div>
         </div>
@@ -60,22 +77,31 @@ const LoginForm = ({
           />
         </div>
       </div>
-      <button
-        className="primary-button text-size-20"
-        onClick={async () => {
-          await manageLogin(setLoading, setAlert, redirectOnSuccess);
-        }}
-      >
-        <span
-          style={{
-            display: loading ? "none" : "block",
+      <div className="buttons-container">
+        <button
+          className="primary-button text-size-20 width-100-auto"
+          onClick={async () => {
+            await manageLogin(setLoading, setAlert, redirectOnSuccess);
           }}
+          ref={loginRef}
         >
-          Log in
-        </span>
+          <span
+            style={{
+              display: loading ? "none" : "block",
+            }}
+          >
+            Log in
+          </span>
 
-        <Loader loading={loading} />
-      </button>
+          <Loader loading={loading} />
+        </button>
+        <span className="separator">Or</span>
+        <button className="secondary-button  text-size-20 width-100-auto" onClick={() => {
+          window.location.href = "/register";
+        }}>
+          Create an account
+        </button>
+      </div>
     </>
   );
 };

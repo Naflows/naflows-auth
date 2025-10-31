@@ -16,6 +16,7 @@ import ManageAlert from "./sub-component/ManageAlert";
 import Input from "../../../global/components/Input";
 import AccountDir from "../manage/sub-component/ServiceDir";
 import type { ServicesForUserProps } from "../../../types/ServicesForUserProps";
+import AppFooter from "../../../global/components/AppFooter";
 
 
 
@@ -64,27 +65,24 @@ const JoinPage = () => {
 
     useEffect(() => {
         (async () => {
-            try {
-                const res = await fetchData("user");
-                if (res.data && res.data.data && res.data.data.user) {
-                    setUserInfo(res.data.data.user as UserBodyProps);
-                    setUserIdQueried(false);
-                }
-            } catch (error) {
-                const status = (error as any)?.response?.status || 500;
-                if (status != 400 && status != 401 && status != 403) {
-                    setDisplayAlert({
-                        status: (error as any)?.response?.status || 500,
-                        message: "Failed to get user data. You might need to login again.",
-                        success: false,
-                        closeAlert: false,
-                        customClose: {
-                            text: "Go to Login",
-                            action: () => { window.location.href = `/login?redirect=/services/join/${serviceID}`; }
-                        },
-                        title: "Error Fetching User Data",
-                    });
-                }
+            const res = await fetchData("user");
+            console.log("Fetched user data:", res);
+            if (res.data && res.data && res.data.user) {
+                setUserInfo(res.data.user as UserBodyProps);
+                setUserIdQueried(false);
+            } else {
+                setDisplayAlert({
+                    status: 500,
+                    message: "Failed to get user data. You might need to login again.",
+                    success: false,
+                    closeAlert: false,
+                    customClose: {
+                        text: "Go to Login",
+                        action: () => { window.location.href = `/login?redirect=/services/join/${serviceID}`; }
+                    },
+                    title: "Error Fetching User Data",
+                });
+
             }
         })();
 
@@ -145,7 +143,7 @@ const JoinPage = () => {
             <>
                 <AccountHeader selectedTab="services" userFetch={userInfo ? userInfo : undefined} />
                 <div className="nass__join__page nass__page">
-                    <AccountDir service={service as ServicesForUserProps} tab="share" title="Share Service" description="Share this service with others." setTab={() => {}} />
+                    <AccountDir service={service as ServicesForUserProps} tab="share" title="Share Service" description="Share this service with others." setTab={() => { }} />
 
                     <div className={`nass__connect__service ${userInfo && "user-connected-already-registered"}`}>
                         <ServiceDescription service={service} publicDisplay={true} />
@@ -201,6 +199,7 @@ const JoinPage = () => {
 
     return (
         <>
+
             <div className="nass__page">
                 <AccountHeader selectedTab="services" userFetch={userInfo ? userInfo : undefined} />
                 <div className="nass__join__page ">
@@ -282,7 +281,7 @@ const JoinPage = () => {
                                         </div>
                                         <div className="service__connection__details__content">
                                             {Object.entries(dataPreferences).map(([key, info]) => {
-                                                if (service.public_settings && service.public_settings.required_data && service.public_settings.required_data.includes((    key as keyof typeof dataPreferences))) {
+                                                if (service.public_settings && service.public_settings.required_data && service.public_settings.required_data.includes((key as keyof typeof dataPreferences))) {
                                                     return (
                                                         <div className="data__item" key={key}>
                                                             <div className="data__item__header">
@@ -309,6 +308,8 @@ const JoinPage = () => {
                     </div>
                 </div>
             </div>
+            <AppFooter />
+
         </>
     )
 };

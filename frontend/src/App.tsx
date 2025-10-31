@@ -12,7 +12,7 @@ interface AppLoginBigButtonProps {
 
 const AppLoginBigButton = ({ onClick, value }: AppLoginBigButtonProps) => {
   return (
-    <button className="tertiary-button text-size-20" onClick={onClick}>
+    <button className="tertiary-button" onClick={onClick}>
       {value}
     </button>
   );
@@ -43,50 +43,54 @@ function App() {
   return (
     <>
       <div className="col-20 global__nass__form">
-        <div className="panel">
-          {
-            redirect && <GlobalDisclaimer
-              allowHidden={true}
-              title={`This login will redirect you`}
-              message={""}
-              maxWidth={true}
-              content={<>
-                <p>
-                  Once logged in, you will be redirected to {redirect}. If you wish to log in to your account dashboard, please use <a href="/account">https://auth.naflows.com/account</a> instead.
-                </p>
-              </>}
-            />
-          }
-          <img
-            src={NAFLOWS_LOGO}
-            alt="Naflows Logo"
-            className="logo"
-            style={{ height: "100px" }}
+        {
+          redirect && <GlobalDisclaimer
+            allowHidden={true}
+            title={`This login will redirect you`}
+            message={""}
+            maxWidth={true}
+            fixed={true}
+            content={<>
+              <p>
+                Once logged in, you will be redirected to {redirect}. If you wish to log in to your account dashboard, please use <a href="/account">https://auth.naflows.com/account</a> instead.
+              </p>
+            </>}
           />
-          <div className="panel-header">
-            <h1>
-              {formType === "login"
-                ? "Welcome back to the NASS"
-                : "Create an account"}
-            </h1>
-            <p>
-              {formType === "login"
-                ? "Please enter your credentials. If you don't have an account, you can create one."
-                : "Please fill in the form to create an account. Once your account is created, you will receive your set identifier and customer ID via email."}
-            </p>
-          </div>
-          <div className="form">
-            {formType === "login" ? <LoginForm redirectOnSuccess={redirect ? redirect : undefined} /> : <RegisterForm />}
+        }
+        <div className="panel">
+          <div className="panel-body">
+            <img
+              src={NAFLOWS_LOGO}
+              alt="Naflows Logo"
+              className="logo"
+              style={{ height: "100px" }}
+            />
+            <div className="panel-header">
+              <h1>
+                {formType === "login"
+                  ? "Welcome back to the NASS"
+                  : "Create an account"}
+              </h1>
+              <p>
+                {formType === "login"
+                  ? "Please enter your credentials. If you don't have an account, you can create one."
+                  : "Please fill in the form to create an account. Once your account is created, you will receive your set identifier and customer ID via email."}
+              </p>
+            </div>
+            <div className="form">
+              {formType === "login" ? <LoginForm redirectOnSuccess={redirect ? redirect : undefined} /> : <RegisterForm />}
+            </div>
           </div>
           <div className="panel-footer">
-            <AppLoginBigButton
-              onClick={() => {
-                setFormType(formType === "login" ? "register" : "login");
-              }}
-              value={formType === "login" ? "Sign up" : "Log in"}
-            />
-            <AppLoginBigButton onClick={() => { }} value="Forgot password?" />
-            <AppLoginBigButton onClick={() => { }} value="Forgot customer ID?" />
+            <h5>
+              {formType === "login"
+                ? "Having trouble logging in?"
+                : "Need help with registration?"}
+            </h5>
+            <div className="footer-buttons-container">
+              <AppLoginBigButton onClick={() => { }} value="I forgot my password" />
+              <AppLoginBigButton onClick={() => { }} value="I forgot my customer ID" />
+            </div>
           </div>
         </div>
       </div>

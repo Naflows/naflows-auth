@@ -146,6 +146,11 @@
         width: 75%;
       }
 
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+
       &.with-image {
         background: rgba(0, 0, 0, 0.5);
         color: white;
@@ -330,14 +335,18 @@
       transition: 0.3s;
       position: relative;
       padding: 20px 0;
-      box-shadow: 0 4px 20px rgba(150, 150, 150, 0.2);
+
+      &.selected {
+        box-shadow: 0 4px 20px rgba(150, 150, 150, 0.2);
+      }
 
       .selected--info {
         position: absolute;
         top: 10px;
         right: 10px;
         background-color: $_2k25-background-hue-darker-2;
-        border:1px solid $_2k25-background-hue-50;
+        border: 1px solid $_2k25-background-hue-50;
+
         color: white;
         padding: 5px 10px;
         border-radius: 5px;

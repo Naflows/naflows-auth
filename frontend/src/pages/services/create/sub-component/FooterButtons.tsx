@@ -7,7 +7,7 @@ const servicesCreationsStep = {
     "disclaimer": "Service Creation Guidelines",
     "wizard-init": "Service Details",
     "wizard-configure": "Service Configuration",
-    "wizard-payement": "Review & Create"
+    "wizard-review": "Review & Create"
 };
 
 
