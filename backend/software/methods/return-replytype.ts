@@ -17,7 +17,7 @@ export function returnReplyType(code, message, data?): ReplyType {
             ? `\x1b[32mSuccess (${r.status}) - ${r.message}\x1b[0m\n`
             : `\x1b[31mError (${r.status}) - ${r.message}\x1b[0m\n`
     );
-    if (data) {
+    if (data && process.env.DEV_SKIP_LOGGING_METADATA !== "true") {
         process.stdout.write(`\x1b[90mData: ${JSON.stringify(data)}\x1b[0m\n`);
     }
     return r;

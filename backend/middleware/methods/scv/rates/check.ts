@@ -1,30 +1,46 @@
 import { v4 } from "uuid";
-import { db } from "../../..";
-import { ReplyType } from "../../../types/.types/reply.type";
-import UCRType from "../../../types/.types/ucr.type";
-import { software } from "../../../software/dir";
-import secure from "../../../secure/global/dir";
-import { services } from "../../../secure/services/dir";
-import { Service, UserRequest } from "../../../types/.types/collections.type";
+import { db } from "../../../..";
+import { ReplyType } from "../../../../types/.types/reply.type";
+import UCRType from "../../../../types/.types/ucr.type";
+import { software } from "../../../../software/dir";
+import secure from "../../../../secure/global/dir";
+import { services } from "../../../../secure/services/dir";
+import { Requests, Service, UserRequest } from "../../../../types/.types/collections.type";
+import { Collection } from "mongoose";
+import middleware from "../../../dir";
 
 export async function checkRates(UCR: UCRType): Promise<ReplyType> {
-  const ratesCollection = db.collection("requests");
+  const ratesCollection = db.collection("requests") as Collection<Requests>;
   if (ratesCollection) {
     console.log(`Searching for service ${UCR.client.service}`)
-    const service: Service = (await services.service.get(UCR.client.service) as ReplyType).data as Service;
+
+    const serviceId = UCR.client.service;
+
+    const service: Service = (await services.service.get(serviceId)).data.service;
+
+    if (!service) {
+      return software.methods.serverReply(404, "Service not found for rate checking.");
+    }
+
     const reqRates = await ratesCollection.findOne({
-      associated_service: UCR.client.service
-    });
+      associated_service: service.id
+    }) as Requests;
 
 
     if (!reqRates) {
       // If no rates found, create a new one
-      await ratesCollection.insertOne({
-        id: v4(),
-        device_fingerprint: UCR.user.device_fingerprint,
-        requests: [{ last_requests: [Date.now()], request_number: 1, ip: UCR.user.ip, userAgent: UCR.user.agent }],
-        associated_service: service.id,
-      });
+      const userRequest : UserRequest = {
+        last_requests: [Date.now()],
+        request_number: 1,
+        ip: UCR.user.ip,
+        userAgent: UCR.user.agent,
+        device_fingerprint: UCR.user.device_fingerprint
+      }
+      
+      const record = await middleware.rates.create(service, userRequest);
+      if (!record.success) {
+        return software.methods.serverReply(500, "Failed to create rate record for service.");
+      }
     } else {
       const requestsArray: Array<UserRequest> = reqRates.requests;
       // Find user IP and Agent in requests array
@@ -39,7 +55,8 @@ export async function checkRates(UCR: UCRType): Promise<ReplyType> {
           last_requests: [Date.now()],
           request_number: 1,
           ip: UCR.user.ip,
-          userAgent: UCR.user.agent
+          userAgent: UCR.user.agent,
+          device_fingerprint: UCR.user.device_fingerprint
         };
         requestsArray.push(newRequest);
         userRequest = newRequest;
@@ -68,7 +85,8 @@ export async function checkRates(UCR: UCRType): Promise<ReplyType> {
                   last_requests: [...userRequest.last_requests, Date.now()],
                   request_number: userRequest.request_number + 1,
                   ip: UCR.user.ip,
-                  userAgent: UCR.user.agent
+                  userAgent: UCR.user.agent,
+                  device_fingerprint: UCR.user.device_fingerprint
                 }
               ],
             },

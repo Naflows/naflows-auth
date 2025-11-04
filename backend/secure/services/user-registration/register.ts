@@ -34,7 +34,7 @@ export default async function registerUserInAPI(user: User, apiID: string, codeN
             return software.methods.serverReply(404, "Service not found.");
         }
         console.log("Service data:", service.data);
-        const serviceData = service.data as Service;
+        const serviceData = service.data.service as Service;
 
         const userDoc = await usersCollection.updateOne(
             { id: user.id },
@@ -43,7 +43,7 @@ export default async function registerUserInAPI(user: User, apiID: string, codeN
                     [`services.${apiID}`]: {
                         id: secure.hash(apiID), active: true, joined_at: new Date().getTime(), rights, data_preferences: {
                             usage_data: "FULL",
-                            personal_data: (service.data as Service)?.public_settings.required_data || [],
+                            personal_data: serviceData.public_settings.required_data || [],
                         }
                     }
                 }

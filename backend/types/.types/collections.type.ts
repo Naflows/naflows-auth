@@ -16,12 +16,12 @@ export interface UserRequest {
   request_number: number;
   ip: string;
   userAgent: string;
+  device_fingerprint: string | object; // Device fingerprint of the user, used for security purposes
 }
 export interface Requests {
   requests: Array<UserRequest>;
-  device_fingerprint: string; // Device fingerprint of the user, used for security purposes
   associated_service: string;
-  associated_service_key: string;
+  id : string;
 }
 // User chooses how the APIs are using their data
 export interface UserDataPreferences {

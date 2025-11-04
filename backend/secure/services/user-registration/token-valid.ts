@@ -13,7 +13,7 @@ export default async function isRegistrationTokenValid(tokenID: string): Promise
             return false;
         } 
 
-        const api = apiRT.data as Service;
+        const api = apiRT.data.service as Service;
 
 
         return (

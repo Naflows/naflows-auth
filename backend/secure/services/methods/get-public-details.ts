@@ -13,12 +13,12 @@ export async function getPublicServiceDetails(id: string, userId: string | null)
         return serviceData;
     }
 
-    const service = serviceData.data as Service;
+    const service = serviceData.data.service as Service;
 
     delete service.ip_address;
     delete service.plan;
     delete service.settings;
-    delete service.service_token;
+    //delete service.service_token;
     delete service.public_settings.allow_user_registration;
     delete service.public_settings.allow_service_connection;
 

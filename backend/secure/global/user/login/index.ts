@@ -72,10 +72,40 @@ export default async function logUserIn(req: Request, res: Response): Promise<Re
         user.agent
     );
 
+    if (!associatedSession) {
+        console.log("No existing session found for this login request.");
+        if (credentialsOk) {
+            console.log("Credentials are valid, proceeding to create a new session.");
+            const r: ReplyType = await manageNewSession(_user, user, client);
+            return r;
+        }
+
+    }
+
+    if (associatedSession.token_id === '') {
+        console.log("No token associated with the session.");
+        const token: ReplyType = await secure.token.create(
+            _user,
+            associatedSession,
+            [], // Rights are deprecated here
+            true,
+            parseInt(process.env.STV_MAXIMAL_USE_RATES) // Default to 1 use if not specified
+        );
+        if (token.success) {
+            // Update the session with the new token ID
+            await db.collection("sessions").updateOne(
+                { id: associatedSession.id },
+                { $set: { token_id: secure.hash((token.data as any).token_id) } }
+            );
+            console.log("New token created and associated with the session:", token.data);
+        } else {
+            console.error("Failed to create token for the session during login process:", token.message);
+        }
+    }
+
     console.log("Associated Session:", associatedSession);
 
     if (credentialsOk) {
-
         if (associatedSession && associatedSession.active || (!associatedSession && process.env.DEV_SKIP_SESSION_CONFIRMATION === "true")) {
             // Notify user
             console.log(req.body.request.headers)
@@ -108,9 +138,6 @@ export default async function logUserIn(req: Request, res: Response): Promise<Re
                 console.log("Deleted inactive session:", associatedSession.id);
                 return software.methods.serverReply(401, "Login failed, the session associated with this login request is no longer active. Please initiate a new login request.");
             }
-        } else {
-            const r: ReplyType = await manageNewSession(_user, user, client);
-            return r;
         }
     } else {
         return software.methods.serverReply(401, "The provided credentials are incorrect. Please try again with valid information or reset your password.");
