@@ -6,8 +6,10 @@ import Loader from "../global/components/Loader";
 
 const LoginForm = ({
   redirectOnSuccess = "/account",
+  setFormType,
 }: {
   redirectOnSuccess?: string;
+  setFormType: (formType: "login" | "register") => void;
 }) => {
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState<AlertContentProps>({
@@ -18,6 +20,7 @@ const LoginForm = ({
   });
 
   const loginRef = useRef<HTMLButtonElement>(null);
+
 
   useEffect(() => {
     // On enter, click login button
@@ -97,7 +100,7 @@ const LoginForm = ({
         </button>
         <span className="separator">Or</span>
         <button className="secondary-button  text-size-20 width-100-auto" onClick={() => {
-          window.location.href = "/register";
+          setFormType("register");
         }}>
           Create an account
         </button>

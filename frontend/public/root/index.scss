@@ -575,9 +575,9 @@ body {
   .panel-footer {
     background-color: $_2k25-background-hue-darker;
     display: flex;
+    flex-direction: column;
     gap: 20px;
     border-radius: 20px;
-    flex-direction: column;
   }
   .panel-body {
     align-items: start;
@@ -588,6 +588,33 @@ body {
     padding: 20px 20px;
     width: calc(100% - 40px);
     gap: 5px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+    .service__status__small {
+      width: fit-content;
+      min-height: fit-content;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      .service__status__indicator {
+        border: 1px solid $_2k25-text;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 12px;
+        text-align: center;
+        &.service__status__indicator--active {
+          background-color: $da-confirm-hue-transparent;
+          border-color: $da-confirm-hue;
+          color: $da-confirm-hue;
+        }
+        &.service__status__indicator--inactive {
+          background-color: $da-error-hue-transparent;
+          border-color: $da-error-hue;
+          color: $da-error-hue;
+        }
+      }
+    }
     h5 {
       margin: 0;
       padding: 0;

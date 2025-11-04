@@ -100,6 +100,7 @@ const LatestLogs = ({
                                     >
                                         <td className="log__icon">
                                             {getSvgPerType(log.type)}
+
                                         </td>
                                         
 

@@ -1,9 +1,10 @@
-import NAFLOWS_LOGO from "../public/assets/naflows-green.svg";
 import "../public/root/index.scss";
 import LoginForm from "./form/Login";
 import { useEffect, useState } from "react";
 import RegisterForm from "./form/Register";
 import GlobalDisclaimer from "./global/components/GlobalDisclaimer";
+import fetchServiceStatus from "./pages/home/scripts/fetch-status";
+import type { ServiceStatus } from "./pages/home/components/Status";
 
 interface AppLoginBigButtonProps {
   onClick: () => void;
@@ -40,6 +41,22 @@ function App() {
     window.history.replaceState(null, "", newUrl);
   }, [formType]);
 
+
+  const [status, setStatus] = useState<ServiceStatus | null>(null);
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      const status = await fetchServiceStatus();
+      setStatus(status);
+    };
+
+    fetchStatus();
+
+    const intervalId = setInterval(fetchStatus, 15000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <>
       <div className="col-20 global__nass__form">
@@ -60,7 +77,7 @@ function App() {
         <div className="panel">
           <div className="panel-body">
             <img
-              src={NAFLOWS_LOGO}
+              src="https://naflows.com/public/assets/naflows_full_logotype.png"
               alt="Naflows Logo"
               className="logo"
               style={{ height: "100px" }}
@@ -78,18 +95,34 @@ function App() {
               </p>
             </div>
             <div className="form">
-              {formType === "login" ? <LoginForm redirectOnSuccess={redirect ? redirect : undefined} /> : <RegisterForm />}
+              {formType === "login" ? <LoginForm setFormType={setFormType} redirectOnSuccess={redirect ? redirect : undefined} /> : <RegisterForm setFormType={setFormType} />}
             </div>
           </div>
           <div className="panel-footer">
-            <h5>
-              {formType === "login"
-                ? "Having trouble logging in?"
-                : "Need help with registration?"}
-            </h5>
-            <div className="footer-buttons-container">
-              <AppLoginBigButton onClick={() => { }} value="I forgot my password" />
-              <AppLoginBigButton onClick={() => { }} value="I forgot my customer ID" />
+            <div className="footer-left">
+              <h5>
+                {formType === "login"
+                  ? "Having trouble logging in?"
+                  : "Need help with registration?"}
+              </h5>
+              <div className="footer-buttons-container">
+                <AppLoginBigButton onClick={() => { }} value="I forgot my password" />
+                <AppLoginBigButton onClick={() => { }} value="I forgot my customer ID" />
+              </div>
+            </div>
+            <div className="footer-right">
+              <div className="service__status__small">
+                <span className={`service__status__indicator  ${status && status.disk.usagePercent
+                  ? "service__status__indicator--active"
+                  : "service__status__indicator--inactive"
+                  }`}
+                  data-tooltip={status && status.disk.usagePercent
+                    ? `Disk Usage: ${status.disk.usagePercent}`
+                    : "Service is currently unreachable"}
+                >
+                  Service {status && status.disk.usagePercent ? "Online" : "Offline"}
+                </span>
+              </div>
             </div>
           </div>
         </div>

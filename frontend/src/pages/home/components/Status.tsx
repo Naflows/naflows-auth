@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useEffect } from "react";
+import fetchServiceStatus from "../scripts/fetch-status";
 
 export interface ServiceStatus {
   memory: { usagePercent: string };
@@ -25,19 +25,9 @@ const Status = ({
 
   useEffect(() => {
     const fetchStatus = () => {
-      axios
-        .get(`${process.env.DUMMY_API_URL_DEV}/public/status-check`)
-        .then((response) => {
-          if (response.status === 200) {
-            console.log("Service status fetched:", response.data);
-            setServiceStatus(response.data);
-          } else {
-            setServiceStatus(null);
-          }
-        })
-        .catch(() => {
-          setServiceStatus(null);
-        });
+      return fetchServiceStatus().then((data) => {
+        setServiceStatus(data);
+      });
     };
 
     fetchStatus(); // Initial fetch
