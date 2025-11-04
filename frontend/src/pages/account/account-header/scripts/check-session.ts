@@ -1,0 +1,31 @@
+import axios from "axios";
+import { useEffect } from "react";
+
+const useSessionValid = () => {
+    const x = 2; // seconds - normally 60
+    const y = 2;
+
+    useEffect(() => {
+        let intervalId: number | null = null;
+        const timeoutId = window.setTimeout(() => {
+            intervalId = window.setInterval(async () => {
+                const response = await axios.post(`${process.env.DUMMY_API_URL_DEV}/client/secure/session-check`, {}, {
+                    withCredentials: true
+                });
+                console.log("Session validity response:", response.data);
+                if (!response.data.success) {
+                    window.location.href = "/login?form=login&reason=outdated-session&redirect=" + window.location.pathname;
+                }
+            }, x * 1000);
+        }, y * 1000); // wait 60s before starting the periodic check
+
+        return () => {
+            window.clearTimeout(timeoutId);
+            if (intervalId !== null) {
+                window.clearInterval(intervalId);
+            }
+        };
+    }, []);
+}
+
+export default useSessionValid;

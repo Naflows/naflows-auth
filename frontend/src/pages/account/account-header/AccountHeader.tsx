@@ -4,6 +4,7 @@ import AccountUserBodyProfilePicture from "../sub-components/ProfilePicture";
 import axios from "axios";
 import { loadPreferenceFromLocalStorage, setPreferenceToLocalStorage } from "../../../scripts/localstorage";
 import Loader from "../../../global/components/Loader";
+import useSessionValid from "./scripts/check-session";
 
 
 const icons = {
@@ -80,6 +81,8 @@ const AccountHeader = ({
 
     }, 500);
   }, [])
+
+  useSessionValid();
 
   // On mount, set the initial header width
   useEffect(() => {
