@@ -229,7 +229,7 @@ app.post('/get-user-info/notifications', async (req: Request, res: Response) => 
 app.put('/set-user-info/user/update', async (req: Request, res: Response) => {
     await manageConnection(req,res,'/client/secure/user/update', {
         userDetails: req.body.userDetails
-    });
+    }, "PUT");
 });
 
 app.post('/set-user-info/services/create', async (req: Request, res: Response) => {

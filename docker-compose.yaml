@@ -27,7 +27,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     restart: always
-    profiles: ["auth-api"]
+    profiles: ["auth-api","mongo-nass"]
     container_name: auth-api-1
     networks:
       - nass-network

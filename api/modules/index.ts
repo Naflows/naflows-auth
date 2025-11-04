@@ -38,28 +38,32 @@ function getCookies(req) {
 
 
 
-async function manageConnection(req: Request, res: Response, route: string, data?: object) {
+async function manageConnection(req: Request, res: Response, route: string, data?: object | null, method: "POST" | "PUT" = "POST") {
     const { sessionID, token, uid } = getCookies(req);
 
     console.log(`Forwarding request to NASS at route: ${route} with data:`, data);
 
-    await axios.post(`${process.env.AUTH_API_URL_DEV}${route}`, {
-        user: {
-            ip: req.ip,
-            agent: req.headers['user-agent'],
-            device_fingerprint: req.fingerprint,
-            session_id: sessionID || null,
-            token: token || null,
-            user_id: uid || null,
-        },
-        ...data,
-        request: {
-            method: req.method,
-            url: req.originalUrl,
-            headers: req.headers,
-            request_date: Date.now()
-        },
-        client: service
+    await axios({
+        method: method,
+        url: `${process.env.AUTH_API_URL_DEV}${route}`,
+        data: {
+            user: {
+                ip: req.ip,
+                agent: req.headers['user-agent'],
+                device_fingerprint: req.fingerprint,
+                session_id: sessionID || null,
+                token: token || null,
+                user_id: uid || null,
+            },
+            ...data,
+            request: {
+                method: req.method,
+                url: req.originalUrl,
+                headers: req.headers,
+                request_date: Date.now()
+            },
+            client: service
+        }
     }).then((result) => {
         const resultData = result.data.data;
 
