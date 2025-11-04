@@ -40,7 +40,7 @@ export async function ssv(req: Request, res: Response): Promise<ReplyType> {
       id: ucr.user.session_id
     }) as unknown as UserSession;
 
-    if (ucr.data["session-renewal-token"]) {
+    if (ucr.data && ucr.data["session-renewal-token"]) {
       // Execute session renewal process
       console.log("Session renewal token found in UCR data - executing session renewal process.");
       const sessionRenewal: ReplyType = await middleware.session.renewal(ucr, user, session);

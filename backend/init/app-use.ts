@@ -16,6 +16,8 @@ export function useApp(app) {
 
     app.use(async (req, res, next) => {
 
+
+
         if (req.path.startsWith('/nass/dev/instance')) {
             // Bypass middleware for instance management routes but check developer validity
             const devCheck = await services.service.dev.login(req.body.apiID, req.body.devKey);

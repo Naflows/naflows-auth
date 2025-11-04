@@ -9,11 +9,16 @@ const useSessionValid = () => {
         let intervalId: number | null = null;
         const timeoutId = window.setTimeout(() => {
             intervalId = window.setInterval(async () => {
-                const response = await axios.post(`${process.env.DUMMY_API_URL_DEV}/client/secure/session-check`, {}, {
-                    withCredentials: true
-                });
-                console.log("Session validity response:", response.data);
-                if (!response.data.success) {
+                try {
+                    const response = await axios.post(`${process.env.DUMMY_API_URL_DEV}/client/secure/session-check`, {}, {
+                        withCredentials: true
+                    });
+                    console.log("Session validity response:", response.data);
+                    if (!response.status || response.status !== 200) {
+                        window.location.href = "/login?form=login&reason=outdated-session&redirect=" + window.location.pathname;
+                    }
+                } catch (error) {
+                    console.error("Error checking session validity:", error);
                     window.location.href = "/login?form=login&reason=outdated-session&redirect=" + window.location.pathname;
                 }
             }, x * 1000);

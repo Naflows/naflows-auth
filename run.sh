@@ -15,7 +15,7 @@ function reset_db {
 
     # Initialize database manually
     echo -e "\033[1;32mInitializing database...\033[0m"
-    docker exec -i mongo-nass mongosh -u XQaLCRrQWDir -p vGaHbhFzAOrq --authenticationDatabase admin < ./mongo-init/init.js
+    docker exec -i mongo-nass mongosh -u admin -p pass --authenticationDatabase admin < ./mongo-init/init.js
 
 }
 

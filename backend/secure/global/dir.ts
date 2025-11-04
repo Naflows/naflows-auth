@@ -18,7 +18,7 @@ import { checkUserCredentials } from "./user/check-credentials";
 import getUser from "./user/get";
 import logUserIn from "./user/login/index";
 import { hiddenLogin } from "./user/login/hidden-login";
-import { isSessionValid } from "./session/valid";
+import { isSessionValid, isSessionValidDoWork } from "./session/valid";
 import { updateUser } from "./user/update";
 import { getTokenByValue } from "./token/getByValue";
 import getSystemStatus from "../health/getSystemStatus";
@@ -76,7 +76,8 @@ const secure = {
         confirm : confirmSession,
         update : updateSession,
         valid : isSessionValid,
-        delete : deleteSession
+        delete : deleteSession,
+        isValidDoWork : isSessionValidDoWork
     }
 };
 

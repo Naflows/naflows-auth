@@ -21,10 +21,10 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
         if (sessionsCollection && tokensCollection && usersCollection) {
             // This means a new session has been issued. So, a new token must be created.
 
-            let tokenID : string = undefined;
+            let tokenID: string = undefined;
 
             if (ssv && ssv.data && ssv.status === 201) {
-                const tokenRenewal: ReplyType = await middleware.token.renewal(req,ssv);
+                const tokenRenewal: ReplyType = await middleware.token.renewal(req, ssv);
                 console.log("Token renewal result:", tokenRenewal);
                 if (tokenRenewal.success) {
                     console.log("\x1b[32m%s\x1b[0m", "New session token created successfully : " + tokenRenewal.data.token_id);
@@ -38,14 +38,16 @@ export async function stv(req: Request, res: Response, ssv: ReplyType): Promise<
             const sessionID = ssv.data ? (ssv.data.session as unknown as string) : ucr.user.session_id;
             console.log(`SessionID = ${sessionID} | ucr.user.session_id = ${ucr.user.session_id}`);
             console.log("All sessions:  ", await sessionsCollection.find({}).toArray());
-            const session = await secure.session.get(sessionID,false);
+            const session = await secure.session.get(sessionID, false);
             if (session) {
                 // The token ID is queried directly FROM the session that has been recovered in the database, so its ID is already hashed.
+                let token;
                 if (!tokenID) {
                     tokenID = session.token_id;
+                    token = await secure.token.get(tokenID, true);
+                } else {
+                    token = await secure.token.get(tokenID);
                 }
-
-                const token = await secure.token.get(tokenID);
 
 
                 console.log(`TokenID = ${tokenID}`);

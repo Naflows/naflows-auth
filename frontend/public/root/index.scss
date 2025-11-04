@@ -25,6 +25,18 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+
+
+  .disclaimers__container {
+    display: flex;
+    width: 100% !important;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
+    .global__nass__disclaimer {
+      min-width: calc(100% - 40px - 2px);
+    }
+  }
 }
 
 .nass__page__loader {
@@ -59,7 +71,6 @@ body {
 
   backdrop-filter: blur(5px);
   width: fit-content;
-  min-width: calc(100% - 40px - 4px) !important;
 
   &.max-width {
     max-width: 600px !important;
@@ -563,6 +574,7 @@ body {
   flex-direction: column;
   align-items: start;
   margin-top: 130px;
+  max-width: 40%;
 
   .panel-body,
   .panel-footer {
@@ -575,6 +587,7 @@ body {
   .panel-body {
     align-items: start;
     padding: 50px 50px;
+    width: calc(100% - 100px);
   }
 
   .panel-footer {
