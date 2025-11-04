@@ -10,6 +10,8 @@ import { ReplyType } from "../../../types/.types/reply.type";
 export async function createTunnel(req: Request, res: Response) {
     const { apiKey, apiID, devKey, route, service_rights  } = req.body;
 
+    console.log(`Creating tunnel for API ID: ${apiID}, Route: ${route}, Service Rights: ${service_rights} with API Key: ${apiKey} and Dev Key: ${devKey}`);
+
     const correctData = await nass.connection.checkIncomingMetadata(apiKey, apiID, devKey, ["MANAGE_TUNNELS"]);
     console.log("Correct data:", correctData);
     if (!correctData.success) {

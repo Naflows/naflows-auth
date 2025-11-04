@@ -13,7 +13,7 @@ export async function directServerResponse(status: number, message: string, res 
             status,
             success,
             message,
-            middleware : req.middleware.data
+            middleware : req.middleware ? req.middleware.data : {}
         }
     })
 }

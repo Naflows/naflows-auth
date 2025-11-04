@@ -15,7 +15,7 @@ export default async function checkServiceToken(
 
     console.log(`Checking token for service: ${serviceID} with value ${token} ${creation_date}`);
 
-    const service : Service = await services.service.get(serviceID).then(res => res.data as Service);
+    const service : Service = await services.service.get(serviceID).then(res => res.data.service as Service);
 
     if (!service) {
         console.log(`Service with ID ${serviceID} not found.`);

@@ -22,7 +22,7 @@ export async function createToken(
         const encryptedTokenValue = secure.crypt(t);
         const hashedTokenID  = secure.hash(t);
         const token: Tokens = {
-            id: t,
+            id: tID,
             token: rights.length === 1 && (rights[0] === "SESSION_RENEWAL" || rights[0] === "TOKEN_RENEWAL") ? t : encryptedTokenValue, // Generate a secure random token (unless it's a renewal token)
             user_id: secure.hash(user.id),
             session_id: secure.hash(session.id),

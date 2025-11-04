@@ -39,6 +39,7 @@ export async function createServiceRights(service_id: string, name: string, righ
                     service_id: service_id,
                     created_at: Date.now(),
                     updated_at: Date.now(),
+                    id : `itr-${service_id}-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
                     created_by: user_id || "system"
                 });
             }
@@ -47,7 +48,7 @@ export async function createServiceRights(service_id: string, name: string, righ
 
 
     const right : ServiceRights = {
-        id: `rights-${service_id}-${Date.now()}`,
+        id: `rights-${service_id}-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
         service_id: service_id,
         name: name,
         rights: rights,

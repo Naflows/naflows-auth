@@ -34,7 +34,7 @@ body {
   align-items: end;
   button {
     align-self: stretch;
-    height: 100% ;
+    height: 100%;
   }
 }
 
@@ -75,9 +75,8 @@ body {
   transition: 0.3s;
   border: 2px solid transparent;
 
-
   .global--loader--page {
-    position:fixed;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
@@ -142,7 +141,7 @@ body {
         height: fit-content !important;
         padding: 5px !important;
         align-self: stretch;
-        flex:1;
+        flex: 1;
         min-width: calc(100% - 10px - 2px) !important;
         border-radius: 10px !important;
         justify-content: center !important;
@@ -255,7 +254,7 @@ body {
           }
         }
         display: flex;
-        position:relative;
+        position: relative;
         flex-direction: column;
         gap: 10px;
         align-items: center;
@@ -315,6 +314,42 @@ body {
           display: flex;
           align-items: center;
           justify-content: center;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+
+  .nass__account__page__header.collapsed {
+    width: calc(100vw - 20px) !important;
+    height: auto;
+    flex-direction: row;
+    .header__footer__content {
+      flex-direction: row;
+      justify-content: space-between;
+      display: none;
+      .header__account {
+        width: fit-content;
+        button {
+          display: none;
+        }
+      }
+    }
+    .header__tabs {
+      display: flex;
+      flex-direction: row;
+      img {
+        display: none;
+      }
+      .tabs {
+        flex-direction: row;
+        gap: 20px;
+        justify-content: center;
+        gap: 5px !important;
+        .header__tab {
+          width: fit-content !important;
         }
       }
     }

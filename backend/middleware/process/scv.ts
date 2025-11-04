@@ -5,16 +5,14 @@ import { Request, Response } from "express";
 
 export async function scv(req: Request, res: Response, naflowsFrontendOnly : boolean = false): Promise<ReplyType> {
   if (process.env.NASS_UCR_ENABLED === "true") {
-    const isUCRCorrect: boolean = middleware.check.ucr(req.body);
-    if (!isUCRCorrect) {
-      console.log("\x1b[31m%s\x1b[0m", "Invalid UCR.");
-      return software.methods.serverReply(400, "Invalid request format.");
+    if (!middleware.check.ucr(req.body)) {
+      return software.methods.serverReply(400, `Request format is invalid.`);
     }
   }
 
   if (process.env.NASS_RATES_LIMIT_ENABLED === "true") {
     const ratesCheck : ReplyType = await middleware.check.rates(req.body);
-    if (!ratesCheck.success) {
+    if (!(ratesCheck).success) {
       console.log(
         "\x1b[31m%s\x1b[0m",
         "Rate limit exceeded, exiting NASS Verification Process."

@@ -117,7 +117,6 @@ db.service_rights.createIndex({ service_id: 1 });
 db.service_rights.createIndex({ type: 1 });
 db.instance_tunneling_rights.createIndex({ id: 1 }, { unique: true });
 db.instance_tunneling_rights.createIndex({ name: 1 }, { unique: true });
-db.instance_tunneling_rights.createIndex({ service_id: 1 }, { unique: true });
 
 
 db.user_rights.createIndex({ id: 1 }, { unique: true });
@@ -513,7 +512,14 @@ db.nass_api_keys.insertOne({
     key : "naflows_backend_key"
 })
 
-
+db.service_tokens.insertOne({
+    id : "naflows_backend_token",
+    service_id : "naflows_backend",
+    token : "naflows_backend_token",
+    created_at : new Date().getTime(),
+    lifespan: 1000 * 60 * 60 * 24 * 1000000000000000000, // Infinite
+    uses : 0
+});
 
 
 db.service_logs.insertOne({

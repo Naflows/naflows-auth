@@ -21,7 +21,7 @@ export async function checkIncomingDevData(apiKey : string, apiID : string, devK
         return software.methods.serverReply(404, "API Key not found for this service.");
     }
 
-    const service = serviceRT.data as Service;
+    const service = serviceRT.data.service as Service;
     const key = keyRT.data.key as APIKey;
 
     if (key.key !== apiKey) {
@@ -40,6 +40,7 @@ export async function checkIncomingDevData(apiKey : string, apiID : string, devK
         return software.methods.serverReply(403, "Service is not active.");
     }
 
+    console.log("[initInstance] API Key and Service are valid. Checking developer key..." + devKey);
     const userRT: ReplyType = await services.service.dev.getUserByKey(devKey);
     if (!userRT.success) {
         return software.methods.serverReply(userRT.status, userRT.message || "Developer access key is invalid.");

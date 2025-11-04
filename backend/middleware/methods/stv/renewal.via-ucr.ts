@@ -5,6 +5,7 @@ import UCRType from "../../../types/.types/ucr.type";
 import { software } from "../../../software/dir";
 import secure from "../../../secure/global/dir";
 import middleware from "../../dir";
+import { db } from "../../..";
 
 
 
@@ -12,13 +13,12 @@ import middleware from "../../dir";
 export async function checkRenewalViaUCR(
     token: Tokens,
     ucr: UCRType,
-    session: UserSession,
-    collections: {
-        sessionsCollection: Collection<UserSession>,
-        tokensCollection: Collection<Tokens>,
-        usersCollection: Collection<User>
-    }
+    session: UserSession
 ): Promise<ReplyType> {
+
+    const tokensCollection = db.collection('tokens') as Collection<Tokens>;
+    const sessionsCollection = db.collection('user_sessions') as Collection<UserSession>;
+    
 
     console.log("\x1b[33m%s\x1b[0m", "Token is expired or has reached its maximum uses. Attempting to renew via UCR...");
     const user: User = await secure.user.get(session.user_id, true);
@@ -31,7 +31,7 @@ export async function checkRenewalViaUCR(
 
     if (!token.enabled && ucr.data && ucr.data["renewal-token"]) {
         const rt = ucr.data["renewal-token"];
-        const t = await collections.tokensCollection.findOne({
+        const t = await tokensCollection.findOne({
             token: rt,
             rights: "TOKEN_RENEWAL"
         }) as unknown as Tokens;
@@ -55,7 +55,7 @@ export async function checkRenewalViaUCR(
         }
 
         // Delete the old token
-        const changes: DeleteResult = await collections.tokensCollection.deleteOne({ 
+        const changes: DeleteResult = await tokensCollection.deleteOne({ 
             session_id: secure.hash(session.id),
             user_id: secure.hash(user.id)
          });
@@ -66,7 +66,7 @@ export async function checkRenewalViaUCR(
             );
         }
 
-        const renewalToken = await collections.tokensCollection.deleteOne({
+        const renewalToken = await tokensCollection.deleteOne({
             id : t.id,
         });
         if (!renewalToken) {
@@ -79,7 +79,7 @@ export async function checkRenewalViaUCR(
         const newToken: ReplyType = await secure.token.create(
             user, session, token.rights, false, token.max_uses
         );
-        const sessionChange = await collections.sessionsCollection.updateOne(
+        const sessionChange = await sessionsCollection.updateOne(
             { id: session.id },
             { $set: { token_id: secure.hash((newToken.data as { token_id?: string })?.token_id) } }
         );
@@ -97,7 +97,7 @@ export async function checkRenewalViaUCR(
             }
         );
     } else {
-        const tokenChange = await collections.tokensCollection.updateOne(
+        const tokenChange = await tokensCollection.updateOne(
             { id: token.id },
             { $set: { enabled: false } }
         );

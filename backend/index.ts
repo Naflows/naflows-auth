@@ -186,7 +186,7 @@ app.post('/client/secure/data/services', async (req, res) => {
     const sentServices = await Promise.all(
         Object.keys(userServices).map(async (key) => {
             const serviceRt: ReplyType = await services.service.get(key);
-            const service: Service = serviceRt.data as Service;
+            const service: Service = serviceRt.data.service as Service;
             if (service) {
                 console.log("Pushing service to sentServices:", service);
                 return {
@@ -248,7 +248,7 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
         }));
     }
 
-    const serviceInfo = serviceData.data as Service;
+    const serviceInfo = serviceData.data.service as Service;
 
     console.log('>>> Service ID requested:', serviceInfo.id);
 
