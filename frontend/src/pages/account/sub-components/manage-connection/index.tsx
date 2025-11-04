@@ -124,6 +124,22 @@ const ManageServiceConnection = ({
                 Manage the data access preferences for this service.
               </p>
             </div>
+            <div className="save__content__button" style={{
+              display:
+                JSON.stringify(
+                  newService.data_preferences.personal_data
+                ) !==
+                  JSON.stringify(service.data_preferences.personal_data) ||
+                  usageData !== service.data_preferences.usage_data
+                  ? "block"
+                  : "none",
+            }}>
+              <button
+                className="primary-button save__changes__button"
+              >
+                Save Changes
+              </button>
+            </div>
             <div className="manage__details__body">
               <UsageDataCards
                 usageData={usageData}
@@ -256,22 +272,6 @@ const ManageServiceConnection = ({
                 </div>
               </div>
             </div>
-          </div>
-          <div className="save__content__button" style={{
-            display:
-              JSON.stringify(
-                newService.data_preferences.personal_data
-              ) !==
-                JSON.stringify(service.data_preferences.personal_data) ||
-                usageData !== service.data_preferences.usage_data
-                ? "block"
-                : "none",
-          }}>
-            <button
-              className="primary-button save__changes__button"
-            >
-              Save Changes
-            </button>
           </div>
         </div>
       </div>

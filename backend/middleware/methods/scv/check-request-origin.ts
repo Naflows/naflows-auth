@@ -68,8 +68,8 @@ export async function checkRequestOrigin(client: {
       return software.methods.serverReply(403, "Service not found.");
     }
 
-    const queriedService = serviceData.data.service as Service;
-    const isOriginValid = queriedService && (queriedService.ip_address.includes(client.ip.replace("::ffff:", "")));
+    const queriedService = serviceData.data as Service;
+    const isOriginValid = queriedService && (queriedService.ip_address.includes(client.ip.replace("::ffff:", ""))) /*&& (queriedService.dns === client.dns)*/;
 
     if (isOriginValid && queriedService.status === "ACTIVE") {
       if (naflowsFrontendOnly && queriedService.details && queriedService.details.official !== true) {

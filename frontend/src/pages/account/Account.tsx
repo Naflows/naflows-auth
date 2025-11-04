@@ -20,9 +20,9 @@ const Account = () => {
   const dir = {
     profile: { val: "user" },
     services: { val: "services" },
-    security: { val: "security" },
-    billing: { val: "billing" },
-    support: { val: "support" },
+    security: { val: "security", active: false },
+    billing: { val: "billing", active: false },
+    support: { val: "support", active: false },
   };
   const [successfulFetch, setSuccessfulFetch] = useState<boolean>(false);
 

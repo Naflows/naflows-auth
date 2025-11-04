@@ -43,6 +43,10 @@ const ServiceCreationDisclaimer = ({
                         I agree to the <a href="/legal/terms-of-service" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
                     </label>
                 </div>
+
+                <p style={{ marginTop: "15px" }}>
+                    Naflows Services keeps the right to monitor, suspend, or terminate services that violate our policies. By proceeding, you acknowledge your understanding and acceptance of these terms. Please note that failure to comply with our guidelines may result in service suspension or termination.
+                </p>
             </>
             }
         />

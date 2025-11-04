@@ -1,9 +1,10 @@
-import NAFLOWS_LOGO from "../public/assets/naflows-green.svg";
 import "../public/root/index.scss";
 import LoginForm from "./form/Login";
 import { useEffect, useState } from "react";
 import RegisterForm from "./form/Register";
 import GlobalDisclaimer from "./global/components/GlobalDisclaimer";
+import fetchServiceStatus from "./pages/home/scripts/fetch-status";
+import type { ServiceStatus } from "./pages/home/components/Status";
 
 interface AppLoginBigButtonProps {
   onClick: () => void;
@@ -12,7 +13,7 @@ interface AppLoginBigButtonProps {
 
 const AppLoginBigButton = ({ onClick, value }: AppLoginBigButtonProps) => {
   return (
-    <button className="tertiary-button text-size-20" onClick={onClick}>
+    <button className="tertiary-button" onClick={onClick}>
       {value}
     </button>
   );
@@ -40,53 +41,89 @@ function App() {
     window.history.replaceState(null, "", newUrl);
   }, [formType]);
 
+
+  const [status, setStatus] = useState<ServiceStatus | null>(null);
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      const status = await fetchServiceStatus();
+      setStatus(status);
+    };
+
+    fetchStatus();
+
+    const intervalId = setInterval(fetchStatus, 15000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <>
       <div className="col-20 global__nass__form">
-        <div className="panel">
-          {
-            redirect && <GlobalDisclaimer
-              allowHidden={true}
-              title={`This login will redirect you`}
-              message={""}
-              maxWidth={true}
-              content={<>
-                <p>
-                  Once logged in, you will be redirected to {redirect}. If you wish to log in to your account dashboard, please use <a href="/account">https://auth.naflows.com/account</a> instead.
-                </p>
-              </>}
-            />
-          }
-          <img
-            src={NAFLOWS_LOGO}
-            alt="Naflows Logo"
-            className="logo"
-            style={{ height: "100px" }}
+        {
+          redirect && <GlobalDisclaimer
+            allowHidden={true}
+            title={`This login will redirect you`}
+            message={""}
+            maxWidth={true}
+            fixed={true}
+            content={<>
+              <p>
+                Once logged in, you will be redirected to {redirect}. If you wish to log in to your account dashboard, please use <a href="/account">https://auth.naflows.com/account</a> instead.
+              </p>
+            </>}
           />
-          <div className="panel-header">
-            <h1>
-              {formType === "login"
-                ? "Welcome back to the NASS"
-                : "Create an account"}
-            </h1>
-            <p>
-              {formType === "login"
-                ? "Please enter your credentials. If you don't have an account, you can create one."
-                : "Please fill in the form to create an account. Once your account is created, you will receive your set identifier and customer ID via email."}
-            </p>
-          </div>
-          <div className="form">
-            {formType === "login" ? <LoginForm redirectOnSuccess={redirect ? redirect : undefined} /> : <RegisterForm />}
+        }
+        <div className="panel">
+          <div className="panel-body">
+            <img
+              src="https://naflows.com/public/assets/naflows_full_logotype.png"
+              alt="Naflows Logo"
+              className="logo"
+              style={{ height: "100px" }}
+            />
+            <div className="panel-header">
+              <h1>
+                {formType === "login"
+                  ? "Welcome back to the NASS"
+                  : "Create an account"}
+              </h1>
+              <p>
+                {formType === "login"
+                  ? "Please enter your credentials. If you don't have an account, you can create one."
+                  : "Please fill in the form to create an account. Once your account is created, you will receive your set identifier and customer ID via email."}
+              </p>
+            </div>
+            <div className="form">
+              {formType === "login" ? <LoginForm setFormType={setFormType} redirectOnSuccess={redirect ? redirect : undefined} /> : <RegisterForm setFormType={setFormType} />}
+            </div>
           </div>
           <div className="panel-footer">
-            <AppLoginBigButton
-              onClick={() => {
-                setFormType(formType === "login" ? "register" : "login");
-              }}
-              value={formType === "login" ? "Sign up" : "Log in"}
-            />
-            <AppLoginBigButton onClick={() => { }} value="Forgot password?" />
-            <AppLoginBigButton onClick={() => { }} value="Forgot customer ID?" />
+            <div className="footer-left">
+              <h5>
+                {formType === "login"
+                  ? "Having trouble logging in?"
+                  : "Need help with registration?"}
+              </h5>
+              <div className="footer-buttons-container">
+                <AppLoginBigButton onClick={() => { }} value="I forgot my password" />
+                <AppLoginBigButton onClick={() => { }} value="I forgot my customer ID" />
+              </div>
+            </div>
+            <div className="footer-right">
+              <div className="service__status__small">
+                <span className={`service__status__indicator  ${status && status.disk.usagePercent
+                  ? "service__status__indicator--active"
+                  : "service__status__indicator--inactive"
+                  }`}
+                  data-tooltip={status && status.disk.usagePercent
+                    ? `Disk Usage: ${status.disk.usagePercent}`
+                    : "Service is currently unreachable"}
+                >
+                  Service {status && status.disk.usagePercent ? "Online" : "Offline"}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -10,11 +10,28 @@ import ServiceCreationFooterButtons from "./sub-component/FooterButtons";
 import CreateServiceDescription from "./sub-component/ServiceDescription";
 import type { ServiceCreationSteps } from "./sub-component/HeaderButtons";
 import ServiceConfiguration, { type ServiceConfigurationProps } from "./sub-component/ServiceConfiguration";
-import axios from "axios";
 import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert";
+import { createServiceToNass } from "./scripts/create-service";
 
 
-
+const stepContent = {
+    "disclaimer" : {
+        title: "Service Creation Guidelines",
+        description: "Please read and accept the service creation guidelines before proceeding."
+    },
+    "wizard-init" : {
+        title: "Service Details",
+        description: "Provide the basic details for your new service."
+    },
+    "wizard-configure" : {
+        title: "Service Configuration",
+        description: "Configure the technical settings of your service."
+    },
+    "wizard-review" : {
+        title: "Review & Create",
+        description: "Review your service details and create your service."
+    }   
+}
 
 const CreateService = () => {
     const [user, setUser] = useState<UserBodyProps | null>(null);
@@ -109,52 +126,18 @@ const CreateService = () => {
                     serviceConfiguration.config.dns !== ""
                 } />
             </div>);
-        } else if (serviceCreationStep == "wizard-payement") {
-            const create = axios.post(`${process.env.DUMMY_API_URL_DEV}/set-user-info/services/create`, {
-                details: {
-                    public: serviceDescription,
-                    configuration: {
-                        plans: serviceConfiguration.plans.id,
-                        config: serviceConfiguration.config,
-                        settings: serviceConfiguration.settings
-                    }
-                }
-            }, {
-                headers: {
-                    // Also allow large image uploads
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                },
-                withCredentials: true
+        } else if (serviceCreationStep == "wizard-review") {
+            createServiceToNass({
+                serviceDescription,
+                serviceConfiguration,
+                setDisplayAlert
             });
-            create.then((res) => {
-                console.log(res);
-                if (res.status === 200) {
-                    setDisplayAlert({
-                        status: 200,
-                        message: "Service created successfully! You will be redirected to the service page shortly.",
-                        success: true,
-                        closeAlert: false,
-                        displayCode: false,
-                        title: "Service Created"
-                    });
-                    setTimeout(() => {
-                        window.location.href = `/services/manage/${serviceDescription.id}`;
-                    }, 5000);
-                }
-            }).catch((err) => {
-                setDisplayAlert({
-                    status: err.response?.status || 500,
-                    message: err.response?.data?.message || "An error occurred while creating the service.",
-                    success: false,
-                    closeAlert: false,
-                    displayCode: true,
-                    title: "Service Creation Failed"
-                });
+        } else {
+            createServiceToNass({
+                serviceDescription,
+                serviceConfiguration,
+                setDisplayAlert
             });
-
-            // dev
-            setServiceCreationStep("wizard-configure");
         }
     }, [serviceCreationStep, guidelinesAccepted, serviceDescription, serviceConfiguration]);
 
@@ -186,8 +169,10 @@ const CreateService = () => {
                     <div className="user__body__section services__creation__section">
                         <div className="services__section__header">
                             <div className="section__header__content">
-                                <h3 className="services__header__title">Services Creation</h3>
-                                <p>Create a new service.</p>
+                                <h3 className="services__header__title">{
+                                    stepContent[serviceCreationStep].title    
+                                }</h3>
+                                <p>{stepContent[serviceCreationStep].description}</p>
                             </div>
                         </div>
                         {component}

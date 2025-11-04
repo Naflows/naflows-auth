@@ -1,13 +1,24 @@
 @import "../../variables.scss";
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
+@keyframes GlobalHeaderAppears {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .global__home__header {
-  width: calc(100% - 100px);
+  width: calc(100% - 200px);
   height: 100px;
   display: flex;
   align-items: center;
-  justify-content: start;
-  padding: 0 50px;
+  justify-content: space-between;
+  padding: 0 100px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: sticky;
   top: 0;
@@ -15,6 +26,7 @@
   background-color: $_2k25-background-hue-darker-transparent;
   backdrop-filter: blur(10px);
   z-index: 10;
+  animation: GlobalHeaderAppears 1s ease forwards;
 
   gap: 50px;
 
@@ -33,16 +45,30 @@
   .header__actions {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: end;
     gap: 20px;
+    .buttons__container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
   }
 
   .header__navigation {
-    width: 100%;
     align-items: center;
     justify-content: start;
     display: flex;
     gap: 20px;
+    button {
+      font-size: 15px;
+    }
+  }
+
+  .header__navigation,
+  .header__actions {
+    max-width: 30%;
+    min-width: 30%;
   }
 
   .header__head {
@@ -50,8 +76,10 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
+    width: 100%;
     img {
       height: 60px;
+      width: auto;
     }
   }
 }
@@ -132,8 +160,7 @@
   }
 }
 
-.moving--lighted--title {
-  .word {
+  .highlight {
     display: inline-block;
     background: linear-gradient(
       270deg,
@@ -147,10 +174,9 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: gradientAnimation 5s ease infinite;
-    opacity: 0;
-    animation: fadeInUp 0.5s ease forwards;
+    font-weight: bold;
   }
-}
+
 
 .nass_home__activity,
 .nass_welcome__informations,
@@ -486,6 +512,17 @@
 
 .nass_mailing__list {
   width: calc(100% - 40px);
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .nass_service__info__item__title {
+    font-size: 12px;
+    opacity: 0.8;
+  }
 
   .nass_homepage__box__content {
     display: flex;
@@ -632,6 +669,21 @@
   }
 }
 
+@media screen and (max-width: 1400px) {
+  .header__actions,
+  .header__navigation {
+    max-width: 40% !important;
+    min-width: 40% !important;
+  }
+  .header__head {
+    width: 20% !important;
+    img {
+      width: 100% !important;
+      height: auto !important;
+    }
+  }
+}
+
 @media screen and (max-width: 1200px) {
   .head__global__title {
     width: 90% !important;
@@ -668,6 +720,11 @@
       display: flex;
     }
 
+    .header__navigation,
+    .header__actions {
+      display: none;
+    }
+
     &.active {
       position: fixed;
       top: 0;
@@ -679,28 +736,55 @@
       flex-direction: column;
       align-items: start;
       justify-content: start;
-      .buttons-content {
+      gap: 20px;
+
+      .header__head,
+      .header__actions,
+      .header__navigation {
+        min-width: calc(100vw - 40px) !important;
+        max-width: calc(100vw - 40px) !important;
+      }
+
+      .header__head {
+        order: 1;
         display: flex;
-        flex-direction: column-reverse;
-        gap: 30px;
-        margin-top: 50px;
-        align-items: start;
-        width: 100%;
-        .header__actions {
-          padding-bottom: 10px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-          width: 100%;
-          justify-content: space-between;
-          align-items: center;
+        align-items: center;
+        justify-content: space-between;
+
+        img {
+          height: 40px !important;
+          width: auto !important;
         }
-        .header__navigation {
-          flex-direction: column;
-          gap: 5px;
-          align-items: start;
-          button {
-            background-color: $_2k25-background-hue-darker-2;
-            width: 100%;
-          }
+      }
+
+      .header__actions {
+        order: 2;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        justify-content: space-between;
+        align-items: center;
+        display: flex;
+        margin-top: 30px;
+      }
+
+      .header__navigation {
+        order: 3;
+        flex-direction: column;
+        gap: 5px;
+
+        display: flex;
+        align-items: start;
+        button {
+          background-color: $_2k25-background-hue-50-transparent;
+
+          width: 100%;
+          text-align: left;
+          padding: 10px 15px;
+          border: 2px solid $_2k25-background-hue-40;
+          border-radius: 10px;
+          transition: background-color 0.3s ease;
+          /* Disable blue box on click */
         }
       }
     }

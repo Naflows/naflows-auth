@@ -6,19 +6,21 @@ const GlobalDisclaimer = ({
     message,
     content,
     allowHidden = false,
-    maxWidth = false
+    maxWidth = false,
+    fixed = false
 }: {
     title: string,
     message: string,
     content?: React.ReactNode,
     allowHidden?: boolean,
-    maxWidth?: boolean
+    maxWidth?: boolean,
+    fixed?: boolean
 }) => {
 
     const [hide, setHide] = useState<boolean>(false);
 
     return (
-        <div className={`global__nass__disclaimer ${maxWidth ? "max-width" : ""}`} style={{ display: hide ? "none" : "flex" }}>
+        <div className={`global__nass__disclaimer ${fixed ? "fixed" : ""} ${maxWidth ? "max-width" : ""}`} style={{ display: hide ? "none" : "flex" }}>
             <div className="global__disclaimer__header">
                 <h4>{title}</h4>
                 {allowHidden && <div className="global__disclaimer__hide">

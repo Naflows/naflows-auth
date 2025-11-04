@@ -11,67 +11,67 @@
   }
 }
 
-  .traffic-overview {
-    padding: 10px 20px;
+.traffic-overview {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 2px solid $_2k25-background-hue-50-transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 20px;
+  background-color: $_2k25-background-hue-darker;
+  .network__traffic__placeholder {
+    width: calc(100% - 20px);
+    background-color: rgba(255, 255, 255, 0.05);
+    height: 100%;
     border-radius: 10px;
-    border: 2px solid $_2k25-background-hue-50-transparent;
     display: flex;
     flex-direction: column;
-    align-items: start;
-    gap: 20px;
-    background-color: $_2k25-background-hue-darker;
-    .network__traffic__placeholder {
-      width: calc(100% - 20px);
-      background-color: rgba(255, 255, 255, 0.05);
-      height: 100%;
-      border-radius: 10px;
+    padding: 10px;
+
+    align-items: center;
+    justify-content: center;
+
+    .network__information__container {
       display: flex;
       flex-direction: column;
-      padding: 10px;
+      gap: 10px;
+      width: 100%;
+    }
 
-      align-items: center;
-      justify-content: center;
-
-      .network__information__container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
+    .network__information {
+      padding: 5px 10px;
+      text-align: center;
+      border: 1px solid;
+      font-size: 13px;
+      width: calc(100% - 22px);
+      border-radius: 5px;
+      p {
+        margin: 0;
       }
-
-      .network__information {
-        padding: 5px 10px;
-        text-align: center;
-        border: 1px solid;
-        font-size: 13px;
-        width: calc(100% - 22px);
-        border-radius: 5px;
-        p {
-          margin: 0;
-        }
-        &.normal {
-          border-color: $da-confirm-hue;
-          background-color: $da-confirm-hue-transparent;
-          color: $da-confirm-hue;
-        }
-        &.warning {
-          border-color: $da-warning-hue;
-          background-color: $da-warning-hue-transparent;
-          color: $da-warning-hue;
-        }
-        &.shutdown {
-          border-color: $da-error-hue;
-          background-color: $da-error-hue-transparent;
-          color: $da-error-hue;
-        }
+      &.normal {
+        border-color: $da-confirm-hue;
+        background-color: $da-confirm-hue-transparent;
+        color: $da-confirm-hue;
       }
-      .footer__informations {
-        font-size: 10px;
-        opacity: 0.7;
-        text-align: center;
+      &.warning {
+        border-color: $da-warning-hue;
+        background-color: $da-warning-hue-transparent;
+        color: $da-warning-hue;
+      }
+      &.shutdown {
+        border-color: $da-error-hue;
+        background-color: $da-error-hue-transparent;
+        color: $da-error-hue;
       }
     }
+    .footer__informations {
+      font-size: 10px;
+      opacity: 0.7;
+      text-align: center;
+    }
   }
+}
 
 .service__quick__actions {
   display: flex;
@@ -324,10 +324,9 @@
         background-color: $da-confirm-hue-transparent;
       }
       .log__icon {
-        background-color: $da-confirm-hue-darker;
-        svg {
-          fill: white;
-        }
+        background-color: $da-confirm-hue-transparent;
+        border-color: $da-confirm-hue;
+        color: $da-confirm-hue;
       }
     }
     &.status--warning {
@@ -335,10 +334,9 @@
         background-color: $da-warning-hue-transparent;
       }
       .log__icon {
-        background-color: $da-warning-hue-darker;
-        svg {
-          fill: white;
-        }
+        background-color: $da-warning-hue-transparent;
+        border-color: $da-warning-hue;
+        color: $da-warning-hue;
       }
     }
     &.status--error {
@@ -346,23 +344,25 @@
         background-color: $da-error-hue-transparent;
       }
       .log__icon {
-        background-color: $da-error-hue-darker;
-        svg {
-          fill: white;
-        }
+        background-color: $da-error-hue-transparent;
+        border-color: $da-error-hue;
+        color: $da-error-hue;
       }
     }
     .log__icon {
+      min-height: 30px;
+      border-radius: 10px;
+      display: flex;
+      padding: 5px 10px;
+      align-items: center;
+      justify-content: start !important;
+      flex-direction: row;
+      gap: 10px;
+      border: 1px solid transparent;
       svg {
-        height: 25px;
-        width: 25px;
-        fill: white;
+        width: 20px;
+        height: 20px;
       }
-      min-width: 34px;
-      min-height: 34px;
-      max-width: 34px;
-      max-height: 34px;
-      border-radius: 5px;
     }
 
     &:hover {
@@ -509,9 +509,8 @@
   #security-data {
     display: flex;
     flex-direction: row;
-    align-items:center;
+    align-items: center;
     gap: 20px;
-    
 
     .key__container {
       animation: KeysContainerAppear 0.3s ease forwards;
@@ -635,7 +634,17 @@
     gap: 20px;
     justify-content: start;
     min-height: 100vh;
-    margin-bottom: 10%;
+  }
+
+  .nass__service__page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    max-height: fit-content;
+    margin-bottom: 20px;
   }
 
   .service__description__section {
