@@ -48,6 +48,6 @@ export async function acceptLogin(
 
         });
     } else {
-        return software.methods.serverReply(200, "Login successful");
+        return software.methods.serverReply(200, "Login successful in idle mode.");
     }
 }

@@ -28,7 +28,8 @@ export async function hiddenLogin(req: Request, res: Response, preventMiddleware
         return software.methods.serverReply(401, "Unauthorized: Session not found.");
     }
 
-    const token: Tokens = await secure.token.get(session.token_id, true);
+    console.log("----- Session Retrieved for Hidden Login:", session , " -----");
+    const token: Tokens = await secure.token.getByValue(tokenValue, true);
 
     if (!token) {
         return software.methods.serverReply(401, "Unauthorized: Token not found.");
