@@ -10,7 +10,7 @@ import notifications from "../../../../software/notifications/dir";
 
 
 
-export async function hiddenLogin(req: Request, res: Response): Promise<ReplyType> {
+export async function hiddenLogin(req: Request, res: Response, preventMiddlewareReload: boolean): Promise<ReplyType> {
 
     // Verify all parameters: user, session, token 
     const tokenValue = req.body.user.token;
@@ -46,5 +46,5 @@ export async function hiddenLogin(req: Request, res: Response): Promise<ReplyTyp
     }
 
 
-    return (await acceptLogin(user, session));
+    return (await acceptLogin(user, session, preventMiddlewareReload));
 }

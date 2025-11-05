@@ -1069,3 +1069,20 @@ a {
     width: calc(90% - 40px) !important;
   }
 }
+
+
+@media screen and (max-width: 1200px) {
+  .panel {
+    max-width: calc(100% - 40px) !important;
+    .panel-body {
+      .logo {
+        max-width: 200px !important;
+        height: auto !important;
+        object-fit: cover !important;
+        .inputs-container {
+          gap: 50px !important;
+        }
+      }
+    }
+  }
+}
