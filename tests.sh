@@ -32,8 +32,8 @@ clear_terminal
 print_blue "Welcome to the Naflows Authentication Secure System (NASS) Test Suite"
 print_light_grey "Production notice: This test suite is intended for development and testing purposes only. Do not use in a production environment.\nHowever, tests may pass before production release.\n"
 if [ "$RESET_ENVIRONMENT" = "true" ]; then
-    print_red "WARNING: You have chosen to reset the environment. This will delete all existing Docker containers, volumes, and networks related to NASS."
-    print_red "Make sure you have backed up any important data before proceeding.\n"
+    print_red "WARNING: You have chosen to reset the TEST environment. This will delete the test Docker containers and volumes."
+    print_red "Your development database (mongo-nass) will remain untouched.\n"
 fi
 print_separator
 
@@ -74,17 +74,17 @@ fi
 
 print_title "$TEST_PARAMETER"
 
-function reset_db {
-    echo -e "\033[1;32mResetting database...\033[0m"
-    COMPOSE_PROFILES="mongo-nass" docker compose down -v
-    echo -e "\033[1;32mStarting MongoDB...\033[0m"
-    COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express" docker compose up -d --build
+function reset_test_db {
+    echo -e "\033[1;32mResetting TEST database...\033[0m"
+    COMPOSE_PROFILES="mongo-nass-test" docker compose down -v
+    echo -e "\033[1;32mStarting MongoDB TEST instance...\033[0m"
+    COMPOSE_PROFILES="mongo-nass-test,auth-api-test" docker compose up -d --build
     # Wait for MongoDB to be ready
     sleep 5
 
     # Initialize database manually
-    echo -e "\033[1;32mInitializing database...\033[0m"
-    docker exec -i mongo-nass mongosh -u admin -p secret --authenticationDatabase admin < ./mongo-init/init.js
+    echo -e "\033[1;32mInitializing TEST database...\033[0m"
+    docker exec -i mongo-nass-test mongosh -u admin -p secret --authenticationDatabase admin < ./mongo-init/init.js
 
 }
 
@@ -95,26 +95,25 @@ function launch_dummy_api {
 }
 
 if [ "$RESET_ENVIRONMENT" = "true" ]; then
-    echo -e "\033[1;32mCleaning up existing Docker containers and volumes...\033[0m"
-    rm -rf ./backend/auth-data
-    docker volume rm $(docker volume ls -q)
-    docker system prune -a -f --volumes
-    COMPOSE_PROFILES="auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down -v
+    echo -e "\033[1;32mCleaning up existing TEST Docker containers and volumes...\033[0m"
+    rm -rf ./backend/auth-data-test
+    docker volume rm mongo-data-test 2>/dev/null || true
+    COMPOSE_PROFILES="auth-api-test,test-services,test-global,mongo-nass-test" docker compose down -v
 fi
 
 
 
 if [ "$TEST_PARAMETER" = "methods" ]; then
-    reset_db
+    reset_test_db
     
 
     # Wait for services to start and MongoDB to be ready
     echo -e "\033[1;32mWaiting for services to start...\033[0m"
     sleep 2
 
-    # Run tests inside the auth-api container
-    echo -e "\033[1;32mRunning methods tests inside auth-api container...\033[0m"
-    docker exec auth-api-1 sh -c "cd /app && npm run methods-test -- --forceExit"
+    # Run tests inside the auth-api-test container
+    echo -e "\033[1;32mRunning methods tests inside auth-api-test container...\033[0m"
+    docker exec auth-api-test sh -c "cd /app && npm run methods-test -- --forceExit"
 
     TEST_EXIT_CODE=$?
 
@@ -122,9 +121,8 @@ if [ "$TEST_PARAMETER" = "methods" ]; then
         echo -e "\033[1;32m✓ All tests passed successfully.\033[0m"
     else
         echo -e "\033[1;31m✗ Some tests failed (Exit code: $TEST_EXIT_CODE).\033[0m"
-        docker logs auth-api-1
-        COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker compose down
-        exit 1
+        docker logs auth-api-test
+        COMPOSE_PROFILES="mongo-nass-test,auth-api-test,dummy-api" docker compose down
     fi
 
     print_blue "\nAll tests ran. To run the same suite again, press 'y'. To exit, press any other key."
@@ -135,10 +133,10 @@ if [ "$TEST_PARAMETER" = "methods" ]; then
 
 
     else
-        COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker compose down
-        exit 0
+        COMPOSE_PROFILES="mongo-nass-test,auth-api-test,dummy-api" docker compose down
+        exit 1
     fi
 else
     echo -e "\033[1;32mStarting Docker containers for no-test...\033[0m"
-    COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker compose up --build -d
+    COMPOSE_PROFILES="mongo-nass-test,auth-api-test,dummy-api" docker compose up --build -d
 fi
