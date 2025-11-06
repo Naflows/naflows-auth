@@ -144,6 +144,14 @@ export interface ServiceSettings {
   rates: 100 | 500 | 1000 | 10000;
   allow_nass_payement_method: boolean; // Whether the service allows payment through NASS
 }
+
+export interface ServiceAlert {
+  title: string;
+  message: string;
+  instructions ?: string; // Optional instructions to resolve the alert
+  type: "info" | "warning" | "error" | "success";
+  link ?: string; // Optional link to more information about the alert
+}
 export interface Service {
   id: string; // Service ID
   name: string; // Service name, used for display purposes
@@ -158,6 +166,7 @@ export interface Service {
   apiKey?: string; // The API key associated with the service
   picture?: string; // URL to the service picture, optional
   banner?: string; // URL to the service banner, optional
+  approved : boolean; // Whether the service has been approved by the NASS team or not
   public_settings: {
     allow_user_registration: boolean; // Whether the service allows user registration or not
     allow_service_connection: boolean; // Whether the service allows connection from other services or not
@@ -177,11 +186,21 @@ export interface Service {
       last_name? : string;
     },
     public : {
-      privacy_policy_url? : string;
-      terms_of_service_url? : string;
-      contact_email? : string;
+      privacy_policy_url? : {
+        url : string,
+        approved : boolean
+      };
+      terms_of_service_url? : {
+        url : string,
+        approved : boolean
+      };
+      contact_email? : {
+        email : string,
+        approved : boolean
+      };
     }
   },
+  alerts? : ServiceAlert[]; // List of alerts related to the service
 }
 
 export interface ServiceLog {

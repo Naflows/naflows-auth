@@ -82,6 +82,7 @@ export async function registerService(
         description: pub.description,
 
         created_by: user.id,
+        approved : false, // Service needs to be approved by NASS team
 
         ip_address: [pub.ip_address],
         dns: pub.dns,
@@ -113,9 +114,18 @@ export async function registerService(
         details: {
             users: 0, // The creator is the first user but is added after the service creation
             public: {
-                privacy_policy_url: "null",
-                terms_of_service_url: "null",
-                contact_email: "null",
+                privacy_policy_url: {
+                    approved: false,
+                    url: "null"
+                },
+                terms_of_service_url: {
+                    approved: false,
+                    url: "null"
+                },
+                contact_email: {
+                    approved: false,
+                    email: "null"
+                }
             }
         }
     };

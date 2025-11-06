@@ -3,7 +3,7 @@ import { type UserBodyProps } from "../../../types/UserBodyProps";
 import fetchData from "../../../scripts/account/get-user-info";
 import type { AlertContentProps } from "../../../global/error-alert/Alert";
 import Alert from "../../../global/error-alert/Alert";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import ServiceDescription from "../manage/sub-component/ServiceDescription";
 import '../../../../public/root/pages/services/join/index.scss';
 import type { ServicesBodyProps } from "../../../types/ServicesBodyProps";
@@ -103,7 +103,7 @@ const JoinPage = () => {
                     }
                 } catch (error) {
                     setDisplayAlert({
-                        status: (error as any)?.response?.status || 500,
+                        status: (error as unknown as AxiosError)?.response?.status || 500,
                         message: "Failed to fetch service data. Please try again. Make sure the service exists.",
                         success: false,
                         closeAlert: false,
@@ -263,9 +263,22 @@ const JoinPage = () => {
                                 )}
 
                                 <div className="service__connection__details">
-                                    <img src={userInfo?.profile_picture || ""} alt="User profile" className="user__profile__picture small" style={{
-                                        display: userInfo && userInfo.profile_picture ? "block" : "none",
-                                    }} />
+
+                                    <div className="connection__details__user">
+                                        <div className="details__global">
+                                            <img src={userInfo?.profile_picture || ""} alt="User profile" className="user__profile__picture small" style={{
+                                                display: userInfo && userInfo.profile_picture ? "block" : "none",
+                                            }} />
+                                            <div className="profile__container">
+                                                <h3 className="user__name">
+                                                    {userInfo ? `${userInfo.first_name} ${userInfo.last_name}` : "Guest User"}
+                                                </h3>
+                                                <p className="user__email">
+                                                    {userInfo ? userInfo.email : "You are not logged in."}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
 
 
                                     {service?.public_settings?.required_data && service.public_settings.required_data.length > 0 && (<div className="service__connection__detail__body">

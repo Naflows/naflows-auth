@@ -12,7 +12,7 @@ import { useApp } from "./init/app-use";
 import { services } from "./secure/services/dir";
 import path from "path";
 import { software } from "./software/dir";
-import { Service, User } from "./types/.types/collections.type";
+import { Service, ServiceAlert, User } from "./types/.types/collections.type";
 import mailing from "./software/mailing/dir";
 import express from "express";
 import bodyParser from "body-parser";
@@ -259,6 +259,8 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
     console.log("Is user a developer for this service?", isUserDev);
     if (isUserDev.success) {
         serviceInfo.details.access_key = isUserDev.data.access_key;
+
+        serviceInfo.alerts = (await services.service.getAlerts(serviceInfo.id)).data.alerts as unknown as ServiceAlert[];
     } else {
         delete serviceInfo.ip_address;
         delete serviceInfo.created_by;

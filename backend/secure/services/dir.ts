@@ -38,6 +38,7 @@ import { setTrafficLogs } from "./logs/set-traffic-log";
 import { getTrafficLogRoute } from "./methods/global/get-traffic-log";
 import { getTrafficLog } from "./logs/get-traffic-log";
 import { getKeyByUser } from "./methods/dev/key-by-user";
+import { getServiceAlerts } from "./methods/get-service-alerts";
 
 
 
@@ -56,6 +57,7 @@ export const services = {
         get: getService,
         build: createService,
         generateID: generateApiID,
+        getAlerts : getServiceAlerts,
         global: {
             update: updateService,
         },
