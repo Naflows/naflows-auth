@@ -29,11 +29,12 @@ export async function hiddenLogin(req: Request, res: Response, preventMiddleware
     }
 
     console.log("----- Session Retrieved for Hidden Login:", session , " -----");
-    const token: Tokens = await secure.token.getByValue(tokenValue, true);
-
-    if (!token) {
-        return software.methods.serverReply(401, "Unauthorized: Token not found.");
+    const tokenBySession = await secure.token.get(session.token_id, true);
+    if (!tokenBySession || secure.verify(tokenValue, tokenBySession.token) === false) {
+        return software.methods.serverReply(401, "Unauthorized: Token does not match session.");
     }
+
+
 
     const user: User = await secure.user.get(uid, false);
 
@@ -41,9 +42,9 @@ export async function hiddenLogin(req: Request, res: Response, preventMiddleware
         return software.methods.serverReply(401, "Unauthorized: User not found.");
     }
 
-    const tokenValid = await secure.token.valid(token, session, user.id, true); // TODO : MAKE SURE CREDENTIALS ARE VALID
-    if (!secure.session.valid(token, session, user.id).success || !tokenValid.success) {
-        return software.methods.serverReply(401, "Invalid token or session.");
+    const tokenValid = await secure.token.valid(tokenBySession, session, user.id, true); // TODO : MAKE SURE CREDENTIALS ARE VALID
+    if (!secure.session.valid(tokenBySession, session, user.id).success || !tokenValid.success) {
+        return software.methods.serverReply(401, "Unauthorized : Invalid token or session.");
     }
 
 

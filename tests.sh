@@ -124,7 +124,6 @@ if [ "$TEST_PARAMETER" = "methods" ]; then
         echo -e "\033[1;31m✗ Some tests failed (Exit code: $TEST_EXIT_CODE).\033[0m"
         docker logs auth-api-1
         COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker compose down
-        exit 1
     fi
 
     print_blue "\nAll tests ran. To run the same suite again, press 'y'. To exit, press any other key."
@@ -136,7 +135,7 @@ if [ "$TEST_PARAMETER" = "methods" ]; then
 
     else
         COMPOSE_PROFILES="mongo-nass,mongo-express,auth-api,dummy-api" docker compose down
-        exit 0
+        exit 1
     fi
 else
     echo -e "\033[1;32mStarting Docker containers for no-test...\033[0m"

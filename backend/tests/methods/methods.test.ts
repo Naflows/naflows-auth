@@ -792,6 +792,7 @@ describe("Test NASS Secure Verification Methods", () => {
                 expect(ssvRT).toBeDefined();
             });
 
+
             test("STV Creates New Token for New Session", async () => {
                 const ucr = fakeUCR();
                 ucr.client = serviceUCRData;
@@ -812,24 +813,9 @@ describe("Test NASS Secure Verification Methods", () => {
                 newSessionToken = result.data.token;
                 expect(newSessionToken).toBeDefined();
 
+                console.log(`New correct credentials : Session ID = ${sessionID} | Session Token = ${newSessionToken}`);
+
             });
-
-            // test("STV Fails with Invalid Session Token", async () => {
-            //     const ucr = fakeUCR();
-            //     ucr.client = serviceUCRData;
-            //     ucr.user.session_id = sessionID;
-            //     ucr.request.url = "/test-tunnel-route";
-            //     ucr.user.token = "invalid-session-token-value";
-            //     delete ucr.user.password;
-            //     delete ucr.user.identifier;
-
-            //     const fakeReq = getFakeReq(ucr);
-            //     const res = getFakeRes();
-            //     const result: ReplyType = await middleware.process.stv(fakeReq, res, ssvRT);
-            //     expect(result.success).toBe(false);
-            //     expect(result.status).toBe(401);
-            //     expect(result.message).toBe("Invalid token or credentials provided.");
-            // });
 
             test("Session succesfully verified in idle mode", async () => {
                 const ucr = fakeUCR();
@@ -848,44 +834,13 @@ describe("Test NASS Secure Verification Methods", () => {
                 expect(result.message).toBe("Login successful in idle mode.");
             })
 
-            // test("Session fails to verify with wrong session ID", async () => {
-            //     const ucr = fakeUCR();
-            //     ucr.client = serviceUCRData;
-            //     ucr.user.session_id = "invalid-session-id-value";
-            //     ucr.request.url = "/test-tunnel-route";
-            //     ucr.user.token = newSessionToken;
-            //     delete ucr.user.password;
-            //     delete ucr.user.identifier;
-
-            //     const fakeReq = getFakeReq(ucr);
-            //     const res = getFakeRes();
-            //     const result: ReplyType = await secure.user.hiddenLogin(fakeReq, res, true);
-            //     expect(result.success).toBe(false);
-            //     expect(result.status).toBe(401);
-            //     expect(result.message).toBe("Unauthorized: Session not found.");
-            // });
-
-            // test("Session fails to verify with invalid token", async () => {
-            //     const ucr = fakeUCR();
-            //     ucr.client = serviceUCRData;
-            //     ucr.user.session_id = sessionID;
-            //     ucr.request.url = "/test-tunnel-route";
-            //     ucr.user.token = "invalid-session-token-value";
-            //     delete ucr.user.password;
-            //     delete ucr.user.identifier;
-
-            //     const fakeReq = getFakeReq(ucr);
-            //     const res = getFakeRes();
-            //     const result: ReplyType = await secure.user.hiddenLogin(fakeReq, res, true);
-            //     expect(result.success).toBe(false);
-            //     expect(result.status).toBe(401);
-            //     expect(result.message).toBe("Invalid token or credentials provided.");
-            // });
-
             test("Session fails to verify when session expired", async () => {
                 // Manually expire the session in the database
-                const sessions = db.collection("sessions") as Collection<UserSession>;
-                await sessions.updateOne({ id: sessionID }, { $set: { expires_at: Date.now() - 1000 } });
+                let session = await secure.session.get(sessionID);
+                expect(session).toBeDefined();
+                expect(session?.id).toBe(sessionID);
+                session!.expires_at = 0; // Set expiration to 1 second in the past
+                await secure.session.update(sessionID, session);
 
                 const ucr = fakeUCR();
                 ucr.client = serviceUCRData;
@@ -900,8 +855,65 @@ describe("Test NASS Secure Verification Methods", () => {
                 const result: ReplyType = await secure.user.hiddenLogin(fakeReq, res, true);
                 expect(result.success).toBe(false);
                 expect(result.status).toBe(401);
-                expect(result.message).toBe("Session has expired.");
+                expect(result.message).toBe("Unauthorized : Invalid token or session.");
             });
+
+            test("STV Fails with Invalid Session Token", async () => {
+                const ucr = fakeUCR();
+                ucr.client = serviceUCRData;
+                ucr.user.session_id = sessionID;
+                ucr.request.url = "/test-tunnel-route";
+                ucr.user.token = "invalid-session-token-value";
+                delete ucr.user.password;
+                delete ucr.user.identifier;
+
+                const fakeReq = getFakeReq(ucr);
+                const res = getFakeRes();
+                const result: ReplyType = await middleware.process.stv(fakeReq, res, ssvRT);
+                expect(result.success).toBe(false);
+                expect(result.status).toBe(401);
+                expect(result.message).toBe("Invalid token or credentials provided.");
+            });
+
+
+
+            test("Session fails to verify with wrong session ID", async () => {
+                const ucr = fakeUCR();
+                ucr.client = serviceUCRData;
+                ucr.user.session_id = "invalid-session-id-value";
+                ucr.request.url = "/test-tunnel-route";
+                ucr.user.token = newSessionToken;
+                delete ucr.user.password;
+                delete ucr.user.identifier;
+
+                const fakeReq = getFakeReq(ucr);
+                const res = getFakeRes();
+                const result: ReplyType = await secure.user.hiddenLogin(fakeReq, res, true);
+                expect(result.success).toBe(false);
+                expect(result.status).toBe(401);
+                expect(result.message).toBe("Unauthorized: Session not found.");
+            });
+
+
+
+            test("Session fails to verify with invalid token", async () => {
+                const ucr = fakeUCR();
+                ucr.client = serviceUCRData;
+                ucr.user.session_id = sessionID;
+                ucr.request.url = "/test-tunnel-route";
+                ucr.user.token = "invalid-session-token-value";
+                delete ucr.user.password;
+                delete ucr.user.identifier;
+
+                const fakeReq = getFakeReq(ucr);
+                const res = getFakeRes();
+                const result: ReplyType = await secure.user.hiddenLogin(fakeReq, res, true);
+                expect(result.success).toBe(false);
+                expect(result.status).toBe(401);
+                expect(result.message).toBe("Unauthorized: Token does not match session.");
+            });
+
+
         });
     })
 
