@@ -18,7 +18,7 @@ export async function getAllRights(service_id: string): Promise<ServiceRights[]>
         await Promise.all(
             ur.rights.map(async (rID) => {
                 if (rightsSet.has(rID)) {
-                    const user = await secure.user.get(ur.user_id, true);
+                    const user = await secure.user.get(ur.user_id, false);
                     if (user) {
                         if (!usersPerRights[rID]) {
                             usersPerRights[rID] = [];

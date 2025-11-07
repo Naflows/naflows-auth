@@ -7,7 +7,7 @@ import { services } from "../../dir";
 export async function getRightsByUser(user_id : string, service_id : string, sendRightsValue : boolean = false, type : ServiceRights["type"] | "ALL" = "ALL") : Promise<ServiceRights[]> {
     const userRightsDB = db.collection('user_rights') as Collection<UserRights>;
     const AllUserRights = await userRightsDB.find({service_id: service_id}).toArray();
-    const userRights = AllUserRights.find((ur : UserRights) => secure.verify(user_id, ur.user_id));
+    const userRights = AllUserRights.find((ur : UserRights) => ur.user_id === user_id);
 
     console.log("User rights for user", user_id, "in service", service_id, ":", userRights);
 

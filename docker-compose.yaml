@@ -20,14 +20,34 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: NASS
-    
+
+  mongo-nass-test:
+    image: mongo:latest
+    restart: always
+    profiles: ["mongo-nass-test"]
+    container_name: mongo-nass-test
+    hostname: mongo-nass-test
+    networks:
+      - nass-network
+    ports:
+      - "27017:27017"
+    expose:
+      - "27017"
+    volumes:
+      - mongo-data-test:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: NASS
 
   auth-api:
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile
     restart: always
-    profiles: ["auth-api","mongo-nass"]
+    profiles: ["auth-api", "mongo-nass"]
     container_name: auth-api-1
     networks:
       - nass-network
@@ -47,7 +67,6 @@ services:
       - "3000"
     depends_on:
       - mongo-nass
-
 
   mongo-express:
     image: mongo-express
@@ -75,7 +94,7 @@ services:
       driver: none
 
   dummy-api:
-    build: 
+    build:
       context: ./api
       dockerfile: Dockerfile
     restart: always
@@ -88,10 +107,33 @@ services:
       - "3005:3005"
     expose:
       - "3005"
-  
-     
 
-        
+  auth-api-test:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    profiles: ["auth-api-test", "mongo-nass-test"]
+    container_name: auth-api-test
+    networks:
+      - nass-network
+    environment:
+      - AUTH_API_PORT=3000
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo-nass-test:27017/NASS?authSource=admin
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - SMTP_SECURE=${SMTP_SECURE}
+    ports:
+      - "3001:3000"
+    expose:
+      - "3000"
+    depends_on:
+      - mongo-nass-test
+
   frontend:
     build:
       context: ./frontend
@@ -107,22 +149,6 @@ services:
     ports:
       - "8080:3000"
 
-  methods-tests:
-    build: 
-      context: ./backend
-      dockerfile: Dockerfile
-    profiles: ["methods-tests"]
-    command: npm run methods-test
-    depends_on:
-      - mongo-nass
-      - auth-api
-    volumes:
-      - ./backend:/app
-    environment:
-      - NODE_ENV=test
-      - AUTH_API_URL=${AUTH_API_URL}
-
-
 
 volumes:
   auth-data:
@@ -132,6 +158,8 @@ volumes:
   mongo-express-data:
     driver: local
   captcha-data:
+    driver: local
+  mongo-data-test:
     driver: local
 networks:
   nass-network:

@@ -130,15 +130,19 @@ app.post('/nass/instance/connect', async (req: Request, res: Response) => {
 
 
 app.put('/user/secure/service/update', async (req: Request, res: Response) => {
-
     await manageConnection(req,res,'/client/secure/services/update', {
         serviceDetails: req.body.serviceDetails
     });
-
 });
 
 app.post('/user/secure/service/logs', async (req: Request, res: Response) => {
     await manageConnection(req,res,'/client/secure/services/get-logs', {
+        service_id: req.body.service_id
+    });
+});
+
+app.post('/user/secure/service/users', async (req: Request, res: Response) => {
+    await manageConnection(req,res,'/client/secure/services/get-users', {
         service_id: req.body.service_id
     });
 });
@@ -228,6 +232,7 @@ app.post('/get-user-info/notifications', async (req: Request, res: Response) => 
         start: req.query.start || 0
     });
 });
+
 
 
 app.put('/set-user-info/user/update', async (req: Request, res: Response) => {

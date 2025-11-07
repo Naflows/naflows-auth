@@ -3,7 +3,7 @@ import ServiceCapacities from "../../sub-component/capacities"
 import ServiceDescription from "../../sub-component/ServiceDescription"
 import type { accountTabs } from "../../ManageService"
 import QuickActions from "./components/quick-actions"
-import TrafficOverview from "./components/network/components/traffic"
+import ServiceAlerts from "../components/alerts"
 
 
 const ManageServiceOverview = ({
@@ -17,7 +17,7 @@ const ManageServiceOverview = ({
 }) => {
 
 
-
+    console.log("Rendering ManageServiceOverview with service:", service);
 
     return (
         <div className="manage__service__body">
@@ -37,7 +37,8 @@ const ManageServiceOverview = ({
                             <QuickActions service={service} setService={setService} />
                             <ServiceCapacities service={service} />
                         </div>
-                        <TrafficOverview service={service} />
+                        <ServiceAlerts service={service!} />
+
                     </div>
                 </div>
 
