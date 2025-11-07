@@ -16,11 +16,13 @@ export async function userHasRight(userID: string, serviceID: string, rightName:
 
     const rightsDB = db.collection('service_rights') as Collection<ServiceRights>;
 
-    const right = await rightsDB.findOne({ id: { $in: rightIDs }, service_id: serviceID, name: rightName,
+    const right = await rightsDB.findOne({ id: { $in: rightIDs }, service_id: serviceID,
         rights : { $in: [rightName] }
     }) as ServiceRights | null;
 
-    return right && right.rights.includes(rightName);
+    console.log(`Found right for user ${userID} in service ${serviceID}:`, right);
+
+    return right !== null;
     
 
 }

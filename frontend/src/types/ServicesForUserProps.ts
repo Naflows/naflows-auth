@@ -13,6 +13,22 @@ export interface UserDataPreferences {
   personal_data: Array<"PHONE" | "EMAIL" | "FIRST AND LAST NAME" | "ADDRESS" | "BIRTHDATE" | "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS">;
 }
 
+export interface ServiceUser {
+    id: string;
+    username: string;
+    email: string;
+    profile_picture: string;
+    joined_on : number;
+    last_updated : number;
+    rights: {
+        id: string;
+        name: string;
+        hue: string;
+        description: string;
+    }[];
+}
+
+
 export interface ServiceAlert {
   title: string;
   message: string;

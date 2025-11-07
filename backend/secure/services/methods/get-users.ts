@@ -37,6 +37,8 @@ export async function getServiceUsers(serviceId : string) : Promise<ReplyType> {
                 id: user.id,
                 username: user.username,
                 email: user.email,
+                joined_on : userRight.created_at,
+                last_updated : userRight.updated_at,
                 rights: rightsNames,
                 profile_picture: user.profile_picture,
             });

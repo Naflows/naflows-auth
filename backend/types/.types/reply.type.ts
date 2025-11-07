@@ -24,6 +24,8 @@ export interface ReplyType {
             username: string;
             email: string;
             profile_picture: string;
+            joined_on : number;
+            last_updated : number;
             rights: {
                 id: string;
                 name: string;

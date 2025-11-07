@@ -7,11 +7,7 @@ export async function getUsers(req : Request, res : Response, user : User) {
 
     const serviceRT = await services.service.get(req.body.service_id);
     if (!serviceRT) {
-        return res.status(404).json({
-            success: false,
-            status : 404,
-            message: "Service not found."
-        });
+        return software.methods.directResponse(404, "Service not found.", res, req);
     }
 
     const service = serviceRT.data.service;
@@ -21,11 +17,7 @@ export async function getUsers(req : Request, res : Response, user : User) {
     const hasRight : boolean = await services.service.user.hasRight(user.id, service.id, "VIEW_USERS");
 
     if (!hasRight) {
-        return res.status(403).json({
-            success: false,
-            status : 403,
-            message: "Forbidden: You do not have permission to view users for this service."
-        });
+        return software.methods.directResponse(403, "Forbidden: You do not have permission to view service users.", res, req);
     }
 
     const reply = await services.service.user.getAll(service.id);
