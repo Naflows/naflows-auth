@@ -7,7 +7,7 @@ import { services } from "../../secure/services/dir";
 import { getPlans } from "../../secure/services/methods/get-plans";
 import { db } from "../..";
 import { ReplyType } from "../../types/.types/reply.type";
-import { NassServiceToken, Service, ServiceToken } from "../../types/.types/collections.type";
+import { NassServiceToken, Service, ServiceToken, UserSession } from "../../types/.types/collections.type";
 import nass from "../../nass/dir";
 import { before } from "node:test";
 import { sessionRenewal } from "../../middleware/methods/ssv/session-renewal";
@@ -792,6 +792,7 @@ describe("Test NASS Secure Verification Methods", () => {
                 expect(ssvRT).toBeDefined();
             });
 
+
             test("STV Creates New Token for New Session", async () => {
                 const ucr = fakeUCR();
                 ucr.client = serviceUCRData;
@@ -812,6 +813,49 @@ describe("Test NASS Secure Verification Methods", () => {
                 newSessionToken = result.data.token;
                 expect(newSessionToken).toBeDefined();
 
+                console.log(`New correct credentials : Session ID = ${sessionID} | Session Token = ${newSessionToken}`);
+
+            });
+
+            test("Session succesfully verified in idle mode", async () => {
+                const ucr = fakeUCR();
+                ucr.client = serviceUCRData;
+                ucr.user.session_id = sessionID;
+                ucr.request.url = "/test-tunnel-route";
+                ucr.user.token = newSessionToken;
+                delete ucr.user.password;
+                delete ucr.user.identifier;
+
+                const fakeReq = getFakeReq(ucr);
+                const res = getFakeRes();
+                const result: ReplyType = await secure.user.hiddenLogin(fakeReq, res, true);
+                expect(result.success).toBe(true);
+                expect(result.status).toBe(200);
+                expect(result.message).toBe("Login successful in idle mode.");
+            })
+
+            test("Session fails to verify when session expired", async () => {
+                // Manually expire the session in the database
+                let session = await secure.session.get(sessionID);
+                expect(session).toBeDefined();
+                expect(session?.id).toBe(sessionID);
+                session!.expires_at = 0; // Set expiration to 1 second in the past
+                await secure.session.update(sessionID, session);
+
+                const ucr = fakeUCR();
+                ucr.client = serviceUCRData;
+                ucr.user.session_id = sessionID;
+                ucr.request.url = "/test-tunnel-route";
+                ucr.user.token = newSessionToken;
+                delete ucr.user.password;
+                delete ucr.user.identifier;
+
+                const fakeReq = getFakeReq(ucr);
+                const res = getFakeRes();
+                const result: ReplyType = await secure.user.hiddenLogin(fakeReq, res, true);
+                expect(result.success).toBe(false);
+                expect(result.status).toBe(401);
+                expect(result.message).toBe("Unauthorized : Invalid token or session.");
             });
 
             test("STV Fails with Invalid Session Token", async () => {
@@ -829,9 +873,47 @@ describe("Test NASS Secure Verification Methods", () => {
                 expect(result.success).toBe(false);
                 expect(result.status).toBe(401);
                 expect(result.message).toBe("Invalid token or credentials provided.");
-
-                
             });
+
+
+
+            test("Session fails to verify with wrong session ID", async () => {
+                const ucr = fakeUCR();
+                ucr.client = serviceUCRData;
+                ucr.user.session_id = "invalid-session-id-value";
+                ucr.request.url = "/test-tunnel-route";
+                ucr.user.token = newSessionToken;
+                delete ucr.user.password;
+                delete ucr.user.identifier;
+
+                const fakeReq = getFakeReq(ucr);
+                const res = getFakeRes();
+                const result: ReplyType = await secure.user.hiddenLogin(fakeReq, res, true);
+                expect(result.success).toBe(false);
+                expect(result.status).toBe(401);
+                expect(result.message).toBe("Unauthorized: Session not found.");
+            });
+
+
+
+            test("Session fails to verify with invalid token", async () => {
+                const ucr = fakeUCR();
+                ucr.client = serviceUCRData;
+                ucr.user.session_id = sessionID;
+                ucr.request.url = "/test-tunnel-route";
+                ucr.user.token = "invalid-session-token-value";
+                delete ucr.user.password;
+                delete ucr.user.identifier;
+
+                const fakeReq = getFakeReq(ucr);
+                const res = getFakeRes();
+                const result: ReplyType = await secure.user.hiddenLogin(fakeReq, res, true);
+                expect(result.success).toBe(false);
+                expect(result.status).toBe(401);
+                expect(result.message).toBe("Unauthorized: Token does not match session.");
+            });
+
+
         });
     })
 
@@ -862,4 +944,6 @@ describe("Test NASS Secure Verification Methods", () => {
     //         expect(result.message).toBe("Tunnel request processed successfully.");
     //     });
     // })
+
+
 });

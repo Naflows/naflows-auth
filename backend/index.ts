@@ -398,9 +398,15 @@ app.post('/client/secure/data/services/build', async (req, res) => {
             middleware: req.middleware.data,
         }
     });
+});
 
-
-})
+app.post('/client/secure/session-check', async (req, res) => {
+    return res.status(200).json({
+        status: 200,
+        message: "Session is valid.",
+        success: true
+    });
+});
 
 app.post('/client/secure/data/user', async (req, res) => {
 

@@ -65,7 +65,16 @@ async function manageConnection(req: Request, res: Response, route: string, data
             client: service
         }
     }).then((result) => {
-        const resultData = result.data.data;
+        if (!result || !result.data) {
+            console.error("No response data received from NASS but the request was successful.");
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "No response data received from NASS."
+            });
+        }
+
+        const resultData = (result.data ? result.data.data : {}) || {};
 
         console.log("Response from NASS:", resultData);
 
@@ -75,7 +84,7 @@ async function manageConnection(req: Request, res: Response, route: string, data
         }
 
         console.log(`Final response data sent to client for route ${route}:`, resultData , "with status:", result.status);
-        res.status(result.status).json(resultData);
+        res.status(result.status || 200).json(resultData);
 
     }).catch((error) => {
         const errorCode = error.response ? error.response.status : 500;

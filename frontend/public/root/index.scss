@@ -25,6 +25,18 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+
+
+  .disclaimers__container {
+    display: flex;
+    width: 100% !important;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
+    .global__nass__disclaimer {
+      min-width: calc(100% - 40px - 2px);
+    }
+  }
 }
 
 .nass__page__loader {
@@ -55,18 +67,10 @@ body {
   flex-direction: column;
   gap: 10px;
 
-  &.fixed {
-    position: fixed;
-    top: 0;
-    border-radius: 0 0 8px 8px;
 
-    left: 1px;
-    z-index: 5000;
-  }
 
   backdrop-filter: blur(5px);
   width: fit-content;
-  min-width: calc(100% - 40px - 4px) !important;
 
   &.max-width {
     max-width: 600px !important;
@@ -570,6 +574,7 @@ body {
   flex-direction: column;
   align-items: start;
   margin-top: 130px;
+  max-width: 40%;
 
   .panel-body,
   .panel-footer {
@@ -582,6 +587,7 @@ body {
   .panel-body {
     align-items: start;
     padding: 50px 50px;
+    width: calc(100% - 100px);
   }
 
   .panel-footer {
@@ -1061,5 +1067,22 @@ a {
 
   .nass__page__loader {
     width: calc(90% - 40px) !important;
+  }
+}
+
+
+@media screen and (max-width: 1200px) {
+  .panel {
+    max-width: calc(100% - 40px) !important;
+    .panel-body {
+      .logo {
+        max-width: 200px !important;
+        height: auto !important;
+        object-fit: cover !important;
+        .inputs-container {
+          gap: 50px !important;
+        }
+      }
+    }
   }
 }

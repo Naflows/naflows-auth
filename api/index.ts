@@ -223,6 +223,10 @@ app.post('/set-user-info/notifications/mark-as-read', async (req: Request, res: 
     });
 });
 
+app.post('/client/secure/session-check', async (req: Request, res: Response) => {
+    await manageConnection(req,res,'/client/secure/session-check');
+});
+
 app.post('/get-user-info/notifications', async (req: Request, res: Response) => {
     await manageConnection(req,res,'/client/secure/data/notifications', {
         start: req.query.start || 0
