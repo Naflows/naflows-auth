@@ -16,6 +16,11 @@ router.post('/secure/services/get-logs', async (req, res) => {
     services.routes.logs(req, res, user);
 });
 
+router.post('/secure/services/get-users', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    services.routes.getUsers(req, res, user);
+});
+
 router.post('/secure/services/get-traffic', async (req, res) => {
     const user = await secure.user.manageConnection(req, res);
     services.routes.traffic(req, res, user);

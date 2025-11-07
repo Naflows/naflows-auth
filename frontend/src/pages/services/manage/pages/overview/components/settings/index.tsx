@@ -10,9 +10,9 @@ const ServiceSettings = ({
 }) => {
     if (service) {
         return (
-            <div className="service__tab__content">
+            <div className="service__tab__content user__body__section">
                 <div className="tab__content__section">
-                    <Switch label="Enable Service" checked={service.active != "ACTIVE"} onChange={(value) => { return value }} description="Toggle to enable or disable the service" />
+                    <Switch label="Enable Service" checked={service.status != "ACTIVE"} onChange={(value) => { return value }} description="Toggle to enable or disable the service" />
                 </div>
             </div>
         )

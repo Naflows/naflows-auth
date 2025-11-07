@@ -39,6 +39,9 @@ import { getTrafficLogRoute } from "./methods/global/get-traffic-log";
 import { getTrafficLog } from "./logs/get-traffic-log";
 import { getKeyByUser } from "./methods/dev/key-by-user";
 import { getServiceAlerts } from "./methods/get-service-alerts";
+import { getServiceUsers } from "./methods/get-users";
+import { getUsers } from "./methods/global/get-users";
+import { userHasRight } from "./rights/methods/hasRight";
 
 
 
@@ -50,7 +53,8 @@ export const services = {
         createRights : createRights,
         serviceKey : getApiKey,
         canAccess : checkUserAccess,
-        traffic : getTrafficLogRoute
+        traffic : getTrafficLogRoute,
+        getUsers : getUsers
     },
     service: {
         register: registerService,
@@ -67,6 +71,8 @@ export const services = {
             isDev: isDevFromService,
             getKeyByValue: getDevKeyByValue,
             getRights : getRightsByUser,
+            getAll : getServiceUsers,
+            hasRight : userHasRight
         },
         logs: {
             create: createServiceLogEntry,
