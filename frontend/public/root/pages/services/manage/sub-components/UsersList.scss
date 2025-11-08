@@ -19,11 +19,7 @@
   border: 1px solid $_2k25-background-hue-50-transparent;
   border-radius: 8px;
   transition: background-color 0.2s ease-in-out;
-  cursor: pointer;
 
-  &:hover {
-    background-color: $_2k25-background-hue-darker-2-transparent;
-  }
   .user__item__avatar {
     width: 40px;
     height: 40px;
@@ -50,6 +46,34 @@
         font-size: 14px;
         opacity: 0.8;
       }
+      .user__item__uid {
+        font-size: 12px;
+        opacity: 0.6;
+        margin-top: 2px;
+        align-items: center;
+        display: flex;
+        gap: 5px;
+        .user__item__id {
+          font-family: monospace;
+        }
+        button {
+          margin-left: 5px;
+          padding: 2px 5px;
+          border-radius: 4px;
+          background-color: $_2k25-background-hue-50-transparent;
+          border: 1px solid $_2k25-background-hue-50-transparent;
+          cursor: pointer;
+          transition: background-color 0.2s ease-in-out;
+          &:hover {
+            background-color: $_2k25-background-hue-darker-2-transparent;
+          }
+          svg {
+            width: 15px;
+            height: 15px;
+            color : $_2k25-darker;
+          }
+        }
+      }
     }
   }
   .user__item__rights {
@@ -57,14 +81,38 @@
     flex-direction: row;
     gap: 8px;
     width: 40%;
-    align-self: stretch;
-    align-items: center;
+    align-items: start;
     flex-wrap: wrap;
+    .add-button {
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      min-height: 23px;
+      justify-content: center;
+      color: $_2k25-darker;
+      transition: background-color 0.2s ease-in-out;
+      background-color: $_2k25-background-hue-50-transparent;
+      border: 1px solid $_2k25-background-hue-50-transparent;
+      &:hover {
+        background-color: $_2k25-background-hue-darker-2-transparent;
+      }
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
     .user__item__right {
       padding: 2px 6px;
       border-radius: 4px;
       font-weight: 500;
       height: fit-content;
+      min-height: 23px;
+      display: flex;
+      border: 1px solid $_2k25-background-hue-50-transparent;
+      align-items: center;
+      justify-content: end;
     }
   }
 
@@ -77,6 +125,22 @@
     text-align: right;
     .user__item__date {
       margin-top: 2px;
+    }
+  }
+
+  .user__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    .user__action__manage {
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    .user__action__remove {
+      padding: 5px 10px;
+      border-radius: 5px;
     }
   }
 }

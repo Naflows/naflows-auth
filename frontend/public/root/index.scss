@@ -884,6 +884,7 @@ button * {
   }
 }
 
+
 .secondary-button {
   background-color: transparent;
   border: none;
@@ -935,6 +936,38 @@ button * {
 
   svg {
     fill: $_2k25-text !important;
+  }
+}
+
+
+.danger-button {
+  background-color: transparent;
+  border: none;
+  color: $da-error-hue;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  transition: 0.3s;
+  width: fit-content;
+  height: fit-content;
+  text-wrap: nowrap;
+  border: 2px solid $_2k25-background-hue-50-transparent;
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background-color: $da-error-hue-transparent;
+    color: $da-error-hue;
+    border-color: $da-error-hue-transparent;
+    svg {
+      stroke: $da-error-hue;
+    }
   }
 }
 
