@@ -45,9 +45,8 @@ export async function acceptLogin(
             session: (newSessionID.data as any)?.session,
             token: (newTokenID.data as any)?.token,
             user_id: _user.id,
-
         });
     } else {
-        return software.methods.serverReply(200, "Login successful in idle mode.");
+        return software.methods.serverReply(200, "Login successful in idle mode.", {}, true);
     }
 }

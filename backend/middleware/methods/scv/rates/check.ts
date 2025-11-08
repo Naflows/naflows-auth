@@ -12,7 +12,6 @@ import middleware from "../../../dir";
 export async function checkRates(UCR: UCRType): Promise<ReplyType> {
   const ratesCollection = db.collection("requests") as Collection<Requests>;
   if (ratesCollection) {
-    console.log(`Searching for service ${UCR.client.service}`)
 
     const serviceId = UCR.client.service;
 
@@ -50,7 +49,6 @@ export async function checkRates(UCR: UCRType): Promise<ReplyType> {
       });
 
       if (!userRequest) {
-        console.log(`No user request found for IP: ${UCR.user.ip}, UserAgent: ${UCR.user.agent}`);
         const newRequest: UserRequest = {
           last_requests: [Date.now()],
           request_number: 1,
@@ -64,7 +62,6 @@ export async function checkRates(UCR: UCRType): Promise<ReplyType> {
 
       const timeoutSeconds = process.env.BLACKLIST_RATES_TIMEOUT ? parseInt(process.env.BLACKLIST_RATES_TIMEOUT) : 60;
       const rateLimit = process.env.BLACKLIST_RATES ? parseInt(process.env.BLACKLIST_RATES) : 100;
-      console.log(`User request found: ${JSON.stringify(userRequest)}`);
 
       if (
         // Calculate the amount of requests in the last BLACKLIST_RATES seconds

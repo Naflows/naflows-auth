@@ -17,7 +17,7 @@ export async function hiddenLogin(req: Request, res: Response, preventMiddleware
     const session_id = req.body.user.session_id;
     const uid = req.body.user.user_id;
 
-    console.log("Hidden Login Attempt:", { tokenValue, session_id, uid });
+
     if (!tokenValue || !session_id || !uid) {
         return software.methods.serverReply(400, "Bad Request: Missing parameters.");
     }
@@ -28,7 +28,7 @@ export async function hiddenLogin(req: Request, res: Response, preventMiddleware
         return software.methods.serverReply(401, "Unauthorized: Session not found.");
     }
 
-    console.log("----- Session Retrieved for Hidden Login:", session , " -----");
+
     const tokenBySession = await secure.token.get(session.token_id, true);
     if (!tokenBySession || secure.verify(tokenValue, tokenBySession.token) === false) {
         return software.methods.serverReply(401, "Unauthorized: Token does not match session.");

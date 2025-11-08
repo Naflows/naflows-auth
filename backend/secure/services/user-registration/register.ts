@@ -51,6 +51,19 @@ export default async function registerUserInAPI(user: User, apiID: string, codeN
             { upsert: true }
         );
 
+        const userRight = await services.service.rights.get("User", apiID, "SERVICE_BY_NASS");
+
+        if (!userRight) {
+            return software.methods.serverReply(500, "Failed to retrieve 'User' right for the service.");
+        }
+
+        // Assign 'User' right to the user for this service
+        const serviceUserRight = await services.service.rights.assign(userRight.id, user.id, apiID);
+
+        if (!serviceUserRight.success) {
+            return software.methods.serverReply(500, "Failed to assign 'User' right to the user for the service.");
+        }
+
         const serviceActualize = await servicesCollection.updateOne(
             { id: apiID },
             {
@@ -68,7 +81,7 @@ export default async function registerUserInAPI(user: User, apiID: string, codeN
             "INFO",
             {
                 title: "Welcome to " + serviceData.name + "!",
-                message: `You have been successfully registered to the ${ serviceData.name } service. You can now access the service using your Naflows account.`,
+                message: `You have been successfully registered to the ${serviceData.name} service. You can now access the service using your Naflows account.`,
                 link: "https://nass.naflows.com/account/services/" + apiID,
                 associated_service: apiID
             },

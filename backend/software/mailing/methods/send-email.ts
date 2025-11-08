@@ -25,6 +25,7 @@ async function sendEmail(by = process.env.SMTP_USER, to, subject, content): Prom
     if (!info) {
       return software.methods.serverReply(500, "Failed to send email for unknown reasons.");
     } else {
+      console.log('Email sent: %s', info.messageId);
       return software.methods.serverReply(200, "Email sent successfully.");
     }
 

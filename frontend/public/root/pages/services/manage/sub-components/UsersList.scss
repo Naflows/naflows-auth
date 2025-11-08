@@ -1,15 +1,26 @@
 @import "../../../../variables.scss";
 
+.users__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
 .user__item {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 15px;
+  justify-content: space-between;
   padding: 10px;
   border: 1px solid $_2k25-background-hue-50-transparent;
   border-radius: 8px;
   transition: background-color 0.2s ease-in-out;
   cursor: pointer;
+
   &:hover {
     background-color: $_2k25-background-hue-darker-2-transparent;
   }
@@ -26,9 +37,11 @@
     display: flex;
     flex-direction: row;
     gap: 15px;
+    width: 20%;
     .item__info__header {
       display: flex;
       flex-direction: column;
+
       .user__item__username {
         font-weight: 600;
         font-size: 16px;
@@ -43,14 +56,15 @@
     display: flex;
     flex-direction: row;
     gap: 8px;
-    margin-top: 4px;
-    max-width: 50%;
-    min-width: 50%;
+    width: 40%;
+    align-self: stretch;
+    align-items: center;
     flex-wrap: wrap;
     .user__item__right {
       padding: 2px 6px;
       border-radius: 4px;
       font-weight: 500;
+      height: fit-content;
     }
   }
 
@@ -58,6 +72,7 @@
     display: flex;
     flex-direction: column;
     font-size: 12px;
+    width: 20%;
     opacity: 0.7;
     text-align: right;
     .user__item__date {

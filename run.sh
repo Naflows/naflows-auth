@@ -61,3 +61,6 @@ echo -e "\033[1;32mAll services should be running. Showing logs...\033[0m"
 
 # Run all logs with profiles
 COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,dummy-api" docker compose logs -f
+
+# Open a new terminal and run the auth-api logs only
+gnome-terminal -- bash -c 'COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,dummy-api" docker compose logs -f auth-api; exec bash'

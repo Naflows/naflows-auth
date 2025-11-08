@@ -320,8 +320,83 @@ body {
   }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1200px) {
+  .nass__page {
+    width: calc(100% - 50px) !important;
+    padding-left: 0 !important;
+    padding-top: 100px !important;
+    margin-left: 0 !important;
+  }
 
+  .nass__account__page__header,
+  .nass__account__page__header.collapsed {
+    flex-direction: row;
+    width: calc(100vw - 40px) !important;
+    height: auto;
+    padding: 10px 20px;
+    justify-content: space-between;
+    .header__tabs {
+      display: flex;
+      flex-direction: row;
+      gap: 30px !important;
+      .tabs {
+        flex-direction: row;
+        gap: 20px;
+        width: fit-content;
+        justify-content: center;
+        gap: 5px !important;
+        .header__tab {
+          .tab__content {
+            gap: 5px !important;
+          }
+          .tab__content .tab-label {
+            display: flex !important;
+          }
+          width: fit-content !important;
+        }
+      }
+    }
+    .header__footer__content {
+      margin-left: auto;
+      flex-direction: row;
+      width: fit-content;
+      justify-content: space-between;
+      .header__account {
+        width: fit-content;
+
+        .user__header__visual__access {
+          flex-direction: row !important;
+          align-items: center !important;
+          padding: 5px 10px !important;
+          width: fit-content !important;
+          min-width: unset !important;
+          border-radius: 10px !important;
+          padding: 0 !important;
+          border: none !important;
+          .user__header__content {
+            display: none;
+          }
+          .user__header__visual__hover {
+            display: flex !important;
+            button {
+              display: flex !important;
+              padding: 10px 15px !important;
+              span {
+                display: inline !important;
+              }
+            }
+          }
+        }
+
+        .secondary-button {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
   .nass__account__page__header.collapsed {
     width: calc(100vw - 20px) !important;
     height: auto;

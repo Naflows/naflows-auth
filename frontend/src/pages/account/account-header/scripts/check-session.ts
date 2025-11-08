@@ -2,8 +2,8 @@ import axios from "axios";
 import { useEffect } from "react";
 
 const useSessionValid = () => {
-    const x = 2; // seconds - normally 60
-    const y = 2;
+    const x = 60; // seconds - normally 60
+    const y = 60;
 
     useEffect(() => {
         let intervalId: number | null = null;
