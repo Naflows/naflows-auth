@@ -169,17 +169,20 @@
   }
 }
 
-
 #rights-process-done {
   display: flex;
   flex-direction: row;
   gap: 10px;
   align-items: center;
   &.success {
-    svg {fill: $da-confirm-hue;}
+    svg {
+      fill: $da-confirm-hue;
+    }
   }
   &.error {
-    svg {fill: $da-error-hue;}
+    svg {
+      fill: $da-error-hue;
+    }
   }
   svg {
     width: 40px;
@@ -228,7 +231,7 @@
     transition: all 0.3s ease-in-out;
     opacity: 0;
     animation: RightCardAppears 0.3s ease-in-out forwards;
-    position:relative;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -258,6 +261,58 @@
         opacity: 1;
       }
     }
+  }
+}
 
+.nass__rights__table {
+  #right-name {
+    width: 30%;
+  }
+  #right-description {
+    width: 70%;
+  }
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  .nass__rights__table__header {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid $_2k25-background-hue-40;
+    align-items: center;
+    background-color: $_2k25-background-hue-40;
+    border-radius: 5px;
+    .nass__rights__table__header__item {
+      font-size: 14px;
+      font-weight: 600;
+      color: $da-secondary-hue-lighter-2;
+      text-transform: uppercase;
+    }
+  }
+
+  .nass__rights__table__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    .nass__rights__table__row {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      cursor: pointer;
+      padding: 10px;
+      border: 1px solid $_2k25-background-hue-40;
+      align-items: center;
+      border-radius: 5px;
+      &:hover {
+        background-color: $_2k25-background-hue-50-transparent;
+      }
+      &.selected {
+        background-color: $da-secondary-hue-transparent;
+        border: 1px solid $da-secondary-hue;
+        color: $da-secondary-hue-lighter-2;
+      }
+    }
   }
 }

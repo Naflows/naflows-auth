@@ -125,6 +125,14 @@ app.post('/nass/instance/connect', async (req: Request, res: Response) => {
     });
 });
 
+app.post('/user/secure/service/rights/assign', async (req: Request, res: Response) => {
+    await manageConnection(req,res,'/client/secure/services/rights/assign', { 
+        rightsIDs: req.body.rightsIDs,
+        serviceID: req.body.serviceID,
+        userID: req.body.userID,
+    });
+});
+
 
 
 

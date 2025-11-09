@@ -61,7 +61,7 @@ const RightComponent = ({ rights, type, service, userInfo }: { rights: ServiceUs
                         left: left,
                     }}
                 >
-                    <AddUserRight service={service} type={type} currentRights={rights} />
+                    <AddUserRight service={service} type={type} currentRights={rights} userID={userInfo.id} />
                 </div>
             )}
 
@@ -133,14 +133,16 @@ const ListedUser = ({ user, service }: { user: ServiceUser, service: ServicesFor
 
             </div>
 
-            <div className="user__item__dates">
-                <span className="user__item__joined">Joined: {createdAtToAgo(user.joined_on)}</span>
-                <span className="user__item__last-updated">Last Updated: {createdAtToAgo(user.last_updated)}</span>
-            </div>
+            <div className="user__additional__content">
+                <div className="user__item__dates">
+                    <span className="user__item__joined">Joined: {createdAtToAgo(user.joined_on)}</span>
+                    <span className="user__item__last-updated">Last Updated: {createdAtToAgo(user.last_updated)}</span>
+                </div>
 
-            <div className="user__actions">
-                <button className={`user__action__manage secondary-button ${!user.you_can_manage || user.you ? "inactive" : ""}`}>Manage</button>
-                <button className={`user__action__remove tertiary-button danger-button ${!user.you_can_manage || user.you ? "inactive" : ""}`}>Expulse</button>
+                <div className="user__actions">
+                    <button className={`user__action__manage secondary-button ${!user.you_can_manage || user.you ? "inactive" : ""}`}>Manage</button>
+                    <button className={`user__action__remove tertiary-button danger-button ${!user.you_can_manage || user.you ? "inactive" : ""}`}>Expulse</button>
+                </div>
             </div>
         </div>
     )

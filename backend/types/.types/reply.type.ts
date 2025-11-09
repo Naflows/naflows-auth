@@ -24,8 +24,8 @@ export interface ReplyType {
             username: string;
             email: string;
             profile_picture: string;
-            joined_on : number;
-            last_updated : number;
+            joined_on: number;
+            last_updated: number;
             rights: {
                 id: string;
                 name: string;
@@ -33,6 +33,8 @@ export interface ReplyType {
                 description: string;
             }[];
         }[];
+        services?: Service[];
+        alerts? : string[];
 
     };
 }

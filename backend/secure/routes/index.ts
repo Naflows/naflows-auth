@@ -48,6 +48,11 @@ router.post('/secure/services/user/check-access', async (req,res) => {
     services.routes.canAccess(req, res, user);
 })
 
+router.post('/secure/services/rights/assign', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    services.routes.assignRights(req, res, user);
+});
+
 
 
 module.exports = router;

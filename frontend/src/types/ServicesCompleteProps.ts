@@ -9,7 +9,8 @@ export interface ServicesCompleteBodyProps {
     joined_at: number; // Date when the user joined the service
     user_active: boolean; // Whether the user's account in the service is active
     created_at: number; // Date when the service was created
-    
+    created_by: string; // User ID of the user who created the service
+    is_user_developer: boolean; // Whether the user is a developer of the service
     data_preferences: {
         usage_data: "NONE" | "BASIC" | "FULL"; // Level of usage data the service can access
         personal_data: Array<"PHONE" | "EMAIL" | "FIRST AND LAST NAME" | "ADDRESS" | "BIRTHDATE" | "ACCOUNT SECURITY MEASURES" | "BILLING DETAILS">;
@@ -35,6 +36,7 @@ export interface ServicesCompleteBodyProps {
         privacy_policy_url?: string;
         terms_of_service_url?: string;
         contact_email?: string;
-    }
+    },
+    user_authorizations?: Record<string, boolean>; // Map of user IDs to whether they are authorized developers for the service
 
 }

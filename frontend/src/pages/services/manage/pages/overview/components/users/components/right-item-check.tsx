@@ -5,8 +5,6 @@ import SmallRight from "./small-right";
 
 const RightItemCheck = ({
     list,
-    currentRights,
-    filtered,
     setCurrentRights,
     setFiltered,
     selected

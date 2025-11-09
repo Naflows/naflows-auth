@@ -173,6 +173,7 @@ export interface Service {
     allow_public_visibility: boolean; // Whether the service is visible in the public services list or not
     required_data?: UserDataPreferences["personal_data"]; // What personal data is required for a user to register in the service
   },
+  user_authorizations? : Record<string, boolean>; // Map of user IDs to whether they are authorized developers for the service
   details: {
     access_key? : string; // Secure key for developer access
     users: number; // Number of users in the service

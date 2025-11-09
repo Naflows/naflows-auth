@@ -42,7 +42,9 @@ const Account = () => {
       console.log(userData.data.user)
       setUserFetch(userData.data.user as UserBodyProps);
       if (selectedTab === "services") {
+        console.log("Fetched services data:", res, "is  ");
         setServicesFetch(res.data.services as ServicesBodyProps[]);
+        console.log("Services data set:", res.data.services);
       }
       setSuccessfulFetch(true);
     } catch (error) {

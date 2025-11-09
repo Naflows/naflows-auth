@@ -2,19 +2,22 @@ import { useEffect, useState } from "react";
 import type { ServiceRights } from "../../../../../../../../types/TunnelingTypes";
 import type { ServicesForUserProps, ServiceUser } from "../../../../../../../../types/ServicesForUserProps";
 import { fetchRights } from "../scripts/fetch-rights-list";
-import SmallRight from "./small-right";
 import Loader from "../../../../../../../../global/components/Loader";
 import RightItemCheck from "./right-item-check";
+import { postRightsList } from "../scripts/post-rights-list";
 
 const AddUserRight = ({
     service,
     type,
-    currentRights
+    currentRights,
+    userID
 }: {
     service: ServicesForUserProps | null,
     type: "SERVICE_BY_NASS" | "SERVICE_BY_INSTANCE",
-    currentRights: ServiceUser["rights"]
+    currentRights: ServiceUser["rights"],
+    userID: string
 }) => {
+
     const [loadServices, setLoadServices] = useState<boolean>(true);
     const [load, setLoad] = useState<boolean>(true);
 
@@ -54,7 +57,8 @@ const AddUserRight = ({
         const originalIds = currentRights.map(r => r.id).sort();
         const isChanged = JSON.stringify(currentIds) !== JSON.stringify(originalIds);
         setChanged(isChanged);
-    }, [current, filtered]);
+    }, [current, filtered, currentRights]);
+    if (!service) return null;
 
     return (
         <div className="add-rights__container">
@@ -114,13 +118,17 @@ const AddUserRight = ({
                     )}
                 </div>
 
-                <button className="primary-button width-100-auto" onClick={() => {
-                    // Logic to save the current rights
-                    // This could involve calling an API to update the user's rights
+                <button className="primary-button width-100-auto" onClick={async () => {
+                    await postRightsList(userID, service.id, current.map(r => r.id));
+                    // Update original to current
+                    setOriginal({
+                        ...current as unknown as ServiceRights[]
+                    });
+                    setChanged(false);
                 }} style={{
                     display : changed ? "block" : "none"
                 }}>
-                    Save Rights
+                    Save
                 </button>
             </div>
         </div>

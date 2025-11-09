@@ -43,6 +43,11 @@ import { getServiceUsers } from "./methods/get-users";
 import { getUsers } from "./methods/global/get-users";
 import { userHasRight } from "./rights/methods/hasRight";
 import { canUserManageOthers } from "./rights/methods/can-user-manage-others";
+import { assignRights } from "./methods/global/assign-rights";
+import { updateRights } from "./rights/methods/update-rights";
+import { getUserServices } from "./methods/get-own-services";
+import { unregisterDev } from "./methods/dev/unregister-dev";
+import { NassAuthorForDev } from "./methods/dev/all-nass-author";
 
 
 
@@ -55,7 +60,8 @@ export const services = {
         serviceKey : getApiKey,
         canAccess : checkUserAccess,
         traffic : getTrafficLogRoute,
-        getUsers : getUsers
+        getUsers : getUsers,
+        assignRights : assignRights
     },
     service: {
         register: registerService,
@@ -74,7 +80,9 @@ export const services = {
             getRights : getRightsByUser,
             getAll : getServiceUsers,
             hasRight : userHasRight,
-            canManageUserInService : canUserManageOthers
+            canManageUserInService : canUserManageOthers,
+            updateRights : updateRights,
+            getAllService : getUserServices
         },
         logs: {
             create: createServiceLogEntry,
@@ -86,7 +94,9 @@ export const services = {
             register: registerServiceDev,
             login: devLogin,
             getUserByKey: getUserByKey,
-            getKey : getKeyByUser
+            getKey : getKeyByUser,
+            unregister : unregisterDev,
+            authorizations: NassAuthorForDev
         },
         key: {
             getByApi: getKeyByIPID,
