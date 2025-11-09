@@ -15,12 +15,6 @@ import { checkTokenRights } from "../../middleware/methods/stv/check-rights";
 import { software } from "../../software/dir";
 
 
-beforeAll(async () => {
-    // Ensure database connection is established before running tests
-    if (mongoose.connection.readyState === 0) {
-        await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/nass");
-    }
-});
 
 describe("Test NASS Secure Verification Methods", () => {
 
@@ -54,11 +48,8 @@ describe("Test NASS Secure Verification Methods", () => {
 
     describe("Check Blacklist Middleware", () => {
         test("Non-Blacklisted IP", async () => {
-            const req: any = {
-                ip: "123.456.789.000"
-            };
             // Excluding res because it is only used to serve the blacklist page
-            const result = await middleware.check.blacklist(getFakeRes(), req.ip);
+            const result = await middleware.check.blacklist(getFakeRes(), "123.456.789.000");
             expect(result.success).toBe(true);
             expect(result.status).toBe(200);
             expect(result.message).toBe("IP is not blacklisted.");
