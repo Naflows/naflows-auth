@@ -8,7 +8,7 @@ import ServiceRights from "./small-right";
 
 
 
-const RightComponent = ({ rights, type, service, userInfo }: { rights: ServiceUser["rights"], type: "SERVICE_BY_NASS" | "SERVICE_BY_INSTANCE", service: ServicesForUserProps | null, userInfo: ServiceUser }) => {
+const RightComponent = ({ rights, type, service, userInfo, setCurrentRights }: { rights: ServiceUser["rights"], type: "SERVICE_BY_NASS" | "TUNNELING_BY_INSTANCE", service: ServicesForUserProps | null, userInfo: ServiceUser, setCurrentRights: React.Dispatch<React.SetStateAction<ServiceUser["rights"]>>  }) => {
     const buttonRef = useRef<HTMLDivElement>(null);
     const popupRef = useRef<HTMLDivElement>(null);
     const [top, setTop] = useState<string>("0px");
@@ -61,7 +61,7 @@ const RightComponent = ({ rights, type, service, userInfo }: { rights: ServiceUs
                         left: left,
                     }}
                 >
-                    <AddUserRight service={service} type={type} currentRights={rights} userID={userInfo.id} />
+                    <AddUserRight service={service} type={type} currentRights={rights} userID={userInfo.id} setCurrentRights={setCurrentRights} />
                 </div>
             )}
 
@@ -71,6 +71,7 @@ const RightComponent = ({ rights, type, service, userInfo }: { rights: ServiceUs
             </span>
             <div className="list">
                 {rights.map((right) => {
+                    console.log("Rendering right:", right, "for type:", type);
                     if (right.type === type) {
                         return (
                             <ServiceRights key={right.id} id={right.id} name={right.name} hue={right.hue} />
@@ -97,7 +98,7 @@ const RightComponent = ({ rights, type, service, userInfo }: { rights: ServiceUs
 
 const ListedUser = ({ user, service }: { user: ServiceUser, service: ServicesForUserProps | null }) => {
 
-
+    const [currentRights, setCurrentRights] = useState<ServiceUser["rights"]>(user.rights);
 
     return (
         <div key={user.id} className="user__item">
@@ -124,10 +125,10 @@ const ListedUser = ({ user, service }: { user: ServiceUser, service: ServicesFor
 
                 <>
                     {(
-                        <RightComponent rights={user.rights} type="SERVICE_BY_NASS" service={service} userInfo={user} />
+                        <RightComponent rights={currentRights} type="SERVICE_BY_NASS" service={service} userInfo={user} setCurrentRights={setCurrentRights} />
                     )}
                     {(
-                        <RightComponent rights={user.rights} type="SERVICE_BY_INSTANCE" service={service} userInfo={user} />
+                        <RightComponent rights={currentRights} type="TUNNELING_BY_INSTANCE" service={service} userInfo={user} setCurrentRights={setCurrentRights} />
                     )}
                 </>
 

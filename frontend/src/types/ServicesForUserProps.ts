@@ -14,30 +14,30 @@ export interface UserDataPreferences {
 }
 
 export interface ServiceUser {
+  id: string;
+  username: string;
+  email: string;
+  profile_picture: string;
+  joined_on: number;
+  last_updated: number;
+  rights: {
     id: string;
-    username: string;
-    email: string;
-    profile_picture: string;
-    joined_on : number;
-    last_updated : number;
-    rights: {
-        id: string;
-        name: string;
-        hue: string;
-        description: string;
-        type: "SERVICE_BY_NASS" | "TUNNELING_BY_INSTANCE";
-    }[];
-    you_can_manage : boolean;
-    you : boolean;
+    name: string;
+    hue: string;
+    description: string;
+    type: "SERVICE_BY_NASS" | "TUNNELING_BY_INSTANCE";
+  }[];
+  you_can_manage: boolean;
+  you: boolean;
 }
 
 
 export interface ServiceAlert {
   title: string;
   message: string;
-  instructions ?: string; // Optional instructions to resolve the alert
+  instructions?: string; // Optional instructions to resolve the alert
   type: "info" | "warning" | "error" | "success";
-  link ?: string; // Optional link to more information about the alert
+  link?: string; // Optional link to more information about the alert
 }
 interface ServicesForUserProps {
   id: string; // Service ID
@@ -53,41 +53,43 @@ interface ServicesForUserProps {
   apiKey?: string; // The API key associated with the service
   picture?: string; // URL to the service picture, optional
   banner?: string; // URL to the service banner, optional
-  approved : boolean; // Whether the service has been approved by the NASS team or not
+  approved: boolean; // Whether the service has been approved by the NASS team or not
   public_settings: {
     allow_user_registration: boolean; // Whether the service allows user registration or not
     allow_service_connection: boolean; // Whether the service allows connection from other services or not
     allow_public_visibility: boolean; // Whether the service is visible in the public services list or not
     required_data?: UserDataPreferences["personal_data"]; // What personal data is required for a user to register in the service
   },
-  is_user_developer : boolean; // Whether the user is a developer of the service
+  is_user_developer: boolean; // Whether the user is a developer of the service
   details: {
-    access_key? : string; // Secure key for developer access
+    access_key?: string; // Secure key for developer access
     users: number; // Number of users in the service
     official?: boolean; // Whether the service is verified or not, verified services are services that have been verified by the NASS team to be legitimate and secure
-    user_is_registered? : boolean; // Whether the user is registered in the service
-    owner? : {
-      username : string;
-      profile_picture : string;
-      verified : boolean;
-      first_name? : string;
-      last_name? : string;
+    user_is_registered?: boolean; // Whether the user is registered in the service
+    owner?: {
+      username: string;
+      profile_picture: string;
+      verified: boolean;
+      first_name?: string;
+      last_name?: string;
     },
-    public : {
-      privacy_policy_url? : {
-        url : string,
-        approved : boolean
+    public: {
+      privacy_policy_url?: {
+        url: string,
+        approved: boolean
       };
-      terms_of_service_url? : {
-        url : string,
-        approved : boolean
+      terms_of_service_url?: {
+        url: string,
+        approved: boolean
       };
-      contact_email? : {
-        email : string,
-        approved : boolean
+      contact_email?: {
+        email: string,
+        approved: boolean
       };
     }
   },
-  alerts? : ServiceAlert[]; // Alerts related to the service
+  user_authorizations?: Record<string, boolean>; // Map of user IDs to whether they are authorized developers for the service
+
+  alerts?: ServiceAlert[]; // Alerts related to the service
 }
 export type { ServicesForUserProps };

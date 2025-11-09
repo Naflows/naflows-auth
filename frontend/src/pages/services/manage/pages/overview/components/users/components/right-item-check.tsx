@@ -7,14 +7,15 @@ const RightItemCheck = ({
     list,
     setCurrentRights,
     setFiltered,
-    selected
+    selected,
+    setCurrentAllTypes
 }: {
     list: ServiceUser["rights"] | ServiceRights[],
-    currentRights: ServiceUser["rights"],
     filtered: ServiceRights[],
     setCurrentRights: React.Dispatch<React.SetStateAction<ServiceUser["rights"]>>,
     setFiltered: React.Dispatch<React.SetStateAction<ServiceRights[]>>,
-    selected?: boolean
+    selected?: boolean,
+    setCurrentAllTypes: React.Dispatch<React.SetStateAction<ServiceUser["rights"]>>;
 }) => {
     return (
 
@@ -40,11 +41,13 @@ const RightItemCheck = ({
                             setCurrentRights(prev => prev.filter(r => r.id !== right.id));
                             // Add to filtered
                             setFiltered(prev => [...prev, right as ServiceRights]);
+                            setCurrentAllTypes(prev => prev.filter(r => r.id !== right.id));
                         } else {
                             // Add to currentRights
                             setCurrentRights(prev => [...prev, right as ServiceUser["rights"][0]]);
                             // Remove from filtered
                             setFiltered(prev => prev.filter(r => r.id !== right.id));
+                            setCurrentAllTypes(prev => [...prev, right as ServiceUser["rights"][0]]);
                         }
                     }}
                 >

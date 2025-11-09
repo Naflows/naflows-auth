@@ -14,9 +14,9 @@ export async function NassAuthorForDev(devID : string, serviceId : string) : Pro
     const associatedRights: Record<string, boolean> = {};
     for (const right of devRights) {
         const r = await services.service.rights.get(right.id, serviceId, "SERVICE_BY_NASS");
-        if (right) {
-            right.rights.forEach((r) => {
-                associatedRights[r] = true;
+        if (r) {
+            r.rights.forEach((a) => {
+                associatedRights[a] = true;
             })
         }
     }

@@ -10,12 +10,14 @@ const AddUserRight = ({
     service,
     type,
     currentRights,
+    setCurrentRights,
     userID
 }: {
     service: ServicesForUserProps | null,
-    type: "SERVICE_BY_NASS" | "SERVICE_BY_INSTANCE",
+    type: "SERVICE_BY_NASS" | "TUNNELING_BY_INSTANCE",
     currentRights: ServiceUser["rights"],
-    userID: string
+    userID: string,
+    setCurrentRights: React.Dispatch<React.SetStateAction<ServiceUser["rights"]>>;
 }) => {
 
     const [loadServices, setLoadServices] = useState<boolean>(true);
@@ -43,7 +45,6 @@ const AddUserRight = ({
                     setFiltered(instanceRights.filter((n) => !currentRights.some(cr => cr.id === n.id)));
                     // Filter current based on type
                     setCurrent(currentRights.filter((cr) => instanceRights.some(n => n.id === cr.id)));
-
                 }
             });
             setLoadServices(false);
@@ -86,11 +87,11 @@ const AddUserRight = ({
                                 <h5>Current Rights</h5>
                                 <RightItemCheck 
                                     list={current} 
-                                    currentRights={current} 
                                     filtered={filtered} 
                                     setCurrentRights={setCurrent} 
                                     setFiltered={setFiltered}
                                     selected={true}
+                                    setCurrentAllTypes={setCurrentRights}
                                 />
                                 {current.length === 0 && (
                                     <p className="no-rights__message">
@@ -102,11 +103,11 @@ const AddUserRight = ({
                                 <h5>Available Rights</h5>
                                 <RightItemCheck 
                                     list={filtered} 
-                                    currentRights={current} 
                                     filtered={filtered} 
                                     setCurrentRights={setCurrent} 
                                     setFiltered={setFiltered}
                                     selected={false}
+                                    setCurrentAllTypes={setCurrentRights}
                                 />
                                 {filtered.length === 0 && (
                                     <p className="no-rights__message">
@@ -119,7 +120,14 @@ const AddUserRight = ({
                 </div>
 
                 <button className="primary-button width-100-auto" onClick={async () => {
-                    await postRightsList(userID, service.id, current.map(r => r.id));
+                    // Create an array of all current right IDs for both types 
+                    const IDs = [
+                        ...currentRights.map(r => r.id),
+                    ]
+
+                    console.log("Submitting rights IDs:", IDs);
+
+                    await postRightsList(userID, service.id, IDs);
                     // Update original to current
                     setOriginal({
                         ...current as unknown as ServiceRights[]

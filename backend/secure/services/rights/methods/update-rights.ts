@@ -20,9 +20,28 @@ export async function updateRights(userId : string, serviceId : string, rightsId
         return software.methods.serverReply(404, "User rights not found for the specified service.");
     }
 
+    const rolesNamesBef = []
+    for (const rightId of userRights.rights) {
+        const right = await services.service.rights.get(rightId, serviceId, "SERVICE_BY_NASS");
+        if (right) {
+            rolesNamesBef.push(right.name);
+        }
+    }
+
+    const rolesNamesAft = []
+    for (const rightId of rightsIds) {
+        const right = await services.service.rights.get(rightId, serviceId, "SERVICE_BY_NASS");
+        if (right) {
+            rolesNamesAft.push(right.name);
+        }
+    }
+
+    const additions = rolesNamesAft.filter(x => !rolesNamesBef.includes(x));
+    const removals = rolesNamesBef.filter(x => !rolesNamesAft.includes(x));
+
     await services.service.logs.create(serviceId, `Updated rights for ${user.username} (${userId})`, "USER", "INFO", {
-        user: userId,
-        message : `From ${JSON.stringify(userRights.rights)} to ${JSON.stringify(rightsIds)}`
+        user: author.id,
+        message : `${author.username} ${removals.length > 0 && `removed rights [${removals.join(", ")}]`} - ${additions.length > 0 && `added rights [${additions.join(", ")}]`} for user ${user.username} (${userId})`
     });
 
     // If a right happens to be the "DEVELOPER" right, ensure the user is registered as a developer for the service
@@ -58,10 +77,7 @@ export async function updateRights(userId : string, serviceId : string, rightsId
         return software.methods.serverReply(500, "Failed to update user rights.");
     }
 
-    await services.service.logs.create(serviceId, `Updated rights for ${user.username} (${userId})`, "USER", "INFO", {
-        user: author.id,
-        message : `User rights for ${user.username} (${userId}) updated by ${author.username}`
-    });
+
 
     return software.methods.serverReply(200, "User rights updated successfully.");
 

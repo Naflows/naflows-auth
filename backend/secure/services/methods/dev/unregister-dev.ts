@@ -41,7 +41,7 @@ export async function unregisterDev(service_id : string, developer_id : string, 
 
     const user = await secure.user.get(developer_id, false);
     if (user && author) {
-        await services.service.logs.create(service_id, `Unregistered developer (${user.username})`, "USER", "INFO", {
+        await services.service.logs.create(service_id, `Unregistered developer (${user.username})`, "DEVELOPERS", "WARNING", {
             user: author.id,
             message : `Developer ${user.username} (${developer_id}) was unregistered from service ${service.data.service.name} (${service_id}) by ${author.username}`
         });
