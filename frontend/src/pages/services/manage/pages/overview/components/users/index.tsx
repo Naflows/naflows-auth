@@ -39,7 +39,7 @@ const ServiceUsers = ({
                 ) : (
                     users.length > 0 ? (
                         users.map((user) => (
-                            <ListedUser key={user.id} user={user} />
+                            <ListedUser key={user.id} user={user} service={service} />
                         ))
                     ) : (
                         <span>

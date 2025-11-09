@@ -6,11 +6,11 @@ import { services } from "../dir";
 export async function generateBasicServiceTunnels(service_id: string, owner_id: string) {
 
 
-    const serviceDevRight = await services.service.rights.create(service_id, "Developer", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS","DEV_TOKEN_CREATION"]);
-    const serviceAdminRight = await services.service.rights.create(service_id, "Administrator", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_ROLES", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_ROLES", "VIEW_SERVICE", "VIEW_SETTINGS","DEV_TOKEN_CREATION","PROD_TOKEN_CREATION"]);
-    const serviceNormalRight = await services.service.rights.create(service_id, "User", ["READ_OWN", "WRITE_OWN", "DELETE_OWN"]);
+    const serviceDevRight = await services.service.rights.create(service_id, "Developer", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS","DEV_TOKEN_CREATION"], false, "SERVICE_BY_NASS");
+    const serviceAdminRight = await services.service.rights.create(service_id, "Administrator", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_ROLES", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_ROLES", "VIEW_SERVICE", "VIEW_SETTINGS","DEV_TOKEN_CREATION","PROD_TOKEN_CREATION"], false, "SERVICE_BY_NASS");
+    const serviceNormalRight = await services.service.rights.create(service_id, "User", ["READ_OWN", "WRITE_OWN", "DELETE_OWN"], false, "SERVICE_BY_NASS");
 
-    if (!serviceDevRight.success || !serviceAdminRight.success) {
+    if (!serviceDevRight.success || !serviceAdminRight.success || !serviceNormalRight.success) {
         return software.methods.serverReply(500, "Failed to create automatic rights.");
     }
 

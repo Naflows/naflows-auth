@@ -25,7 +25,10 @@ export interface ServiceUser {
         name: string;
         hue: string;
         description: string;
+        type: "SERVICE_BY_NASS" | "TUNNELING_BY_INSTANCE";
     }[];
+    you_can_manage : boolean;
+    you : boolean;
 }
 
 

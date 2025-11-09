@@ -9,7 +9,7 @@ import { services } from "../dir";
 import { profile } from "console";
 
 
-export async function getServiceUsers(serviceId : string) : Promise<ReplyType> {
+export async function getServiceUsers(serviceId : string, user_id : string) : Promise<ReplyType> {
     const userRightsCollection = db.collection("user_rights") as Collection<UserRights>;
     const usersCollection = db.collection("users") as Collection<User>;
 
@@ -18,17 +18,19 @@ export async function getServiceUsers(serviceId : string) : Promise<ReplyType> {
     const usersData = [];
 
     for (const userRight of usersRights) {
-        const user = await usersCollection.findOne({ id: userRight.user_id });
+        const user = await secure.user.get(userRight.user_id, false) as User | null;
         const rights = userRight.rights;
         const rightsNames = [];
         for (const rightId of rights) {
-            const right = await services.service.rights.get(rightId, serviceId) as ServiceRights | null;
+            const right = await services.service.rights.get(rightId, serviceId, "ALL") as ServiceRights | null;
             if (right) {
+                console.log(` FOund right ${right.name} for user ${userRight.user_id}`);
                 rightsNames.push({
                     id : right.id,
                     name : right.name,
                     hue : right.hue,
-                    description : right.description
+                    description : right.description,
+                    type : right.type
                 });
             }
         }
@@ -41,11 +43,14 @@ export async function getServiceUsers(serviceId : string) : Promise<ReplyType> {
                 last_updated : userRight.updated_at,
                 rights: rightsNames,
                 profile_picture: user.profile_picture,
+                you : user.id === user_id,
+                you_can_manage : await services.service.user.canManageUserInService(user_id, user.id, serviceId)
             });
         }
     }
 
-
+    // Order users by joined_on date descending
+    usersData.sort((a, b) => b.joined_on - a.joined_on);
 
     return software.methods.serverReply(200, "Service users retrieved successfully.", {
         serviceUsers: usersData

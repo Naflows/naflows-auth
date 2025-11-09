@@ -21,6 +21,14 @@ function reset_db {
 
 
 if [ "$RESET_ENVIRONMENT" = "true" ]; then
+
+    # Ask for confirmation
+    read -p "Are you sure you want to reset the entire environment? This will delete all Docker containers and volumes, including mongo-nass (main) database. (yes/no): " CONFIRM
+    if [ "$CONFIRM" != "yes" ]; then
+        echo -e "\033[1;31mEnvironment reset cancelled.\033[0m"
+        exit 1
+    fi
+
     echo -e "\033[1;32mCleaning up existing Docker containers and volumes...\033[0m"
     rm -rf ./backend/auth-data
     
@@ -30,13 +38,13 @@ if [ "$RESET_ENVIRONMENT" = "true" ]; then
     fi
     
     docker system prune -a -f --volumes
-    COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down -v
+    COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-services,test-global,dummy-api, mongo-nass-test,auth-api-test" docker compose down -v
     
     echo -e "\033[1;32mStarting MongoDB...\033[0m"
     COMPOSE_PROFILES="mongo-nass" docker compose up -d mongo-nass
 else
     echo -e "\033[1;32mStopping and removing existing containers, volumes, and networks...\033[0m"
-    COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-services,test-global,dummy-api" docker compose down
+    COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-services,test-global,dummy-api, mongo-nass-test,auth-api-test" docker compose down
 fi
 
 if [ "$RESET_DB" = "true" ]; then

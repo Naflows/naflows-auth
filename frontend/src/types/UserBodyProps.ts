@@ -1,3 +1,5 @@
+import type { ServiceRights } from "./TunnelingTypes";
+
 export interface UserBodyProps {
     _id: string;
     id: string; // User ID
@@ -21,5 +23,6 @@ export interface UserBodyProps {
     phone_verified?: boolean; // Whether the user's phone number is verified, optional
     email_verified?: boolean; // Whether the user's email is verified, optional
     bio ?: string; // Short bio of the user, optional
+    rights : ServiceRights[]; // List of rights assigned to the user
 }
 

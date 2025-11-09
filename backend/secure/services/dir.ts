@@ -42,6 +42,7 @@ import { getServiceAlerts } from "./methods/get-service-alerts";
 import { getServiceUsers } from "./methods/get-users";
 import { getUsers } from "./methods/global/get-users";
 import { userHasRight } from "./rights/methods/hasRight";
+import { canUserManageOthers } from "./rights/methods/can-user-manage-others";
 
 
 
@@ -72,7 +73,8 @@ export const services = {
             getKeyByValue: getDevKeyByValue,
             getRights : getRightsByUser,
             getAll : getServiceUsers,
-            hasRight : userHasRight
+            hasRight : userHasRight,
+            canManageUserInService : canUserManageOthers
         },
         logs: {
             create: createServiceLogEntry,

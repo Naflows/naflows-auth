@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import type { ServiceRights } from "../../../../../../../../types/TunnelingTypes";
 import Loader from "../../../../../../../../global/components/Loader";
 import ServiceRightsComponent from "./components/rights";
 import type { ServicesForUserProps } from "../../../../../../../../types/ServicesForUserProps";
 import '../../../../../../../../../public/root/pages/services/manage/sub-components/Rights.scss';
 import CreateRightSet from "./components/create-righet-set/create-right-set";
+import { fetchRights } from "../scripts/fetch-rights-list";
 
 
 const ServiceRightsComponentGlobal = ({
@@ -21,30 +21,12 @@ const ServiceRightsComponentGlobal = ({
     const [loadServices, setLoadServices] = useState<boolean>(true);
 
     useEffect(() => {
-        async function fetchRights() {
-            if (!service) return;
-            try {
-                await axios.post(`${process.env.DUMMY_API_URL_DEV}/user/secure/service/rights/get`, {
-                    service_id: service.id
-                }, {
-                    withCredentials: true
-                }).then((response) => {
-                    const fetchedRights: ServiceRights[] = response.data.rights;
-                    const nassRights = fetchedRights.filter(r => r.type === "SERVICE_BY_NASS");
-                    const instanceRights = fetchedRights.filter(r => r.type === "TUNNELING_BY_INSTANCE");
-                    setNassRights(nassRights);
-                    setInstanceRights(instanceRights);
-                }).finally(() => {
-                    setIsLoading(false);
-                });
-                setLoadServices(false);
-            } catch (error) {
-                console.error("Error fetching rights:", error);
-            }
-        }
-
-        if (loadServices) {
-            fetchRights();
+        if (loadServices && service) {
+            fetchRights(service.id, setIsLoading).then(({ nassRights, instanceRights }) => {
+                setNassRights(nassRights);
+                setInstanceRights(instanceRights);
+            });
+            setLoadServices(false);
         }
     }, [service, loadServices]);
 

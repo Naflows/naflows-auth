@@ -20,7 +20,7 @@ export async function getUsers(req : Request, res : Response, user : User) {
         return software.methods.directResponse(403, "Forbidden: You do not have permission to view service users.", res, req);
     }
 
-    const reply = await services.service.user.getAll(service.id);
+    const reply = await services.service.user.getAll(service.id, user.id);
 
     return software.methods.directResponse(200, "Service users retrieved successfully.", res, req, reply.data);
 }

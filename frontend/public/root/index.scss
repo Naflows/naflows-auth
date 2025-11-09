@@ -718,7 +718,7 @@ input[type="checkbox"] {
   width: 16px;
   height: 16px;
   border: 2px solid $da-secondary-hue-lighter-2;
-  border-radius: 3px;
+  border-radius: 50px;
   margin-right: 5px;
   cursor: pointer;
   background: transparent;
@@ -726,11 +726,11 @@ input[type="checkbox"] {
   vertical-align: middle;
 }
 
-input[type="checkbox"]:checked {
+input[type="checkbox"]:not(.no-fill):checked {
   background: $da-secondary-hue-lighter-2;
 }
 
-input[type="checkbox"]:checked::after {
+input[type="checkbox"]:not(.no-fill):checked::after {
   content: "";
   display: block;
   position: absolute;
@@ -742,7 +742,7 @@ input[type="checkbox"]:checked::after {
   border-radius: 2px;
 }
 
-input[type="checkbox"]::after {
+input[type="checkbox"]:not(.no-fill)::after {
   content: "";
   display: block;
   position: absolute;
@@ -758,7 +758,7 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-input[type="checkbox"]:checked:after {
+input[type="checkbox"]:not(.no-fill):checked:after {
   background: $da-secondary-hue-lighter-2;
 }
 
@@ -916,14 +916,7 @@ button * {
   }
 }
 
-.primary-button.inactive,
-.secondary-button.inactive,
-.tertiary-button.inactive {
-  opacity: 0.3;
-  pointer-events: none;
-  user-select: none;
-  cursor: not-allowed !important;
-}
+
 
 .visibility-toggle {
   position: absolute;
@@ -969,6 +962,15 @@ button * {
       stroke: $da-error-hue;
     }
   }
+}
+
+.primary-button.inactive,
+.secondary-button.inactive,
+.tertiary-button.inactive {
+  opacity: 0.3;
+  pointer-events: none;
+  user-select: none;
+  cursor: not-allowed !important;
 }
 
 /* ------------------------------- */
