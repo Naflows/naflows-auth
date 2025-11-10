@@ -57,7 +57,8 @@ export async function createServiceRights(service_id: string, name: string, righ
         deletable: deletable,
         hue: (await createNotExistingHue()).toString(),
         type : type,
-        created_by: user_id || "system"
+        created_by: user_id || "system",
+        order:  await serviceRightsDB.countDocuments({ service_id: service_id, type : type }) // Note: 1 is the highest priority
     }
 
     if (user_id) {

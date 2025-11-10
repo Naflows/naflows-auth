@@ -21,6 +21,8 @@ export interface ServiceRights {
     hue : string; // Color hue for UI representation
     usersPerRights? : { id: string; username: string; first_name: string; last_name: string; profile_picture: string | null }[]; // Added field to map rights to users
 
+    order : number; // Order for displaying rights sets
+
     description?: string;
     type : "SERVICE_BY_NASS" | "TUNNELING_BY_INSTANCE"; // Type of service rights, view documentation for more info
 }

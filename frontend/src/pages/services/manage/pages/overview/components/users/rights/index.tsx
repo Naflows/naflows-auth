@@ -42,6 +42,7 @@ const ServiceRightsComponentGlobal = ({
                         <Loader loading={true} />
                     ) :
                         <>
+                            
                             <button className="primary-button width-fit" onClick={() => {
                                 setCreateRightSet(true);
                             }}>Create New Rights Set</button>
@@ -51,6 +52,10 @@ const ServiceRightsComponentGlobal = ({
                                     <div className="rights__container__header">
                                         <div className="header__content">
                                             <h3 className="rights__container__title">Service Rights Sets</h3>
+                                            <span>
+                                                Rights sets defining permissions for NASS services.
+                                                <a href="/docs/" target="_blank" rel="noreferrer"> Learn more.</a>
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="rights__content">
@@ -65,6 +70,10 @@ const ServiceRightsComponentGlobal = ({
                                     <div className="rights__container__header">
                                         <div className="header__content">
                                             <h3 className="rights__container__title">Instance Rights Sets</h3>
+                                            <span>
+                                                Rights sets defining permissions for Instance-based tunneling.
+                                                <a href="/docs/" target="_blank" rel="noreferrer"> Learn more.</a>
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="rights__content">

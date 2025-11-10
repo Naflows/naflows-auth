@@ -55,6 +55,10 @@
         margin: 0;
         padding: 0;
       }
+      span {
+        font-size: 14px;
+        opacity: 0.8;
+      }
       .rights__container__title {
         font-size: 20px;
         font-weight: 600;
@@ -73,15 +77,26 @@
   }
 
   .right__card {
-    padding: 10px;
+    transition: opacity 0.2s ease;
+  }
+
+  .right__card.dragging {
+    cursor: grabbing !important;
+  }
+
+  .right__card:active {
+    cursor: grabbing;
+  }
+
+  .right__card {
+    padding: 10px 20px 10px 10px;
     min-width: fit-content;
-    max-width: 200px;
+    width: calc(100% - 30px);
     border-radius: 10px;
     border: 2px solid $_2k25-background-hue-50-transparent;
     background-color: $_2k25-background-hue-darker;
     transition: all 0.3s ease-in-out;
     opacity: 0;
-    animation: RightCardAppears 0.3s ease-in-out forwards;
     cursor: pointer;
     &:hover {
       border: 2px solid $_2k25-background-hue-50;
@@ -89,15 +104,31 @@
     }
     .right__card__body {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       justify-content: space-between;
       gap: 10px;
+      .right__card__left {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: start;
+        width: 100%;
+        svg {
+          width: 20px;
+          height: 20px;
+          opacity: 0.2;
+        }
+        width: 100%;
+     }
       .right__users {
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: end;
         gap: 5px;
         margin-left: 20px;
+        width: 30%;
+
         .user__image__container {
           width: 30px;
           height: 30px;
@@ -114,23 +145,33 @@
       .right__header {
         display: flex;
         flex-direction: row;
-        gap: 10px;
-        .right__color {
-          min-width: 15px;
-          min-height: 15px;
-          max-width: 15px;
-          max-height: 15px;
-          border-radius: 50%;
-          margin-top: 2px;
-        }
+        align-items: center;
+        gap: 15px;
+        width: 100%;
         .right__info {
           display: flex;
           flex-direction: row;
           gap: 50px;
+          width: 100%;
+          .rights__details {
+            width: 30%;
+            height: fit-content;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
           .right__info__main {
             display: flex;
             flex-direction: column;
+            gap: 5px;
+            width: 100%;
+
+            .user__item__right {
+              font-size: 13px !important;
+            }
           }
+
+
           h3 {
             margin: 0;
             padding: 0;

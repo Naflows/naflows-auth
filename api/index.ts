@@ -186,6 +186,14 @@ app.post('/user/secure/service/rights/get', async (req: Request, res: Response) 
     });
 });
 
+app.post('/user/secure/service/rights/update', async (req: Request, res: Response) => {
+    await manageConnection(req,res,'/client/secure/services/rights/update', { 
+        serviceID: req.body.serviceID,
+        rights: req.body.rights,
+        type: req.body.type
+    });
+});
+
 app.post('/user/secure/service/register', async (req: Request, res: Response) => {
     await manageConnection(req,res,'/client/secure/user/register-in-api', {
         code: req.body.code,

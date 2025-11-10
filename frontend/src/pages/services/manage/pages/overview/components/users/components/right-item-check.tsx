@@ -1,6 +1,6 @@
 import type { ServiceUser } from "../../../../../../../../types/ServicesForUserProps";
 import type { ServiceRights } from "../../../../../../../../types/TunnelingTypes";
-import SmallRight from "./small-right";
+import ServiceRightsSmall from "./small-right";
 
 
 const RightItemCheck = ({
@@ -51,7 +51,7 @@ const RightItemCheck = ({
                         }
                     }}
                 >
-                    <SmallRight key={right.id} id={right.id} name={right.name} hue={right.hue} description={right.description} />
+                    <ServiceRightsSmall key={right.id} id={right.id} name={right.name} hue={right.hue}  />
                     <input type="checkbox" className="no-fill"
                         // Checkbox is checked if the right is in currentRights
                         checked

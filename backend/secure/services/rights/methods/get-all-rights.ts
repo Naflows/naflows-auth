@@ -42,6 +42,9 @@ export async function getAllRights(service_id: string): Promise<ServiceRights[]>
         right.usersPerRights = usersPerRights[right.id] || [];
     }
 
+    // Order rights by their 'order' field, 1 being the highest priority
+    rights.sort((a, b) => a.order - b.order);
+
 
     return rights;
 }

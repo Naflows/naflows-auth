@@ -12,6 +12,7 @@ async function fetchRights(serviceId : string, setIsLoading : (loading : boolean
         const fetchedRights: ServiceRights[] = response.data.rights;
         const nassRights = fetchedRights.filter(r => r.type === "SERVICE_BY_NASS");
         const instanceRights = fetchedRights.filter(r => r.type === "TUNNELING_BY_INSTANCE");
+        console.log("Fetched rights:", { nassRights, instanceRights });
         return { nassRights, instanceRights };
     } catch (error) {
         console.error("Error fetching rights:", error);

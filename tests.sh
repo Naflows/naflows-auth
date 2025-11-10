@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 print_red() {
     echo -e "\033[1;31m$1\033[0m"
 }
@@ -92,7 +94,7 @@ function reset_test_db {
 # And prevent already-located ports from causing issues
 function end_running_containers {
     echo -e "\033[1;32mStopping existing containers to prevent conflicts... - Instance 'mongo-nass' remains untouched.\033[0m"
-    docker compose down
+    COMPOSE_PROFILES="mongo-nass-test,auth-api-test,dummy-api,mongo-nass,auth-api" docker compose down
 }
 
 

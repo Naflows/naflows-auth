@@ -4,6 +4,7 @@ export interface ServiceRights {
     id : string;
     service_id : string;
     rights : string[];
+    order: number;
     created_at : number;
     updated_at : number;
     name : string; // Name of the rights set, e.g., "Default Rights"

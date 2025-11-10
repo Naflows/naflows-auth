@@ -5,6 +5,11 @@ RESET_ENVIRONMENT=$1
 RESET_DB=$2
 
 
+echo -e "\033[1;32mStopping running containers...\033[0m"
+docker compose down
+clear # Clear the terminal for better readability
+
+
 function reset_db {
     echo -e "\033[1;32mResetting database...\033[0m"
     COMPOSE_PROFILES="mongo-nass" docker compose down -v
