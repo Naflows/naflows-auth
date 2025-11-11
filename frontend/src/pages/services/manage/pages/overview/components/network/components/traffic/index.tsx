@@ -124,7 +124,7 @@ const TrafficOverview = ({
 
         const roundedMaxRPS = (service?.settings?.rates || 100) * 1.5;
         const maxRPS = Math.max(...chartDatasets.flatMap(ds => ds.data as number[]));
-        const min = Math.min(maxRPS * 1.5, roundedMaxRPS || 1);
+        const min = roundedMaxRPS;
 
 
         chartRef.current = new Chart(ctx, {

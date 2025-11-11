@@ -211,8 +211,8 @@
 }
 
 .user__item__right {
-  padding: 2px 6px;
-  border-radius: 4px;
+  padding: 2px 10px;
+  border-radius: 10px;
   font-weight: 500;
   height: fit-content;
   min-height: 23px;
@@ -220,7 +220,11 @@
   display: flex;
   border: 1px solid $_2k25-background-hue-50-transparent;
   align-items: center;
-  justify-content: end;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: 13px;
+  overflow:hidden;
+  text-overflow: ellipsis;  
 
   .right__type-indicator {
     display: flex;

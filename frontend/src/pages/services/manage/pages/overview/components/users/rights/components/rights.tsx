@@ -1,10 +1,10 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import type { ServicesForUserProps } from "../../../../../../../../../types/ServicesForUserProps"
 import type { ServiceRights } from "../../../../../../../../../types/TunnelingTypes"
-import { createdAtToAgo } from "../../../../../../../../account/sub-components/notifications/methods/createdAtToAgo"
 import ServiceRightsSmall from "../../components/small-right"
 import SaveChanges from "../../../../../components/save"
 import { updateRightsList } from "../../scripts/update-rights"
+import EditRightRight from "./edit-right-set"
 
 
 
@@ -16,7 +16,9 @@ const ServiceSmallComponent = ({
     onDragEnd,
     onDragOver,
     onDrop,
-    isDragging
+    isDragging,
+    setFullDisplay,
+    fulleDisplayOn
 }: {
     right: ServiceRights;
     i: number;
@@ -25,11 +27,13 @@ const ServiceSmallComponent = ({
     onDragOver: (e: React.DragEvent) => void;
     onDrop: (e: React.DragEvent, index: number) => void;
     isDragging: boolean;
+    setFullDisplay: React.Dispatch<React.SetStateAction<ServiceRights | null>>;
+    fulleDisplayOn: ServiceRights | null;
 }) => {
     return (
         <div
             key={right.id}
-            className={`right__card ${isDragging ? 'dragging' : ''}`}
+            className={`right__card ${isDragging ? 'dragging' : ''} ${fulleDisplayOn ? 'small__display' : ''}`}
             style={{
                 animationDelay: `${i * 100}ms`,
                 opacity: isDragging ? 0.5 : 1,
@@ -56,7 +60,6 @@ const ServiceSmallComponent = ({
                                     name={right.name}
                                     hue={right.hue}
                                 />
-                                <span className="last__updated">Last updated {createdAtToAgo(right.updated_at)}</span>
                             </div>
                             <div className="rights__details">
                                 <span className="right__tag">{right.rights.length} rights </span>
@@ -68,16 +71,25 @@ const ServiceSmallComponent = ({
                     {
                         right.usersPerRights && right.usersPerRights.length > 0 && (
                             right.usersPerRights.map((user, i) => {
-                                if (i < 5) {
+                                const maxUsersToShow = 3;
+
+
+                                if (i < maxUsersToShow) {
                                     return (
-                                        <div className="user__image__container" key={user.id}>
+                                        <div className="user__image__container" key={user.id} style={{
+                                            transform: `translateX(-${i * 20}px)`,
+                                            zIndex: right.usersPerRights!.length - i
+                                        }}>
                                             <img src={user.profile_picture || ""} alt={user.username} />
                                         </div>
                                     )
-                                } else if (i === 3) {
+                                } else if (i === maxUsersToShow) {
                                     return (
-                                        <div className="user__image__container more__users" key={user.id}>
-                                            +{right.usersPerRights!.length - 3}
+                                        <div className="user__image__container more__users" key={user.id} style={{
+                                            transform: `translateX(-${i * 20}px)`,
+                                            zIndex: right.usersPerRights!.length - i
+                                        }}>
+                                            +{right.usersPerRights!.length - maxUsersToShow}
                                         </div>
                                     )
                                 }
@@ -86,6 +98,13 @@ const ServiceSmallComponent = ({
                     }
 
                 </div>
+
+                <button className="primary-button" onClick={() => {
+                    console.log("Editing right:", right.name);
+                    setFullDisplay(right);
+                }}>
+                    Edit
+                </button>
             </div>
         </div>
     )
@@ -102,6 +121,24 @@ const ServiceRightsComponent = ({
 }) => {
     const [localRights, setLocalRights] = useState<ServiceRights[]>(rights)
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
+
+    const [fullDisplay, setFullDisplay] = useState<ServiceRights | null>(null);
+    const [fullDisplayOriginal, setFullDisplayOriginal] = useState<ServiceRights | null>(null);
+    const [rightChanged, setRightChanged] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (fullDisplay) {
+            console.log("Setting full display original for:", fullDisplay.name);
+            setFullDisplayOriginal(rights.find(r => r.id === fullDisplay.id) || null);
+            document.body.style.overflow = "hidden";
+        } else if (!fullDisplay) {
+            setFullDisplayOriginal(null);
+            document.body.style.overflow = "auto";
+        }
+
+    }, [fullDisplay, rights]);
+
+
 
     const [changed, setChanged] = useState(false)
 
@@ -175,20 +212,41 @@ const ServiceRightsComponent = ({
                     appear={changed}
                 />
             </div>
-            {localRights.map((right: ServiceRights, i) => {
-                return (
-                    <ServiceSmallComponent
-                        key={right.id}
-                        right={right}
-                        i={i}
-                        onDragStart={handleDragStart}
-                        onDragEnd={handleDragEnd}
-                        onDragOver={handleDragOver}
-                        onDrop={handleDrop}
-                        isDragging={draggedIndex === i}
-                    />
-                )
-            })}
+
+
+            <div className="rights__list">
+                {localRights.map((right: ServiceRights, i) => {
+                    return (
+                        <ServiceSmallComponent
+                            key={right.id}
+                            right={right}
+                            i={i}
+                            onDragStart={handleDragStart}
+                            onDragEnd={handleDragEnd}
+                            onDragOver={handleDragOver}
+                            onDrop={handleDrop}
+                            isDragging={draggedIndex === i}
+                            setFullDisplay={setFullDisplay}
+                            fulleDisplayOn={fullDisplay}
+                        />
+                    )
+                })}
+            </div>
+
+            <div className="display__right__additional" style={{
+                display: fullDisplay && fullDisplayOriginal ? "flex" : "none"
+            }}>
+                <EditRightRight
+                    fullDisplay={fullDisplay}
+                    setFullDisplay={setFullDisplay}
+                    fullDisplayOriginal={fullDisplayOriginal}
+                    setFullDisplayOriginal={setFullDisplayOriginal}
+                    rightChanged={rightChanged}
+                    setRightChanged={setRightChanged}
+                    rights={rights}
+                    setLocalRights={setLocalRights}
+                />
+            </div>
         </>
     )
 }

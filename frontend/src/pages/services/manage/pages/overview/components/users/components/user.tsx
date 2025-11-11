@@ -61,7 +61,7 @@ const RightComponent = ({ rights, type, service, userInfo, setCurrentRights }: {
                         left: left,
                     }}
                 >
-                    <AddUserRight service={service} type={type} currentRights={rights} userID={userInfo.id} setCurrentRights={setCurrentRights} />
+                    <AddUserRight service={service} type={type} currentRights={rights} userID={userInfo.id} setCurrentRights={setCurrentRights} setClicked={setClicked} />
                 </div>
             )}
 

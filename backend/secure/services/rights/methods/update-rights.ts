@@ -41,7 +41,7 @@ export async function updateRights(userId : string, serviceId : string, rightsId
 
     await services.service.logs.create(serviceId, `Updated rights for ${user.username} (${userId})`, "USER", "INFO", {
         user: author.id,
-        message : `${author.username} ${removals.length > 0 && `removed rights [${removals.join(", ")}]`} - ${additions.length > 0 && `added rights [${additions.join(", ")}]`} for user ${user.username} (${userId})`
+        message : `${author.username} ${removals.length > 0 ? `removed rights [${removals.join(", ")}]` : ""} - ${additions.length > 0 ? `added rights [${additions.join(", ")}]` : ""} for user ${user.username} (${userId})`
     });
 
     // If a right happens to be the "DEVELOPER" right, ensure the user is registered as a developer for the service

@@ -11,13 +11,15 @@ const AddUserRight = ({
     type,
     currentRights,
     setCurrentRights,
-    userID
+    userID,
+    setClicked
 }: {
     service: ServicesForUserProps | null,
     type: "SERVICE_BY_NASS" | "TUNNELING_BY_INSTANCE",
     currentRights: ServiceUser["rights"],
     userID: string,
     setCurrentRights: React.Dispatch<React.SetStateAction<ServiceUser["rights"]>>;
+    setClicked: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
 
     const [loadServices, setLoadServices] = useState<boolean>(true);
@@ -25,7 +27,7 @@ const AddUserRight = ({
 
     const [filtered, setFiltered] = useState<ServiceRights[]>([]);
 
-    const [original, setOriginal] = useState<ServiceRights[]>([]);
+    const [original, setOriginal] = useState<ServiceUser["rights"]>(currentRights);
 
     const [current, setCurrent] = useState<ServiceUser["rights"]>(currentRights);
 
@@ -35,16 +37,17 @@ const AddUserRight = ({
         if (loadServices && service) {
             fetchRights(service.id, setLoad).then(({ nassRights, instanceRights }) => {
                 if (type === "SERVICE_BY_NASS") {
-                    setOriginal(nassRights);
                     setFiltered(nassRights.filter((n) => !currentRights.some(cr => cr.id === n.id)));
+
 
                     // Filter current based on type
                     setCurrent(currentRights.filter((cr) => nassRights.some(n => n.id === cr.id)));
+                    setOriginal(currentRights.filter((cr) => nassRights.some(n => n.id === cr.id)));
                 } else {
-                    setOriginal(instanceRights);
                     setFiltered(instanceRights.filter((n) => !currentRights.some(cr => cr.id === n.id)));
                     // Filter current based on type
                     setCurrent(currentRights.filter((cr) => instanceRights.some(n => n.id === cr.id)));
+                    setOriginal(currentRights.filter((cr) => instanceRights.some(n => n.id === cr.id)));
                 }
             });
             setLoadServices(false);
@@ -55,10 +58,12 @@ const AddUserRight = ({
     useEffect(() => {
         // Check if current rights differ from initial rights
         const currentIds = current.map(r => r.id).sort();
-        const originalIds = currentRights.map(r => r.id).sort();
+        const originalIds = original.map(r => r.id).sort();
         const isChanged = JSON.stringify(currentIds) !== JSON.stringify(originalIds);
+        console.log("Current IDs:", currentIds);
+        console.log("Original IDs:", originalIds);
         setChanged(isChanged);
-    }, [current, filtered, currentRights]);
+    }, [current, filtered, original]);
     if (!service) return null;
 
     return (
@@ -120,21 +125,31 @@ const AddUserRight = ({
                 </div>
 
                 <button className="primary-button width-100-auto" onClick={async () => {
-                    // Create an array of all current right IDs for both types 
+                    // Create an array of all current right IDs for both types: currentRights content with more or less depending on current
                     const IDs = [
-                        ...currentRights.map(r => r.id),
+                        ...current.map(r => r.id),
+                        ...currentRights.filter(r => r.type !== type).map(r => r.id)
                     ]
 
                     console.log("Submitting rights IDs:", IDs);
 
                     await postRightsList(userID, service.id, IDs);
                     // Update original to current
-                    setOriginal({
-                        ...current as unknown as ServiceRights[]
-                    });
+                    setOriginal(
+                        [...current.map(r => r),
+                        ...currentRights.filter(r => r.type !== type)]
+                    );
+                    // Update currentRights in parent
+                    setCurrentRights(
+                        [...current.map(r => r),
+                        ...currentRights.filter(r => r.type !== type)]
+                    );
                     setChanged(false);
+
+                    // Close popup
+                    setClicked(false);
                 }} style={{
-                    display : changed ? "block" : "none"
+                    display : changed ? "flex" : "none"
                 }}>
                     Save
                 </button>
