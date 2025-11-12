@@ -229,19 +229,19 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
 
 
     const isUserDev: ReplyType = await services.service.user.isDev(user.id, serviceInfo.id);
-    console.log("Is user a developer for this service?", isUserDev);
+    console.log("Is user a developer for this service?", isUserDev)
     if (isUserDev.success) {
         serviceInfo.details.access_key = isUserDev.data.access_key;
 
         serviceInfo.alerts = (await services.service.getAlerts(serviceInfo.id)).data.alerts as unknown as ServiceAlert[];
-
-        serviceInfo.user_authorizations = await services.service.dev.authorizations(user.id, serviceInfo.id);
     } else {
         delete serviceInfo.ip_address;
         delete serviceInfo.created_by;
         delete serviceInfo.plan;
         delete serviceInfo.settings;
     }
+
+    serviceInfo.user_authorizations = await services.service.dev.authorizations(user.id, serviceInfo.id);
 
 
 

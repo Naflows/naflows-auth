@@ -48,11 +48,22 @@
 @keyframes SaveButtonAppears {
   0% {
     opacity: 0;
-    transform: translateY(20px) scale(0.95);
+    transform: translateY(50px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
+  }
+}
+
+@keyframes SaveButtonDisappear {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(50px);
   }
 }
 
@@ -76,16 +87,52 @@
     border-radius: 10px;
     animation: RightEditionAppears 0.3s ease forwards;
     padding: 20px;
-    overflow-y: auto;
     max-height: 90vh;
-    max-width: 90vw;
-    width: 600px;
+    max-width: 70vw;
+    height: fit-content;
+    width: fit-content;
+    overflow: hidden;
 
-    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+    .sections {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      max-height: 70vh;
+      #left-section,
+      #right-section {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      #right-section,
+      #left-section {
+        max-height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 10px;
+        width: calc(100%);
+        padding-left: 10px !important;
+      }
+      #section-separator {
+        width: 2px;
+        min-height: 100%;
+        background-color: $_2k25-background-hue-50-transparent;
+
+        &::before {
+          content: "";
+          display: block;
+          width: 2px;
+          height: 100%;
+          background-color: $_2k25-background-hue-50-transparent;
+        }
+      }
+    }
 
     .section__container {
       display: flex;
@@ -152,6 +199,8 @@
       gap: 10px;
       align-items: center;
       justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 2px solid $_2k25-background-hue-50-transparent;
 
       .buttons__action__container {
         display: flex;
@@ -165,11 +214,73 @@
         padding: 0;
         font-size: 24px;
         font-weight: 700;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+        color: $da-secondary-hue-lighter-2;
+        width: 100%;
+
+        .info-badge {
+          min-height: 40px;
+
+          margin-left: 10px;
+          vertical-align: middle;
+          font-size: 15px;
+          font-weight: normal;
+          color: $da-info-hue;
+          border: 1px solid $da-info-hue;
+          background-color: $da-info-hue-transparent;
+          padding: 0 10px;
+          border-radius: 10px;
+          align-self: stretch;
+          height: max-content;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 5px;
+          svg {
+            width: 16px;
+            height: 16px;
+          }
+        }
       }
     }
-    #save-changes-button.inactive {
-      animation: SaveButtonAppears 0.3s ease forwards;
-      transform: translateY(20px);
+
+    .save__changes {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: calc(100% - 40px - 40px - 2px);
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      backdrop-filter: blur(10px);
+      justify-content: space-between;
+      align-items: center;
+      background-color: $_2k25-background-hue-darker-2-transparent;
+      border: 2px solid $_2k25-background-hue-50-transparent;
+      padding: 10px 20px;
+      border-radius: 10px;
+      &.inactive {
+        animation: SaveButtonDisappear 0.3s ease forwards;
+        transform: translateY(50px) scale(0.95);
+      }
+      &.active {
+        animation: SaveButtonAppears 0.3s ease forwards;
+        transform: translateY(0) scale(1);
+
+        z-index: 50;
+      }
+      .buttons__container {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        button {
+          min-width: 100px;
+        }
+      }
     }
   }
 }
@@ -248,16 +359,37 @@
       background-color: $_2k25-background-hue-50-transparent;
     }
 
+
+    &.disabled {
+      cursor: not-allowed !important;
+      opacity: 0.6 !important;
+      &:hover {
+        border: 2px solid $_2k25-background-hue-50-transparent !important;
+        background-color: $_2k25-background-hue-darker !important;
+      }
+
+      pointer-events: none;
+      .right__card__body {
+        button {
+          pointer-events: none !important;
+        }
+      }
+    }
+
     .right__card__body {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       gap: 50px;
+      button {
+        height: fit-content !important;
+        margin: auto;
+      }
       .right__card__left {
         display: flex;
         flex-direction: row;
         gap: 10px;
-        align-items: center;
+        align-items: start;
         width: 100%;
         svg {
           width: 20px;
@@ -320,11 +452,16 @@
           .right__info__main {
             display: flex;
             flex-direction: column;
-            gap: 5px;
             width: 100%;
 
+            .right__description {
+              font-size: 13px;
+              opacity: 0.8;
+              margin-top: 5px;
+            }
+
             .user__item__right {
-              font-size: 13px !important;
+              font-size: 15px !important;
             }
           }
 
@@ -419,7 +556,7 @@
   }
   .right__item {
     padding: 10px;
-    min-width: fit-content;
+    width: 80px;
     max-width: 200px;
     border-radius: 10px;
     border: 2px solid $_2k25-background-hue-50-transparent;
@@ -453,7 +590,7 @@
     &:hover {
       .button-content {
         display: flex;
-        z-index: 1;
+        z-index: 10;
         opacity: 1;
       }
     }
@@ -461,15 +598,12 @@
 }
 
 .nass__rights__table {
-  #right-name {
-    width: 30%;
-  }
-  #right-description {
-    width: 70%;
-  }
   display: flex;
   flex-direction: column;
   gap: 5px;
+  max-height: 400px;
+  height: fit-content;
+  overflow-y: auto;
 
   .nass__rights__table__header {
     display: flex;
@@ -492,17 +626,22 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
+    padding-bottom: 100px;
     .nass__rights__table__row {
       display: flex;
-      flex-direction: row;
-      gap: 10px;
-      cursor: pointer;
-      padding: 10px;
-      border: 1px solid $_2k25-background-hue-40;
-      align-items: center;
+      flex-direction: column;
+      gap: 5px;
+      align-items: start;
+
+      padding: 10px 10px;
+      border: 1px solid $_2k25-background-hue-50-transparent;
       border-radius: 5px;
-      &:hover {
-        background-color: $_2k25-background-hue-50-transparent;
+      .nass__rights__table__row__item {
+        width: 100%;
+      }
+      #right-description {
+        font-size: 13px;
+        opacity: 0.8;
       }
       &.selected {
         background-color: $da-secondary-hue-transparent;

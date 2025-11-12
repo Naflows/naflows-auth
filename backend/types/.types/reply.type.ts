@@ -33,6 +33,7 @@ export interface ReplyType {
                 description: string;
             }[];
         }[];
+        rights? : ServiceRights[];
         services?: Service[];
         alerts? : string[];
 

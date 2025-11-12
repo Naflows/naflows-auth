@@ -10,9 +10,10 @@ export interface ServiceRights {
     id : string;
     service_id : string;
     rights : (
-        "MANAGE_TUNNELS" | "MANAGE_DEVS" | "VIEW_STATS" | "READ" | "WRITE" | "DELETE" | "MANAGE_USERS" | "MANAGE_ROLES" | "MANAGE_SERVICE" | "MANAGE_SETTINGS" | "VIEW_USERS" | "VIEW_ROLES" | "VIEW_SERVICE" | "VIEW_SETTINGS" | "DEV_TOKEN_CREATION" | "PROD_TOKEN_CREATION" | "INSTANCE_STATUS_MONITORING"
+        "MANAGE_TUNNELS" | "MANAGE_DEVS" | "VIEW_STATS" | "READ" | "WRITE" | "DELETE" | "MANAGE_USERS" | "MANAGE_RIGHTS" | "MANAGE_SERVICE" | "MANAGE_SETTINGS" | "VIEW_USERS" | "VIEW_RIGHTS" | "VIEW_SERVICE" | "VIEW_SETTINGS" | "DEV_TOKEN_CREATION" | "PROD_TOKEN_CREATION" | "INSTANCE_STATUS_MONITORING"
     )[] | string[]; // Warning: non-custom rights are ONLY for services with type "SERVICE_BY_NASS". Otherwise, custom rights can be used.
     
+    can_edit? : boolean;
     created_at : number;
     updated_at : number;
     created_by : string; // User ID of the creator, null if created by system

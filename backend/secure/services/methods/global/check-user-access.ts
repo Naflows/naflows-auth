@@ -10,9 +10,9 @@ export async function checkUserAccess(req, res, user : User) {
     }
 
     console.log("\x1b[33m%s\x1b[0m", `Checking access for user ${user.username} (ID: ${user.id}) to service ${service_id}.`);
-    const isuserDev = await services.service.user.isDev(user.id, service_id);
+    const isuserDev = (await services.service.user.isDev(user.id, service_id)).success || await services.service.user.hasRight(user.id, service_id, "VIEW_SERVICE");
     
-    if (!isuserDev.success) {
+    if (!isuserDev) {
         console.log("\x1b[31m%s\x1b[0m", `User ${user.username} (ID: ${user.id}) attempted to access service ${service_id} without sufficient permissions.`);
         return software.methods.directResponse(403, "Forbidden: User does not have access to this service.", res, req);
     } else {

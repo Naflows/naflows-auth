@@ -18,7 +18,8 @@ const ServiceSmallComponent = ({
     onDrop,
     isDragging,
     setFullDisplay,
-    fulleDisplayOn
+    fullDisplayOn,
+    disabled 
 }: {
     right: ServiceRights;
     i: number;
@@ -28,22 +29,39 @@ const ServiceSmallComponent = ({
     onDrop: (e: React.DragEvent, index: number) => void;
     isDragging: boolean;
     setFullDisplay: React.Dispatch<React.SetStateAction<ServiceRights | null>>;
-    fulleDisplayOn: ServiceRights | null;
+    fullDisplayOn: ServiceRights | null;
+    disabled?: boolean;
 }) => {
     return (
         <div
             key={right.id}
-            className={`right__card ${isDragging ? 'dragging' : ''} ${fulleDisplayOn ? 'small__display' : ''}`}
+            className={`right__card ${isDragging ? 'dragging' : ''} ${fullDisplayOn ? 'small__display' : ''} ${disabled ? 'disabled' : ''}`}
             style={{
                 animationDelay: `${i * 100}ms`,
                 opacity: isDragging ? 0.5 : 1,
                 cursor: 'grab'
             }}
             draggable
-            onDragStart={(e) => onDragStart(e, i)}
-            onDragEnd={onDragEnd}
-            onDragOver={onDragOver}
-            onDrop={(e) => onDrop(e, i)}
+            onDragStart={(e) =>{
+                if (!disabled) {
+                    onDragStart(e, i)
+                }
+            }}
+            onDragEnd={() => {
+                if (!disabled) {
+                    onDragEnd()
+                }
+            }}
+            onDragOver={(e) => {
+                if (!disabled) {
+                    onDragOver(e)
+                }
+            }}
+            onDrop={(e) => {
+                if (!disabled) {
+                    onDrop(e, i)
+                }
+            }}
         >
             <div className="right__card__body">
                 <div className="right__card__left">
@@ -60,6 +78,9 @@ const ServiceSmallComponent = ({
                                     name={right.name}
                                     hue={right.hue}
                                 />
+                                <span className="right__description">
+                                    {right.description && right.description.length > 0 ? right.description : "No description provided."}
+                                </span>
                             </div>
                             <div className="rights__details">
                                 <span className="right__tag">{right.rights.length} rights </span>
@@ -99,7 +120,7 @@ const ServiceSmallComponent = ({
 
                 </div>
 
-                <button className="primary-button" onClick={() => {
+                <button className={`primary-button ${right.can_edit ? "" : "inactive"}`} onClick={() => {
                     console.log("Editing right:", right.name);
                     setFullDisplay(right);
                 }}>
@@ -201,7 +222,6 @@ const ServiceRightsComponent = ({
                     onChange={() => {
                         // If there is a change in order, update the backend
                         if (changed) {
-                            alert("Updating rights order...")
                             updateRightsList(service.id, localRights, "order").then((success) => {
                                 if (success) {
                                     setChanged(false)
@@ -227,7 +247,8 @@ const ServiceRightsComponent = ({
                             onDrop={handleDrop}
                             isDragging={draggedIndex === i}
                             setFullDisplay={setFullDisplay}
-                            fulleDisplayOn={fullDisplay}
+                            fullDisplayOn={fullDisplay}
+                            disabled = {right.can_edit === false}
                         />
                     )
                 })}
@@ -245,6 +266,7 @@ const ServiceRightsComponent = ({
                     setRightChanged={setRightChanged}
                     rights={rights}
                     setLocalRights={setLocalRights}
+                    serviceID={service.id}
                 />
             </div>
         </>

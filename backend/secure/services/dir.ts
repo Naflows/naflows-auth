@@ -50,6 +50,7 @@ import { unregisterDev } from "./methods/dev/unregister-dev";
 import { NassAuthorForDev } from "./methods/dev/all-nass-author";
 import { updateRightsRoute } from "./methods/global/update-rights";
 import { updateLiteralRight } from "./rights/methods/update-right";
+import { canUserEdit } from "./rights/methods/can-user-edit";
 
 
 
@@ -114,7 +115,8 @@ export const services = {
             get: getRight,
             assign: assignServiceRights,
             getAll: getAllRights,
-            update : updateLiteralRight
+            update : updateLiteralRight,
+            canUserEdit : canUserEdit
         },
         getPlans: getPlans,
         getPublicDetails: getPublicServiceDetails

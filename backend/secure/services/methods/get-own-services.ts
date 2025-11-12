@@ -17,7 +17,7 @@ export async function getUserServices(userID: string, compact: boolean = false):
     const s = await Promise.all(userRights.map(async (ur) => {
         const service = await serviceCollection.findOne({ id: ur.service_id });
         if (service) {
-            const isUserDeveloper = (await services.service.user.isDev(userID, service.id)).success;
+            const isUserDeveloper = (await services.service.user.isDev(userID, service.id)).success || await services.service.user.hasRight(userID, service.id, "VIEW_SERVICE");
 
             if (compact) {
                 return {
@@ -33,6 +33,7 @@ export async function getUserServices(userID: string, compact: boolean = false):
                     banner: service.banner,
                     details: service.details,
                     is_user_developer: isUserDeveloper,
+                    user_authorizations : await services.service.dev.authorizations(userID, service.id),
                 }
             } else {
                 return {
@@ -41,6 +42,7 @@ export async function getUserServices(userID: string, compact: boolean = false):
                     joined_at: ur.joined_at,
                     user_active: ur.active,
                     is_user_developer: isUserDeveloper,
+                    user_authorizations : await services.service.dev.authorizations(userID, service.id),
                 };
             }
         }

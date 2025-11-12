@@ -6,6 +6,7 @@ import type { ServicesForUserProps } from "../../../../../../../../types/Service
 import '../../../../../../../../../public/root/pages/services/manage/sub-components/Rights.scss';
 import CreateRightSet from "./components/create-righet-set/create-right-set";
 import { fetchRights } from "../scripts/fetch-rights-list";
+import UnauthorizedAccess from "../../../../../../../../global/components/Unauthorized";
 
 
 const ServiceRightsComponentGlobal = ({
@@ -31,6 +32,10 @@ const ServiceRightsComponentGlobal = ({
     }, [service, loadServices]);
 
     if (!service) return <></>;
+
+    if (service.user_authorizations && !service.user_authorizations["MANAGE_RIGHTS"]) {
+        return <UnauthorizedAccess />;
+    }
 
     return (
         <div>

@@ -13,6 +13,7 @@ export interface ServiceRights {
     usersPerRights? : { id: string; username: string; first_name: string; last_name: string; profile_picture: string | null }[]; // Added field to map rights to users
     type : "SERVICE_BY_NASS" | "TUNNELING_BY_INSTANCE"; // Type of service rights, view documentation for more info
     description? : string; // Optional description of the rights set
+    can_edit? : boolean;
 }
 
 export interface UserRights {

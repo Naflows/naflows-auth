@@ -26,7 +26,13 @@ export async function getRightsByUser(user_id : string, service_id : string, sen
                 id: rightContent.id,
                 name: rightContent.name,
                 hue: rightContent.hue,
-                rights : sendRightsValue ? rightContent.rights : []
+                rights : sendRightsValue ? rightContent.rights : [],
+                description: rightContent.description,
+                created_at: rightContent.created_at,
+                updated_at: rightContent.updated_at,
+                created_by: rightContent.created_by,
+                can_edit: rightContent.can_edit || false,
+                order: rightContent.order
             });
         }
     }

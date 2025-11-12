@@ -173,7 +173,7 @@ describe("Test NASS Secure Verification Methods", () => {
 
                 // Check specific rights for each role
                 expect(developerRight?.rights).toEqual(expect.arrayContaining(["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "DEV_TOKEN_CREATION"]));
-                expect(administratorRight?.rights).toEqual(expect.arrayContaining(["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_ROLES", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_ROLES", "VIEW_SERVICE", "VIEW_SETTINGS", "DEV_TOKEN_CREATION", "PROD_TOKEN_CREATION"]));
+                expect(administratorRight?.rights).toEqual(expect.arrayContaining(["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_RIGHTS", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_RIGHTS", "VIEW_SERVICE", "VIEW_SETTINGS", "DEV_TOKEN_CREATION", "PROD_TOKEN_CREATION"]));
             });
         })
 
@@ -493,9 +493,9 @@ describe("Test NASS Secure Verification Methods", () => {
             })
 
             test("Create Right 'admin', 'dev', 'no-work' for tunneling", async () => {
-                const admin = await services.service.rights.create("test-scv-service", "admin", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_ROLES", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_ROLES", "VIEW_SERVICE", "VIEW_SETTINGS", "DEV_TOKEN_CREATION", "PROD_TOKEN_CREATION"], false, "TUNNELING_BY_INSTANCE");
-                const dev = await services.service.rights.create("test-scv-service", "dev", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "DEV_TOKEN_CREATION"], false, "TUNNELING_BY_INSTANCE");
-                const nowork = await services.service.rights.create("test-scv-service", "no-work", ["NO_WORK_RIGHT"], false, "TUNNELING_BY_INSTANCE");
+                const admin = await services.service.rights.create("test-scv-service", "admin", "Administrators with full access to manage tunnels, developers, users, roles, service settings, and tokens.", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_RIGHTS", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_RIGHTS", "VIEW_SERVICE", "VIEW_SETTINGS", "DEV_TOKEN_CREATION", "PROD_TOKEN_CREATION"], false, "TUNNELING_BY_INSTANCE");
+                const dev = await services.service.rights.create("test-scv-service", "dev", "Developers with permissions to manage tunnels and developers.", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "DEV_TOKEN_CREATION"], false, "TUNNELING_BY_INSTANCE");
+                const nowork = await services.service.rights.create("test-scv-service", "no-work", "Users with no work rights.", ["NO_WORK_RIGHT"], false, "TUNNELING_BY_INSTANCE");
 
                 expect(admin.success).toBe(true);
                 expect(dev.success).toBe(true);
@@ -522,7 +522,7 @@ describe("Test NASS Secure Verification Methods", () => {
             });
 
             test("Cannot create a role with name that already exists", async () => {
-                const duplicateRight = await services.service.rights.create("test-scv-service", "admin", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_ROLES", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_ROLES", "VIEW_SERVICE", "VIEW_SETTINGS", "DEV_TOKEN_CREATION", "PROD_TOKEN_CREATION"], false, "TUNNELING_BY_INSTANCE");
+                const duplicateRight = await services.service.rights.create("test-scv-service", "admin", "Administrators with full access to manage tunnels, developers, users, roles, service settings, and tokens.", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_RIGHTS", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_RIGHTS", "VIEW_SERVICE", "VIEW_SETTINGS", "DEV_TOKEN_CREATION", "PROD_TOKEN_CREATION"], false, "TUNNELING_BY_INSTANCE");
                 expect(duplicateRight.success).toBe(false);
                 expect(duplicateRight.status).toBe(409);
                 expect(duplicateRight.message).toBe("A rights set with this name already exists in the service.");

@@ -26,7 +26,9 @@ const ServiceUsers = ({
 
     if (!authorized) {
         return (
-            <UnauthorizedAccess />
+            <>
+                <UnauthorizedAccess />
+            </>
         )
     }
 

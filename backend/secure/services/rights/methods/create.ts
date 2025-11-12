@@ -1,19 +1,22 @@
+import { Collection } from "mongoose";
 import { db } from "../../../..";
 import { software } from "../../../../software/dir";
 import { ReplyType } from "../../../../types/.types/reply.type";
 import { ServiceRights } from "../../../../types/.types/tunneling.type";
 import { services } from "../../dir";
 
-export async function createServiceRights(service_id: string, name: string, rights: ServiceRights["rights"], deletable : boolean = false, type : ServiceRights["type"] = "SERVICE_BY_NASS", user_id : string = null) : Promise<ReplyType> {
-    const serviceRightsDB = db.collection('service_rights');
+export async function createServiceRights(service_id: string, name: string, description: string, rights: ServiceRights["rights"], deletable : boolean = false, type : ServiceRights["type"] = "SERVICE_BY_NASS", user_id : string = null) : Promise<ReplyType> {
+    const serviceRightsDB = db.collection('service_rights') as Collection<ServiceRights>;
     const instanceTunnelingRightsDB = db.collection('instance_tunneling_rights');
+
+    const allRights = await serviceRightsDB.find({ service_id: service_id }).toArray() as ServiceRights[];
 
     if (type === "SERVICE_BY_NASS" && !Array.isArray(rights)) {
         return software.methods.serverReply(400, "For SERVICE_BY_NASS type, rights must be an array of predefined rights.");
     } 
 
     const createNotExistingHue = async () : Promise<number> => {
-        const existingHues = (await serviceRightsDB.find({ service_id: service_id }).toArray()).map(r => parseInt(r.hue));
+        const existingHues = (allRights).map(r => parseInt(r.hue));
         let hue = Math.floor(Math.random() * 360);
         while (existingHues.includes(hue)) {
             hue = Math.floor(Math.random() * 360);
@@ -57,8 +60,10 @@ export async function createServiceRights(service_id: string, name: string, righ
         deletable: deletable,
         hue: (await createNotExistingHue()).toString(),
         type : type,
+        description: description,
         created_by: user_id || "system",
         order:  await serviceRightsDB.countDocuments({ service_id: service_id, type : type }) // Note: 1 is the highest priority
+
     }
 
     if (user_id) {
