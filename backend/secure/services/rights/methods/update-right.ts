@@ -20,7 +20,6 @@ export async function updateLiteralRight(right: ServiceRights, user : User, serv
         return software.methods.serverReply(404, "Right not found.");
     }
 
-    console.log("User", user.username, "is attempting to update right:", right);
     const hasRight = await services.service.user.hasRight(user.id, service.id, "MANAGE_RIGHTS");
     if (!hasRight) {
         return software.methods.serverReply(403, "Forbidden: You do not have permission to update this right.");

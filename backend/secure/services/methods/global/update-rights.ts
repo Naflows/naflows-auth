@@ -87,7 +87,7 @@ export async function updateRightsRoute(req: Request, res: Response, user: User)
         r.rights = right.rights;
         r.description = right.description;
 
-        const rt = await services.service.rights.update(r);
+        const rt = await services.service.rights.update(r, user, service.data.service);
         if (!rt.success) {
             return software.methods.directResponse(500, `Failed to update right with ID ${right.id}.`, res, req);
         }
