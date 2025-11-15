@@ -1,4 +1,6 @@
+import type { ServicesForUserProps } from "../../../../../../../../../../types/ServicesForUserProps";
 import type { ServiceRights } from "../../../../../../../../../../types/TunnelingTypes";
+import { createdAtToAgo } from "../../../../../../../../../account/sub-components/notifications/methods/createdAtToAgo";
 import ServiceRightsSmall from "../../../components/small-right";
 import { updateRightsList } from "../../../scripts/update-rights";
 import NassRightsList from "../sub-components/nass-rights-list";
@@ -12,7 +14,7 @@ const EditRightRight = ({
     setFullDisplayOriginal,
     rightChanged,
     setRightChanged,
-    rights,
+    service,
     setLocalRights,
     serviceID
 }: {
@@ -22,10 +24,12 @@ const EditRightRight = ({
     setFullDisplayOriginal: React.Dispatch<React.SetStateAction<ServiceRights | null>>;
     rightChanged: boolean;
     setRightChanged: React.Dispatch<React.SetStateAction<boolean>>;
-    rights: ServiceRights[];
+    service : ServicesForUserProps | null;
     serviceID: string;
     setLocalRights: React.Dispatch<React.SetStateAction<ServiceRights[]>>;
 }) => {
+    if (!service) return null;
+
     return (
         <div className="display__right__additional__content">
             <div className="rights__section__header">
@@ -239,21 +243,21 @@ const EditRightRight = ({
                                 fullDisplay.type === "SERVICE_BY_NASS" ? (
                                     <NassRightsList rightSetValue={
                                         fullDisplay
-                                    } 
-                                    disabled={!fullDisplay?.deletable}
-                                    setRightSetValue={(newRightSet) => {
-                                        if (fullDisplay && fullDisplayOriginal && newRightSet) {
-                                            setFullDisplay(newRightSet);
-                                            // Check if rights changed
-                                            const right = newRightSet as ServiceRights;
-                                            const rightsChanged = JSON.stringify(right.rights.sort()) !== JSON.stringify(fullDisplayOriginal.rights.sort());
-                                            if (rightsChanged) {
-                                                setRightChanged(true);
-                                            } else {
-                                                setRightChanged(false);
+                                    }
+                                        disabled={!fullDisplay?.deletable}
+                                        setRightSetValue={(newRightSet) => {
+                                            if (fullDisplay && fullDisplayOriginal && newRightSet) {
+                                                setFullDisplay(newRightSet);
+                                                // Check if rights changed
+                                                const right = newRightSet as ServiceRights;
+                                                const rightsChanged = JSON.stringify(right.rights.sort()) !== JSON.stringify(fullDisplayOriginal.rights.sort());
+                                                if (rightsChanged) {
+                                                    setRightChanged(true);
+                                                } else {
+                                                    setRightChanged(false);
+                                                }
                                             }
-                                        }
-                                    }} />
+                                        }} />
                                 ) : (
                                     <div className="rights__container__form__content">
                                         <span className="rights__container__form__title">Current Rights ({fullDisplay.rights.length}/10)</span>
@@ -278,6 +282,37 @@ const EditRightRight = ({
                                 )
                             )
                         }
+                    </div>
+
+
+                    <div className="section__container" style={{
+                        display: fullDisplay?.type === "TUNNELING_BY_INSTANCE" && fullDisplay.tunnels && fullDisplay.tunnels.length > 0 && service?.user_authorizations["MANAGE_TUNNELS"] ? "block" : "none"
+                    }}>
+                        <div className="section__header">
+                            <h4 className="section__title">
+                                Associated Tunnels
+                            </h4>
+                            <div className="section__subtitle">
+                                The following tunnels are associated with this right set. Users with this right set will have access to these tunnels.
+                            </div>
+                        </div>
+                        <div className="tunnels__list">
+                            {
+                                fullDisplay?.tunnels?.map((tunnel, index) => {
+                                    return (
+                                        <div key={index} className="tunnel__item small-box">
+                                            <span className="tunnel__target__url">
+                                                {tunnel.target_url}
+                                            </span>
+                                            <div className="timespan">
+                                                <span>Updated {createdAtToAgo(tunnel.updated_at)}</span>
+                                            </div>
+                                        </div>
+                                    )
+
+                                })
+                            }
+                        </div>
                     </div>
                 </div>
             </div>

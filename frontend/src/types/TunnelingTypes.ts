@@ -14,6 +14,7 @@ export interface ServiceRights {
     type : "SERVICE_BY_NASS" | "TUNNELING_BY_INSTANCE"; // Type of service rights, view documentation for more info
     description? : string; // Optional description of the rights set
     can_edit? : boolean;
+    tunnels? : ServiceTunneling[]; // List of tunnels associated with this rights set
 }
 
 export interface UserRights {

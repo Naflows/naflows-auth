@@ -12,7 +12,7 @@ import { useApp } from "./init/app-use";
 import { services } from "./secure/services/dir";
 import path from "path";
 import { software } from "./software/dir";
-import { Service, ServiceAlert, User } from "./types/.types/collections.type";
+import { Service, ServiceAlert, ServicePlan, User } from "./types/.types/collections.type";
 import mailing from "./software/mailing/dir";
 import express from "express";
 import bodyParser from "body-parser";
@@ -225,7 +225,7 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
 
     console.log('>>> Service ID requested:', serviceInfo.id);
 
-
+    serviceInfo.plan = await services.service.plan.get(serviceInfo.plan as unknown as number) as unknown as ServicePlan;
 
 
     const isUserDev: ReplyType = await services.service.user.isDev(user.id, serviceInfo.id);

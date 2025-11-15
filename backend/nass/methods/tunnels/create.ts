@@ -36,6 +36,7 @@ export async function createTunnel(req: Request, res: Response) {
     // Check if all rights exists, else return error via promise
     console.log("Service rights to check:", service_rights);
     const names : string[] = [];
+    const ids : string[] = [];
     for (const right of service_rights) {
         // Rights must pass by their ID!
         const rightExists = await services.service.rights.get(right, apiID,"TUNNELING_BY_INSTANCE");
@@ -47,13 +48,14 @@ export async function createTunnel(req: Request, res: Response) {
             });
         }
         names.push(rightExists.name);
+        ids.push(rightExists.id);
     }
 
     const newTunnel: ServiceTunneling = {
         id: `tunnel-${apiID}-${Date.now()}`,
         service_id: apiID,
         target_url: route,
-        allowed_rights: service_rights,
+        allowed_rights: ids,
         created_at: Date.now(),
         updated_at: Date.now(),
     };

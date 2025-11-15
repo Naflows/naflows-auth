@@ -1,19 +1,7 @@
-import { software } from "../../../software/dir";
+import { software } from "../../../../software/dir";
 
 
-export interface ServicePlan {
-    id: number;
-    name: 'FREE' | 'PRO' | 'ENTERPRISE';
-    price: number;
-    features: Array<{
-        feature: string;
-        icon: string;
-    }>;
-    RPS: 100 | 500 | 1000 | 10000;
-    storage : 5 | 10 | 25 | 50;
-    type: "CLOUD" | "CLOUD";
-    description: string;
-}
+
 
 export async function getPlans() {
 

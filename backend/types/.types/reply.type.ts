@@ -1,4 +1,4 @@
-import { APIKey, Service, ServiceToken, User, UserSession } from "./collections.type";
+import { APIKey, Service, ServicePlan, ServiceToken, User, UserSession } from "./collections.type";
 import { ServiceTraffic } from "./traffic.type";
 import { DeveloperSecureAccess, ServiceRights } from "./tunneling.type";
 
@@ -36,6 +36,7 @@ export interface ReplyType {
         rights? : ServiceRights[];
         services?: Service[];
         alerts? : string[];
+        plans? : ServicePlan[];
 
     };
 }

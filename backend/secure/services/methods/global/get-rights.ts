@@ -21,7 +21,7 @@ export async function getRights(req: Request, res: Response, user: User) {
         return software.methods.directResponse(403, "You do not have permission to view rights for this service.", res, req);
     }
 
-    const rights = await services.service.rights.getAll(serviceID);
+    const rights = await services.service.rights.getAll(serviceID, user);
     const canEdit = await services.service.rights.canUserEdit(user.id, serviceID, rights);
 
     if (!canEdit.success) {

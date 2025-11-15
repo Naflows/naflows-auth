@@ -4,7 +4,6 @@ import secure from "../../secure/global/dir";
 import mongoose, { Collection } from "mongoose";
 import { getFakeRes, fakeUCR, fakeUserSession, getFakeReq, sleep, getFakeNext } from "./utils";
 import { services } from "../../secure/services/dir";
-import { getPlans } from "../../secure/services/methods/get-plans";
 import { db } from "../..";
 import { ReplyType } from "../../types/.types/reply.type";
 import { NassServiceToken, Service, ServiceToken, UserSession } from "../../types/.types/collections.type";
@@ -163,7 +162,7 @@ describe("Test NASS Secure Verification Methods", () => {
 
         describe("Original Rights Succesfully Created", () => {
             test("Check Original Rights", async () => {
-                const rights = await services.service.rights.getAll("test-scv-service");
+                const rights = await services.service.rights.getAll("test-scv-service", (await secure.user.get("2", false))!);
                 // Check that there is a "Developer" and "Administrator" right with specific rights
                 const developerRight = rights.find(r => r.name === "Developer");
                 const administratorRight = rights.find(r => r.name === "Administrator");

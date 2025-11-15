@@ -11,7 +11,6 @@ import { getDevKeyByValue } from "./methods/dev/key-by-value";
 import { registerServiceDev } from "./methods/dev/register-dev";
 import { generateBasicServiceTunnels } from "./methods/generate-basic-service-tunnels";
 import { generateApiID } from "./methods/generate-key";
-import { getPlans } from "./methods/get-plans";
 import { getPublicServiceDetails } from "./methods/get-public-details";
 import { getService } from "./methods/get-service";
 import { getLogsRoutes } from "./methods/global/get-logs";
@@ -51,6 +50,9 @@ import { NassAuthorForDev } from "./methods/dev/all-nass-author";
 import { updateRightsRoute } from "./methods/global/update-rights";
 import { updateLiteralRight } from "./rights/methods/update-right";
 import { canUserEdit } from "./rights/methods/can-user-edit";
+import { getTunnelsByRight } from "./tunnels/methods/get-by-right";
+import { getPlans } from "./methods/plans/get-plans";
+import { getPlan } from "./methods/plans/get-plan";
 
 
 
@@ -116,9 +118,13 @@ export const services = {
             assign: assignServiceRights,
             getAll: getAllRights,
             update : updateLiteralRight,
-            canUserEdit : canUserEdit
+            canUserEdit : canUserEdit,
+            getTunnels : getTunnelsByRight
         },
-        getPlans: getPlans,
+        plan : {
+            getAll : getPlans,
+            get : getPlan
+        },
         getPublicDetails: getPublicServiceDetails
     },
     token: {
