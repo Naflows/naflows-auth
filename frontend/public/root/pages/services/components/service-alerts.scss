@@ -42,18 +42,18 @@
     }
 
     &.service__alert--info {
-      background-color: $da-secondary-hue-transparent;
+      background-color: $da-info-hue-transparent;
 
       p {
-        color: $da-secondary-hue-lighter-2;
+        color: $da-info-hue-darker;
       }
 
       svg {
-        color: $da-secondary-hue;
+        color: $da-info-hue;
       }
 
       strong {
-        color: $da-secondary-hue;
+        color: $da-info-hue;
       }
 
 

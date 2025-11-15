@@ -2,13 +2,15 @@ import { serve } from "../../../public/method/serve";
 import { ReplyType } from "../../../types/.types/reply.type";
 import { db } from "../../..";
 import { software } from "../../../software/dir";
+import { Blacklist } from "../../../types/.types/collections.type";
+import { Collection } from "mongoose";
 
 export async function checkBlacklist(
-    res, ip
+    res, ip : string
 ) : Promise<ReplyType> {
-    const blacklistCollection = db.collection("blacklist");
+    const blacklistCollection = db.collection("blacklist") as Collection<Blacklist>;
     if (blacklistCollection) {
-        const blacklistedIP: any | null = await blacklistCollection.findOne({
+        const blacklistedIP: Blacklist | null = await blacklistCollection.findOne({
             ip: ip
         });
         if (

@@ -1,12 +1,14 @@
 import { db } from "../../../..";
 import { software } from "../../../../software/dir";
+import { User } from "../../../../types/.types/collections.type";
 import { ReplyType } from "../../../../types/.types/reply.type";
 import secure from "../../../global/dir";
 import crypto from 'crypto';
+import { services } from "../../dir";
 
 
 
-export async function registerServiceDev(service_id : string, developer_id : string) : Promise<ReplyType> {
+export async function registerServiceDev(service_id: string, developer_id: string, author?: User): Promise<ReplyType> {
     const serviceDevs = db.collection('service_devs');
     const existingDev = await serviceDevs.findOne({ service_id: service_id, developer_id: developer_id });
 
@@ -15,17 +17,27 @@ export async function registerServiceDev(service_id : string, developer_id : str
     }
 
     const ins = await serviceDevs.insertOne({
-        id : `dev-${service_id}-${crypto.randomBytes(16).toString('hex')}-${Date.now()}`,
-        developer_id : secure.crypt(developer_id),
-        service_id : service_id,
-        created_at : Date.now(),
-        updated_at : Date.now(),
-        access_key : crypto.randomBytes(32).toString('hex')
+        id: `dev-${service_id}-${crypto.randomBytes(16).toString('hex')}-${Date.now()}`,
+        developer_id: secure.crypt(developer_id),
+        service_id: service_id,
+        created_at: Date.now(),
+        updated_at: Date.now(),
+        access_key: crypto.randomBytes(32).toString('hex')
     });
 
     if (!ins.acknowledged) {
         return software.methods.serverReply(500, "Internal Server Error: Failed to register developer.");
     }
+
+    const dev = await secure.user.get(developer_id, false);
+
+    if (author && dev) {
+        await services.service.logs.create(service_id, `Registered developer (${dev?.username})`, "DEVELOPERS", "INFO", {
+            user: author.id,
+            message: `Developer ${dev?.username} (${developer_id}) was registered to service ${service_id} by ${author.username}`
+        });
+    }
+
 
     return software.methods.serverReply(201, "Developer registered successfully.");
 }

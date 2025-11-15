@@ -126,6 +126,12 @@ export default async function logUserIn(req: Request, res: Response): Promise<Re
                 },
                 true
             );
+
+            // If a session exists, create a new one in order to manage auto-logout of previous sessions
+            console.log("Creating a new session to manage auto-logout of previous sessions.");
+            const r: ReplyType = await manageNewSession(_user, user, client);
+            return r;
+
         }
 
         if (associatedSession) {

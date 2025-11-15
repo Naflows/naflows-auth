@@ -182,34 +182,7 @@ app.post('/client/logout', async (req, res) => {
 
 app.post('/client/secure/data/services', async (req, res) => {
     const user = await secure.user.manageConnection(req, res);
-    const userServices = user.services || [];
-    const sentServices = await Promise.all(
-        Object.keys(userServices).map(async (key) => {
-            const serviceRt: ReplyType = await services.service.get(key);
-            const service: Service = serviceRt.data.service as Service;
-            if (service) {
-                console.log("Pushing service to sentServices:", service);
-                return {
-                    name: service.name,
-                    id: service.id,
-                    description: service.description,
-                    dns: service.dns,
-                    status: service.status,
-                    rights: userServices[key].rights,
-                    joined_at: userServices[key].joined_at,
-                    user_active: userServices[key].active,
-                    picture: service.picture,
-                    banner: service.banner,
-                    details: service.details,
-                };
-            }
-            return null; // Return null for invalid services
-        })
-    );
-
-    const validServices = sentServices.filter(service => service !== null);
-
-    console.log("Sending services to user:", validServices);
+    const userServices = await services.service.user.getAllService(user.id, true);
 
     res.status(200).json({
         status: 200,
@@ -217,7 +190,7 @@ app.post('/client/secure/data/services', async (req, res) => {
         success: true,
         data: {
             middleware: req.middleware.data,
-            services: validServices,
+            services: userServices.data.services,
         }
     });
 });
@@ -256,7 +229,7 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
 
 
     const isUserDev: ReplyType = await services.service.user.isDev(user.id, serviceInfo.id);
-    console.log("Is user a developer for this service?", isUserDev);
+    console.log("Is user a developer for this service?", isUserDev)
     if (isUserDev.success) {
         serviceInfo.details.access_key = isUserDev.data.access_key;
 
@@ -267,6 +240,8 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
         delete serviceInfo.plan;
         delete serviceInfo.settings;
     }
+
+    serviceInfo.user_authorizations = await services.service.dev.authorizations(user.id, serviceInfo.id);
 
 
 
@@ -398,9 +373,15 @@ app.post('/client/secure/data/services/build', async (req, res) => {
             middleware: req.middleware.data,
         }
     });
+});
 
-
-})
+app.post('/client/secure/session-check', async (req, res) => {
+    return res.status(200).json({
+        status: 200,
+        message: "Session is valid.",
+        success: true
+    });
+});
 
 app.post('/client/secure/data/user', async (req, res) => {
 

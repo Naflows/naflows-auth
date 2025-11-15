@@ -39,6 +39,18 @@ import { getTrafficLogRoute } from "./methods/global/get-traffic-log";
 import { getTrafficLog } from "./logs/get-traffic-log";
 import { getKeyByUser } from "./methods/dev/key-by-user";
 import { getServiceAlerts } from "./methods/get-service-alerts";
+import { getServiceUsers } from "./methods/get-users";
+import { getUsers } from "./methods/global/get-users";
+import { userHasRight } from "./rights/methods/hasRight";
+import { canUserManageOthers } from "./rights/methods/can-user-manage-others";
+import { assignRights } from "./methods/global/assign-rights";
+import { updateRights } from "./rights/methods/update-rights";
+import { getUserServices } from "./methods/get-own-services";
+import { unregisterDev } from "./methods/dev/unregister-dev";
+import { NassAuthorForDev } from "./methods/dev/all-nass-author";
+import { updateRightsRoute } from "./methods/global/update-rights";
+import { updateLiteralRight } from "./rights/methods/update-right";
+import { canUserEdit } from "./rights/methods/can-user-edit";
 
 
 
@@ -50,7 +62,10 @@ export const services = {
         createRights : createRights,
         serviceKey : getApiKey,
         canAccess : checkUserAccess,
-        traffic : getTrafficLogRoute
+        traffic : getTrafficLogRoute,
+        getUsers : getUsers,
+        assignRights : assignRights,
+        updateRights:  updateRightsRoute
     },
     service: {
         register: registerService,
@@ -67,6 +82,11 @@ export const services = {
             isDev: isDevFromService,
             getKeyByValue: getDevKeyByValue,
             getRights : getRightsByUser,
+            getAll : getServiceUsers,
+            hasRight : userHasRight,
+            canManageUserInService : canUserManageOthers,
+            updateRights : updateRights,
+            getAllService : getUserServices
         },
         logs: {
             create: createServiceLogEntry,
@@ -78,7 +98,9 @@ export const services = {
             register: registerServiceDev,
             login: devLogin,
             getUserByKey: getUserByKey,
-            getKey : getKeyByUser
+            getKey : getKeyByUser,
+            unregister : unregisterDev,
+            authorizations: NassAuthorForDev
         },
         key: {
             getByApi: getKeyByIPID,
@@ -92,7 +114,9 @@ export const services = {
             create: createServiceRights,
             get: getRight,
             assign: assignServiceRights,
-            getAll: getAllRights
+            getAll: getAllRights,
+            update : updateLiteralRight,
+            canUserEdit : canUserEdit
         },
         getPlans: getPlans,
         getPublicDetails: getPublicServiceDetails

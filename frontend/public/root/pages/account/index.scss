@@ -25,6 +25,34 @@ body {
   .body__section__title {
     text-transform: uppercase;
   }
+
+
+  &.unauthorized {
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border: 1px solid $da-error-hue;
+    color: $da-error-hue;
+    background-color: $da-error-hue-transparent;
+    svg {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 10px;
+    }
+    .error__global {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+      h3 {
+        margin: 0;
+      }
+      span {
+        opacity: 0.7;
+      }
+    }
+  }
 }
 
 .buttons-container {
@@ -130,7 +158,7 @@ body {
     .header__account {
       flex-direction: column-reverse !important;
       .secondary-button {
-        width: calc(100%) !important;
+        min-width: calc(100%) !important;
         height: fit-content !important;
         svg {
           transform: rotate(180deg);
@@ -244,7 +272,6 @@ body {
 
       .user__header__visual__access {
         .user__header__visual__hover {
-          width: calc(100%) !important;
           border-radius: 15px;
           display: none;
         }
@@ -266,8 +293,7 @@ body {
         border-radius: 15px;
 
         align-self: stretch;
-        width: calc(100% - 20px - 4px) !important;
-
+        width: calc(100% - 54px - 2px - 25px - 10px) !important;
         .user__header__content {
           display: flex;
           flex-direction: row;
@@ -311,6 +337,8 @@ body {
           border-radius: 50%;
           width: 35px;
           height: 35px;
+          min-width: 35px;
+          min-height: 35px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -320,8 +348,84 @@ body {
   }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1200px) {
+  .nass__page {
+    width: calc(100% - 50px) !important;
+    padding-left: 0 !important;
+    padding-top: 100px !important;
+    margin-left: 0 !important;
+  }
 
+  .nass__account__page__header,
+  .nass__account__page__header.collapsed {
+    flex-direction: row;
+    width: calc(100vw - 40px) !important;
+    height: auto;
+    padding: 10px 20px;
+    justify-content: space-between;
+    .header__tabs {
+      display: flex;
+      flex-direction: row;
+      gap: 30px !important;
+      .tabs {
+        flex-direction: row;
+        gap: 20px;
+        width: fit-content;
+        justify-content: center;
+        gap: 5px !important;
+        .header__tab {
+          .tab__content {
+            gap: 5px !important;
+          }
+          .tab__content .tab-label {
+            display: flex !important;
+          }
+          width: fit-content !important;
+        }
+      }
+    }
+    .header__footer__content {
+      margin-left: auto;
+      flex-direction: row;
+      width: fit-content;
+      justify-content: space-between;
+      .header__account {
+        width: fit-content;
+
+        .user__header__visual__access {
+          flex-direction: row !important;
+          align-items: center !important;
+          padding: 5px 10px !important;
+          width: fit-content !important;
+          max-width: calc(100% - 20px - 4px) !important;
+          min-width: unset !important;
+          border-radius: 10px !important;
+          padding: 0 !important;
+          border: none !important;
+          .user__header__content {
+            display: none;
+          }
+          .user__header__visual__hover {
+            display: flex !important;
+            button {
+              display: flex !important;
+              padding: 10px 15px !important;
+              span {
+                display: inline !important;
+              }
+            }
+          }
+        }
+
+        .secondary-button {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
   .nass__account__page__header.collapsed {
     width: calc(100vw - 20px) !important;
     height: auto;

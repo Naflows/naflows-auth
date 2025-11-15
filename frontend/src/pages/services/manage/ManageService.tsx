@@ -26,6 +26,9 @@ import axios from "axios";
 
 
 export type accountTabs = "overview" | "capacities" | "security" | "edit" | "network" | "settings" | "users" | "logs" | "rights" | "safety" | "share";
+
+
+
 const dirValues: Record<accountTabs, { title: string; description: string }> = {
   "overview": { title: "Service Overview", description: "View and manage your service details, performance metrics, and recent activity." },
   "capacities": { title: "Service Capacities", description: "Monitor and manage the capacities associated with your service." },

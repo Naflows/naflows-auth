@@ -6,7 +6,7 @@ const ServiceCapacities = ({
 }: {
   service: ServicesForUserProps | null;
 }) => {
-  if (service) {
+  if (service && service.plan) {
     return (
       <div className="user__body__section service__plans">
         <div className="service__plan">

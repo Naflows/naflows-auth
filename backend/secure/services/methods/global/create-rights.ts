@@ -10,7 +10,8 @@ export async function createRights(req: Request, res: Response, user: User) {
         name,
         type,
         deletable,
-        rights
+        rights,
+        description
     } = req.body;
 
     const isUserDev = await services.service.user.isDev(user.id, service_id);
@@ -20,7 +21,7 @@ export async function createRights(req: Request, res: Response, user: User) {
     }
 
 
-    const re = await services.service.rights.create(service_id, name, rights, deletable, type, user.id);
+    const re = await services.service.rights.create(service_id, name, description, rights, deletable, type, user.id);
     if (re.success) {
         return software.methods.directResponse(200, "Rights set created successfully.", res, req);
     } else {

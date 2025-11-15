@@ -1,6 +1,7 @@
 import { software } from "../../../software/dir";
-import { Tokens, UserSession } from "../../../types/.types/collections.type";
+import { Tokens, User, UserSession } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
+import UCRType from "../../../types/.types/ucr.type";
 import secure from "../dir";
 
 
@@ -18,7 +19,5 @@ export function isSessionValid(token: Tokens,session : UserSession, user_id: str
         Token Valid: ${tokenValid}, User Valid: ${userValid}, Session Valid: ${sessionValid}, Session Active: ${sessionActive}`);
         return software.methods.serverReply(401, "Session is invalid or expired.", false);
     }
-
-
-
 }
+

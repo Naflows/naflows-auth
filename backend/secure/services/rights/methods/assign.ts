@@ -19,7 +19,7 @@ export async function assignServiceRights(rightID : string, userID : string, ser
     const userRightsDB = db.collection('user_rights')  as Collection<UserRights>;
 
     const existing = await userRightsDB.find({}).toArray() as UserRights[];
-    const userRight = existing.find((u : UserRights) =>secure.verify(userID, u.user_id) && u.service_id === serviceID);
+    const userRight = existing.find((u : UserRights) =>  u.user_id === userID && u.service_id === serviceID);
 
     // If user already has rights, update them
     if (userRight) {
@@ -38,7 +38,7 @@ export async function assignServiceRights(rightID : string, userID : string, ser
 
     const newUserRight : UserRights = {
         id: `rights-${secure.hash(userID)}-${serviceID}-${Date.now()}`,
-        user_id: secure.crypt(userID),
+        user_id: userID,
         service_id: serviceID,
         rights : [rightID],
         created_at: Date.now(),

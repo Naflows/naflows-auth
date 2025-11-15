@@ -16,6 +16,11 @@ router.post('/secure/services/get-logs', async (req, res) => {
     services.routes.logs(req, res, user);
 });
 
+router.post('/secure/services/get-users', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    services.routes.getUsers(req, res, user);
+});
+
 router.post('/secure/services/get-traffic', async (req, res) => {
     const user = await secure.user.manageConnection(req, res);
     services.routes.traffic(req, res, user);
@@ -24,6 +29,11 @@ router.post('/secure/services/get-traffic', async (req, res) => {
 router.post('/secure/services/rights/get', async (req, res) => {
     const user = await secure.user.manageConnection(req, res);
     services.routes.getRights(req, res, user);
+});
+
+router.post('/secure/services/rights/update', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    services.routes.updateRights(req, res, user);
 });
 
 router.post('/secure/services/rights/create', async (req, res) => {
@@ -42,6 +52,11 @@ router.post('/secure/services/user/check-access', async (req,res) => {
     const user = await secure.user.manageConnection(req, res);
     services.routes.canAccess(req, res, user);
 })
+
+router.post('/secure/services/rights/assign', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    services.routes.assignRights(req, res, user);
+});
 
 
 

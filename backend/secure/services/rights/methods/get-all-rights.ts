@@ -18,7 +18,7 @@ export async function getAllRights(service_id: string): Promise<ServiceRights[]>
         await Promise.all(
             ur.rights.map(async (rID) => {
                 if (rightsSet.has(rID)) {
-                    const user = await secure.user.get(ur.user_id, true);
+                    const user = await secure.user.get(ur.user_id, false);
                     if (user) {
                         if (!usersPerRights[rID]) {
                             usersPerRights[rID] = [];
@@ -29,7 +29,7 @@ export async function getAllRights(service_id: string): Promise<ServiceRights[]>
                                 username: user.username,
                                 first_name: user.first_name,
                                 last_name: user.last_name,
-                                profile_picture: user.profile_picture
+                                profile_picture: user.profile_picture,
                             });
                         }
                     }
@@ -41,6 +41,9 @@ export async function getAllRights(service_id: string): Promise<ServiceRights[]>
     for (const right of rights) {
         right.usersPerRights = usersPerRights[right.id] || [];
     }
+
+    // Order rights by their 'order' field, 1 being the highest priority
+    rights.sort((a, b) => a.order - b.order);
 
 
     return rights;

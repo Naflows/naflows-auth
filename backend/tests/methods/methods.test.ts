@@ -7,7 +7,7 @@ import { services } from "../../secure/services/dir";
 import { getPlans } from "../../secure/services/methods/get-plans";
 import { db } from "../..";
 import { ReplyType } from "../../types/.types/reply.type";
-import { NassServiceToken, Service, ServiceToken } from "../../types/.types/collections.type";
+import { NassServiceToken, Service, ServiceToken, UserSession } from "../../types/.types/collections.type";
 import nass from "../../nass/dir";
 import { before } from "node:test";
 import { sessionRenewal } from "../../middleware/methods/ssv/session-renewal";
@@ -15,12 +15,6 @@ import { checkTokenRights } from "../../middleware/methods/stv/check-rights";
 import { software } from "../../software/dir";
 
 
-beforeAll(async () => {
-    // Ensure database connection is established before running tests
-    if (mongoose.connection.readyState === 0) {
-        await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/nass");
-    }
-});
 
 describe("Test NASS Secure Verification Methods", () => {
 
@@ -54,11 +48,8 @@ describe("Test NASS Secure Verification Methods", () => {
 
     describe("Check Blacklist Middleware", () => {
         test("Non-Blacklisted IP", async () => {
-            const req: any = {
-                ip: "123.456.789.000"
-            };
             // Excluding res because it is only used to serve the blacklist page
-            const result = await middleware.check.blacklist(getFakeRes(), req.ip);
+            const result = await middleware.check.blacklist(getFakeRes(), "123.456.789.000");
             expect(result.success).toBe(true);
             expect(result.status).toBe(200);
             expect(result.message).toBe("IP is not blacklisted.");
@@ -182,7 +173,7 @@ describe("Test NASS Secure Verification Methods", () => {
 
                 // Check specific rights for each role
                 expect(developerRight?.rights).toEqual(expect.arrayContaining(["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "DEV_TOKEN_CREATION"]));
-                expect(administratorRight?.rights).toEqual(expect.arrayContaining(["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_ROLES", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_ROLES", "VIEW_SERVICE", "VIEW_SETTINGS", "DEV_TOKEN_CREATION", "PROD_TOKEN_CREATION"]));
+                expect(administratorRight?.rights).toEqual(expect.arrayContaining(["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_RIGHTS", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_RIGHTS", "VIEW_SERVICE", "VIEW_SETTINGS", "DEV_TOKEN_CREATION", "PROD_TOKEN_CREATION"]));
             });
         })
 
@@ -502,9 +493,9 @@ describe("Test NASS Secure Verification Methods", () => {
             })
 
             test("Create Right 'admin', 'dev', 'no-work' for tunneling", async () => {
-                const admin = await services.service.rights.create("test-scv-service", "admin", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_ROLES", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_ROLES", "VIEW_SERVICE", "VIEW_SETTINGS", "DEV_TOKEN_CREATION", "PROD_TOKEN_CREATION"], false, "TUNNELING_BY_INSTANCE");
-                const dev = await services.service.rights.create("test-scv-service", "dev", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "DEV_TOKEN_CREATION"], false, "TUNNELING_BY_INSTANCE");
-                const nowork = await services.service.rights.create("test-scv-service", "no-work", ["NO_WORK_RIGHT"], false, "TUNNELING_BY_INSTANCE");
+                const admin = await services.service.rights.create("test-scv-service", "admin", "Administrators with full access to manage tunnels, developers, users, roles, service settings, and tokens.", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_RIGHTS", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_RIGHTS", "VIEW_SERVICE", "VIEW_SETTINGS", "DEV_TOKEN_CREATION", "PROD_TOKEN_CREATION"], false, "TUNNELING_BY_INSTANCE");
+                const dev = await services.service.rights.create("test-scv-service", "dev", "Developers with permissions to manage tunnels and developers.", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "DEV_TOKEN_CREATION"], false, "TUNNELING_BY_INSTANCE");
+                const nowork = await services.service.rights.create("test-scv-service", "no-work", "Users with no work rights.", ["NO_WORK_RIGHT"], false, "TUNNELING_BY_INSTANCE");
 
                 expect(admin.success).toBe(true);
                 expect(dev.success).toBe(true);
@@ -531,7 +522,7 @@ describe("Test NASS Secure Verification Methods", () => {
             });
 
             test("Cannot create a role with name that already exists", async () => {
-                const duplicateRight = await services.service.rights.create("test-scv-service", "admin", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_ROLES", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_ROLES", "VIEW_SERVICE", "VIEW_SETTINGS", "DEV_TOKEN_CREATION", "PROD_TOKEN_CREATION"], false, "TUNNELING_BY_INSTANCE");
+                const duplicateRight = await services.service.rights.create("test-scv-service", "admin", "Administrators with full access to manage tunnels, developers, users, roles, service settings, and tokens.", ["MANAGE_TUNNELS", "MANAGE_DEVS", "VIEW_STATS", "READ", "WRITE", "DELETE", "MANAGE_USERS", "MANAGE_RIGHTS", "MANAGE_SERVICE", "MANAGE_SETTINGS", "VIEW_USERS", "VIEW_RIGHTS", "VIEW_SERVICE", "VIEW_SETTINGS", "DEV_TOKEN_CREATION", "PROD_TOKEN_CREATION"], false, "TUNNELING_BY_INSTANCE");
                 expect(duplicateRight.success).toBe(false);
                 expect(duplicateRight.status).toBe(409);
                 expect(duplicateRight.message).toBe("A rights set with this name already exists in the service.");
@@ -792,6 +783,7 @@ describe("Test NASS Secure Verification Methods", () => {
                 expect(ssvRT).toBeDefined();
             });
 
+
             test("STV Creates New Token for New Session", async () => {
                 const ucr = fakeUCR();
                 ucr.client = serviceUCRData;
@@ -812,6 +804,49 @@ describe("Test NASS Secure Verification Methods", () => {
                 newSessionToken = result.data.token;
                 expect(newSessionToken).toBeDefined();
 
+                console.log(`New correct credentials : Session ID = ${sessionID} | Session Token = ${newSessionToken}`);
+
+            });
+
+            test("Session succesfully verified in idle mode", async () => {
+                const ucr = fakeUCR();
+                ucr.client = serviceUCRData;
+                ucr.user.session_id = sessionID;
+                ucr.request.url = "/test-tunnel-route";
+                ucr.user.token = newSessionToken;
+                delete ucr.user.password;
+                delete ucr.user.identifier;
+
+                const fakeReq = getFakeReq(ucr);
+                const res = getFakeRes();
+                const result: ReplyType = await secure.user.hiddenLogin(fakeReq, res, true);
+                expect(result.success).toBe(true);
+                expect(result.status).toBe(200);
+                expect(result.message).toBe("Login successful in idle mode.");
+            })
+
+            test("Session fails to verify when session expired", async () => {
+                // Manually expire the session in the database
+                let session = await secure.session.get(sessionID);
+                expect(session).toBeDefined();
+                expect(session?.id).toBe(sessionID);
+                session!.expires_at = 0; // Set expiration to 1 second in the past
+                await secure.session.update(sessionID, session);
+
+                const ucr = fakeUCR();
+                ucr.client = serviceUCRData;
+                ucr.user.session_id = sessionID;
+                ucr.request.url = "/test-tunnel-route";
+                ucr.user.token = newSessionToken;
+                delete ucr.user.password;
+                delete ucr.user.identifier;
+
+                const fakeReq = getFakeReq(ucr);
+                const res = getFakeRes();
+                const result: ReplyType = await secure.user.hiddenLogin(fakeReq, res, true);
+                expect(result.success).toBe(false);
+                expect(result.status).toBe(401);
+                expect(result.message).toBe("Unauthorized : Invalid token or session.");
             });
 
             test("STV Fails with Invalid Session Token", async () => {
@@ -829,9 +864,47 @@ describe("Test NASS Secure Verification Methods", () => {
                 expect(result.success).toBe(false);
                 expect(result.status).toBe(401);
                 expect(result.message).toBe("Invalid token or credentials provided.");
-
-                
             });
+
+
+
+            test("Session fails to verify with wrong session ID", async () => {
+                const ucr = fakeUCR();
+                ucr.client = serviceUCRData;
+                ucr.user.session_id = "invalid-session-id-value";
+                ucr.request.url = "/test-tunnel-route";
+                ucr.user.token = newSessionToken;
+                delete ucr.user.password;
+                delete ucr.user.identifier;
+
+                const fakeReq = getFakeReq(ucr);
+                const res = getFakeRes();
+                const result: ReplyType = await secure.user.hiddenLogin(fakeReq, res, true);
+                expect(result.success).toBe(false);
+                expect(result.status).toBe(401);
+                expect(result.message).toBe("Unauthorized: Session not found.");
+            });
+
+
+
+            test("Session fails to verify with invalid token", async () => {
+                const ucr = fakeUCR();
+                ucr.client = serviceUCRData;
+                ucr.user.session_id = sessionID;
+                ucr.request.url = "/test-tunnel-route";
+                ucr.user.token = "invalid-session-token-value";
+                delete ucr.user.password;
+                delete ucr.user.identifier;
+
+                const fakeReq = getFakeReq(ucr);
+                const res = getFakeRes();
+                const result: ReplyType = await secure.user.hiddenLogin(fakeReq, res, true);
+                expect(result.success).toBe(false);
+                expect(result.status).toBe(401);
+                expect(result.message).toBe("Unauthorized: Token does not match session.");
+            });
+
+
         });
     })
 
@@ -862,4 +935,6 @@ describe("Test NASS Secure Verification Methods", () => {
     //         expect(result.message).toBe("Tunnel request processed successfully.");
     //     });
     // })
+
+
 });

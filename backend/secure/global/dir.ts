@@ -76,7 +76,7 @@ const secure = {
         confirm : confirmSession,
         update : updateSession,
         valid : isSessionValid,
-        delete : deleteSession
+        delete : deleteSession,
     }
 };
 

@@ -34,7 +34,6 @@ export async function scv(req: Request, res: Response, naflowsFrontendOnly : boo
       req.body.client,
       naflowsFrontendOnly
     );
-    console.log("Request origin check result:", isRequestOriginValid);
     if (!isRequestOriginValid.success) {
       return isRequestOriginValid;
     }

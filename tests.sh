@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 print_red() {
     echo -e "\033[1;31m$1\033[0m"
 }
@@ -88,10 +90,36 @@ function reset_test_db {
 
 }
 
+# Ensure that any running containers are stopped and removed
+# And prevent already-located ports from causing issues
+function end_running_containers {
+    echo -e "\033[1;32mStopping existing containers to prevent conflicts... - Instance 'mongo-nass' remains untouched.\033[0m"
+    COMPOSE_PROFILES="mongo-nass-test,auth-api-test,dummy-api,mongo-nass,auth-api" docker compose down
+}
+
 
 function launch_dummy_api {
     echo -e "\033[1;32mStarting dummy-api service...\033[0m"
     COMPOSE_PROFILES="dummy-api" docker compose up --build -d dummy-api
+}
+
+function save_test_result_with_current_commit {
+    # This function saves the current commit ID, branch, test result, and timestamp in a structured format.
+    TEST_EXIT_CODE=$1
+
+    # Name of the file: test_results.log
+    FILE_NAME="test_results.log"
+    COMMIT_ID=$(git rev-parse HEAD)
+    BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+    TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
+    if [ $TEST_EXIT_CODE -eq 0 ]; then
+        TEST_RESULT="PASS"
+    else
+        TEST_RESULT="FAIL"
+    fi
+
+    # Format the log entry as a table row
+    printf "%-40s %-20s %-10s %-20s\n" "$COMMIT_ID" "$BRANCH_NAME" "$TEST_RESULT" "$TIMESTAMP" >> "$FILE_NAME"
 }
 
 if [ "$RESET_ENVIRONMENT" = "true" ]; then
@@ -104,6 +132,7 @@ fi
 
 
 if [ "$TEST_PARAMETER" = "methods" ]; then
+    end_running_containers
     reset_test_db
     
 
@@ -125,13 +154,13 @@ if [ "$TEST_PARAMETER" = "methods" ]; then
         COMPOSE_PROFILES="mongo-nass-test,auth-api-test,dummy-api" docker compose down
     fi
 
+    save_test_result_with_current_commit $TEST_EXIT_CODE
+
     print_blue "\nAll tests ran. To run the same suite again, press 'y'. To exit, press any other key."
     read -n 1 -s USER_INPUT
     if [ "$USER_INPUT" = "y" ] || [ "$USER_INPUT" = "Y" ]; then
         clear_terminal
         bash tests.sh $RESET_ENVIRONMENT $TEST_PARAMETER
-
-
     else
         COMPOSE_PROFILES="mongo-nass-test,auth-api-test,dummy-api" docker compose down
         exit 1

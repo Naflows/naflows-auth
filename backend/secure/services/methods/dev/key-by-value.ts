@@ -5,8 +5,6 @@ import { software } from "../../../../software/dir";
 export async function getDevKeyByValue(key : string) {
     const serviceDevs = db.collection('service_devs');
     const allDevs = await serviceDevs.find({}).toArray();
-    console.log(">>>>> All devs:", allDevs);
-    console.log(">>>>> Searching for key:", key);
     const dev = allDevs.find(d => d.access_key === key);
     if (!dev) {
         return software.methods.serverReply(404, "Developer Key not found.");

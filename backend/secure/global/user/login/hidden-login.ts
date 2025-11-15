@@ -10,14 +10,14 @@ import notifications from "../../../../software/notifications/dir";
 
 
 
-export async function hiddenLogin(req: Request, res: Response): Promise<ReplyType> {
+export async function hiddenLogin(req: Request, res: Response, preventMiddlewareReload: boolean): Promise<ReplyType> {
 
     // Verify all parameters: user, session, token 
     const tokenValue = req.body.user.token;
     const session_id = req.body.user.session_id;
     const uid = req.body.user.user_id;
 
-    console.log("Hidden Login Attempt:", { tokenValue, session_id, uid });
+
     if (!tokenValue || !session_id || !uid) {
         return software.methods.serverReply(400, "Bad Request: Missing parameters.");
     }
@@ -28,11 +28,13 @@ export async function hiddenLogin(req: Request, res: Response): Promise<ReplyTyp
         return software.methods.serverReply(401, "Unauthorized: Session not found.");
     }
 
-    const token: Tokens = await secure.token.get(session.token_id, true);
 
-    if (!token) {
-        return software.methods.serverReply(401, "Unauthorized: Token not found.");
+    const tokenBySession = await secure.token.get(session.token_id, true);
+    if (!tokenBySession || secure.verify(tokenValue, tokenBySession.token) === false) {
+        return software.methods.serverReply(401, "Unauthorized: Token does not match session.");
     }
+
+
 
     const user: User = await secure.user.get(uid, false);
 
@@ -40,11 +42,11 @@ export async function hiddenLogin(req: Request, res: Response): Promise<ReplyTyp
         return software.methods.serverReply(401, "Unauthorized: User not found.");
     }
 
-    const tokenValid = await secure.token.valid(token, session, user.id, true); // TODO : MAKE SURE CREDENTIALS ARE VALID
-    if (!secure.session.valid(token, session, user.id).success || !tokenValid.success) {
-        return software.methods.serverReply(401, "Invalid token or session.");
+    const tokenValid = await secure.token.valid(tokenBySession, session, user.id, true); // TODO : MAKE SURE CREDENTIALS ARE VALID
+    if (!secure.session.valid(tokenBySession, session, user.id).success || !tokenValid.success) {
+        return software.methods.serverReply(401, "Unauthorized : Invalid token or session.");
     }
 
 
-    return (await acceptLogin(user, session));
+    return (await acceptLogin(user, session, preventMiddlewareReload));
 }

@@ -74,12 +74,12 @@
   .header__head {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 20px;
-    width: 100%;
     img {
-      height: 60px;
-      width: auto;
+      max-height: 60px;
+      max-width: fit-content;
+      object-fit: contain;
     }
   }
 }

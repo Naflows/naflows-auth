@@ -12,13 +12,14 @@ const ServicesComponent = ({
 }: {
   servicesData: ServicesBodyProps[];
 }) => {
+
+
   const userServices = servicesData.filter(
     (service: ServicesBodyProps) =>
-      service.rights.includes("ADMINISTRATOR") ||
-      service.rights.includes("DEVELOPER")
+      service.is_user_developer === true
   );
   const userConnections = servicesData.filter(
-    (service: ServicesBodyProps) => service.rights.includes("USER")
+    (service: ServicesBodyProps) => !service.is_user_developer === true
   );
   const [displayedServices, setDisplayedServices] = useState<ServicesBodyProps[]>(userServices);
   const [searchQuery, setSearchQuery] = useState<string>("");

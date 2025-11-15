@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import type { ServiceRights } from "../../../../../../../../types/TunnelingTypes";
 import Loader from "../../../../../../../../global/components/Loader";
 import ServiceRightsComponent from "./components/rights";
 import type { ServicesForUserProps } from "../../../../../../../../types/ServicesForUserProps";
 import '../../../../../../../../../public/root/pages/services/manage/sub-components/Rights.scss';
 import CreateRightSet from "./components/create-righet-set/create-right-set";
+import { fetchRights } from "../scripts/fetch-rights-list";
+import UnauthorizedAccess from "../../../../../../../../global/components/Unauthorized";
 
 
 const ServiceRightsComponentGlobal = ({
@@ -21,34 +22,20 @@ const ServiceRightsComponentGlobal = ({
     const [loadServices, setLoadServices] = useState<boolean>(true);
 
     useEffect(() => {
-        async function fetchRights() {
-            if (!service) return;
-            try {
-                await axios.post(`${process.env.DUMMY_API_URL_DEV}/user/secure/service/rights/get`, {
-                    service_id: service.id
-                }, {
-                    withCredentials: true
-                }).then((response) => {
-                    const fetchedRights: ServiceRights[] = response.data.rights;
-                    const nassRights = fetchedRights.filter(r => r.type === "SERVICE_BY_NASS");
-                    const instanceRights = fetchedRights.filter(r => r.type === "TUNNELING_BY_INSTANCE");
-                    setNassRights(nassRights);
-                    setInstanceRights(instanceRights);
-                }).finally(() => {
-                    setIsLoading(false);
-                });
-                setLoadServices(false);
-            } catch (error) {
-                console.error("Error fetching rights:", error);
-            }
-        }
-
-        if (loadServices) {
-            fetchRights();
+        if (loadServices && service) {
+            fetchRights(service.id, setIsLoading).then(({ nassRights, instanceRights }) => {
+                setNassRights(nassRights);
+                setInstanceRights(instanceRights);
+            });
+            setLoadServices(false);
         }
     }, [service, loadServices]);
 
     if (!service) return <></>;
+
+    if (service.user_authorizations && !service.user_authorizations["MANAGE_RIGHTS"]) {
+        return <UnauthorizedAccess />;
+    }
 
     return (
         <div>
@@ -60,6 +47,7 @@ const ServiceRightsComponentGlobal = ({
                         <Loader loading={true} />
                     ) :
                         <>
+                            
                             <button className="primary-button width-fit" onClick={() => {
                                 setCreateRightSet(true);
                             }}>Create New Rights Set</button>
@@ -69,6 +57,10 @@ const ServiceRightsComponentGlobal = ({
                                     <div className="rights__container__header">
                                         <div className="header__content">
                                             <h3 className="rights__container__title">Service Rights Sets</h3>
+                                            <span>
+                                                Rights sets defining permissions for NASS services.
+                                                <a href="/docs/" target="_blank" rel="noreferrer"> Learn more.</a>
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="rights__content">
@@ -83,6 +75,10 @@ const ServiceRightsComponentGlobal = ({
                                     <div className="rights__container__header">
                                         <div className="header__content">
                                             <h3 className="rights__container__title">Instance Rights Sets</h3>
+                                            <span>
+                                                Rights sets defining permissions for Instance-based tunneling.
+                                                <a href="/docs/" target="_blank" rel="noreferrer"> Learn more.</a>
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="rights__content">
