@@ -615,7 +615,7 @@ describe("Test NASS Secure Verification Methods", () => {
 
         describe("Tunneling Rights Enforcement", () => {
 
-            beforeAll(async () => {
+            test("Create a Tunnel for Admins Only" ,async () => {
                 // Generate a new tunnel for admins only
                 const fakeReq = getFakeReq({
                     apiKey: serviceKey,
@@ -644,9 +644,9 @@ describe("Test NASS Secure Verification Methods", () => {
                 ucr.request.url = "/test-tunnel-route";
 
                 const result = await checkTokenRights(ucr);
-                expect(result.success).toBe(true);
-                expect(result.status).toBe(200);
                 expect(result.message).toBe("Token rights checked successfully.");
+                expect(result.status).toBe(200);
+                expect(result.success).toBe(true);
             });
 
             test("Rights Invalid for Tunnel", async () => {

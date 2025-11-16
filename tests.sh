@@ -134,6 +134,12 @@ fi
 if [ "$TEST_PARAMETER" = "methods" ]; then
     end_running_containers
     reset_test_db
+
+    # If mongo-express is not running, start it
+    if ! docker ps --format '{{.Names}}' | grep -q '^mongo-express$'; then
+        echo -e "\033[1;32mStarting mongo-express service...\033[0m"
+        COMPOSE_PROFILES="mongo-nass-test" docker compose up -d mongo-express
+    fi
     
 
     # Wait for services to start and MongoDB to be ready

@@ -7,7 +7,7 @@ import { services } from "../../../secure/services/dir";
 import { User } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 
-export async function createTunnel(req: Request, res: Response) {
+export async function createTunnelViaNass(req: Request, res: Response) {
     const { apiKey, apiID, devKey, route, service_rights  } = req.body;
 
     console.log(`Creating tunnel for API ID: ${apiID}, Route: ${route}, Service Rights: ${service_rights} with API Key: ${apiKey} and Dev Key: ${devKey}`);
