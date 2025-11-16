@@ -33,7 +33,7 @@ const ServiceRightsComponentGlobal = ({
 
     if (!service) return <></>;
 
-    if (service.user_authorizations && !service.user_authorizations["MANAGE_RIGHTS"]) {
+    if (service.user_authorizations && !service.user_authorizations["VIEW_RIGHTS"]) {
         return <UnauthorizedAccess />;
     }
 

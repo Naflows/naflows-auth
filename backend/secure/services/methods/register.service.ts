@@ -14,7 +14,7 @@
 */
 
 import { v4 } from "uuid";
-import { Service, ServiceSettings, ServiceToken } from "../../../types/.types/collections.type";
+import { Service, ServicePlan, ServiceSettings, ServiceToken } from "../../../types/.types/collections.type";
 import { ServiceTraffic } from "../../../types/.types/traffic.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import { software } from "../../../software/dir";
@@ -22,7 +22,6 @@ import { services } from "../dir";
 import { db } from "../../..";
 import { Collection } from "mongoose";
 import secure from "../../global/dir";
-import { ServicePlan } from "./get-plans";
 
 export async function registerService(
     // These data are the one defined by the user creating the service
@@ -62,15 +61,13 @@ export async function registerService(
         return software.methods.serverReply(401, "Unauthorized: User not found.");
     }
 
-    const plans = await services.service.getPlans() as ReplyType;
+    const plans = await services.service.plan.getAll() as ReplyType;
 
     if (!plans.success) {
         return software.methods.serverReply(500, "Internal Server Error: Failed to fetch service plans.");
     }
 
-    const data = plans.data as { plans: ServicePlan[] };
-    console.log(data.plans, "PLANS", "for", plan.id);
-    const planData = data.plans.find((p: ServicePlan) => p.id === plan.id);
+    const planData = plans.data.plans.find((p: ServicePlan) => p.id === plan.id);
 
     if (!planData) {
         return software.methods.serverReply(404, "Not Found: Service plan not found.");
@@ -97,12 +94,7 @@ export async function registerService(
             allow_nass_payement_method: false
         },
 
-        plan: {
-            plan: planData.name,
-            type: planData.type,
-            size: planData.storage,
-            used_space: 0
-        },
+        plan: planData.id,
 
         public_settings: {
             allow_public_visibility: public_settings.allow_public_visibility,

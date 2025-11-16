@@ -134,11 +134,17 @@ export interface Tokens {
 }
 
 export interface ServicePlan {
-  plan: "FREE" | "PRO" | "ENTERPRISE";
-  type: "LOCAL" | "CLOUD";
-  size: 5 | 10 | 25 | 50; // in GB
-  used_space: number; // in MB
-
+    id: number;
+    name: 'FREE' | 'PRO' | 'ENTERPRISE';
+    price: number;
+    features: Array<{
+        feature: string;
+        icon: string;
+    }>;
+    RPS: 100 | 500 | 1000 | 10000;
+    storage : 5 | 10 | 25 | 50;
+    type: "CLOUD" | "CLOUD";
+    description: string;
 }
 export interface ServiceSettings {
   rates: 100 | 500 | 1000 | 10000;
@@ -161,7 +167,7 @@ export interface Service {
   status: "ACTIVE" | "INACTIVE" | "DEPRECATED"; // Service status, ACTIVE means the service is running, INACTIVE means the service is not running, DEPRECATED means the service is no longer supported
   dns: string; // DNS of the service, used to identify the service
   ip_address: string[]; // IP address of the service
-  plan: ServicePlan;
+  plan : ServicePlan | number;
   settings: ServiceSettings;
   apiKey?: string; // The API key associated with the service
   picture?: string; // URL to the service picture, optional

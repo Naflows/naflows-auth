@@ -7,7 +7,7 @@ import { services } from "../../../secure/services/dir";
 import { User } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 
-export async function createTunnel(req: Request, res: Response) {
+export async function createTunnelViaNass(req: Request, res: Response) {
     const { apiKey, apiID, devKey, route, service_rights  } = req.body;
 
     console.log(`Creating tunnel for API ID: ${apiID}, Route: ${route}, Service Rights: ${service_rights} with API Key: ${apiKey} and Dev Key: ${devKey}`);
@@ -36,6 +36,7 @@ export async function createTunnel(req: Request, res: Response) {
     // Check if all rights exists, else return error via promise
     console.log("Service rights to check:", service_rights);
     const names : string[] = [];
+    const ids : string[] = [];
     for (const right of service_rights) {
         // Rights must pass by their ID!
         const rightExists = await services.service.rights.get(right, apiID,"TUNNELING_BY_INSTANCE");
@@ -47,13 +48,14 @@ export async function createTunnel(req: Request, res: Response) {
             });
         }
         names.push(rightExists.name);
+        ids.push(rightExists.id);
     }
 
     const newTunnel: ServiceTunneling = {
         id: `tunnel-${apiID}-${Date.now()}`,
         service_id: apiID,
         target_url: route,
-        allowed_rights: service_rights,
+        allowed_rights: ids,
         created_at: Date.now(),
         updated_at: Date.now(),
     };
