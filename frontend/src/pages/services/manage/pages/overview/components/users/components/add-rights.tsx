@@ -5,6 +5,7 @@ import { fetchRights } from "../scripts/fetch-rights-list";
 import Loader from "../../../../../../../../global/components/Loader";
 import RightItemCheck from "./right-item-check";
 import { postRightsList } from "../scripts/post-rights-list";
+import { useNotification } from "../../../../../../../../global/action-information/NotificationContent";
 
 const AddUserRight = ({
     service,
@@ -21,6 +22,7 @@ const AddUserRight = ({
     setCurrentRights: React.Dispatch<React.SetStateAction<ServiceUser["rights"]>>;
     setClicked: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+    const { addNotification } = useNotification();
 
     const [loadServices, setLoadServices] = useState<boolean>(true);
     const [load, setLoad] = useState<boolean>(true);
@@ -109,7 +111,7 @@ const AddUserRight = ({
                     //   id : right.id,
                     //   update_type : "ADD" | "REMOVE"
                     //}
-                    const IDs : {type: "SERVICE_BY_NASS" | "TUNNELING_BY_INSTANCE", id: string, update_type: "ADD" | "REMOVE"}[] = [
+                    const IDs: { type: "SERVICE_BY_NASS" | "TUNNELING_BY_INSTANCE", id: string, update_type: "ADD" | "REMOVE" }[] = [
                         ...current.map(r => ({
                             type: r.type,
                             id: r.id,
@@ -126,6 +128,27 @@ const AddUserRight = ({
 
                     await postRightsList(userID, service.id, IDs).then((response) => {
                         console.log("Post rights list response:", response);
+                        if (response) {
+                            const success = response.success;
+                            if (success) {
+                                addNotification({
+                                    title: "User Rights Updated",
+                                    description: "The user rights have been successfully updated.",
+                                    type: "info",
+                                    action1: undefined,
+                                    action2: undefined,
+                                });
+                            } else {
+                                addNotification({
+                                    title: "Failed to Update Rights",
+                                    description: response.message || "An error occurred while updating user rights.",
+                                    type: "error",
+                                    action1: undefined,
+                                    action2: undefined,
+                                });
+                            }
+                        }
+
                     });
                     // Update original to current
                     setOriginal(

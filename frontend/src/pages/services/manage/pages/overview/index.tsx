@@ -4,6 +4,8 @@ import ServiceDescription from "../../sub-component/ServiceDescription"
 import type { accountTabs } from "../../ManageService"
 import QuickActions from "./components/quick-actions"
 import ServiceAlerts from "../components/alerts"
+import { NotificationProvider } from "../../../../../global/action-information/NotificationContent"
+import NotificationContainer from "../../../../../global/action-information/NotificationContainer"
 
 
 const ManageServiceOverview = ({
@@ -20,33 +22,36 @@ const ManageServiceOverview = ({
     console.log("Rendering ManageServiceOverview with service:", service);
 
     return (
-        <div className="manage__service__body">
-            <div
-                className="parent__of__section row__layout service__manage__content"
-                style={{
-                    width: "100%"
-                }}
-            >
-                <div className="global__content">
-                    <div className="parent__of__section row__layout" id="left-side">
-                        <ServiceDescription service={service} />
-                    </div>
-
-                    <div className="parent__of__section row__layout" id="right-side">
-                        <div className="right__side__header">
-                            <QuickActions service={service} setService={setService} />
-                            <ServiceCapacities service={service} />
+        <NotificationProvider>
+            <NotificationContainer />
+            <div className="manage__service__body">
+                <div
+                    className="parent__of__section row__layout service__manage__content"
+                    style={{
+                        width: "100%"
+                    }}
+                >
+                    <div className="global__content">
+                        <div className="parent__of__section row__layout" id="left-side">
+                            <ServiceDescription service={service} />
                         </div>
-                        <ServiceAlerts service={service!} />
 
+                        <div className="parent__of__section row__layout" id="right-side">
+                            <div className="right__side__header">
+                                <QuickActions service={service} setService={setService} />
+                                <ServiceCapacities service={service} />
+                            </div>
+                            <ServiceAlerts service={service!} />
+
+                        </div>
                     </div>
+
+                    {/* <SecurityMeasures service={service} /> */}
+
+
                 </div>
-
-                {/* <SecurityMeasures service={service} /> */}
-
-
             </div>
-        </div>
+        </NotificationProvider>
     )
 }
 

@@ -28,11 +28,11 @@ export interface Log {
 }
 
 export interface Filters {
-    dateFrom ?: number | null;
-    dateTo ?: number | null;
-    type ?: string | null;
-    level ?: string | null;
-    user ?: string | null;
+    dateFrom?: number | null;
+    dateTo?: number | null;
+    type?: string | null;
+    level?: string | null;
+    user?: string | null;
 }
 
 const LatestLogs = ({
@@ -50,25 +50,32 @@ const LatestLogs = ({
 
     const [offset, setOffset] = useState<number>(0);
 
-        const [filters, setFilters] = useState<Filters>({});
+    const [filters, setFilters] = useState<Filters>({
+        dateFrom: null,
+        dateTo: null,
+        type: null,
+        level: null,
+        user: null
+    });
 
     useEffect(() => {
         async function fetchLogs() {
             setLogs([]);
             setIsError(false);
             try {
-                const response = await axios.post(`${process.env.DUMMY_API_URL_DEV}/user/secure/service/logs`, {
+                await axios.post(`${process.env.DUMMY_API_URL_DEV}/user/secure/service/logs`, {
                     service_id: service?.id,
                     limit: 20,
                     offset: offset,
-                    filters : filters
+                    filters: filters 
                 }, {
                     withCredentials: true
+                }).then((res) => {
+                    console.log("Fetched logs:", res.data.logs);
+                    setLogs(res.data.logs);
+                    setTotalLogs(res.data.total);
+                    setTotalTabs(res.data.tabs);
                 });
-                console.log("Fetched logs:", response.data.logs);
-                setLogs(response.data.logs);
-                setTotalLogs(response.data.total);
-                setTotalTabs(response.data.tabs);
             } catch (error) {
                 console.error("Error fetching logs:", error);
                 setIsError(true);
@@ -135,7 +142,7 @@ const LatestLogs = ({
             }
 
             {
-                !isError && logs.length > 0 ? (
+                logs.length > 0 ? (
                     <div className="logs__content">
                         <div className="log__hover__content">
                             <LogUserDetails log={hoveredLog} />
@@ -218,18 +225,7 @@ const LatestLogs = ({
 
                     </div>
 
-                ) : (
-                    logs.length > 0 ? (
-                        <div className="logs__error">
-                            <p>Unable to retrieve {service?.name}{service?.name.endsWith("s") ? "'" : "'s"} logs</p>
-                            <button className="primary-button" onClick={() => {
-                                setLogs([]);
-                                setOffset(0);
-                            }}>
-                                Retry
-                            </button>
-                        </div>
-                    ) : isError && (
+                ) : ( isError && logs.length <= 0 && (
                         <div className="logs__error">
                             <p>Error loading logs. Please try again later.</p>
                             <button className="primary-button" onClick={() => {

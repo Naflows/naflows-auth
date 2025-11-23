@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import type { Filters } from "../..";
-import getSvgPerType from "../../methods/getSvg";
 import axios from "axios";
 
 

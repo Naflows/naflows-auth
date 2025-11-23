@@ -23,6 +23,8 @@ import ServiceSettings from "./pages/overview/components/settings";
 import Safety from "./pages/overview/components/safety";
 import { SERVICE_OVERVIEW_TABS } from "./pages/overview/types/tabs.type";
 import axios from "axios";
+import { NotificationProvider } from "../../../global/action-information/NotificationContent";
+import NotificationContainer from "../../../global/action-information/NotificationContainer";
 
 
 export type accountTabs = "overview" | "capacities" | "security" | "edit" | "network" | "settings" | "users" | "logs" | "rights" | "safety" | "share";
@@ -171,41 +173,44 @@ const ManageService = () => {
     );
   } else {
     return (
-      <div className="user__body__manage-service nass__page">
-        <AccountHeader
-          selectedTab="services"
-          userFetch={user ? user : undefined}
-        />
+      <NotificationProvider>
+        <NotificationContainer />
+        <div className="user__body__manage-service nass__page">
+          <AccountHeader
+            selectedTab="services"
+            userFetch={user ? user : undefined}
+          />
 
-        <div className="nass__service__page">
-          <div className="service__overview__tabs">
-            {SERVICE_OVERVIEW_TABS.map((tab_) => (
-              <button
-                key={tab_.id}
-                className={`tab ${tab === tab_.id ? "primary-button" : "secondary-button"}`}
-                style={{
-                  width: "100%"
-                }}
-                onClick={() => setTab(tab_.label.toLowerCase() as accountTabs)}
-              >
-                {tab_.label}
-              </button>
-            ))}
+          <div className="nass__service__page">
+            <div className="service__overview__tabs">
+              {SERVICE_OVERVIEW_TABS.map((tab_) => (
+                <button
+                  key={tab_.id}
+                  className={`tab ${tab === tab_.id ? "primary-button" : "secondary-button"}`}
+                  style={{
+                    width: "100%"
+                  }}
+                  onClick={() => setTab(tab_.label.toLowerCase() as accountTabs)}
+                >
+                  {tab_.label}
+                </button>
+              ))}
+            </div>
+            <AccountDir service={service} tab={tab} title={dirValues[tab].title} description={dirValues[tab].description} setTab={setTab} />
+
+            {tab === "overview" && <ManageServiceOverview service={service} setService={setService} setTab={setTab} tab={tab} />}
+            {tab === "edit" && <ManageServiceEdition service={service} />}
+            {tab === "logs" && <LatestLogs service={service} />}
+            {tab === "rights" && <ServiceRightsComponentGlobal service={service} />}
+            {tab === "network" && <ServiceNetwork service={service} />}
+            {tab === "users" && <ServiceUsers
+              service={service} setTab={setTab}
+            />}
+            {tab === "settings" && <ServiceSettings service={service} />}
+            {tab === "safety" && <Safety service={service} />}
           </div>
-          <AccountDir service={service} tab={tab} title={dirValues[tab].title} description={dirValues[tab].description} setTab={setTab} />
-
-          {tab === "overview" && <ManageServiceOverview service={service} setService={setService} setTab={setTab} tab={tab} />}
-          {tab === "edit" && <ManageServiceEdition service={service} />}
-          {tab === "logs" && <LatestLogs service={service} />}
-          {tab === "rights" && <ServiceRightsComponentGlobal service={service} />}
-          {tab === "network" && <ServiceNetwork service={service} />}
-          {tab === "users" && <ServiceUsers
-            service={service} setTab={setTab}
-          />}
-          {tab === "settings" && <ServiceSettings service={service} />}
-          {tab === "safety" && <Safety service={service} />}
         </div>
-      </div>
+      </NotificationProvider>
     )
   }
 

@@ -5,6 +5,8 @@ import RegisterForm from "./form/Register";
 import GlobalDisclaimer from "./global/components/GlobalDisclaimer";
 import fetchServiceStatus from "./pages/home/scripts/fetch-status";
 import type { ServiceStatus } from "./pages/home/components/Status";
+import { NotificationProvider } from "./global/action-information/NotificationContent";
+import NotificationContainer from "./global/action-information/NotificationContainer";
 
 interface AppLoginBigButtonProps {
   onClick: () => void;
@@ -64,93 +66,99 @@ function App() {
 
   return (
     <>
-      <div className="col-20 global__nass__form">
-        <div className="panel" style={{
-          marginTop: (logoutReason || redirect) ? "10px" : "80px",
 
-        }}>
-          <div className="disclaimers__container">
-            {
-              logoutReason && <GlobalDisclaimer
-                allowHidden={false}
-                title={`You have been logged out`}
-                message={""}
-                maxWidth={true}
-                fixed={false}
-                content={<>
-                  {logoutReason === "outdated-session" && <p>Your session has expired due to inactivity. Please log in again to continue.</p>}
-                  {logoutReason === "manual-logout" && <p>You have successfully logged out. We hope to see you again soon!</p>}
-                  {logoutReason === "session-revoked" && <p>Your session has been revoked. Please log in again to continue.</p>}
-                </>}
-              />
-            }
-            {
-              redirect && <GlobalDisclaimer
-                allowHidden={true}
-                title={`This login will redirect you`}
-                message={""}
-                maxWidth={true}
-                fixed={false}
-                content={<>
-                  <p>
-                    Once logged in, you will be redirected to {redirect}. If you wish to log in to your account dashboard, please use <a href="/account">https://auth.naflows.com/account</a> instead.
-                  </p>
-                </>}
-              />
-            }
-          </div>
-          <div className="panel-body">
-            <img
-              src="https://naflows.com/public/assets/naflows_full_logotype.png"
-              alt="Naflows Logo"
-              className="logo"
-              style={{ height: "100px" }}
-            />
-            <div className="panel-header">
-              <h1>
-                {formType === "login"
-                  ? "Welcome back to the NASS"
-                  : "Create an account"}
-              </h1>
-              <p>
-                {formType === "login"
-                  ? "Please enter your credentials. If you don't have an account, you can create one."
-                  : "Please fill in the form to create an account. Once your account is created, you will receive your set identifier and customer ID via email."}
-              </p>
+      <NotificationProvider>
+        <NotificationContainer />
+
+        <div className="col-20 global__nass__form">
+          <div className="panel" style={{
+            marginTop: (logoutReason || redirect) ? "10px" : "80px",
+
+          }}>
+            <div className="disclaimers__container">
+              {
+                logoutReason && <GlobalDisclaimer
+                  allowHidden={false}
+                  title={`You have been logged out`}
+                  message={""}
+                  maxWidth={true}
+                  fixed={false}
+                  content={<>
+                    {logoutReason === "outdated-session" && <p>Your session has expired due to inactivity. Please log in again to continue.</p>}
+                    {logoutReason === "manual-logout" && <p>You have successfully logged out. We hope to see you again soon!</p>}
+                    {logoutReason === "session-revoked" && <p>Your session has been revoked. Please log in again to continue.</p>}
+                  </>}
+                />
+              }
+              {
+                redirect && <GlobalDisclaimer
+                  allowHidden={true}
+                  title={`This login will redirect you`}
+                  message={""}
+                  maxWidth={true}
+                  fixed={false}
+                  content={<>
+                    <p>
+                      Once logged in, you will be redirected to {redirect}. If you wish to log in to your account dashboard, please use <a href="/account">https://auth.naflows.com/account</a> instead.
+                    </p>
+                  </>}
+                />
+              }
             </div>
-            <div className="form">
-              {formType === "login" ? <LoginForm setFormType={setFormType} redirectOnSuccess={redirect ? redirect : undefined} /> : <RegisterForm setFormType={setFormType} />}
-            </div>
-          </div>
-          <div className="panel-footer">
-            <div className="footer-left">
-              <h5>
-                {formType === "login"
-                  ? "Having trouble logging in?"
-                  : "Need help with registration?"}
-              </h5>
-              <div className="footer-buttons-container">
-                <AppLoginBigButton onClick={() => { }} value="I forgot my password" />
-                <AppLoginBigButton onClick={() => { }} value="I forgot my customer ID" />
+            <div className="panel-body">
+              <img
+                src="https://naflows.com/public/assets/naflows_full_logotype.png"
+                alt="Naflows Logo"
+                className="logo"
+                style={{ height: "100px" }}
+              />
+              <div className="panel-header">
+                <h1>
+                  {formType === "login"
+                    ? "Welcome back to the NASS"
+                    : "Create an account"}
+                </h1>
+                <p>
+                  {formType === "login"
+                    ? "Please enter your credentials. If you don't have an account, you can create one."
+                    : "Please fill in the form to create an account. Once your account is created, you will receive your set identifier and customer ID via email."}
+                </p>
+              </div>
+              <div className="form">
+                {formType === "login" ? <LoginForm setFormType={setFormType} redirectOnSuccess={redirect ? redirect : undefined} /> : <RegisterForm setFormType={setFormType} />}
               </div>
             </div>
-            <div className="footer-right">
-              <div className="service__status__small">
-                <span className={`service__status__indicator  ${status && status.disk.usagePercent
-                  ? "service__status__indicator--active"
-                  : "service__status__indicator--inactive"
-                  }`}
-                  data-tooltip={status && status.disk.usagePercent
-                    ? `Disk Usage: ${status.disk.usagePercent}`
-                    : "Service is currently unreachable"}
-                >
-                  Service {status && status.disk.usagePercent ? "Online" : "Offline"}
-                </span>
+            <div className="panel-footer">
+              <div className="footer-left">
+                <h5>
+                  {formType === "login"
+                    ? "Having trouble logging in?"
+                    : "Need help with registration?"}
+                </h5>
+                <div className="footer-buttons-container">
+                  <AppLoginBigButton onClick={() => { }} value="I forgot my password" />
+                  <AppLoginBigButton onClick={() => { }} value="I forgot my customer ID" />
+                </div>
+              </div>
+              <div className="footer-right">
+                <div className="service__status__small">
+                  <span className={`service__status__indicator  ${status && status.disk.usagePercent
+                    ? "service__status__indicator--active"
+                    : "service__status__indicator--inactive"
+                    }`}
+                    data-tooltip={status && status.disk.usagePercent
+                      ? `Disk Usage: ${status.disk.usagePercent}`
+                      : "Service is currently unreachable"}
+                  >
+                    Service {status && status.disk.usagePercent ? "Online" : "Offline"}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </NotificationProvider>
+
     </>
   );
 }
