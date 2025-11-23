@@ -127,6 +127,7 @@ const ServiceSmallComponent = ({
 
                 </div>
 
+
                 <button className={`primary-button ${right.can_edit ? "" : "inactive"}`} onClick={() => {
                     console.log("Editing right:", right.name);
                     setFullDisplay(right);

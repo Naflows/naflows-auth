@@ -37,19 +37,24 @@
     .profile__picture {
       position: relative;
       display: flex;
+      flex-direction: column;
+      gap: 5px;
       align-items: center;
       justify-content: center;
 
-      svg {
-        position: absolute;
-        bottom: 5px;
-        right: -5px;
-        width: 16px;
-        height: 16px;
-        padding: 2px;
-        background-color: $_2k25-background-hue-darker-2;
-        color: $da-secondary-hue-lighter-2;
-        border-radius: 50%;
+      .owner__badge {
+        font-size: 13px;
+        font-weight: 600;
+        color: $da-secondary-hue;
+        background-color: $da-secondary-hue-transparent;
+        padding: 2px 6px;
+        border-radius: 6px;
+        margin-top: 4px;
+        white-space: nowrap;
+        max-width: 100%;
+        text-align: center;
+        /* Not selectable */
+        user-select: none;
       }
     }
 
@@ -248,15 +253,14 @@
 
 .add-rights__container {
   width: 300px;
-  background-color: $_2k25-background-hue-darker-2-transparent;
-  backdrop-filter: blur(5px);
+  background-color: $_2k25-background-hue-darker;
   border: 1px solid $_2k25-background-hue-50-transparent;
   display: flex;
   align-items: start;
   border-radius: 10px;
   z-index: 10;
   flex-direction: column;
-  padding: 10px 15px;
+  padding: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative; /* Ensure stacking context */
 
@@ -309,19 +313,25 @@
     .rights__list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 2px;
       flex-wrap: wrap;
-      .list__content {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
 
-        .item {
-          padding: 5px;
-          border: 1px solid $_2k25-background-hue-50-transparent;
-          border-radius: 6px;
-          cursor: pointer;
-          transition: background-color 0.2s ease-in-out;
+      .item {
+        padding: 5px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+        border: 1px solid $_2k25-background-hue-50-transparent;
+        &:hover {
+          background-color: $_2k25-background-hue-darker-2-transparent;
+        }
+        &.not-editable {
+          cursor: not-allowed;
+          opacity: 0.5;
+          pointer-events: none;
+          &:hover {
+            background-color: transparent;
+          }
         }
       }
     }

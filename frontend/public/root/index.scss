@@ -740,50 +740,56 @@ input[type="checkbox"] {
   -webkit-appearance: none;
   width: 16px;
   height: 16px;
-  border: 2px solid $da-secondary-hue-lighter-2;
-  border-radius: 50px;
+  border: 2px solid $_2k25-background-hue-50-transparent;
+  border-radius: 5px;
   margin-right: 5px;
   cursor: pointer;
   background: transparent;
   position: relative;
   vertical-align: middle;
+
+  &.bc-color {
+    background: $_2k25-background-hue-50-transparent !important;
+  }
+
+  &:checked {
+    background: $da-secondary-hue-lighter-2;
+
+    &.bc-color {
+      background: $_2k25-background-hue-darker !important;
+    }
+  }
+
+  &:checked::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 8px;
+    height: 8px;
+    background: $da-secondary-hue-lighter-2;
+    border-radius: 2px;
+
+    &.bc-color {
+      background: $_2k25-background-hue-darker !important;
+    }
+  }
+
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 8px;
+    height: 8px;
+    background: transparent;
+    border-radius: 2px;
+  }
 }
 
-input[type="checkbox"]:not(.no-fill):checked {
-  background: $da-secondary-hue-lighter-2;
-}
 
-input[type="checkbox"]:not(.no-fill):checked::after {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 8px;
-  height: 8px;
-  background: $da-secondary-hue-lighter-2;
-  border-radius: 2px;
-}
-
-input[type="checkbox"]:not(.no-fill)::after {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 8px;
-  height: 8px;
-  background: transparent;
-  border-radius: 2px;
-}
-
-input[type="checkbox"] {
-  cursor: pointer;
-}
-
-input[type="checkbox"]:not(.no-fill):checked:after {
-  background: $da-secondary-hue-lighter-2;
-}
 
 .global__terms__and__conditions {
   display: flex;
@@ -1042,8 +1048,6 @@ button * {
   user-select: none;
   cursor: pointer !important;
   width: fit-content;
-
-
 
   input[type="checkbox"] {
     min-width: 15px !important;

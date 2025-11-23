@@ -17,8 +17,11 @@ export async function canUserEdit(userID: string, serviceID: string, rights: Ser
     const canManage = await services.service.user.hasRight(userID, serviceID, "MANAGE_RIGHTS");
 
 
-    // The smallest order number is the highest priority
-    const priorityOrder = userRights.reduce((min, r) => r.order < min ? r.order : min, Number.MAX_SAFE_INTEGER);
+    const nassRights = userRights.filter((r) => r.type === "SERVICE_BY_NASS");
+
+    console.log("Nass Rights length:", nassRights.length);
+
+    const priorityOrder = nassRights.reduce((min, r) => r.order < min ? r.order : min, Number.MAX_SAFE_INTEGER);
 
 
     console.log("Priority order num:", priorityOrder, "User rights:", userRights, "Can manage:", canManage);
@@ -27,9 +30,8 @@ export async function canUserEdit(userID: string, serviceID: string, rights: Ser
         r.can_edit = false;
         // If the user can manage rights and the right's order is greater than the priority order, they can edit it
         if (
-            ((canManage && r.order > priorityOrder) || service.data.service.created_by === userID) ||
+            ((canManage && r.order > priorityOrder && r.type==="SERVICE_BY_NASS") || service.data.service.created_by === userID) ||
             (r.type === "TUNNELING_BY_INSTANCE" && (await services.service.user.hasRight(userID, serviceID, "MANAGE_RIGHTS")))
-
         ) {
             r.can_edit = true;
         }

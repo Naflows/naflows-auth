@@ -32,7 +32,8 @@ export async function getRightsByUser(user_id : string, service_id : string, sen
                 updated_at: rightContent.updated_at,
                 created_by: rightContent.created_by,
                 can_edit: rightContent.can_edit || false,
-                order: rightContent.order
+                order: rightContent.order,
+                type: rightContent.type
             });
         }
     }
