@@ -3,7 +3,7 @@ import "dotenv/config.js";
 
 import { serve } from "./public/method/serve";
 import secure from "./secure/global/dir";
-import mongoose from 'mongoose';
+import mongoose, { Collection } from 'mongoose';
 import middleware from "./middleware/dir";
 import { Request, Response } from 'express';
 import { ReplyType } from "./types/.types/reply.type";
@@ -278,6 +278,88 @@ app.post('/client/secure/user/register-in-api', async (req, res) => {
         }
     });
 });
+
+app.post('/public/global/user/id/', async (req, res) => {
+    const userID = req.body.userID || "";
+
+    if (userID.length === 0) {
+        return res.status(400).json({
+            status: 400,
+            message: "User ID must be provided.",
+            success: false,
+            data: {
+                users: [],
+            }
+        });
+    }
+
+    const user = await secure.user.get(userID, false);
+    if (!user) {
+        return res.status(404).json({
+            status: 404,
+            message: "User not found.",
+            success: false,
+            data: {
+                users: [],
+            }
+        });
+    }
+
+    // Remove sensitive information
+    const safeUser = {
+        id: user.id,
+        username: user.username,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        profile_picture: user.profile_picture || null,
+    };
+
+    res.status(200).json({
+        status: 200,
+        message: "User retrieved successfully.",
+        success: true,
+        data: {
+            users: [safeUser],
+        }
+    });
+});
+
+app.post('/public/global/user/', async (req, res) => {
+    const username = req.body.username || "";
+
+    if (username.length < 3) {
+        return res.status(400).json({
+            status: 400,
+            message: "Username must be at least 3 characters long.",
+            success: false,
+            data: {
+                users: [],
+            }
+        });
+    }
+
+    const usersCollection = db.collection("users") as Collection<User>;
+    // Get all users whose username matches a part of the username param (case insensitive)
+    const users = await usersCollection.find({ username: { $regex: new RegExp(username, 'i') } }).toArray();
+    // Remove sensitive information
+    const safeUsers = users.map((user: User) => {
+        return {
+            id: user.id,
+            username: user.username,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            profile_picture: user.profile_picture || null,
+        };
+    });
+    res.status(200).json({
+        status: 200,
+        message: "Users retrieved successfully.",
+        success: true,
+        data: {
+            users: safeUsers,
+        }
+    });
+})
 
 app.post('/client/secure/user/send-verification-code', async (req, res) => {
     const user = await secure.user.manageConnection(req, res);

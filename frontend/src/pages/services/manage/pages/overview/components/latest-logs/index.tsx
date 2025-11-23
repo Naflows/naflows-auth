@@ -5,6 +5,7 @@ import axios from "axios";
 import getSvgPerType from "./methods/getSvg";
 import Loader from "../../../../../../../global/components/Loader";
 import LogUserDetails from "./components/user-details";
+import FilterLogs from "./components/filter";
 
 
 export interface Log {
@@ -21,9 +22,17 @@ export interface Log {
             last_name?: string | null;
             rights?: { id: string; name: string; hue: string; }[];
         },
-        message? : string
+        message?: string
     };
     created_at: number;
+}
+
+export interface Filters {
+    dateFrom ?: number | null;
+    dateTo ?: number | null;
+    type ?: string | null;
+    level ?: string | null;
+    user ?: string | null;
 }
 
 const LatestLogs = ({
@@ -33,47 +42,105 @@ const LatestLogs = ({
 }) => {
 
     const [logs, setLogs] = useState<Log[]>([]);
+    const [totalLogs, setTotalLogs] = useState<number>(0);
+    const [totalTabs, setTotalTabs] = useState<number>(0);
+
     const [isError, setIsError] = useState(false);
     const [hoveredLog, setHoveredLog] = useState<Log | null>(null);
 
+    const [offset, setOffset] = useState<number>(0);
+
+        const [filters, setFilters] = useState<Filters>({});
+
     useEffect(() => {
         async function fetchLogs() {
+            setLogs([]);
+            setIsError(false);
             try {
                 const response = await axios.post(`${process.env.DUMMY_API_URL_DEV}/user/secure/service/logs`, {
                     service_id: service?.id,
                     limit: 20,
-                    offset: 0
+                    offset: offset,
+                    filter : filters
                 }, {
                     withCredentials: true
                 });
                 console.log("Fetched logs:", response.data.logs);
                 setLogs(response.data.logs);
+                setTotalLogs(response.data.total);
+                setTotalTabs(response.data.tabs);
             } catch (error) {
                 console.error("Error fetching logs:", error);
                 setIsError(true);
             }
         }
 
-        if (service) {
+        if (service) { // <- Test only in order to avoid infinite loop
             fetchLogs();
         }
-    }, [service]);
-
+    }, [service, offset, filters]);
 
 
     return (
         <div className="logs__container">
+            <FilterLogs filters={filters} setFilters={setFilters} />
+
+            <div className="logs__directory" style={{
+                display: isError ? "none" : "flex"
+            }}>
+                <div>
+                    <span className="total__logs__count">
+                        {totalLogs} log{totalLogs !== 1 ? "s" : ""} found
+                    </span>
+                    <div className="tabs__directory">
+                        {
+
+                            Array.from({ length: totalTabs }, (_, i) => i + 1).map((tab) => {
+                                // Only display 5 tabs: current, two before and two after. If no tabs before or after, adjust accordingly
+                                const currentTab = Math.floor(offset / 20) + 1;
+                                if (currentTab <= 3) {
+                                    if (tab > 5) return null;
+                                } else if (currentTab >= totalTabs - 2) {
+                                    if (tab <= totalTabs - 5) return null;
+                                } else {
+                                    if (tab < currentTab - 2 || tab > currentTab + 2) return null;
+                                }
+
+                                return (
+                                    <div key={tab} className={`tab__directory__item ${offset === (tab - 1) * 10 ? "active" : ""}`} onClick={() => setOffset((tab - 1) * 10)}>
+                                        {tab}
+                                    </div>
+                                )
+                            })
+
+                        }
+                    </div>
+                </div>
+                <div>
+                    <button className="primary-button" onClick={() => {
+
+                    }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 13.5V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 9.75V10.5" />
+                        </svg>
+
+                    </button>
+                </div>
+            </div>
+
             {
                 logs.length === 0 && !isError && (
                     <Loader loading={true} />
                 )
             }
+
             {
                 !isError && logs.length > 0 ? (
                     <div className="logs__content">
                         <div className="log__hover__content">
                             <LogUserDetails log={hoveredLog} />
                         </div>
+
                         <table className="logs__table">
                             <thead>
                                 <tr>
@@ -102,9 +169,9 @@ const LatestLogs = ({
                                             {getSvgPerType(log.type)}
 
                                         </td>
-                                        
 
-                                        <td className={`log__user ${log.metadata && log.metadata.userData ? "known" : "unknown"}`} id={`log__user__${log.id}`} onMouseEnter={(el : React.MouseEvent<HTMLTableCellElement>) => {
+
+                                        <td className={`log__user ${log.metadata && log.metadata.userData ? "known" : "unknown"}`} id={`log__user__${log.id}`} onMouseEnter={(el: React.MouseEvent<HTMLTableCellElement>) => {
                                             setHoveredLog(log);
                                             const hoverElement = document.querySelector(".log__hover__content") as HTMLDivElement;
                                             if (hoverElement) {
@@ -148,16 +215,29 @@ const LatestLogs = ({
                                 ))}
                             </tbody>
                         </table>
+
                     </div>
 
                 ) : (
                     logs.length > 0 ? (
                         <div className="logs__error">
                             <p>Unable to retrieve {service?.name}{service?.name.endsWith("s") ? "'" : "'s"} logs</p>
+                            <button className="primary-button" onClick={() => {
+                                setLogs([]);
+                                setOffset(0);
+                            }}>
+                                Retry
+                            </button>
                         </div>
                     ) : isError && (
                         <div className="logs__error">
                             <p>Error loading logs. Please try again later.</p>
+                            <button className="primary-button" onClick={() => {
+                                setLogs([]);
+                                setOffset(0);
+                            }}>
+                                Retry
+                            </button>
                         </div>
                     )
                 )

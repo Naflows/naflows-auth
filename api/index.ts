@@ -71,6 +71,19 @@ app.get('/public/data/plans.json', async (req: Request, res: Response) => {
 });
 
 
+app.get('/public/user/:username', async (req: Request, res: Response) => {
+    const username = req.params.username;
+    await manageConnection(req,res,"/public/global/user/", {
+        username: username
+    }, "POST");
+});
+
+app.get('/public/user/id/:id', async (req: Request, res: Response) => {
+    const id = req.params.id;
+    await manageConnection(req,res,"/public/global/user/id/", {
+        id: id
+    }, "POST");
+});
 
 app.get('/public/subscribe-mailing', async (req: Request, res: Response) => {
     const email = req.query.email;
@@ -145,7 +158,10 @@ app.put('/user/secure/service/update', async (req: Request, res: Response) => {
 
 app.post('/user/secure/service/logs', async (req: Request, res: Response) => {
     await manageConnection(req,res,'/client/secure/services/get-logs', {
-        service_id: req.body.service_id
+        service_id: req.body.service_id,
+        limit: req.body.limit,
+        offset: req.body.offset,
+        filters: req.body.filters
     });
 });
 

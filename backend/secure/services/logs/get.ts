@@ -6,9 +6,21 @@ import { services } from "../dir";
 
 
 
-export async function getServiceLogs(service_id: string, limit: number = 50, offset: number = 0): Promise<ServiceLog[]> {
+export async function getServiceLogs(service_id: string, limit: number = 50, offset: number = 0, filters: {
+    dateFrom?: string;
+    dateTo?: string;
+    level?: string;
+    user?: string;
+    type?: string;
+}): Promise<{ logs: ServiceLog[], total: number, tabs: number }> {
     const logsCollection: Collection<ServiceLog> = db.collection("service_logs") as Collection<ServiceLog>;
-    const logs = await logsCollection.find({ service_id }).sort({ created_at: -1 }).skip(offset).limit(limit).toArray();
+    const logs = await logsCollection.find({
+        service_id: service_id,
+        ...(filters.level ? { level: filters.level as "INFO" | "WARNING" | "ERROR" } : {}),
+    }).sort({ created_at: -1 }).skip(offset).limit(limit).toArray();
+    const fullLength = await logsCollection.countDocuments({ service_id });
+    console.log(`[Service Logs] Total logs for service ${service_id}:`, fullLength);
+
 
     // Check all metadata fields are objects
     console.log("[Service Logs] Retrieving logs for service:", service_id);
@@ -32,5 +44,9 @@ export async function getServiceLogs(service_id: string, limit: number = 50, off
         }
     }
 
-    return logs;
+    return {
+        logs: logs,
+        total: fullLength,
+        tabs: Math.ceil(fullLength / limit)
+    };
 }
