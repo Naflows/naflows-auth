@@ -33,6 +33,9 @@ const FilterLogs = ({
                 });
             }
             fetchUsers();
+        } else if (username.length === 0) {
+            setUserSuggestions([]);
+            setFilters(prev => ({ ...prev, user: null }));
         }
     }, [username]);
 
@@ -78,25 +81,25 @@ const FilterLogs = ({
                             onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value || null }))}
                         >
                             <option value="">All</option>
-                            <option value="user">
+                            <option value="USER">
                                 User
                             </option>
-                            <option value="system">
+                            <option value="SYSTEM">
                                 System
                             </option>
-                            <option value="Service">
+                            <option value="SERVICE">
                                 Service
                             </option>
-                            <option value="security">
+                            <option value="SECURITY">
                                 Security
                             </option>
-                            <option value="developers">
+                            <option value="DEVELOPERS">
                                 Developers
                             </option>
-                            <option value="settings">
+                            <option value="SETTINGS">
                                 Settings
                             </option>
-                            <option value="others">
+                            <option value="OTHER">
                                 Others
                             </option>
                         </select>
@@ -133,7 +136,7 @@ const FilterLogs = ({
                                             key={user.id} 
                                             className="user-suggestion-item"
                                             onClick={() => {
-                                                setFilters(prev => ({ ...prev, user: user.username }));
+                                                setFilters(prev => ({ ...prev, user: user.id }));
                                                 setUserSuggestions([]);
                                                 setUsername(user.username);
                                             }}

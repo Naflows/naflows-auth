@@ -61,7 +61,7 @@ const LatestLogs = ({
                     service_id: service?.id,
                     limit: 20,
                     offset: offset,
-                    filter : filters
+                    filters : filters
                 }, {
                     withCredentials: true
                 });

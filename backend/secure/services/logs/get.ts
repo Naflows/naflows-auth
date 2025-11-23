@@ -14,9 +14,17 @@ export async function getServiceLogs(service_id: string, limit: number = 50, off
     type?: string;
 }): Promise<{ logs: ServiceLog[], total: number, tabs: number }> {
     const logsCollection: Collection<ServiceLog> = db.collection("service_logs") as Collection<ServiceLog>;
+
+    console.log(`[Service Logs] Fetching logs for service ID: ${service_id} with limit: ${limit}, offset: ${offset}, filters:`, filters);
+
+
     const logs = await logsCollection.find({
         service_id: service_id,
         ...(filters.level ? { level: filters.level as "INFO" | "WARNING" | "ERROR" } : {}),
+        ...(filters.type ? { type: filters.type as "USER" | "SERVICE" | "SECURITY" | "SYSTEM" | "OTHER" | "SETTINGS" | "DEVELOPERS" } : {}),
+        ...(filters.dateFrom ? { created_at: { $gte: new Date(filters.dateFrom).getTime() } } : {}),
+        ...(filters.dateTo ? { created_at: { $lte: new Date(filters.dateTo).getTime() } } : {}),
+        ...(filters.user ? { "metadata.user": filters.user } : {})
     }).sort({ created_at: -1 }).skip(offset).limit(limit).toArray();
     const fullLength = await logsCollection.countDocuments({ service_id });
     console.log(`[Service Logs] Total logs for service ${service_id}:`, fullLength);
