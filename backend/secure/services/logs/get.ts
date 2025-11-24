@@ -26,8 +26,7 @@ export async function getServiceLogs(service_id: string, limit: number = 50, off
         ...(filters.dateTo ? { created_at: { $lte: new Date(filters.dateTo).getTime() } } : {}),
         ...(filters.user ? { "metadata.user": filters.user } : {})
     }).sort({ created_at: -1 }).skip(offset).limit(limit).toArray();
-    const fullLength = await logsCollection.countDocuments({ service_id });
-    console.log(`[Service Logs] Total logs for service ${service_id}:`, fullLength);
+    console.log(`[Service Logs] Total logs for service ${service_id}:`, logs.length);
 
 
     // Check all metadata fields are objects
@@ -54,7 +53,7 @@ export async function getServiceLogs(service_id: string, limit: number = 50, off
 
     return {
         logs: logs,
-        total: fullLength,
-        tabs: Math.ceil(fullLength / limit)
+        total: logs.length,
+        tabs: Math.ceil(logs.length / limit)
     };
 }

@@ -71,7 +71,7 @@ const LatestLogs = ({
                 }, {
                     withCredentials: true
                 }).then((res) => {
-                    console.log("Fetched logs:", res.data.logs);
+                    console.log("Fetched logs:", res.data);
                     setLogs(res.data.logs);
                     setTotalLogs(res.data.total);
                     setTotalTabs(res.data.tabs);

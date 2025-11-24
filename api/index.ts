@@ -188,6 +188,12 @@ app.post('/user/secure/service/rights/create', async (req: Request, res: Respons
         rights: req.body.rights
     });
 });
+app.post('/user/secure/service/rights/delete', async (req: Request, res: Response) => {
+    await manageConnection(req,res,'/client/secure/services/rights/delete', { 
+        service_id: req.body.service_id,
+        right_id: req.body.right_id
+    });
+});
 
 
 app.post('/user/secure/service/key/get', async (req: Request, res: Response) => {

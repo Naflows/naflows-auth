@@ -53,6 +53,8 @@ import { canUserEdit } from "./rights/methods/can-user-edit";
 import { getTunnelsByRight } from "./tunnels/methods/get-by-right";
 import { getPlans } from "./methods/plans/get-plans";
 import { getPlan } from "./methods/plans/get-plan";
+import { deleteRight } from "./rights/methods/delete";
+import { removeRightRoute } from "./methods/global/remove-right";
 
 
 
@@ -67,7 +69,8 @@ export const services = {
         traffic : getTrafficLogRoute,
         getUsers : getUsers,
         assignRights : assignRights,
-        updateRights:  updateRightsRoute
+        updateRights:  updateRightsRoute,
+        deleteRight : removeRightRoute
     },
     service: {
         register: registerService,
@@ -119,7 +122,8 @@ export const services = {
             getAll: getAllRights,
             update : updateLiteralRight,
             canUserEdit : canUserEdit,
-            getTunnels : getTunnelsByRight
+            getTunnels : getTunnelsByRight,
+            delete : deleteRight
         },
         plan : {
             getAll : getPlans,

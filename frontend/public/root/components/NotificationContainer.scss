@@ -30,6 +30,8 @@
     animation: slide-in 0.3s ease-out;
     border: 1px solid;
 
+    backdrop-filter: blur(10px);
+
     &.info {
       background-color: $da-info-hue-transparent;
       border-color: $da-info-hue;

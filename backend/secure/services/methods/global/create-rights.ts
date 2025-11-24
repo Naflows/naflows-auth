@@ -14,8 +14,8 @@ export async function createRights(req: Request, res: Response, user: User) {
         description
     } = req.body;
 
-    const isUserDev = await services.service.user.isDev(user.id, service_id);
-    if (!isUserDev.success) {
+    const isUserDev = (await services.service.user.isDev(user.id, service_id)).success || await services.service.user.hasRight(user.id, service_id, "MANAGE_RIGHTS");
+    if (!isUserDev) {
         return software.methods.directResponse(403, "Forbidden: User does not have permission to create rights.", res, req);
         return;
     }

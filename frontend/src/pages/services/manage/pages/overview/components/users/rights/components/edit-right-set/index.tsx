@@ -1,9 +1,11 @@
+import axios from "axios";
 import type { ServicesForUserProps } from "../../../../../../../../../../types/ServicesForUserProps";
 import type { ServiceRights } from "../../../../../../../../../../types/TunnelingTypes";
 import { createdAtToAgo } from "../../../../../../../../../account/sub-components/notifications/methods/createdAtToAgo";
 import ServiceRightsSmall from "../../../components/small-right";
 import { updateRightsList } from "../../../scripts/update-rights";
 import NassRightsList from "../sub-components/nass-rights-list";
+import { useNotification } from "../../../../../../../../../../global/action-information/NotificationContent";
 
 
 
@@ -28,7 +30,10 @@ const EditRightRight = ({
     serviceID: string;
     setLocalRights: React.Dispatch<React.SetStateAction<ServiceRights[]>>;
 }) => {
+    const { addNotification } = useNotification();
+
     if (!service) return null;
+
 
     return (
         <div className="display__right__additional__content">
@@ -58,6 +63,41 @@ const EditRightRight = ({
                             // Call backend to delete right
                             // On success, remove right from localRights and close fullDisplay
                             // For now, just simulate deletion
+                            axios.post(`${process.env.DUMMY_API_URL_DEV}/user/secure/service/rights/delete`, {
+                                service_id: service.id,
+                                right_id: fullDisplay.id
+                            }, { withCredentials: true }).then(response => {
+                                if (response.status === 200) {
+                                    console.log("Right deleted successfully:", response.data);
+                                    // Remove right from localRights and close fullDisplay
+                                    setLocalRights(prev => prev.filter(r => r.id !== fullDisplay.id))
+                                    setFullDisplay(null)
+
+                                    addNotification({
+                                        type: "info",
+                                        title: "Right Deleted",
+                                        description: "The right has been deleted successfully."
+                                    });
+                                } else {
+                                    console.error('Failed to delete right:', response.data);
+                                    alert("Failed to delete right: " + (response.data.message || "Unknown error"));
+                                    addNotification({
+                                        type: "error",
+                                        title: "Failed to Delete Right",
+                                        description: response.data.message || "Unknown error"
+                                    });
+                                }
+                            }).catch(error => {
+                                console.error('Error deleting right:', error);
+                                alert("Error deleting right: " + error.message);
+                                addNotification({
+                                    type: "error",
+                                    title: "Error Deleting Right",
+                                    description: error.message
+                                });
+                            });
+
+
                             setLocalRights(prev => prev.filter(r => r.id !== fullDisplay.id))
                             setFullDisplay(null)
                         }

@@ -46,8 +46,6 @@ router.post('/secure/services/service/key', async (req, res) => {
     services.routes.serviceKey(req, res, user);
 });
 
-
-// Can user access the whole service management?
 router.post('/secure/services/user/check-access', async (req,res) => {
     const user = await secure.user.manageConnection(req, res);
     services.routes.canAccess(req, res, user);
@@ -56,6 +54,11 @@ router.post('/secure/services/user/check-access', async (req,res) => {
 router.post('/secure/services/rights/assign', async (req, res) => {
     const user = await secure.user.manageConnection(req, res);
     services.routes.assignRights(req, res, user);
+});
+
+router.post('/secure/services/rights/delete', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    services.routes.deleteRight(req, res, user);
 });
 
 
