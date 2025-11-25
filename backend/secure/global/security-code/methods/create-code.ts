@@ -9,13 +9,19 @@ import crypto from 'crypto';
 
 export async function createSecurityCode(user: User, service : Service, purpose: SecurityCode["purpose"]) : Promise<ReplyType> {
     // Check if there is already a valid code for this user and service
+    const codesCollection = db.collection('security_codes');
+
     const allCodes = await db.collection('security_codes').find({
         purpose: purpose,
         used: false,
     }).toArray();
     const validCode = allCodes.find(c => secure.verify(user.id, c.user_id) && secure.verify(service.id, c.associated_service) && c.expires_at > new Date().getTime());
     if (validCode) {
-        return software.methods.serverReply(201, "A valid code has already been sent to your email. Please check your inbox.");
+        // Delete the existing valid code to avoid confusion and regenerate a new one
+        const del = await codesCollection.deleteOne({ id: validCode.id });
+        if (!del.acknowledged) {
+            return software.methods.serverReply(500, "Failed to delete existing verification code.");
+        }
     }
 
 

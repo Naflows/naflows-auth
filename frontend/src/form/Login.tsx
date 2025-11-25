@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import Input from "../global/components/Input";
-import Alert, { type AlertContentProps } from "../global/error-alert/Alert";
 import { manageLogin } from "../scripts/login";
 import Loader from "../global/components/Loader";
+import type { AlertContentProps } from "../types/AlertContentProps.type";
+import Alert from "../global/error-alert/Alert";
 
 const LoginForm = ({
   redirectOnSuccess = "/account",

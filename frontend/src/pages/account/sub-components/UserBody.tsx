@@ -4,8 +4,9 @@ import AccountDetails from "./AccountDetails";
 import UserPersonalInformations from "./UserPersonalInformations";
 import { useEffect, useState } from "react";
 import SaveChanges from "../../services/manage/pages/components/save";
-import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert";
 import axios from "axios";
+import Alert from "../../../global/error-alert/Alert";
+import type { AlertContentProps } from "../../../types/AlertContentProps.type";
 
 const AccountUserBody = ({
   userData,

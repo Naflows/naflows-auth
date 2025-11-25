@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import "../../../public/root/pages/home/index.scss";
-import Status, { type ServiceStatus } from "./components/Status";
+import Status from "./components/status";
 import WelcomeOverlay from "./components/welcome-overlay/WelcomeOverlay";
+import type { ServiceStatus } from "../../types/ServiceStatus.type";
 
 const Home = () => {
   const [serviceStatus, setServiceStatus] = useState<ServiceStatus | null>(

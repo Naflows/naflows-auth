@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import type { Filters } from "../..";
 import axios from "axios";
+import type { Filters } from "../../../../../../../../../types/Logs.type";
 
 
 const FilterLogs = ({

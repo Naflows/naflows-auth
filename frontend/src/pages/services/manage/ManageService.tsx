@@ -11,7 +11,6 @@ import Loader from "../../../global/components/Loader";
 import fetchServiceData from "../../../scripts/account/fetch-individual-service";
 import type { AxiosError, AxiosResponse } from "axios";
 import type { ServicesForUserProps } from "../../../types/ServicesForUserProps";
-import Alert, { type AlertContentProps } from "../../../global/error-alert/Alert";
 import ManageServiceOverview from "./pages/overview";
 import ManageServiceEdition from "./pages/edit";
 import AccountDir from "./sub-component/ServiceDir";
@@ -25,6 +24,8 @@ import { SERVICE_OVERVIEW_TABS } from "./pages/overview/types/tabs.type";
 import axios from "axios";
 import { NotificationProvider } from "../../../global/action-information/NotificationContent";
 import NotificationContainer from "../../../global/action-information/NotificationContainer";
+import type { AlertContentProps } from "../../../types/AlertContentProps.type";
+import Alert from "../../../global/error-alert/Alert";
 
 
 export type accountTabs = "overview" | "capacities" | "security" | "edit" | "network" | "settings" | "users" | "logs" | "rights" | "safety" | "share";

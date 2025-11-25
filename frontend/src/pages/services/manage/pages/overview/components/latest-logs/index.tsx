@@ -6,34 +6,9 @@ import getSvgPerType from "./methods/getSvg";
 import Loader from "../../../../../../../global/components/Loader";
 import LogUserDetails from "./components/user-details";
 import FilterLogs from "./components/filter";
+import type { Filters, Log } from "../../../../../../../types/Logs.type";
 
 
-export interface Log {
-    id: string;
-    service_id: string;
-    message: string;
-    type: "USER" | "SERVICE" | "SECURITY" | "SYSTEM" | "OTHER" | "SETTINGS" | "DEVELOPERS";
-    level: "INFO" | "WARNING" | "ERROR"; // Log level
-    metadata?: {
-        userData?: {
-            username?: string;
-            picture?: string | null;
-            first_name?: string | null;
-            last_name?: string | null;
-            rights?: { id: string; name: string; hue: string; }[];
-        },
-        message?: string
-    };
-    created_at: number;
-}
-
-export interface Filters {
-    dateFrom?: number | null;
-    dateTo?: number | null;
-    type?: string | null;
-    level?: string | null;
-    user?: string | null;
-}
 
 const LatestLogs = ({
     service

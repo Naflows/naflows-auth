@@ -1,12 +1,11 @@
 import type { UserBodyProps } from "../../../../types/UserBodyProps";
 import '../../../../../public/root/pages/account/notifications/index.scss';
 import NotificationSingleView from "./components/single-view";
-import type { Notification } from "./types/notification.type";
 import { useState } from "react";
 import NotificationDetailledView from "./components/detailled-view";
 import { notifications } from "./methods/dir";
 import Loader from "../../../../global/components/Loader";
-
+import type { FrontendNotification } from "../../../../types/Notification.type";
 
 
 
@@ -15,12 +14,12 @@ const Notifications = ({
 }: {
     userData: UserBodyProps
 }) => {
-    const [viewNotification, setViewNotification] = useState<Notification | undefined>(undefined);
+    const [viewNotification, setViewNotification] = useState<FrontendNotification | undefined>(undefined);
     const [updateNotifications, setUpdateNotifications] = useState<boolean>(false);
 
     const [onLoad, setOnLoad] = useState(false);
 
-    const userNotifications: Array<Notification> = notifications.get(userData, updateNotifications, setOnLoad).notifications;
+    const userNotifications: Array<FrontendNotification> = notifications.get(userData, updateNotifications, setOnLoad).notifications;
 
 
 
@@ -51,7 +50,7 @@ const Notifications = ({
                         )}
                         {userNotifications.length > 0 && (
                             <>
-                                {userNotifications.map((notification: Notification) => (
+                                {userNotifications.map((notification: FrontendNotification) => (
                                     <NotificationSingleView key={notification.id} notification={notification} setViewNotification={setViewNotification} setUpdateNotifications={setUpdateNotifications} />
                                 ))
                                 }

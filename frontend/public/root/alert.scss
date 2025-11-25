@@ -36,6 +36,58 @@
   justify-content: center;
 
   .global__alert__component__content {
+
+    &.success {
+      border: 2px solid $da-confirm-hue-darker;
+      background-color: $da-confirm-hue-transparent;
+      .global___alert__component__header {
+        color: $da-confirm-hue;
+      }
+      button {
+        &:hover {
+          background-color: $da-confirm-hue-darker;
+        }
+      }
+      input {
+        &:hover {
+          border-color: $da-confirm-hue-darker !important;
+        }
+      }
+      label {
+        display: none;
+      }
+    }
+    &.error {
+      border: 2px solid $da-error-hue-darker;
+      background-color: $da-error-hue-transparent;
+      .global___alert__component__header {
+        color: $da-error-hue;
+      }
+      button {
+        &:hover {
+          background-color: $da-error-hue-transparent;
+          border-color: $da-error-hue-transparent;
+          color: white;
+        }
+      }
+      input {
+        &:hover {
+          border-color: $da-error-hue-darker !important;
+        }
+      }
+      label {
+        display: none;
+      }
+    }
+
+
+    input {
+      background-color: unset !important;
+    }
+
+
+
+    backdrop-filter: blur(10px);
     background-color: white;
     border-radius: 20px;
     padding: 20px;
@@ -60,7 +112,7 @@
     .global__alert__body {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 5px;
       width: 100%;
 
       .global___alert__component__message {
@@ -83,11 +135,6 @@
           margin: 0;
           padding: 0;
         }
-
-        .enhanced {
-          color : $da-secondary-hue-lighter-2;
-        }
-
 
 
 
@@ -140,6 +187,7 @@
 
     button {
       width: 100%;
+
     }
 
     .global___alert__component__message {

@@ -1,23 +1,7 @@
 import React from "react";
 import "../../../public/root/alert.scss";
+import type { AlertProps } from "../../types/AlertContentProps.type";
 
-export interface AlertContentProps {
-  success: boolean;
-  status: number;
-  message: string | React.JSX.Element; // Message is a HTML body
-  closeAlert: boolean;
-  title?: string;
-  displayCode?: boolean;
-  customClose?: {
-    text: string; action: () => void;
-    additionalButton?: { content: React.JSX.Element; action: () => void; class?: string }; // Optional additional button
-  },
-  displaySuccess?: boolean; // If true, will display a success message even if status is not 200
-}
-interface AlertProps {
-  alert: AlertContentProps;
-  setAlert: (alert: AlertProps["alert"]) => void;
-}
 
 
 const errors = {
@@ -38,7 +22,7 @@ const Alert = ({ alert, setAlert }: AlertProps) => {
     <div
       className={`global__alert__component ${alert.closeAlert ? "hidden" : ""}`}
     >
-      <div className="global__alert__component__content">
+      <div className={`global__alert__component__content ${alert.success ? "success" : "error"}`}>
         <div className="global__alert__body">
           <div className={`global___alert__component__header`}>
             <p

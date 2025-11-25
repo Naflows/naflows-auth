@@ -4,9 +4,9 @@ import App from "./App.tsx";
 import Account from "./pages/account/Account.tsx";
 import ManageService from "./pages/services/manage/ManageService.tsx";
 import Home from "./pages/home/Home.tsx";
-import CreateService from "./pages/services/create/CreateService.tsx";
+import CreateService from "./pages/services/create/index.tsx";
 import AppFooter from "./global/components/AppFooter.tsx";
-import JoinPage from "./pages/services/join/JoinPage.tsx";
+import JoinPage from "./pages/services/join/index.tsx";
 import DocsPage from "./pages/docs/index.tsx";
 import DocsPageDoc from "./pages/docs/page.tsx";
 

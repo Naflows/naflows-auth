@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { ServicesForUserProps } from "../../../../../../../../types/ServicesForUserProps";
-import type { AlertContentProps } from "../../../../../../../../global/error-alert/Alert";
 import Loader from "../../../../../../../../global/components/Loader";
+import type { AlertContentProps } from "../../../../../../../../types/AlertContentProps.type";
 
 
 

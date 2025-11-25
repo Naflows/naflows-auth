@@ -3,10 +3,10 @@ import LoginForm from "./form/Login";
 import { useEffect, useState } from "react";
 import RegisterForm from "./form/Register";
 import GlobalDisclaimer from "./global/components/GlobalDisclaimer";
-import fetchServiceStatus from "./pages/home/scripts/fetch-status";
-import type { ServiceStatus } from "./pages/home/components/Status";
 import { NotificationProvider } from "./global/action-information/NotificationContent";
 import NotificationContainer from "./global/action-information/NotificationContainer";
+import type { ServiceStatus } from "./types/ServiceStatus.type";
+import fetchServiceStatus from "./scripts/home/status/fetch-status";
 
 interface AppLoginBigButtonProps {
   onClick: () => void;

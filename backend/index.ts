@@ -536,7 +536,7 @@ app.post('/public/services/generate-api-id', async (req, res) => {
 
 
 app.post('/public/services/plans', async (req, res) => {
-    const plans = await services.service.getPlans();
+    const plans = await services.service.plan.getAll();
     res.status(plans.status).json(plans);
 });
 

@@ -1,6 +1,6 @@
+import type { FrontendNotification } from "../../../../../types/Notification.type";
 import { createdAtToAgo } from "../methods/createdAtToAgo";
 import { notifications } from "../methods/dir";
-import type { Notification } from "../types/notification.type";
 import { notificationSVGPerType } from "../types/svg.type";
 
 
@@ -9,8 +9,8 @@ const NotificationSingleView = ({
     setViewNotification,
     setUpdateNotifications
 }: {
-    notification: Notification,
-    setViewNotification: (notification: Notification | undefined) => void,
+    notification: FrontendNotification,
+    setViewNotification: (notification: FrontendNotification | undefined) => void,
     setUpdateNotifications: (update: boolean) => void
 }) => {
 

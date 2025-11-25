@@ -1,5 +1,5 @@
-import type { Log } from "../..";
 import { hslToRgba } from "../../../../../../../../../scripts/styling/hslToRgba";
+import type { Log } from "../../../../../../../../../types/Logs.type";
 
 
 const LogUserDetails = ({

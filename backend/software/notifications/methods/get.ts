@@ -1,6 +1,5 @@
 import { db } from "../../..";
 import secure from "../../../secure/global/dir";
-import { Notification } from "../../../types/.types/collections.type";
 
 
 async function getNotifications(userId: string, limit: number = 10, offset: number = 0) {

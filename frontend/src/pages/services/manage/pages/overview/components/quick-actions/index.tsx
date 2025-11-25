@@ -1,9 +1,9 @@
 import { useState } from "react";
 import type { ServicesForUserProps } from "../../../../../../../types/ServicesForUserProps";
 import StartService from "./methods/start-service";
-import type { AlertContentProps } from "../../../../../../../global/error-alert/Alert";
 import Alert from "../../../../../../../global/error-alert/Alert";
 import type { accountTabs } from "../../../../ManageService";
+import type { AlertContentProps } from "../../../../../../../types/AlertContentProps.type";
 
 
 const QuickActions = ({

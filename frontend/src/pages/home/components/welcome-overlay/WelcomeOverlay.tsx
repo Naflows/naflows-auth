@@ -1,7 +1,7 @@
 
 import "../../../../../public/root/pages/home/welcome-overlay.scss";
+import type { ServiceStatus } from "../../../../types/ServiceStatus.type";
 import Mailing from "../Mailing";
-import type { ServiceStatus } from "../Status";
 
 const WelcomeOverlay = ({
     serviceStatus

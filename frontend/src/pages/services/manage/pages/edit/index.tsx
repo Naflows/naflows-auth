@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import type { ServicesForUserProps } from "../../../../../types/ServicesForUserProps";
-import CreateServiceDescription, { type ServiceDescriptionProps } from "../../../create/sub-component/ServiceDescription";
+import CreateServiceDescription, { type ServiceDescriptionProps } from "../../../create/sub-components/service-details";
 import SaveChanges from "../components/save";
-import Alert, { type AlertContentProps } from "../../../../../global/error-alert/Alert";
 import axios from "axios";
 import Loader from "../../../../../global/components/Loader";
+import type { AlertContentProps } from "../../../../../types/AlertContentProps.type";
+import Alert from "../../../../../global/error-alert/Alert";
 
 
 const ManageServiceEdition = ({
