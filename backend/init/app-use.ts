@@ -9,6 +9,15 @@ import nass from '../nass/dir';
 import { services } from '../secure/services/dir';
 import { v4 } from 'uuid';
 
+
+
+
+/*
+    This function is based on the express framework and sets up middleware for handling JSON requests,
+    URL-encoded data, and CORS. It also includes custom middleware for request logging, service validation,
+    and secure user authentication.
+    @context backend/init/app-use.ts
+*/
 export function useApp(app) {
     app.use(express.json());
     app.use(bodyParser.urlencoded({ extended: true }));
