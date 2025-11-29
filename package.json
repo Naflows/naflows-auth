@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "jsdoc": "^4.0.5",
     "nodemailer": "^7.0.6",
     "ping.js": "^0.2.3"
   }
