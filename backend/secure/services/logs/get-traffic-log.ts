@@ -17,5 +17,5 @@ export async function getTrafficLog(service_id : string) : Promise<ReplyType> {
     const oneHourAgo = Date.now() - (60 * 60 * 1000);
     trafficLog.requests = trafficLog.requests.filter(request => request.timestamp >= oneHourAgo);
 
-    return software.methods.serverReply(200, "Traffic log retrieved successfully.", trafficLog);
+    return software.methods.serverReply(200, "Traffic log retrieved successfully.", {trafficLog : trafficLog});
 }

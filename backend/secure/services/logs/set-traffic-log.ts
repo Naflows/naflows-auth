@@ -13,7 +13,7 @@ export async function setTrafficLogs(service_id : string, newLog :TrafficLogEntr
     if (!trafficLog.success) {
         return software.methods.serverReply(404, "Traffic log not found for the specified service ID.");
     } else {
-        const logData = trafficLog.data as ServiceTraffic;
+        const logData = trafficLog.data.trafficLog as ServiceTraffic;
         logData.requests.push(newLog);
         const result = await serviceTrafficCollection.updateOne(
             { service_id: service_id },

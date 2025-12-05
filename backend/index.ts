@@ -234,9 +234,9 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
         serviceInfo.details.access_key = isUserDev.data.access_key;
 
         serviceInfo.alerts = (await services.service.getAlerts(serviceInfo.id)).data.alerts as unknown as ServiceAlert[];
-    } else {
+
+    } else { 
         delete serviceInfo.ip_address;
-        delete serviceInfo.created_by;
         delete serviceInfo.plan;
         delete serviceInfo.settings;
     }
