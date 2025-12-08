@@ -12,6 +12,7 @@ export default interface TwoFALog {
     created_at: number;
     used : {
         at? : number;
+        validated_at? : number;
         is_used : boolean;
     },
     code : string; // Crypted 2FA code sent to the user

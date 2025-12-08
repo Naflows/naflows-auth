@@ -15,3 +15,6 @@ a5c49d5a6c76463fe20faf6e5bcf181509ef888c manage-users-view    PASS       2025-11
 6f24c17dec5992db87e6743f65cf3f143a4badf2 idk                  PASS       2025-11-16 10:09:16 
 6f24c17dec5992db87e6743f65cf3f143a4badf2 idk                  FAIL       2025-11-16 10:10:30 
 6f24c17dec5992db87e6743f65cf3f143a4badf2 idk                  PASS       2025-11-16 10:14:42 
+859a8760df1e949fd05e14d944132681174de86b dev                  FAIL       2025-12-08 14:37:38 
+859a8760df1e949fd05e14d944132681174de86b dev                  FAIL       2025-12-08 14:38:45 
+859a8760df1e949fd05e14d944132681174de86b dev                  FAIL       2025-12-08 14:39:59 

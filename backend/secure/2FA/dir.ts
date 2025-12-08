@@ -1,4 +1,5 @@
 import { analyze2FAContext } from "./methods/analyze-context";
+import { check2FACode } from "./methods/check-code";
 import { generate2FACode } from "./methods/generate-code";
 import { generate2FARequest } from "./methods/generate-request";
 import { createTwoFALog } from "./methods/log/createLog";
@@ -9,6 +10,7 @@ import { updateTwoFALogState } from "./methods/log/updateState";
 export const twoFA = {
     generateRequest : generate2FARequest,
     generateCode:  generate2FACode,
+    validateRequest : check2FACode,
     analysis : {
         context :analyze2FAContext
     },

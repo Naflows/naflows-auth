@@ -3,6 +3,7 @@ import mailing from "../../../software/mailing/dir";
 import { User } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import TwoFALog from "../../../types/.types/twoFA.type";
+import secure from "../../global/dir";
 import { twoFA } from "../dir";
 
 
@@ -31,7 +32,7 @@ export async function generate2FACode(user: User, cryptographic_token: string, c
     const code = Math.floor(10000000 + Math.random() * 90000000).toString();
 
     const u = await twoFA.logs.update(twoFALog.id, "REQUEST_SENT", {
-        code: code,
+        code: secure.crypt(code),
         used: {
             is_used: false
         }
