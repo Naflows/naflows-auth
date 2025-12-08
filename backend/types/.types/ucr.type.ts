@@ -12,6 +12,8 @@ interface UCRType {
         password? : string; // PRE-HASHED
 
         device_fingerprint : object | string; // Can be an object or a JSON string
+
+        cryptographic_token? : string; // For 2FA and other cryptographic operations
     };
 
     client : {

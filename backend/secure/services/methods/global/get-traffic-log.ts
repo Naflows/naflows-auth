@@ -9,9 +9,25 @@ export async function getTrafficLogRoute(req: Request, res: Response, user: User
     if (isUserDev.success) {
         const traffic = await services.service.logs.getTraffic(serviceID);
 
+        const service = await services.service.get(serviceID);
+        if (!service.success || !service.data?.service) {
+            return software.methods.directResponse(404, "Service not found.", res, req);
+        }
+
+        const serviceData = service.data.service;
+        const requests = traffic.data.trafficLog.requests;
+ 
+
+        const maxRate = (await services.service.plan.get(serviceData.plan)).RPS * 1.5;
+        const oneMinuteAgo = Date.now() - 60000;
+        const recentRequests = requests.filter(req => req.timestamp >= oneMinuteAgo);
+        const rps = recentRequests.length; // requests per second
 
         return software.methods.directResponse(200, "Traffic retrieved successfully.", res, req, {
-            traffic 
+            traffic : traffic.data.trafficLog,
+            maxRate : maxRate,
+            overwhelmed : rps > maxRate,
+            rps : rps
         });
     }
 

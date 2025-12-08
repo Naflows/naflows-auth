@@ -44,9 +44,13 @@ if [ "$RESET_ENVIRONMENT" = "true" ]; then
     
     docker system prune -a -f --volumes
     COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-services,test-global,dummy-api, mongo-nass-test,auth-api-test" docker compose down -v
+
     
     echo -e "\033[1;32mStarting MongoDB...\033[0m"
     COMPOSE_PROFILES="mongo-nass" docker compose up -d mongo-nass
+
+
+    
 else
     echo -e "\033[1;32mStopping and removing existing containers, volumes, and networks...\033[0m"
     COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,test-services,test-global,dummy-api, mongo-nass-test,auth-api-test" docker compose down

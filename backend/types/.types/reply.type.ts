@@ -1,5 +1,5 @@
 import { APIKey, Service, ServicePlan, ServiceToken, User, UserSession } from "./collections.type";
-import { ServiceTraffic } from "./traffic.type";
+import { ServiceTraffic, TrafficLogEntry } from "./traffic.type";
 import { DeveloperSecureAccess, ServiceRights } from "./tunneling.type";
 
 export interface ReplyType {
@@ -37,6 +37,14 @@ export interface ReplyType {
         services?: Service[];
         alerts? : string[];
         plans? : ServicePlan[];
+        requests?: TrafficLogEntry[];
 
+        // Will be extended as needed
+        userData?: { // Data meant to be sent to the frontend
+            log? : {
+                log_id : string;
+                cryptographic_token : string;
+            }
+        }
     };
 }

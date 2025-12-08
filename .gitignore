@@ -4,3 +4,8 @@ auth-data
 production-build.sh
 .env*
 *.env
+# Exclude only the frontend directory
+*frontend/
+
+# Or exclude only the frontend-nextjs directory
+frontend-nextjs/

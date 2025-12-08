@@ -22,6 +22,12 @@ function sendCookies(res, data) {
     res.cookie("token", token, { httpOnly: true, secure: true, sameSite: 'None' });
     res.cookie("session", session, { httpOnly: true, secure: true, sameSite: 'None' });
     res.cookie("uid", uid, { httpOnly: true, secure: true, sameSite: 'None' });
+
+    if (data.data.middleware && data.data.middleware["2fa_cryptographic_token"]) {
+        const cryptographic_token = data.data.middleware["2fa_cryptographic_token"];
+        console.log("Setting 2FA cryptographic token cookie:", { cryptographic_token });
+        res.cookie("2fa_cryptographic_token", cryptographic_token, { httpOnly: true, secure: true, sameSite: 'None' });
+    }
 }
 
 function getCookies(req) {
@@ -29,9 +35,10 @@ function getCookies(req) {
     const sessionID = getCookieValue(cookies, 'session');
     const token = getCookieValue(cookies, 'token');
     const uid = getCookieValue(cookies, 'uid');
-    console.log("'\x1b[33m%s\x1b[0m'", "Cookies received: " + JSON.stringify({ sessionID, token, uid }));
+    const cryptographic_token = getCookieValue(cookies, '2fa_cryptographic_token');
+    console.log("'\x1b[33m%s\x1b[0m'", "Cookies received: " + JSON.stringify({ sessionID, token, uid, cryptographic_token }));
 
-    return { sessionID, token, uid };
+    return { sessionID, token, uid, cryptographic_token };
 }
 
 
@@ -39,7 +46,7 @@ function getCookies(req) {
 
 
 async function manageConnection(req: Request, res: Response, route: string, data?: object | null, method: "POST" | "PUT" = "POST") {
-    const { sessionID, token, uid } = getCookies(req);
+    const { sessionID, token, uid, cryptographic_token } = getCookies(req);
 
     console.log(`Forwarding request to NASS at route: ${route} with data:`, data);
 
@@ -54,6 +61,7 @@ async function manageConnection(req: Request, res: Response, route: string, data
                 session_id: sessionID || null,
                 token: token || null,
                 user_id: uid || null,
+                cryptographic_token: cryptographic_token || null
             },
             ...data,
             request: {
