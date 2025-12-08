@@ -224,6 +224,22 @@ app.post('/user/secure/service/register', async (req: Request, res: Response) =>
 });
 
 
+app.post('/user/secure/2FA/create', async (req: Request, res: Response) => {
+    await manageConnection(req,res,'/client/secure/2FA/generate-request', { 
+        action: req.body.action,
+        data: req.body.data
+    });
+});
+app.post('/user/secure/2FA/generate-code', async (req: Request, res: Response) => {
+    await manageConnection(req,res,'/client/secure/2FA/generate-code', { 
+        action: req.body.action,
+        data: req.body.data
+    });
+});
+app.post('/user/secure/2FA/clear-cookie', async (req: Request, res: Response) => {
+    res.clearCookie("2fa_cryptographic_token", { httpOnly: true, secure: true, sameSite: 'None' });
+    res.status(200).json({ status: 200, message: "2FA cryptographic token cookie cleared.", success: true });
+});
 
 app.post('/user/secure/services/can-access', async (req: Request, res: Response) => {
     await manageConnection(req,res,'/client/secure/services/user/check-access', { 

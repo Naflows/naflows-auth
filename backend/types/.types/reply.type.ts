@@ -38,5 +38,13 @@ export interface ReplyType {
         alerts? : string[];
         plans? : ServicePlan[];
         requests?: TrafficLogEntry[];
+
+        // Will be extended as needed
+        userData?: { // Data meant to be sent to the frontend
+            log? : {
+                log_id : string;
+                cryptographic_token : string;
+            }
+        }
     };
 }

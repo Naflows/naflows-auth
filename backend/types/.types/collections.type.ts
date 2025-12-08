@@ -84,6 +84,8 @@ export type TokenRights =
   | "SESSION_CONFIRMATION" // Confirm a session, used to check if a session is valid
   | "API_REGISTRATION" // Register a user in an API
 
+  | "2FA_ACTION" // Perform actions related to Two-Factor Authentication
+
 
   // The following rights are for the NASS Administrative Instances
   | "NASS_SECURE_CHECK" // Check if a connection is secure and accepted
@@ -124,6 +126,7 @@ export interface Tokens {
   supertest?: boolean; // If the token is a supertest token, it can be used for testing purposes
   data?: {
     apiIDForRegistration?: string;
+    associatedCode? : string;
   };
   enabled: boolean; // Whether the token is enabled or not, if not, it cannot be used
   frozen_until?: number; // UNIX TIMESTAMP, if the token is frozen, this is the amount of seconds until it can be unfrozen
@@ -178,6 +181,7 @@ export interface Service {
     allow_service_connection: boolean; // Whether the service allows connection from other services or not
     allow_public_visibility: boolean; // Whether the service is visible in the public services list or not
     required_data?: UserDataPreferences["personal_data"]; // What personal data is required for a user to register in the service
+    backup_enabled?: boolean; // Whether the service has backups enabled or not
   },
   user_authorizations? : Record<string, boolean>; // Map of user IDs to whether they are authorized developers for the service
   details: {

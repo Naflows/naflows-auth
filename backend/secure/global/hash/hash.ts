@@ -16,6 +16,8 @@ export function crypt(value: string | undefined): string {
     return `${iterations}:${salt}:${hash}`;
 }
 
+
+
 export function hashID(value: string): string {
     if (!value) {
         throw new Error('Value must be defined for hashing');

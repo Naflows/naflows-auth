@@ -15,8 +15,12 @@ db.createCollection('requests'); // Logging requests to the NASS
 db.createCollection('user_connections'); // Connections between users and services
 
 db.createCollection('mailings'); // Mailing list for notifications and updates
-db.createCollection('security_codes'); // Security codes for actions like email verification, password reset, etc.
 db.createCollection('notifications'); // User notifications
+
+
+db.createCollection('security_codes'); // Security codes for actions like email verification, password reset, etc.
+db.createCollection('2fa_logs'); // Logs for 2FA actions
+
 
 
 db.createCollection('service_rights');
@@ -37,6 +41,7 @@ const logs = db.getCollection('logs');
 const requests = db.getCollection('requests');
 const mailings = db.getCollection('mailings'); // Mailing list for notifications and updates
 const securityCodes = db.getCollection('security_codes'); // Security codes for actions like email verification, password reset, etc.
+const twofaLogs = db.getCollection('2fa_logs'); // Logs for 2FA actions
 const notifications = db.getCollection('notifications'); // User notifications
 
 const userConnections = db.getCollection('user_connections'); // Connections between users and services
@@ -131,6 +136,11 @@ db.service_devs.createIndex({ service_id: 1 });
 
 db.service_traffic.createIndex({ id: 1 }, { unique: true });
 db.service_traffic.createIndex({ service_id: 1 });
+
+db.twofaLogs.createIndex({ id: 1 }, { unique: true });
+db.twofaLogs.createIndex({ user_id: 1 });
+db.twofaLogs.createIndex({ action: 1 });
+db.twofaLogs.createIndex({ created_at: 1 });
 
 
 // See the .env file in the root directory of the naflows-system repository for the unhashed password

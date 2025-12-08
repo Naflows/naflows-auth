@@ -20,8 +20,8 @@ import notifications from "./software/notifications/dir";
 
 
 const nass = require('./nass/routes/index');
-const servicesRoutes = require('./secure/routes/index');
-
+const servicesRoutes = require('./secure/routes/services.ts');
+const TwoFARoutes = require('./secure/routes/2fa.ts');
 
 const app = express();
 const router = express.Router();
@@ -40,6 +40,7 @@ app.get('/client', (req, res) => {
 useApp(app);
 app.use('/nass', nass);
 app.use('/client', servicesRoutes);
+app.use('/client/secure/2FA', TwoFARoutes);
 
 
 
@@ -194,6 +195,8 @@ app.post('/client/secure/data/services', async (req, res) => {
         }
     });
 });
+
+
 
 app.post('/client/secure/data/services/service-informations', async (req, res) => {
     const user = await secure.user.manageConnection(req, res);
