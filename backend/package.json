@@ -5,7 +5,8 @@
   "scripts": {
     "test-global": "jest global.test.ts --runInBand --no-cache --verbose",
     "test-services": "jest services.test.ts --runInBand --no-cache --verbose",
-    "methods-test": "jest /tests/methods/methods.test.ts --runInBand --no-cache --verbose --detectOpenHandles"
+    "methods-test": "jest /tests/methods/methods.test.ts --runInBand --no-cache --verbose --detectOpenHandles",
+    "2fa-test": "jest /tests/methods/2fa.test.ts --runInBand --no-cache --verbose --detectOpenHandles"
   },
   "author": "",
   "license": "ISC",

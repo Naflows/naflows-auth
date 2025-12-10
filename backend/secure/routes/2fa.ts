@@ -38,6 +38,7 @@ router.post('/generate-code', async (req, res) => {
     return software.methods.directResponse(result.status, result.message,res,req, result.data);
 });
 
+// Used by the client to check if a 2FA is required and valid for the current action (prevents unnecessary re-run of 2FA)
 router.post('/socket-status', async (req, res) => {
     const user = await secure.user.manageConnection(req, res);
     const ucr = req.body as UCRType;
@@ -53,9 +54,15 @@ router.post('/socket-status', async (req, res) => {
         ucr.user.cryptographic_token || ""
     );
 
+    if (!result.existing) {
+        console.log("No existing 2FA log found for socket-status.");
+        return software.methods.directResponse(404, result.reason || "No matching 2FA request found.",res,req, {});
+    }
+
     console.log("2FA socket-status result:", result);
-    return software.methods.directResponse(result.valid ? 200 : 401, result.reason || "",res,req, {});
+    return software.methods.directResponse(result.valid ? 200 : 401, result.reason || "",res,req,  {});
 });
+
 
 
 router.post('/verify-code', async (req, res) => {

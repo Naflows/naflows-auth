@@ -60,12 +60,17 @@ if [ -z "$TEST_PARAMETER" ]; then
     COL4_WIDTH=$((COL4_WIDTH + 10)) # Adjust width for color codes
     printf "| %-${COL1_WIDTH}s | %-${COL2_WIDTH}s | %-${COL3_WIDTH}s | %-${COL4_WIDTH}s |\n" "1" "methods" "Test all methods" "$green_text"
     printf -- "+-------+------------+----------------------+---------------------+\n"
+    printf "| %-${COL1_WIDTH}s | %-${COL2_WIDTH}s | %-${COL3_WIDTH}s | %-${COL4_WIDTH}s |\n" "2" "2fa" "Test 2fa security" "$green_text"
+    printf -- "+-------+------------+----------------------+---------------------+\n"
     print_separator
     read -p "Enter a test number: " TEST_NUMBER
 
     case $TEST_NUMBER in
         1)
             TEST_PARAMETER="methods"
+            ;;
+        2)
+            TEST_PARAMETER="2fa"
             ;;
         *)
             print_red "Invalid test number."
@@ -86,7 +91,7 @@ function reset_test_db {
 
     # Initialize database manually
     echo -e "\033[1;32mInitializing TEST database...\033[0m"
-    docker exec -i mongo-nass-test mongosh -u admin -p secret --authenticationDatabase admin < ./mongo-init/init.js
+    docker exec -i mongo-nass-test mongosh -u admin -p pass --authenticationDatabase admin < ./mongo-init/init.js
 
 }
 
@@ -131,47 +136,46 @@ fi
 
 
 
-if [ "$TEST_PARAMETER" = "methods" ]; then
-    end_running_containers
-    reset_test_db
+end_running_containers
+reset_test_db
 
-    # If mongo-express is not running, start it
-    if ! docker ps --format '{{.Names}}' | grep -q '^mongo-express$'; then
-        echo -e "\033[1;32mStarting mongo-express service...\033[0m"
-        COMPOSE_PROFILES="mongo-nass-test" docker compose up -d mongo-express
-    fi
-    
+# If mongo-express is not running, start it
+if ! docker ps --format '{{.Names}}' | grep -q '^mongo-express$'; then
+    echo -e "\033[1;32mStarting mongo-express service...\033[0m"
+    COMPOSE_PROFILES="mongo-nass-test" docker compose up -d mongo-express
+fi
 
-    # Wait for services to start and MongoDB to be ready
-    echo -e "\033[1;32mWaiting for services to start...\033[0m"
-    sleep 2
 
-    # Run tests inside the auth-api-test container
-    echo -e "\033[1;32mRunning methods tests inside auth-api-test container...\033[0m"
+# Wait for services to start and MongoDB to be ready
+echo -e "\033[1;32mWaiting for services to start...\033[0m"
+sleep 2
+
+# Run tests inside the auth-api-test container
+echo -e "\033[1;32mRunning methods tests inside auth-api-test container...\033[0m"
+if [ "$TEST_PARAMETER" = "2fa" ]; then
+    docker exec auth-api-test sh -c "cd /app && npm run 2fa-test -- --forceExit --testPathPattern=2fa"
+elif [ "$TEST_PARAMETER" = "methods" ]; then
     docker exec auth-api-test sh -c "cd /app && npm run methods-test -- --forceExit"
+fi
 
-    TEST_EXIT_CODE=$?
+TEST_EXIT_CODE=$?
 
-    if [ $TEST_EXIT_CODE -eq 0 ]; then
-        echo -e "\033[1;32m✓ All tests passed successfully.\033[0m"
-    else
-        echo -e "\033[1;31m✗ Some tests failed (Exit code: $TEST_EXIT_CODE).\033[0m"
-        docker logs auth-api-test
-        COMPOSE_PROFILES="mongo-nass-test,auth-api-test,dummy-api" docker compose down
-    fi
-
-    save_test_result_with_current_commit $TEST_EXIT_CODE
-
-    print_blue "\nAll tests ran. To run the same suite again, press 'y'. To exit, press any other key."
-    read -n 1 -s USER_INPUT
-    if [ "$USER_INPUT" = "y" ] || [ "$USER_INPUT" = "Y" ]; then
-        clear_terminal
-        bash tests.sh $RESET_ENVIRONMENT $TEST_PARAMETER
-    else
-        COMPOSE_PROFILES="mongo-nass-test,auth-api-test,dummy-api" docker compose down
-        exit 1
-    fi
+if [ $TEST_EXIT_CODE -eq 0 ]; then
+    echo -e "\033[1;32m✓ All tests passed successfully.\033[0m"
 else
-    echo -e "\033[1;32mStarting Docker containers for no-test...\033[0m"
-    COMPOSE_PROFILES="mongo-nass-test,auth-api-test,dummy-api" docker compose up --build -d
+    echo -e "\033[1;31m✗ Some tests failed (Exit code: $TEST_EXIT_CODE).\033[0m"
+    docker logs auth-api-test
+    COMPOSE_PROFILES="mongo-nass-test,auth-api-test,dummy-api" docker compose down
+fi
+
+save_test_result_with_current_commit $TEST_EXIT_CODE
+
+print_blue "\nAll tests ran. To run the same suite again, press 'y'. To exit, press any other key."
+read -n 1 -s USER_INPUT
+if [ "$USER_INPUT" = "y" ] || [ "$USER_INPUT" = "Y" ]; then
+    clear_terminal
+    bash tests.sh $RESET_ENVIRONMENT $TEST_PARAMETER
+else
+    COMPOSE_PROFILES="mongo-nass-test,auth-api-test,dummy-api" docker compose down
+    exit 1
 fi

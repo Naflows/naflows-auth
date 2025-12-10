@@ -29,7 +29,7 @@ export async function analyze2FAContext(user: User, context: {
 
     if (existing2FA.length > 0) {
         const log = existing2FA[0];
-        if (log.state === "REQUEST_GENERATED" || log.state === "REQUEST_SENT") {
+        if (log.state === "REQUEST_GENERATED" || log.state === "REQUEST_SENT" || log.state === "REQUEST_COMPLETED") {
             if (log.used.is_used) {
                 return { valid: false, reason: "A 2FA request has already been used for this action." };
             }
@@ -44,7 +44,7 @@ export async function analyze2FAContext(user: User, context: {
 
             return { valid: true, existing: log };
         } else {
-            return { valid: false, reason: "A 2FA request has already been completed for this action." };
+            return { valid: false, reason: "A 2FA request has already been completed for this action."};
         }
     }
     

@@ -41,7 +41,8 @@ export async function generate2FARequest(user: User, cryptographic_token:string,
         return software.methods.serverReply(201, "2FA request generated successfully.", {
             middleware: { // Send back the cryptographic token to the client via middleware for further use
                 "2fa_cryptographic_token": twoFALog.data.userData.log.cryptographic_token
-            }
+            },
+            "codeSent": false
         });
     }
 

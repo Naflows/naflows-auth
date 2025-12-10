@@ -45,6 +45,8 @@ export interface ReplyType {
                 log_id : string;
                 cryptographic_token : string;
             }
-        }
+        },
+
+        middleware?: object; // Data meant to be sent via middleware headers
     };
 }

@@ -1,4 +1,4 @@
-import secure from "../global/dir";
+ import secure from "../global/dir";
 import { services } from "../services/dir";
 
 const express = require('express');
