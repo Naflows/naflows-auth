@@ -16,38 +16,43 @@ export async function analyze2FAContext(user: User, context: {
 }, cryptographic_token: string): Promise<{
     valid: boolean;
     reason?: string;
-    existing? : TwoFALog
+    existing?: TwoFALog
 }> {
 
     // Is there already a token associated with this session for 2FA actions?
-    const existing2FA = await twoFA.logs.get(
-        user.id,
-        context.action,
-        cryptographic_token,
-        context.data
-    )
+    if (cryptographic_token) {
+        const existing2FA = await twoFA.logs.get(
+            user.id,
+            context.action,
+            cryptographic_token,
+            context.data
+        )
 
-    if (existing2FA.length > 0) {
-        const log = existing2FA[0];
-        if (log.state === "REQUEST_GENERATED" || log.state === "REQUEST_SENT" || log.state === "REQUEST_COMPLETED") {
-            if (log.used.is_used) {
-                return { valid: false, reason: "A 2FA request has already been used for this action." };
-            }
+        if (existing2FA.length === 0) {
+            return { valid: false, reason: "Invalid or expired cryptographic token for 2FA context analysis." };
+        }
 
-            if (log.attempts >= 3) {
+        if (existing2FA.length > 0) {
+            const log = existing2FA[0];
+            if (log.state === "REQUEST_GENERATED" || log.state === "REQUEST_SENT" || log.state === "REQUEST_COMPLETED") {
+                if (log.used.is_used) {
+                    return { valid: false, reason: "A 2FA request has already been used for this action." };
+                }
+
+
+                if (log.created_at + (5 * 60 * 1000) < Date.now()) { // 5 minutes expiry
+                    return { valid: false, reason: "This 2FA request has expired." };
+                }
+
+                return { valid: true, existing: log };
+            } else if (log.attempts >= 3 || log.state === "REQUEST_FAILED") {
                 return { valid: false, reason: "Maximum number of attempts reached for this 2FA request." };
+            } else {
+                return { valid: false, reason: "A 2FA request has already been completed for this action." };
             }
-
-            if (log.created_at + (5 * 60 * 1000) < Date.now()) { // 5 minutes expiry
-                return { valid: false, reason: "This 2FA request has expired." };
-            }
-
-            return { valid: true, existing: log };
-        } else {
-            return { valid: false, reason: "A 2FA request has already been completed for this action."};
         }
     }
-    
+
 
     switch (context.action) {
         case "TRANSFER_OWNERSHIP":

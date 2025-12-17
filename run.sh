@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e  # Exit on any error
 
+
 RESET_ENVIRONMENT=$1
 RESET_DB=$2
 

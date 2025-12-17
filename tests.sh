@@ -161,10 +161,12 @@ fi
 TEST_EXIT_CODE=$?
 
 if [ $TEST_EXIT_CODE -eq 0 ]; then
+    # Clear terminal
+    clear 
     echo -e "\033[1;32m✓ All tests passed successfully.\033[0m"
 else
+    # Clear terminal
     echo -e "\033[1;31m✗ Some tests failed (Exit code: $TEST_EXIT_CODE).\033[0m"
-    docker logs auth-api-test
     COMPOSE_PROFILES="mongo-nass-test,auth-api-test,dummy-api" docker compose down
 fi
 

@@ -19,12 +19,17 @@ export async function check2FACode(user: User, cryptographic_token: string, cont
     );
 
     if (!twoFa.valid) {
-        return software.methods.serverReply(404, twoFa.reason || "No matching 2FA request found.");
+        return software.methods.serverReply(400, twoFa.reason || "No matching 2FA request found.");
     }
 
     const twoFALog = twoFa.existing!;
+    console.log("Checking TWOFA request with log:", twoFALog);
 
     if (secure.verify(code, twoFALog.code)) {
+        if (twoFALog.state === "REQUEST_COMPLETED" || twoFALog.used.is_used) {
+            return software.methods.serverReply(400, "This 2FA request has already been used.");
+        }
+
         const u = await twoFA.logs.update(twoFALog.id, "REQUEST_COMPLETED", {
             used : {
                 validated_at : Date.now(),

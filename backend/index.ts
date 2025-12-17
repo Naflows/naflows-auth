@@ -553,6 +553,15 @@ app.post('/public/services/plans', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`NASS is running on http://localhost:${PORT}`);
+
+    if (process.env.DEV_SEND_SENSITIVE_DATA === "true") {
+        console.log("WARNING: DEV_SEND_SENSITIVE_DATA is enabled. Sensitive data may be exposed in responses.");
+        // Close after 10 seconds
+        setTimeout(() => {
+            console.log("Shutting down NASS due to DEV_SEND_SENSITIVE_DATA being enabled.");
+            process.exit(0);
+        }, 10000);
+    }
 });
 
 export const db = mongoose.connection;

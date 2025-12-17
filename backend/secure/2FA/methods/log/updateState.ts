@@ -24,12 +24,10 @@ export async function updateTwoFALogState(log_id: string, newState: TwoFALog["st
         return software.methods.serverReply(404, "2FA log not found.");
     }
 
-    // Validate state transition
-    if (existingLog.state === newState) {
-        return software.methods.serverReply(200, "2FA log state is already up to date.");
-    }
+
 
     // Prevent invalid state transitions
+    // If the new state is the same as before, do nothing (because there might be other data to update)
     if (states.indexOf(newState) < states.indexOf(existingLog.state)) {
         return software.methods.serverReply(400, "Invalid state transition.");
     }

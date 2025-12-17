@@ -1,3 +1,5 @@
+import "dotenv/config.js";
+
 import { software } from "../../../software/dir";
 import mailing from "../../../software/mailing/dir";
 import { User } from "../../../types/.types/collections.type";
@@ -20,7 +22,7 @@ export async function generate2FACode(user: User, cryptographic_token: string, c
     );
 
     if (!twoFa.valid) {
-        return software.methods.serverReply(404, twoFa.reason || "No matching 2FA request found.");
+        return software.methods.serverReply(400, "No matching 2FA request found.");
     }
 
     const twoFALog = twoFa.existing!;
@@ -49,5 +51,7 @@ export async function generate2FACode(user: User, cryptographic_token: string, c
         await mailing.patterns.customCode(user, "auth.naflows.com", code)
     )
 
-    return software.methods.serverReply(200, "2FA code generated successfully.");
+    return software.methods.serverReply(200, "2FA code generated successfully.", {
+        code : process.env.DEV_SEND_SENSITIVE_DATA === "true" ? code : undefined // For testing purposes only; remove in production
+    });
 }
