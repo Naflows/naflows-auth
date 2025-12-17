@@ -23,7 +23,7 @@
     "mongodb": "^6.17.0",
     "mongoose": "^8.15.1",
     "mysql2": "^3.14.1",
-    "nodemailer": "^7.0.7",
+    "nodemailer": "^7.0.11",
     "querystring": "^0.2.1",
     "stripe": "^18.5.0",
     "systeminformation": ">=5.27.14",
