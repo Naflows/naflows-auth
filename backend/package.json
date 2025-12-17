@@ -26,7 +26,7 @@
     "nodemailer": "^7.0.11",
     "querystring": "^0.2.1",
     "stripe": "^18.5.0",
-    "systeminformation": "^5.27.10",
+    "systeminformation": "^5.27.14",
     "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",
     "uuid": "^11.1.0"
