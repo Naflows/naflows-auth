@@ -5,7 +5,7 @@ export default interface TwoFALog {
     user_id: string;
     cryptographic_token : string; // 256-bit cryptographic token associated with the 2FA log
     state: "REQUEST_GENERATED" | "REQUEST_SENT" | "REQUEST_COMPLETED" | "REQUEST_FAILED" | "REQUEST_EXPIRED" | "REQUEST_FULLFILLED"; // Completed = code sent and used, fullfilled = action completed
-    action : "TRANSFER_OWNERSHIP" | "CHANGE_SECURITY_SETTINGS" | "DELETE_ACCOUNT" | "CUSTOM_ACTION";
+    action : "TRANSFER_OWNERSHIP" | "CHANGE_SECURITY_SETTINGS" | "DELETE_ACCOUNT" | "CUSTOM_ACTION" | "DELETE_SERVICE" | "JOIN_SERVICE"; // The action that this 2FA log is associated with
     data? : {
         [key: string] : any;
     };

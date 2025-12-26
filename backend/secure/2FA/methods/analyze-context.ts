@@ -1,6 +1,6 @@
 import { Collection } from "mongoose";
 import { db } from "../../..";
-import { Tokens, User, UserSession } from "../../../types/.types/collections.type";
+import { Service, Tokens, User, UserSession } from "../../../types/.types/collections.type";
 import secure from "../../global/dir";
 import { services } from "../../services/dir";
 import TwoFALog from "../../../types/.types/twoFA.type";
@@ -54,14 +54,25 @@ export async function analyze2FAContext(user: User, context: {
     }
 
 
+    let service : Service;
+    if (context.data.serviceID) {
+        const serviceResult = await services.service.get(context.data.serviceID);
+        if (!serviceResult.success) {
+            return { valid: false, reason: "Service not found." };
+        }
+        service = serviceResult.data.service;
+    }
+
+
     switch (context.action) {
         case "TRANSFER_OWNERSHIP":
-            const service = await services.service.get(context.data.serviceID);
-            if (!service.success) {
-                return { valid: false, reason: "Service not found." };
+            if (service.created_by !== user.id) {
+                return { valid: false, reason: "User is not the owner of the service." };
             }
-            const serviceData = service.data.service;
-            if (serviceData.created_by !== user.id) {
+            return { valid: true };
+        
+        case "DELETE_SERVICE":
+            if (service.created_by !== user.id) {
                 return { valid: false, reason: "User is not the owner of the service." };
             }
             return { valid: true };
