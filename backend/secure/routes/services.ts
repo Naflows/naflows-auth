@@ -1,4 +1,6 @@
- import secure from "../global/dir";
+ import { software } from "../../software/dir";
+import { ReplyType } from "../../types/.types/reply.type";
+import secure from "../global/dir";
 import { services } from "../services/dir";
 
 const express = require('express');
@@ -60,6 +62,18 @@ router.post('/secure/services/rights/delete', async (req, res) => {
     const user = await secure.user.manageConnection(req, res);
     services.routes.deleteRight(req, res, user);
 });
+
+
+// Update service data
+router.post('/secure/services/data/update/', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    const serviceId = req.body.service_id;
+    const markdown = req.body.markdown;
+    const type = req.body.type; // "privacy_policy_url" | "terms_of_service_url" | "contact_email"
+    const replyType : ReplyType = await services.service.global.updateLegal(serviceId, user, markdown, type);
+    return software.methods.directResponse(replyType.status, replyType.message, res, req, replyType.data);
+});
+
 
 
 

@@ -108,15 +108,15 @@ export async function registerService(
             public: {
                 privacy_policy_url: {
                     approved: false,
-                    url: "null"
+                    value: "null"
                 },
                 terms_of_service_url: {
                     approved: false,
-                    url: "null"
+                    value: "null"
                 },
                 contact_email: {
                     approved: false,
-                    email: "null"
+                    value: "null"
                 }
             }
         }

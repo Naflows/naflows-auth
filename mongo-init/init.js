@@ -6,6 +6,7 @@ db.createCollection('users');
 db.createCollection('sessions');
 db.createCollection('tokens'); // User tokens, used for authentication
 db.createCollection('services'); // Service connections for direct access to the NASS
+db.createCollection("pictures"); // User and service pictures storage
 db.createCollection('service_tokens'); // Tokens for services to authenticate with the NASS
 db.createCollection('service_logs'); // Logs for services to log actions and events
 db.createCollection('nass_api_keys');
@@ -58,6 +59,8 @@ const serviceDevs = db.getCollection('service_devs'); // Service developers
 
 
 const service_traffic = db.getCollection('service_traffic'); // Service traffic logs
+
+const pictures = db.getCollection('pictures');
 
 
 // Create indexes for the collections to improve performance and ensure uniqueness where necessary
@@ -142,6 +145,8 @@ db.twofaLogs.createIndex({ user_id: 1 });
 db.twofaLogs.createIndex({ action: 1 });
 db.twofaLogs.createIndex({ created_at: 1 });
 
+
+db.pictures.createIndex({ id: 1 }, { unique: true });
 
 // See the .env file in the root directory of the naflows-system repository for the unhashed password
 db.users.insertOne({

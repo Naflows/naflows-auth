@@ -198,16 +198,28 @@ export interface Service {
     },
     public : {
       privacy_policy_url? : {
-        url : string,
-        approved : boolean
+        value : string,
+        approved : boolean,
+        history? : Array<{
+          updated_at : number,
+          previous_value : string
+        }>;
       };
       terms_of_service_url? : {
-        url : string,
-        approved : boolean
+        value : string,
+        approved : boolean,
+        history? : Array<{
+          updated_at : number,
+          previous_value : string
+        }>;
       };
       contact_email? : {
-        email : string,
-        approved : boolean
+        value : string,
+        approved : boolean,
+        history? : Array<{
+          updated_at : number,
+          previous_value : string
+        }>;
       };
     }
   },

@@ -156,6 +156,14 @@ app.put('/user/secure/service/update', async (req: Request, res: Response) => {
     });
 });
 
+app.post('/user/secure/service/legal/update', async (req: Request, res: Response) => {
+    await manageConnection(req,res,'/client/secure/services/data/update', {
+        service_id: req.body.service_id,
+        markdown: req.body.markdown,
+        type: req.body.type // "privacy_policy_url" | "terms_of_service_url" | "contact_email"
+    });
+});
+
 app.post('/user/secure/service/logs', async (req: Request, res: Response) => {
     await manageConnection(req,res,'/client/secure/services/get-logs', {
         service_id: req.body.service_id,
