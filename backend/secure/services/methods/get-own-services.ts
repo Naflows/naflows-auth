@@ -1,4 +1,5 @@
 import { db } from "../../..";
+import getPicture from "../../../software/data-management/get-picture";
 import { software } from "../../../software/dir";
 import { ReplyType } from "../../../types/.types/reply.type";
 import { services } from "../dir";
@@ -29,8 +30,8 @@ export async function getUserServices(userID: string, compact: boolean = false):
                     rights: ur.rights,
                     joined_at: ur.joined_at,
                     user_active: ur.active,
-                    picture: service.picture,
-                    banner: service.banner,
+                    picture: await getPicture(service.picture, "service") || null,
+                    banner: await getPicture(service.banner, "banner") || null,
                     details: service.details,
                     is_user_developer: isUserDeveloper,
                     user_authorizations : await services.service.dev.authorizations(userID, service.id),

@@ -1,3 +1,4 @@
+import getPicture from "../../../software/data-management/get-picture";
 import { software } from "../../../software/dir";
 import { Service, User } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
@@ -30,7 +31,7 @@ export async function getPublicServiceDetails(id: string, userId: string | null)
     if (owner) {
         service.details.owner = {
             username: owner.username,
-            profile_picture: owner.profile_picture,
+            profile_picture: await getPicture(owner.profile_picture, "user") || null,
             verified: owner.phone_verified && owner.email_verified,
             first_name: owner.first_name,
             last_name: owner.last_name,

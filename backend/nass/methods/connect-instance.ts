@@ -44,7 +44,8 @@ export async function connectInstance(req : Request, res : Response) {
 
     await services.service.logs.create(serviceID, `Service ${service.status === "ACTIVE" ? "started" : "stopped"}.`, "SYSTEM", "INFO", { user: user.id });
 
-    return res.status(200).json(software.methods.serverReply(200, `Service ${service.status === "ACTIVE" ? "started" : "stopped"} successfully.`, {
-        middleware: req.middleware.data
-    }));
+    return software.methods.directResponse(200, `Service ${service.status === "ACTIVE" ? "started" : "stopped"} successfully.`, res, req, {
+        success : true,
+        service_status : service.status,
+    });
 }

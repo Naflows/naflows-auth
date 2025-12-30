@@ -1,3 +1,4 @@
+import { uploadPicture } from "../../../../software/data-management/manage-pictures";
 import { software } from "../../../../software/dir";
 import { Service } from "../../../../types/.types/collections.type";
 import { ReplyType } from "../../../../types/.types/reply.type";
@@ -23,8 +24,8 @@ export async function updateServiceRoute(req, res, user) {
     const serviceInfo = serviceData.data.service as Service;
     serviceInfo.name = req.body.service.name || serviceInfo.name;
     serviceInfo.description = req.body.service.description || serviceInfo.description;
-    serviceInfo.picture = req.body.service.profileImage || serviceInfo.picture;
-    serviceInfo.banner = req.body.service.bannerImage || serviceInfo.banner;
+    serviceInfo.picture = await uploadPicture(serviceInfo.id,req.body.service.profileImage || serviceInfo.picture, "service");
+    serviceInfo.banner = await uploadPicture(serviceInfo.id, req.body.service.bannerImage || serviceInfo.banner, "banner");
     serviceInfo.public_settings.allow_public_visibility = req.body.service.allow_public_visibility !== undefined ? req.body.service.allow_public_visibility : serviceInfo.public_settings.allow_public_visibility;
 
     const update: ReplyType = await services.service.global.update(serviceID, serviceInfo);

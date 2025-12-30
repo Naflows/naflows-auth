@@ -17,6 +17,8 @@ import mailing from "./software/mailing/dir";
 import express from "express";
 import bodyParser from "body-parser";
 import notifications from "./software/notifications/dir";
+import { uploadPicture } from "./software/data-management/manage-pictures";
+import getPicture from "./software/data-management/get-picture";
 
 
 const nass = require('./nass/routes/index');
@@ -248,7 +250,9 @@ app.post('/client/secure/data/services/service-informations', async (req, res) =
 
 
 
-    console.log("Sending service information for service:", serviceInfo.name, "to user:", user.username);
+
+
+    console.log("Sending service information for service:",serviceInfo.name, "to user:", user.username);
     res.status(200).json({
         status: 200,
         message: "Secure data access granted",
@@ -314,7 +318,7 @@ app.post('/public/global/user/id/', async (req, res) => {
         username: user.username,
         first_name: user.first_name,
         last_name: user.last_name,
-        profile_picture: user.profile_picture || null,
+        profile_picture: await getPicture(user.id, "user") || null,
     };
 
     res.status(200).json({
@@ -345,15 +349,15 @@ app.post('/public/global/user/', async (req, res) => {
     // Get all users whose username matches a part of the username param (case insensitive)
     const users = await usersCollection.find({ username: { $regex: new RegExp(username, 'i') } }).toArray();
     // Remove sensitive information
-    const safeUsers = users.map((user: User) => {
+    const safeUsers = await Promise.all(users.map(async (user: User) => {
         return {
             id: user.id,
             username: user.username,
             first_name: user.first_name,
             last_name: user.last_name,
-            profile_picture: user.profile_picture || null,
+            profile_picture: await getPicture(user.id, "user") || null,
         };
-    });
+    }));
     res.status(200).json({
         status: 200,
         message: "Users retrieved successfully.",
@@ -403,7 +407,7 @@ app.put('/client/secure/user/update', async (req, res) => {
     user.first_name = req.body.userDetails.first_name || user.first_name;
     user.last_name = req.body.userDetails.last_name || user.last_name;
     user.username = req.body.userDetails.username || user.username;
-    user.profile_picture = req.body.userDetails.profile_picture || user.profile_picture;
+    user.profile_picture = await uploadPicture(user.id, req.body.userDetails.profile_picture || "", "user") || user.profile_picture;
     user.country = req.body.userDetails.country || user.country || "";
     user.city = req.body.userDetails.city || user.city || "";
     user.postal_code = req.body.userDetails.postal_code || user.postal_code || "";
@@ -477,6 +481,8 @@ app.post('/client/secure/data/user', async (req, res) => {
     delete user.services;
     delete user.identifier;
 
+    user.profile_picture = await getPicture(user.profile_picture, "user") || null;
+
     res.status(200).json({
         status: 200,
         message: "Secure data access granted",
@@ -542,10 +548,6 @@ app.post('/public/services/plans', async (req, res) => {
     const plans = await services.service.plan.getAll();
     res.status(plans.status).json(plans);
 });
-
-
-
-
 
 
 

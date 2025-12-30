@@ -77,6 +77,8 @@ echo -e "\033[1;32mAll services are up and running.\033[0m"
 
 echo -e "\033[1;32mAll services should be running. Showing logs...\033[0m"
 
+# If there is a ./frontend-nextjs directory, run asynchronously another script to start the frontend in the background
+
 # Run all logs with profiles
 COMPOSE_PROFILES="mongo-nass,auth-api,mongo-express,dummy-api" docker compose logs -f
 

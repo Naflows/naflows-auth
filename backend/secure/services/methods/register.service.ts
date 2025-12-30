@@ -22,6 +22,7 @@ import { services } from "../dir";
 import { db } from "../../..";
 import { Collection } from "mongoose";
 import secure from "../../global/dir";
+import { uploadPicture } from "../../../software/data-management/manage-pictures";
 
 export async function registerService(
     // These data are the one defined by the user creating the service
@@ -86,9 +87,10 @@ export async function registerService(
         created_at: new Date().getTime(),
         status: "INACTIVE",
 
-        picture: pub.picture,
-        banner: pub.banner,
+        picture: await uploadPicture(pub.id, pub.picture, "service"),
+        banner: await uploadPicture(pub.id, pub.banner, "banner"),
 
+        
         settings: {
             rates: planData["RPS"],
             allow_nass_payement_method: false

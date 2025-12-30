@@ -3,6 +3,7 @@ import { db } from "../../..";
 import { User } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import secure from "../dir";
+import getPicture from "../../../software/data-management/get-picture";
 
 
 
@@ -13,6 +14,7 @@ export default async function getUser(userID : string, hash : boolean = true) : 
         const allUsers = await usersCollection.find({}).toArray() as User[];
         for (const user of allUsers) {
             if (secure.verify(user.id, hashedUserID)) {
+                user.profile_picture = await getPicture(user.profile_picture, "user");
                 return user;
             }
         }

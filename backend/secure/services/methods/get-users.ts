@@ -7,6 +7,7 @@ import secure from "../../global/dir";
 import { software } from "../../../software/dir";
 import { services } from "../dir";
 import { profile } from "console";
+import getPicture from "../../../software/data-management/get-picture";
 
 
 export async function getServiceUsers(serviceId : string, user_id : string) : Promise<ReplyType> {

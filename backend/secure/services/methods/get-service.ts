@@ -1,4 +1,5 @@
 import { db } from "../../..";
+import getPicture from "../../../software/data-management/get-picture";
 import { software } from "../../../software/dir";
 import { ReplyType } from "../../../types/.types/reply.type";
 import { services } from "../dir";
@@ -10,7 +11,11 @@ export async function getService(api_id: string): Promise<ReplyType> {
     const service = await serviceCollection.findOne({ id: api_id });
     if (service) {
       return software.methods.serverReply(200, "Service found.", {
-        service: service
+        service: {
+          ...service,
+          picture: await getPicture(service.picture ?? "", "service"),
+          banner: await getPicture(service.banner ?? "", "banner"),
+        }
       });
     } else {
        console.log(`All services: ${JSON.stringify(await serviceCollection.find().toArray())}`);
