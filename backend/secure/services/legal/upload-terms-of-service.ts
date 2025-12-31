@@ -13,6 +13,12 @@ export async function uploadLegal(serviceId: string, user: User, markdown: strin
         return software.methods.serverReply(403, "You do not have permission to manage this service.");
     }
 
+    // Replace all "-" with "_" in type
+    if (!["privacy_policy", "terms_of_service"].includes(type)) {
+        type+="_url";
+    }
+    type = type.replace(/-/g, "_") as "privacy_policy_url" | "terms_of_service_url" | "contact_email";
+
     const serviceData = service.data.service;
 
     const servicesCollection = db.collection("services");

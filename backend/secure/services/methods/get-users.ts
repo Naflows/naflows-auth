@@ -43,7 +43,7 @@ export async function getServiceUsers(serviceId : string, user_id : string) : Pr
                 joined_on : userRight.created_at,
                 last_updated : userRight.updated_at,
                 rights: rightsNames,
-                profile_picture: user.profile_picture,
+                profile_picture: await getPicture(user.profile_picture ?? "", "user"),
                 you : user.id === user_id,
                 you_can_manage : await services.service.user.canManageUserInService(user_id, user.id, serviceId)
             });

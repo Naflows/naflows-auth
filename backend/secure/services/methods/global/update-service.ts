@@ -20,6 +20,13 @@ export async function updateServiceRoute(req, res, user) {
         return software.methods.directResponse(404, "Service not found.", res, req);
     }
 
+    const differences = [];
+    for (const key in req.body.service) {
+        if (req.body.service[key] !== serviceData.data.service[key]) {
+            differences.push(key);
+        }
+    }
+
 
     const serviceInfo = serviceData.data.service as Service;
     serviceInfo.name = req.body.service.name || serviceInfo.name;
@@ -29,7 +36,7 @@ export async function updateServiceRoute(req, res, user) {
     serviceInfo.public_settings.allow_public_visibility = req.body.service.allow_public_visibility !== undefined ? req.body.service.allow_public_visibility : serviceInfo.public_settings.allow_public_visibility;
 
     const update: ReplyType = await services.service.global.update(serviceID, serviceInfo);
-    await services.service.logs.create(serviceID, `Service public details (${Object.keys(req.body.service).join(", ")}) updated.`, "SETTINGS", "INFO", { user: user.id });
+    await services.service.logs.create(serviceID, `Service public details updated.`, "SETTINGS", "INFO", { user: user.id, message : `Updated: ${differences.join(", ")}` });
 
     return software.methods.directResponse(update.status, update.message, res, req);
 }

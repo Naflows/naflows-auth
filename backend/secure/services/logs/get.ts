@@ -3,6 +3,7 @@ import { db } from "../../..";
 import { ServiceLog, User } from "../../../types/.types/collections.type";
 import secure from "../../global/dir";
 import { services } from "../dir";
+import getPicture from "../../../software/data-management/get-picture";
 
 
 
@@ -42,7 +43,7 @@ export async function getServiceLogs(service_id: string, limit: number = 50, off
                 console.log("User data found:", user);
                 log.metadata.userData = {
                     username: user.username ?? "Unknown User",
-                    picture: user.profile_picture ?? null,
+                    picture: await getPicture(user.profile_picture, "user"),
                     first_name: user.first_name ?? null,
                     last_name: user.last_name ?? null,
                     rights: rights ? rights.map(r => ({ id: r.id, name: r.name, hue: r.hue })) : []

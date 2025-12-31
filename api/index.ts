@@ -150,9 +150,9 @@ app.post('/user/secure/service/rights/assign', async (req: Request, res: Respons
 
 
 
-app.put('/user/secure/service/update', async (req: Request, res: Response) => {
-    await manageConnection(req,res,'/client/secure/services/update', {
-        serviceDetails: req.body.serviceDetails
+app.post('/user/secure/service/update', async (req: Request, res: Response) => {
+    await manageConnection(req,res,'/client/secure/services/update/description', {
+        service: req.body.serviceDetails
     });
 });
 

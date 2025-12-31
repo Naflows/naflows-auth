@@ -4,6 +4,7 @@ import { ServiceRights, UserRights } from "../../../../types/.types/tunneling.ty
 import secure from "../../../global/dir";
 import { services } from "../../dir";
 import { User } from "../../../../types/.types/collections.type";
+import getPicture from "../../../../software/data-management/get-picture";
 
 export async function getAllRights(service_id: string, user: User): Promise<ServiceRights[]> {
     const serviceRightsDB = db.collection('service_rights') as Collection<ServiceRights>;
@@ -31,7 +32,7 @@ export async function getAllRights(service_id: string, user: User): Promise<Serv
                                 username: user.username,
                                 first_name: user.first_name,
                                 last_name: user.last_name,
-                                profile_picture: user.profile_picture,
+                                profile_picture: await getPicture(user.profile_picture ?? "", "user"),
                             });
                         }
                     }

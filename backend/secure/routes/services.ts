@@ -63,6 +63,11 @@ router.post('/secure/services/rights/delete', async (req, res) => {
     services.routes.deleteRight(req, res, user);
 });
 
+router.post('/secure/services/update/description', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    services.routes.update(req, res, user);
+});
+
 
 // Update service data
 router.post('/secure/services/data/update/', async (req, res) => {
