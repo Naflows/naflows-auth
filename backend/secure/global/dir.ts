@@ -31,6 +31,8 @@ import { invalidateSecurityCode } from "./security-code/methods/invalidate-code"
 import { logout } from "./user/logout";
 import deleteSession from "./session/delete";
 import { getUserByUsername } from "./user/get-by-username";
+import { registerUser } from "./user/register";
+import { generateID } from "./id/generateId";
 
 
 const secure = {
@@ -39,7 +41,8 @@ const secure = {
     hash : hashID,
     blacklist : blacklistIP,
     system : {
-        status : getSystemStatus
+        status : getSystemStatus,
+        generateID : generateID
     },
     token : {
         valid : isTokenValid,
@@ -66,7 +69,8 @@ const secure = {
         manageConnection : manageConnection,
         sendVerificationCode : sendVerificationCode,
         logout : logout,
-        getByUsername : getUserByUsername
+        getByUsername : getUserByUsername,
+        register : registerUser
     },
     session : {
         renew : renewSessionId,

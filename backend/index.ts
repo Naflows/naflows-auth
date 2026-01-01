@@ -24,6 +24,7 @@ import getPicture from "./software/data-management/get-picture";
 const nass = require('./nass/routes/index');
 const servicesRoutes = require('./secure/routes/services.ts');
 const TwoFARoutes = require('./secure/routes/2fa.ts');
+const userRoutes = require('./secure/routes/user.ts');
 
 const app = express();
 const router = express.Router();
@@ -43,6 +44,7 @@ useApp(app);
 app.use('/nass', nass);
 app.use('/client', servicesRoutes);
 app.use('/client/secure/2FA', TwoFARoutes);
+app.use('/client/secure/user', userRoutes);
 
 
 

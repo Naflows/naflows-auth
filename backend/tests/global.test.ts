@@ -1,4 +1,6 @@
+import secure from "../secure/global/dir";
 import UCRType from "../types/.types/ucr.type";
+import { getFakeReq, getFakeRes } from "./methods/utils";
 const { test, expect, describe } = require('@jest/globals');
 
 // Ensure setTimeout is available (for Node.js environments)
@@ -684,7 +686,7 @@ describe("NASS STV Tests", () => {
             status: 200,
             message: "Successful connection",
             data: {
-                token: expect.any(String), 
+                token: expect.any(String),
                 session: expect.any(String),
                 retry_after: expect.any(Number)
             }
@@ -758,7 +760,7 @@ describe("NASS STV Tests", () => {
                 session: expect.any(String),
             }
         });
-        newSessionID = res.data.data.session; 
+        newSessionID = res.data.data.session;
     });
 
     test('accessing an existing route with wrong token rights', async () => {
@@ -778,7 +780,7 @@ describe("NASS STV Tests", () => {
                 session: expect.any(String),
             }
         });
-        newSessionID = res.data.data.session; 
+        newSessionID = res.data.data.session;
     });
 
     test('accessing an existing route with wrong user rights & token', async () => {
@@ -798,7 +800,7 @@ describe("NASS STV Tests", () => {
                 session: expect.any(String),
             }
         });
-        newSessionID = res.data.data.session; 
+        newSessionID = res.data.data.session;
     })
 
     test('accessing an existing route with wrong user rights & identifier/password', async () => {
@@ -817,12 +819,12 @@ describe("NASS STV Tests", () => {
                 session: expect.any(String),
             }
         });
-        newSessionID = res.data.data.session; 
+        newSessionID = res.data.data.session;
     })
 
-    
 
-    
+
+
     test('accessing an existing route with correct rights & token', async () => {
         const ucr = getValidUCR({ ...dummy1_2, token: newTokenValue, session_id: newSessionID });
         ucr.data["customRequestURL"] = "/test-stv/existing-route-correct-rights/token";
@@ -843,9 +845,9 @@ describe("NASS STV Tests", () => {
                 retry_after: expect.any(Number)
             }
         });
-        newSessionID = res.data.data.session; 
-        newTokenValue = res.data.data.token; 
-        timingBeforeUnfrozen = res.data.data.retry_after; 
+        newSessionID = res.data.data.session;
+        newTokenValue = res.data.data.token;
+        timingBeforeUnfrozen = res.data.data.retry_after;
 
     })
 
@@ -868,9 +870,9 @@ describe("NASS STV Tests", () => {
                 retry_after: expect.any(Number)
             }
         });
-        newSessionID = res.data.data.session; 
-        newTokenValue = res.data.data.token; 
-        timingBeforeUnfrozen = res.data.data.retry_after; 
+        newSessionID = res.data.data.session;
+        newTokenValue = res.data.data.token;
+        timingBeforeUnfrozen = res.data.data.retry_after;
     });
 });
 
@@ -906,6 +908,10 @@ describe("User Connection Tests", () => {
         const res = await postToLogin("1", "W8JdVoy30xEa1hZ5aDVQ", "123456789");
         expect(res.status).toBe(200);
     })
+
+
+
+
 
 
 })

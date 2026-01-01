@@ -23,6 +23,15 @@ export function useApp(app) {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(cors());
 
+
+    // To prevent any bruteforce attacks, timeout each request for a random time between 100ms and 300ms
+    app.use(async (req, res, next) => {
+        const timeout = Math.floor(Math.random() * 200) + 100;
+        setTimeout(() => {
+            next();
+        }, timeout);
+    });
+
     app.use(async (req, res, next) => {
 
 

@@ -615,7 +615,7 @@ describe("Test NASS Secure Verification Methods", () => {
 
         describe("Tunneling Rights Enforcement", () => {
 
-            test("Create a Tunnel for Admins Only" ,async () => {
+            test("Create a Tunnel for Admins Only", async () => {
                 // Generate a new tunnel for admins only
                 const fakeReq = getFakeReq({
                     apiKey: serviceKey,
@@ -908,32 +908,171 @@ describe("Test NASS Secure Verification Methods", () => {
     })
 
 
-    // describe("NASS Three-Layers System" , () => {
-    //     test("Complete Request Cycle", async () => {
-    //         const ucr = fakeUCR();
+    describe("Create user", () => {
+        describe("Failed cases", () => {
+            const workingBody = {
+                username: "naflouille",
+                password: "8StrongP@ssw0rd!",
+                passwordConfirm: "8StrongP@ssw0rd!",
+                email: "newuser@naflows.com",
+                firstName: "New",
+                lastName: "User",
+                birthDate: "1990-01-01",
+            }
 
-    //         expect(newSessionID).toBeDefined();
-    //         expect(newSessionToken).toBeDefined();
+            test('Username already taken', async () => {
 
-    //         ucr.client = serviceUCRData;
-    //         ucr.user.session_id = newSessionID;
-    //         ucr.user.token = newSessionToken;
-    //         delete ucr.user.password;
-    //         delete ucr.user.identifier;
-    //         ucr.request.url = "/test-tunnel-route";
+                const result = await secure.user.register(
+                    workingBody.username,
+                    workingBody.password,
+                    workingBody.passwordConfirm,
+                    workingBody.email,
+                    workingBody.firstName,
+                    workingBody.lastName,
+                    workingBody.birthDate
+                );
+                expect(result).toEqual({
+                    success: false,
+                    status: 409,
+                    message: "User with provided username, email, or name already exists."
+                });
+            })
 
-    //         const fakeReq = getFakeReq(ucr);
-    //         const res = getFakeRes();
+            test("Email already taken", async () => {
 
-    //         const result = await middleware.main(fakeReq, res, () => {
-    //             return software.methods.serverReply(200,"Tunnel request processed successfully.");
-    //         });
+                const result = await secure.user.register(
+                    "differentusername",
+                    workingBody.password,
+                    workingBody.passwordConfirm,
+                    "dummy@gmail.com",
+                    workingBody.firstName,
+                    workingBody.lastName,
+                    workingBody.birthDate
+                );
+                expect(result).toEqual({
+                    success: false,
+                    status: 409,
+                    message: "User with provided username, email, or name already exists."
+                });
+            });
 
-    //         expect(result.success).toBe(true);
-    //         expect(result.status).toBe(200);
-    //         expect(result.message).toBe("Tunnel request processed successfully.");
-    //     });
-    // })
 
 
+            test("Passwords do not match", async () => {
+
+                const result = await secure.user.register(
+                    workingBody.username,
+                    workingBody.password,
+                    "DifferentP@ssw0rd!",
+                    workingBody.email,
+                    workingBody.firstName,
+                    workingBody.lastName,
+                    workingBody.birthDate
+                );
+                expect(result).toEqual({
+                    success: false,
+                    status: 400,
+                    message: "Passwords do not match."
+                });
+            });
+
+            test("Weak password", async () => {
+                const result = await secure.user.register(
+                    workingBody.username,
+                    "weak",
+                    "weak",
+                    workingBody.email,
+                    workingBody.firstName,
+                    workingBody.lastName,
+                    workingBody.birthDate
+                );
+                expect(result).toEqual({
+                    success: false,
+                    status: 400,
+                    message: "Password does not meet strength requirements."
+                });
+            });
+
+            test("Missing fields", async () => {
+                const result = await secure.user.register(
+                    "",
+                    workingBody.password,
+                    workingBody.passwordConfirm,
+                    workingBody.email,
+                    workingBody.firstName,
+                    workingBody.lastName,
+                    workingBody.birthDate
+                );
+                expect(result).toEqual({
+                    success: false,
+                    status: 400,
+                    message: "Missing required fields."
+                });
+            });
+
+            test("Invalid birthdate", async () => {
+                const result = await secure.user.register(
+                    workingBody.username,
+                    workingBody.password,
+                    workingBody.passwordConfirm,
+                    workingBody.email,
+                    workingBody.firstName,
+                    workingBody.lastName,
+                    "invalid-date-string"
+                );
+                expect(result).toEqual({
+                    success: false,
+                    status: 400,
+                    message: "Invalid birthdate provided."
+                });
+            });
+
+            test("Invalid email format", async () => {
+                const result = await secure.user.register(
+                    workingBody.username,
+                    workingBody.password,
+                    workingBody.passwordConfirm,
+                    "invalid-email-format",
+                    workingBody.firstName,
+                    workingBody.lastName,
+                    workingBody.birthDate
+                );
+                expect(result).toEqual({
+                    success: false,
+                    status: 400,
+                    message: "Invalid email format."
+                });
+            });
+        });
+
+        test("Successful registration", async () => {
+            const result = await secure.user.register(
+                "uniqueusername",
+                "Str0ngP@ssw0rd!",
+                "Str0ngP@ssw0rd!",
+                "uniqueemail@example.com",
+                "FirstName",
+                "LastName",
+                "2000-01-01"
+            );
+            expect(result).toEqual({
+                success: true,
+                status: 201,
+                message: "User registered successfully.",
+                data: expect.objectContaining({
+                    userId: expect.any(String)
+                })
+            });
+
+
+            // Verify that the user is actually in the database
+            const users = db.collection("users");
+            const newUser = await users.findOne({ id: result.data?.userId! });
+            expect(newUser).toBeDefined();
+            expect(newUser?.username).toBe("uniqueusername");
+            expect(newUser?.email).toBe("uniqueemail@example.com"); 
+        });
+
+
+    });
 });
