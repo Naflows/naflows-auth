@@ -123,8 +123,10 @@ function save_test_result_with_current_commit {
         TEST_RESULT="FAIL"
     fi
 
+    SMALL_COMMIT_ID=${COMMIT_ID:0:40}
+
     # Format the log entry as a table row
-    printf "%-40s %-20s %-10s %-20s\n" "$COMMIT_ID" "$BRANCH_NAME" "$TEST_RESULT" "$TIMESTAMP" >> "$FILE_NAME"
+    printf "%-40s %-20s %-10s %-20s\n" "$SMALL_COMMIT_ID" "$BRANCH_NAME" "$TEST_PARAMETER" "$TEST_RESULT" "$TIMESTAMP" >> "$FILE_NAME"
 }
 
 if [ "$RESET_ENVIRONMENT" = "true" ]; then
