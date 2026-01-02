@@ -344,7 +344,6 @@ app.post('/send-login-request', async (req: Request, res: Response) => {
     try {
         const f = await axios.post(`${process.env.AUTH_API_URL_DEV}/client/login`, {
             user: {
-                user_id,
                 password,
                 identifier,
                 ip: req.ip,

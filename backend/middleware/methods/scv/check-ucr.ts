@@ -6,7 +6,6 @@ export function isUCRType(obj: any): boolean {
             user != undefined &&
             user.ip != undefined && 
             user.agent != undefined &&
-            user.user_id != undefined &&
             (user.token != undefined || (user.identifier != undefined && user.password != undefined)) &&
             !(user.token != undefined && (user.identifier != undefined || user.password != undefined)) &&
             typeof user.ip === 'string' &&
@@ -16,7 +15,6 @@ export function isUCRType(obj: any): boolean {
                 typeof user.session_id === 'undefined' ||
                 user.session_id === null
             ) &&
-            typeof user.user_id === 'string' &&
             (
                 typeof user.device_fingerprint === 'object' ||
                 typeof user.device_fingerprint === 'undefined'

@@ -55,16 +55,17 @@ export default async function logUserIn(req: Request, res: Response): Promise<Re
         client
     } = req.body;
 
-    if (user.id == "" || user.password == "" || user.identifier == "") {
+    if (user.password == "" || user.identifier == "") {
         return software.methods.serverReply(400, "Some user credentials are missing. Please provide all required information.");
     }
 
-    const credentialsOk: boolean = await secure.user.credentials(user.user_id, user.password, user.identifier);
-    const _user: User = await secure.user.get(user.user_id, false);
+    const credentialsOk = await secure.user.credentials(user.password, user.identifier);
 
-    if (!_user) {
+    if (!credentialsOk.valid) {
         return software.methods.serverReply(404, "User not found when attempting to log in.");
     }
+    const _user: User = credentialsOk.user as User;
+
 
     const associatedSession = await secure.session.find(
         _user.id,

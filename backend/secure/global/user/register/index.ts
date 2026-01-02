@@ -55,11 +55,11 @@ export async function registerUser(
 
     // If the 
 
-    const hashedPassword = secure.hash(password);
+    const cryptedPassword = secure.crypt(password);
     const newUser : User = {
         id: await secure.system.generateID("users"),
         username,
-        password: hashedPassword,
+        password: cryptedPassword,
         email,
         first_name: firstName,
         created_at: new Date().getTime(),
