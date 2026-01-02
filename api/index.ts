@@ -274,6 +274,16 @@ app.post('/user/secure/confirm-identity/send-code', async (req: Request, res: Re
         serviceID: req.body.serviceID
     });
 });
+app.post('/user/secure/register', async (req: Request, res: Response) => {
+    await manageConnection(req,res,'/client/secure/user/register', { 
+        email: req.body.email,
+        password: req.body.password,
+        passwordConfirm: req.body.passwordConfirm,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        birthdate: req.body.birthdate
+    });
+});
 
 app.get('/get-user-info/services/:id/service-informations', async (req: Request, res: Response) => {
     await manageConnection(req,res,'/client/secure/data/services/service-informations', {

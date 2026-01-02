@@ -59,6 +59,9 @@ export interface User {
   email_verified?: boolean; // Whether the user's email is verified, optional
   birthdate?: Date; // Birthdate of the user, optional
   bio ?: string; // Short bio of the user, optional
+  privacy : {
+    acceptEmails: boolean; // Whether the user accepts to receive emails
+  }
 }
 
 export interface UserSession {

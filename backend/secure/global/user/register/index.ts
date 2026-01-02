@@ -13,7 +13,8 @@ export async function registerUser(
     email : string,
     firstName : string,
     lastName : string,
-    birthdate : string
+    birthdate : string,
+    acceptEmails: boolean
 )  : Promise<ReplyType> {
 
     if (!username || !password || !passwordConfirm || !email || !firstName || !lastName || !birthdate) {
@@ -68,6 +69,9 @@ export async function registerUser(
         last_login: null,
         birthdate: new Date(birthdate),
         services: {},
+        privacy: {
+            acceptEmails: acceptEmails
+        }
     };
 
     const change = await users.insertOne(newUser);

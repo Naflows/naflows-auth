@@ -57,7 +57,22 @@ export function useApp(app) {
         }
 
         // If the request path starts with "/client" or "/public"
-        if (req.path.startsWith('/client') || req.path.startsWith('/public') || req.path.startsWith('/nass/user')) {
+        // The following routes are bypassing the STV and SSV process since no session is needed to access them
+        const bypassPaths = [
+            '/client',
+            '/public',
+            '/nass/user',
+        ]
+
+        if (req.path.startsWith('/client/secure/user/register')) {
+            next();
+            return;
+        }
+
+
+        if (
+            bypassPaths.some(path => req.path.startsWith(path))
+        ) {
             // Continue 
 
             async function checkService() {
