@@ -5,7 +5,7 @@ import { ReplyType } from "../../../types/.types/reply.type";
 import { services } from "../dir";
 
 
-export async function getService(api_id: string): Promise<ReplyType> {
+export async function getService(api_id: string, getFullPicture: boolean = true): Promise<ReplyType> {
   const serviceCollection = db.collection("services");
   if (serviceCollection) {
     const service = await serviceCollection.findOne({ id: api_id });
@@ -13,8 +13,8 @@ export async function getService(api_id: string): Promise<ReplyType> {
       return software.methods.serverReply(200, "Service found.", {
         service: {
           ...service,
-          picture: await getPicture(service.picture ?? "", "service"),
-          banner: await getPicture(service.banner ?? "", "banner"),
+          picture:  getFullPicture ? await getPicture(service.picture ?? "", "service") : service.picture,
+          banner: getFullPicture ? await getPicture(service.banner ?? "", "banner") : service.banner,
         }
       });
     } else {

@@ -164,6 +164,7 @@ export interface ServiceAlert {
   type: "info" | "warning" | "error" | "success";
   link ?: string; // Optional link to more information about the alert
 }
+
 export interface Service {
   id: string; // Service ID
   name: string; // Service name, used for display purposes
@@ -183,7 +184,8 @@ export interface Service {
     allow_user_registration: boolean; // Whether the service allows user registration or not
     allow_service_connection: boolean; // Whether the service allows connection from other services or not
     allow_public_visibility: boolean; // Whether the service is visible in the public services list or not
-    required_data?: UserDataPreferences["personal_data"]; // What personal data is required for a user to register in the service
+    required_data?: string[]; // What personal data is required for a user to register in the service
+    user_data_preferences?: string[]; // What personal data the user allows the service to use based on required_data
     backup_enabled?: boolean; // Whether the service has backups enabled or not
   },
   user_authorizations? : Record<string, boolean>; // Map of user IDs to whether they are authorized developers for the service

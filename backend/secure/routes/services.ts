@@ -80,6 +80,18 @@ router.post('/secure/services/data/update/', async (req, res) => {
 });
 
 
+router.post('/secure/services/set-policies', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    const serviceId = req.body.service_id;
+    const policies = req.body.policies; // Array of strings
+    const replyType : ReplyType = await services.service.global.setPolicies(
+        user.id,
+        serviceId,
+        policies
+    );
+    return software.methods.directResponse(replyType.status, replyType.message, res, req, replyType.data);
+});
+
 
 
 module.exports = router;

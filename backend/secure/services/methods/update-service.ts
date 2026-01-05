@@ -12,6 +12,14 @@ export async function updateService(serviceId: string, newServiceData: Service):
         return software.methods.serverReply(500, "Database collection 'services' not found.");
     }
 
+    const service = await services.service.get(serviceId, false);
+    if (!service) {
+        return software.methods.serverReply(404, "Service not found.");
+    }
+    if (JSON.stringify(service.data.service) === JSON.stringify(newServiceData)) {
+        return software.methods.serverReply(200, "No changes detected in service data.");
+    }
+
     console.log("Updating service with ID:", serviceId);
     console.log("New service data:", newServiceData);
     const updt = await servicesCollection.updateOne(

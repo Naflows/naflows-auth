@@ -56,6 +56,7 @@ import { getPlan } from "./methods/plans/get-plan";
 import { deleteRight } from "./rights/methods/delete";
 import { removeRightRoute } from "./methods/global/remove-right";
 import { uploadLegal } from "./legal/upload-terms-of-service";
+import setPolicies from "./methods/policies/set-policies";
 
 
 
@@ -81,7 +82,8 @@ export const services = {
         getAlerts : getServiceAlerts,
         global: {
             update: updateService,
-            updateLegal : uploadLegal
+            updateLegal : uploadLegal,
+            setPolicies : setPolicies
         },
         user: {
             register: registerUserInAPI,
