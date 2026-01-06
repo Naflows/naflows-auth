@@ -92,6 +92,17 @@ router.post('/secure/services/set-policies', async (req, res) => {
     return software.methods.directResponse(replyType.status, replyType.message, res, req, replyType.data);
 });
 
+router.post('/secure/services/update/public-details', async (req, res) => {
+    const user = await secure.user.manageConnection(req, res);
+    const serviceId = req.body.service_id;
+    const details = req.body.details; // Service["public_settings"]
+    const replyType : ReplyType = await services.service.global.updatePublicDetails(
+        serviceId,
+        user.id,
+        details
+    );
+    return software.methods.directResponse(replyType.status, replyType.message, res, req, replyType.data);
+});
 
 
 module.exports = router;

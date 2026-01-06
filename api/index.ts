@@ -238,6 +238,12 @@ app.post('/user/secure/service/policies/set', async (req: Request, res: Response
         policies: req.body.policies
     });
 });
+app.post('/user/secure/service/public-details/update', async (req: Request, res: Response) => {
+    await manageConnection(req,res,'/client/secure/services/update/public-details', {
+        service_id: req.body.service_id,
+        details: req.body.details
+    });
+});
 
 app.post('/user/secure/2FA/create', async (req: Request, res: Response) => {
     await manageConnection(req,res,'/client/secure/2FA/generate-request', { 
