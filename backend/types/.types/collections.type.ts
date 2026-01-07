@@ -201,6 +201,10 @@ export interface Service {
       first_name? : string;
       last_name? : string;
     },
+    naflows_allows_registration? : {
+      message : string;
+      allowed : boolean;
+    },
     public : {
       privacy_policy_url? : {
         value : string,

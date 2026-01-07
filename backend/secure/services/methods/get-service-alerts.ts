@@ -70,7 +70,5 @@ export async function getServiceAlerts(serviceId: string) : Promise<ReplyType> {
     
 
     
-
-    // If we reach this point, the service is approved
     return software.methods.serverReply(201, "Service alerts retrieved successfully.", { alerts });
 }

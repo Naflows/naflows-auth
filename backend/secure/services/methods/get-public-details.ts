@@ -1,6 +1,6 @@
 import getPicture from "../../../software/data-management/get-picture";
 import { software } from "../../../software/dir";
-import { Service, User } from "../../../types/.types/collections.type";
+import { Service, ServiceAlert, User } from "../../../types/.types/collections.type";
 import { ReplyType } from "../../../types/.types/reply.type";
 import secure from "../../global/dir";
 import { services } from "../dir";
@@ -38,6 +38,19 @@ export async function getPublicServiceDetails(id: string, userId: string | null)
         }
     }
     delete service.created_by;
+
+    const alerts = await services.service.getAlerts(id);
+    if (alerts.data.alerts && alerts.data.alerts.length > 0) {
+        service.details.naflows_allows_registration = {
+            message: alerts.data.alerts.length > 0 ? "There are important alerts regarding this service." : "No current alerts for this service: something is wrong.",
+            allowed: false
+        };
+    } else {
+        service.details.naflows_allows_registration = {
+            message: "No current alerts for this service.",
+            allowed: true
+        };
+    }
 
     return software.methods.serverReply(200, "Public service details fetched successfully.", service);
 
