@@ -44,6 +44,10 @@ export async function analyze2FAContext(user: User, context: {
                     return { valid: false, reason: "This 2FA request has expired." };
                 }
 
+                if (log.state === "REQUEST_GENERATED" || log.state === "REQUEST_SENT") {
+                    return { valid: false, reason: "The 2FA request has not been completed yet." };
+                }
+
                 return { valid: true, existing: log };
             } else if (log.attempts >= 3 || log.state === "REQUEST_FAILED") {
                 return { valid: false, reason: "Maximum number of attempts reached for this 2FA request." };
@@ -77,6 +81,14 @@ export async function analyze2FAContext(user: User, context: {
             }
             return { valid: true };
         // For now, default to false
+        case "JOIN_SERVICE":
+            // Additional checks can be added here, e.g., is the user already a member of the service?
+            const isMember = await services.service.user.isIn(context.data.serviceID, user.id);
+            // TODO: check if the user has been invited to the service if it's private
+            if (isMember) {
+                return { valid: false, reason: "User is already a member of the service." };
+            }
+            return { valid: true };
         default:
             return { valid: false, reason: "Invalid action for 2FA context analysis." };
     }
