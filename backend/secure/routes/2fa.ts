@@ -51,7 +51,7 @@ router.post('/socket-status', async (req, res) => {
             action: req.body.action,
             data: req.body.data
         },
-        ucr.user.cryptographic_token || ""
+        ucr.user.cryptographic_token || "", true
     );
 
     if (!result.existing) {

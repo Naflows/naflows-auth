@@ -6,7 +6,7 @@ print_red() {
     echo -e "\033[1;31m$1\033[0m"
 }
 print_green() {
-    echo -e "\033[1;32m$1\033[0m"
+    echo -e "\033[1;32m$1\033[0m" 
 }
 print_blue() {
     echo -e "\033[1;34m$1\033[0m"
@@ -47,21 +47,24 @@ if [ -z "$TEST_PARAMETER" ]; then
     # Display centered header
     # Define column widths
     COL1_WIDTH=5
-    COL2_WIDTH=10
+    COL2_WIDTH=15
     COL3_WIDTH=20
-    COL4_WIDTH=20
+    COL4_WIDTH=10
 
-    printf -- "+-------+------------+----------------------+---------------------+\n"
-    printf "| %-${COL1_WIDTH}s | %-${COL2_WIDTH}s | %-${COL3_WIDTH}s | %-${COL4_WIDTH}s|\n" "Num." "Name" "Description" "Database Reset"
-    printf -- "+-------+------------+----------------------+---------------------+\n"
+    function printSeparatorLine {
+        printf -- "+-%-${COL1_WIDTH}s-+-%-${COL2_WIDTH}s-+-%-${COL3_WIDTH}s-+-%-${COL4_WIDTH}s-+\n" | tr ' ' '-'
+    }
 
-    # Print table row
-    green_text=$(print_green 'Yes')
-    COL4_WIDTH=$((COL4_WIDTH + 10)) # Adjust width for color codes
-    printf "| %-${COL1_WIDTH}s | %-${COL2_WIDTH}s | %-${COL3_WIDTH}s | %-${COL4_WIDTH}s |\n" "1" "methods" "Test all methods" "$green_text"
-    printf -- "+-------+------------+----------------------+---------------------+\n"
-    printf "| %-${COL1_WIDTH}s | %-${COL2_WIDTH}s | %-${COL3_WIDTH}s | %-${COL4_WIDTH}s |\n" "2" "2fa" "Test 2fa security" "$green_text"
-    printf -- "+-------+------------+----------------------+---------------------+\n"
+    printSeparatorLine
+    printf "| %-${COL1_WIDTH}s | %-${COL2_WIDTH}s | %-${COL3_WIDTH}s | %-${COL4_WIDTH}s|\n" "Num." "Name" "Description" "Db Reset"
+    printSeparatorLine
+
+    printf "| %-${COL1_WIDTH}s | %-${COL2_WIDTH}s | %-${COL3_WIDTH}s | %-${COL4_WIDTH}s |\n" "1" "methods" "Test all methods" "Yes"
+    printSeparatorLine
+    printf "| %-${COL1_WIDTH}s | %-${COL2_WIDTH}s | %-${COL3_WIDTH}s | %-${COL4_WIDTH}s |\n" "2" "2fa" "Test 2fa security" "Yes"
+    printSeparatorLine
+    printf "| %-${COL1_WIDTH}s | %-${COL2_WIDTH}s | %-${COL3_WIDTH}s | %-${COL4_WIDTH}s |\n" "3" "join-service" "Test join service" "Yes"
+    printSeparatorLine
     print_separator
     read -p "Enter a test number: " TEST_NUMBER
 
@@ -71,6 +74,9 @@ if [ -z "$TEST_PARAMETER" ]; then
             ;;
         2)
             TEST_PARAMETER="2fa"
+            ;;
+        3)
+            TEST_PARAMETER="join-service"
             ;;
         *)
             print_red "Invalid test number."
@@ -158,6 +164,12 @@ if [ "$TEST_PARAMETER" = "2fa" ]; then
     docker exec auth-api-test sh -c "cd /app && npm run 2fa-test -- --forceExit --testPathPattern=2fa"
 elif [ "$TEST_PARAMETER" = "methods" ]; then
     docker exec auth-api-test sh -c "cd /app && npm run methods-test -- --forceExit"
+elif [ "$TEST_PARAMETER" = "join-service" ]; then
+    docker exec auth-api-test sh -c "cd /app && npm run join-service-test -- --forceExit"
+else
+    print_red "Invalid test parameter: $TEST_PARAMETER"
+    COMPOSE_PROFILES="mongo-nass-test,auth-api-test,dummy-api" docker compose down
+    exit 1
 fi
 
 TEST_EXIT_CODE=$?

@@ -165,6 +165,16 @@ export interface ServiceAlert {
   link ?: string; // Optional link to more information about the alert
 }
 
+export interface UserConnections {
+  id: string; // Connection ID
+  user_id: string; // User ID, the user that owns the connection
+  service_id: string; // Service ID, the service that the user is connected to
+  connected_at: number; // Date when the connection was created
+  status: "PENDING" | "ACCEPTED" | "REJECTED" | "EXPIRED"; // Status of the connection
+  sent_by: string; // User ID of the user who sent the connection request
+  expires_at: number; // Date when the connection request expires
+}
+
 export interface Service {
   id: string; // Service ID
   name: string; // Service name, used for display purposes

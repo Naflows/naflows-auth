@@ -15,13 +15,13 @@ import { services } from "../dir";
 export async function createService(userID : string, password : string, identifier: string, details : {
     name : string,
     description : string | null,
-    storagePlan : ServicePlan,
+    storagePlan : string,
     ip_address : string,
     dns : string,
     settings : ServiceSettings
 }) : Promise<ReplyType> {
 
-    if ((await secure.user.credentials(userID, password, identifier))) {
+    if ((await secure.user.credentials(password, identifier))) {
         const servicesCollection : Collection<Service> = await db.collection("services");
 
         if (!servicesCollection) return software.methods.serverReply(500, "Internal Server Error: Services collection not found.");

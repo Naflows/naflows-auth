@@ -13,10 +13,11 @@ export async function analyze2FAContext(user: User, context: {
     data: {
         serviceID: string;
     }
-}, cryptographic_token: string): Promise<{
+}, cryptographic_token: string, checkSocket: boolean = false): Promise<{
     valid: boolean;
     reason?: string;
-    existing?: TwoFALog
+    existing?: TwoFALog,
+    checkSocket?: boolean
 }> {
 
     // Is there already a token associated with this session for 2FA actions?
@@ -44,7 +45,7 @@ export async function analyze2FAContext(user: User, context: {
                     return { valid: false, reason: "This 2FA request has expired." };
                 }
 
-                if (log.state === "REQUEST_GENERATED" || log.state === "REQUEST_SENT") {
+                if ((log.state === "REQUEST_GENERATED" || log.state === "REQUEST_SENT") && checkSocket) {
                     return { valid: false, reason: "The 2FA request has not been completed yet." };
                 }
 

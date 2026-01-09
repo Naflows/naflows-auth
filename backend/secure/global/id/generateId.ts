@@ -1,7 +1,7 @@
 import { db } from "../../..";
 import crypto from "crypto";
 
-export async function generateID(type: "users" | "services"): Promise<string> {
+export async function generateID(type: "users" | "services" | "user_connections"): Promise<string> {
     const collection = await db.collection(type);
     const id = crypto.randomBytes(16).toString("hex");
     const existing = await collection.findOne({ id });

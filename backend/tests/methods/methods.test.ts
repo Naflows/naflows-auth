@@ -929,7 +929,8 @@ describe("Test NASS Secure Verification Methods", () => {
                     workingBody.email,
                     workingBody.firstName,
                     workingBody.lastName,
-                    workingBody.birthDate
+                    workingBody.birthDate,
+                    true
                 );
                 expect(result).toEqual({
                     success: false,
@@ -947,7 +948,8 @@ describe("Test NASS Secure Verification Methods", () => {
                     "dummy@gmail.com",
                     workingBody.firstName,
                     workingBody.lastName,
-                    workingBody.birthDate
+                    workingBody.birthDate,
+                    true
                 );
                 expect(result).toEqual({
                     success: false,
@@ -967,7 +969,8 @@ describe("Test NASS Secure Verification Methods", () => {
                     workingBody.email,
                     workingBody.firstName,
                     workingBody.lastName,
-                    workingBody.birthDate
+                    workingBody.birthDate,
+                    true
                 );
                 expect(result).toEqual({
                     success: false,
@@ -984,7 +987,8 @@ describe("Test NASS Secure Verification Methods", () => {
                     workingBody.email,
                     workingBody.firstName,
                     workingBody.lastName,
-                    workingBody.birthDate
+                    workingBody.birthDate,
+                    true
                 );
                 expect(result).toEqual({
                     success: false,
@@ -1001,7 +1005,8 @@ describe("Test NASS Secure Verification Methods", () => {
                     workingBody.email,
                     workingBody.firstName,
                     workingBody.lastName,
-                    workingBody.birthDate
+                    workingBody.birthDate,
+                    true
                 );
                 expect(result).toEqual({
                     success: false,
@@ -1018,7 +1023,8 @@ describe("Test NASS Secure Verification Methods", () => {
                     workingBody.email,
                     workingBody.firstName,
                     workingBody.lastName,
-                    "invalid-date-string"
+                    "invalid-date-string",
+                    true
                 );
                 expect(result).toEqual({
                     success: false,
@@ -1035,7 +1041,8 @@ describe("Test NASS Secure Verification Methods", () => {
                     "invalid-email-format",
                     workingBody.firstName,
                     workingBody.lastName,
-                    workingBody.birthDate
+                    workingBody.birthDate,
+                    true
                 );
                 expect(result).toEqual({
                     success: false,
@@ -1053,7 +1060,8 @@ describe("Test NASS Secure Verification Methods", () => {
                 "uniqueemail@example.com",
                 "FirstName",
                 "LastName",
-                "2000-01-01"
+                "2000-01-01",
+                true
             );
             expect(result).toEqual({
                 success: true,
@@ -1070,7 +1078,7 @@ describe("Test NASS Secure Verification Methods", () => {
             const newUser = await users.findOne({ id: result.data?.userId! });
             expect(newUser).toBeDefined();
             expect(newUser?.username).toBe("uniqueusername");
-            expect(newUser?.email).toBe("uniqueemail@example.com"); 
+            expect(newUser?.email).toBe("uniqueemail@example.com");
         });
 
 

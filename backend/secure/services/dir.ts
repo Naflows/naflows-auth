@@ -58,6 +58,9 @@ import { removeRightRoute } from "./methods/global/remove-right";
 import { uploadLegal } from "./legal/upload-terms-of-service";
 import setPolicies from "./methods/policies/set-policies";
 import { updatePublicDetails } from "./methods/global/update-public-details";
+import { isServiceGloballyApproved } from "./methods/global/isGloballyApproved";
+import sendInvite from "./users/methods/send-invite";
+import { processInvite } from "./users/methods/process-invite";
 
 
 
@@ -85,7 +88,8 @@ export const services = {
             update: updateService,
             updateLegal : uploadLegal,
             setPolicies : setPolicies,
-            updatePublicDetails : updatePublicDetails
+            updatePublicDetails : updatePublicDetails,
+            isApproved : isServiceGloballyApproved
         },
         user: {
             register: registerUserInAPI,
@@ -97,7 +101,11 @@ export const services = {
             hasRight : userHasRight,
             canManageUserInService : canUserManageOthers,
             updateRights : updateRights,
-            getAllService : getUserServices
+            getAllService : getUserServices,
+            invite : {
+                send : sendInvite,
+                process : processInvite
+            }
         },
         logs: {
             create: createServiceLogEntry,
