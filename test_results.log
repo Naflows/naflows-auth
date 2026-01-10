@@ -126,3 +126,7 @@ b3d3c7835136917d2e7437a7cab79f4be8b66237 dev                  methods    PASS
 2026-01-09 16:10:16                                                                          
 8a8d4a325fc710ebbc873db1a4ee143dd37a11a0 dev                  join-service FAIL                
 2026-01-09 16:12:44                                                                          
+b43c0ef97168ccc0aebe0f2eed7c9c134e83f57f dev                  join-service FAIL                
+2026-01-10 07:23:41                                                                          
+b43c0ef97168ccc0aebe0f2eed7c9c134e83f57f dev                  join-service PASS                
+2026-01-10 07:32:07                                                                          

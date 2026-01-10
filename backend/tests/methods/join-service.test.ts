@@ -51,7 +51,7 @@ describe("Cannot invite to service", () => {
             }
         });
 
-        const d = await services.service.user.invite.send("1", serviceId, "3");
+        const d = await services.service.user.invite.send("2", serviceId, "3");
         expect(d.success).toBe(false);
         expect(d.status).toBe(403);
         expect(d.message).toBe("Cannot send invitations for unapproved services.");
@@ -68,7 +68,7 @@ describe("Cannot invite to service", () => {
 
 
         // Service is not globally approved yet
-        const d2 = await services.service.user.invite.send("1", serviceId, "3");
+        const d2 = await services.service.user.invite.send("2", serviceId, "3");
         expect(d2.success).toBe(false);
         expect(d2.status).toBe(403);
         expect(d2.message).toBe("Cannot send invitations for unapproved services.");
@@ -82,7 +82,7 @@ describe("Cannot invite to service", () => {
         serviceData.approved = true;
         serviceData.public_settings.allow_user_registration = true;
         await services.service.global.update(serviceId, serviceData);
-        const d = await services.service.user.invite.send("1", serviceId, "3");
+        const d = await services.service.user.invite.send("2", serviceId, "3");
         expect(d.success).toBe(false);
         expect(d.status).toBe(400);
         expect(d.message).toBe("This service allows public user registration; invitations are not required.");
@@ -94,7 +94,7 @@ describe("Cannot invite to service", () => {
         const serviceData = service.data.service;
         serviceData.public_settings.allow_user_registration = false;
         await services.service.global.update(serviceId, serviceData);
-        const d = await services.service.user.invite.send("1", serviceId, "3");
+        const d = await services.service.user.invite.send("2", serviceId, "3");
         expect(d.success).toBe(true);
         expect(d.status).toBe(200);
         expect(d.message).toBe("Invitation sent successfully.");
