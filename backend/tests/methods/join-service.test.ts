@@ -1,11 +1,14 @@
 import { beforeAll, test, expect, describe } from "@jest/globals";
 import { services } from "../../secure/services/dir";
 import { fakeUCR, getFakeReq, getFakeRes } from "./utils";
+import { twoFA } from "../../secure/2FA/dir";
+import secure from "../../secure/global/dir";
 
 
 // Before all, set up a new service created by user 1 and invite user 2 to join it.
 
 const serviceId = "test-service";
+let user;
 
 beforeAll(async () => {
     const d = await services.service.register({
@@ -30,7 +33,7 @@ beforeAll(async () => {
     expect(d.success).toBe(true);
     expect(d.status).toBe(200);
     expect(d.message).toBe("Service registered successfully.");
-    
+
     const service = await services.service.get(serviceId);
 
     // const serviceData = service.data.service;
@@ -39,6 +42,9 @@ beforeAll(async () => {
     // serviceData.details.public.contact_email.approved = true;
     // serviceData.details.public.privacy_policy_url.approved = true;
     // serviceData.details.public.terms_of_service_url.approved = true;
+
+    user = await secure.user.get("3", false);
+
 });
 
 describe("Cannot invite to service", () => {
@@ -87,8 +93,9 @@ describe("Cannot invite to service", () => {
         expect(d.status).toBe(400);
         expect(d.message).toBe("This service allows public user registration; invitations are not required.");
     });
+})
 
-
+describe("Invite and join service flow", () => {
     test("Successfully send invite after disabling public registration", async () => {
         const service = await services.service.get(serviceId);
         const serviceData = service.data.service;
@@ -99,4 +106,107 @@ describe("Cannot invite to service", () => {
         expect(d.status).toBe(200);
         expect(d.message).toBe("Invitation sent successfully.");
     });
-})
+
+    test("Cannot send duplicate invite", async () => {
+        const d = await services.service.user.invite.send("2", serviceId, "3");
+        expect(d.success).toBe(false);
+        expect(d.status).toBe(409);
+        expect(d.message).toBe("An invitation has already been sent to this user and is still pending.");
+    });
+});
+
+describe("Process invite", () => {
+    test("Cannot process non-existing invite", async () => {
+        const d = await services.service.user.invite.process("1", serviceId, "ACCEPTED", "");
+        expect(d.success).toBe(false);
+        expect(d.status).toBe(404);
+        expect(d.message).toBe("No pending invitation found for this user and service.");
+    });
+
+    test("Cannot process invite with unvalidated 2FA", async () => {
+        const d = await services.service.user.invite.process("3", serviceId, "ACCEPTED", "crypto-token");
+        expect(d.message).toBe("Failed to register user to the service: Unauthorized: Invalid or expired security request.");
+
+        expect(d.success).toBe(false);
+        expect(d.status).toBe(500);
+    });
+
+    let cryptoToken = "";
+    let generatedCode = "";
+
+    test("Generate 2FA request for user 3", async () => {
+        const request = await twoFA.generateRequest(user, undefined, {
+            action: "JOIN_SERVICE",
+            data: {
+                serviceID: serviceId
+            }
+        });
+        expect(request.success).toBe(true);
+        expect(request.status).toBe(201);
+        expect(request.message).toBe("2FA request generated successfully.");
+        console.log("Request result:", request);
+        cryptoToken = request.data.middleware["2fa_cryptographic_token"];
+
+    });
+
+
+    test("Cannot process invite with unvalidated 2FA", async () => {
+        const d = await services.service.user.invite.process("3", serviceId, "ACCEPTED", "crypto-token");
+        expect(d.success).toBe(false);
+        expect(d.status).toBe(500);
+        expect(d.message).toBe("Failed to register user to the service: Unauthorized: Invalid or expired security request.");
+    });
+
+    test("Validate 2FA code for user 3", async () => {
+        const request = await twoFA.generateCode(user, cryptoToken, {
+            action: "JOIN_SERVICE",
+            data: {
+                serviceID: serviceId
+            }
+        });
+        expect(request.success).toBe(true);
+        expect(request.status).toBe(200);
+        expect(request.message).toBe("2FA code generated successfully.");
+        console.log("Request result:", request);
+        generatedCode = request.data.code!;
+    });
+
+
+    test("Cannot process invite with unvalidated 2FA", async () => {
+        const d = await services.service.user.invite.process("3", serviceId, "ACCEPTED", "crypto-token");
+        expect(d.success).toBe(false);
+        expect(d.status).toBe(500);
+        expect(d.message).toBe("Failed to register user to the service: Unauthorized: Invalid or expired security request.");
+    });
+
+    test("Validate 2FA code for user 3", async () => {
+        const check = await twoFA.validateRequest(user, cryptoToken, {
+            action: "JOIN_SERVICE",
+            data: {
+                serviceID: serviceId
+            }
+        }, generatedCode);
+        expect(check.success).toBe(true);
+        expect(check.status).toBe(200);
+        expect(check.message).toBe("2FA code validated successfully.");
+    });
+
+    test("Successfully accept invite", async () => {
+        const d = await services.service.user.invite.process("3", serviceId, "ACCEPTED", cryptoToken);
+        expect(d.success).toBe(true);
+        expect(d.status).toBe(200);
+        expect(d.message).toBe("Invitation accepted successfully.");
+    });
+
+    test("Cannot accept already accepted invite", async () => {
+        const d = await services.service.user.invite.process("3", serviceId, "ACCEPTED", cryptoToken);
+        expect(d.success).toBe(false);
+        expect(d.status).toBe(400);
+        expect(d.message).toBe("User is already a member of this service.");
+    });
+
+    test("User is now a member of the service", async () => {
+        const res = await services.service.user.isIn(serviceId, "3");
+        expect(res).toBe(true);
+    });
+});

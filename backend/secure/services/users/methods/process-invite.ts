@@ -8,7 +8,7 @@ import secure from "../../../global/dir";
 
 
 
-export async function processInvite(userID: string, serviceID: string, status: UserConnections["status"]): Promise<ReplyType> {
+export async function processInvite(userID: string, serviceID: string, status: UserConnections["status"], cryptographic_token: string): Promise<ReplyType> {
     const userConnections = db.collection("user_connections") as Collection<UserConnections>;
 
     const user = await secure.user.get(userID, false);
@@ -28,6 +28,10 @@ export async function processInvite(userID: string, serviceID: string, status: U
         status: "PENDING"
     });
 
+    if (!invite) {
+        return software.methods.serverReply(404, "No pending invitation found for this user and service.");
+    }
+
     if (invite.status === status || (status !== "ACCEPTED" && status !== "REJECTED")) {
         return software.methods.serverReply(400, `Invitation is already marked as ${status} or invalid status provided.`);
     }
@@ -44,7 +48,17 @@ export async function processInvite(userID: string, serviceID: string, status: U
         return software.methods.serverReply(400, "This invitation has expired.");
     }
 
+    if (status === "ACCEPTED") {
+        const userJoined = await services.service.user.register(user, serviceID, cryptographic_token, false, [""]);
 
+        if (!userJoined.success) {
+            return software.methods.serverReply(500, "Failed to register user to the service: " + userJoined.message);
+        }
+
+        return software.methods.serverReply(200, "Invitation accepted successfully.");
+    } else if (status === "REJECTED") {
+        return software.methods.serverReply(200, "Invitation rejected successfully.");
+    }
 
     const update = await userConnections.updateOne(
         { id: invite.id },
@@ -52,18 +66,7 @@ export async function processInvite(userID: string, serviceID: string, status: U
     );
 
     if (update.modifiedCount === 1) {
-
-        if (status === "ACCEPTED") {
-            const userJoined = await services.service.user.register(user, serviceID, null, true, [""]);
-
-            if (!userJoined.success) {
-                return software.methods.serverReply(500, "Failed to register user to the service after accepting the invitation.");
-            }
-
-            return software.methods.serverReply(200, "Invitation accepted successfully.");
-        } else if (status === "REJECTED") {
-            return software.methods.serverReply(200, "Invitation rejected successfully.");
-        }
+        return software.methods.serverReply(200, `Invitation ${status} successfully.`);
     }
 
     return software.methods.serverReply(500, "Failed to accept the invitation. Please try again later.");

@@ -19,9 +19,10 @@ import secure from "../../global/dir";
 import { services } from "../dir";
 import notifications from "../../../software/notifications/dir";
 import mailing from "../../../software/mailing/dir";
+import { twoFA } from "../../2FA/dir";
 
 
-export default async function registerUserInAPI(user: User, apiID: string, codeNumber: string | null, force = false, rights: string[]): Promise<ReplyType> {
+export default async function registerUserInAPI(user: User, apiID: string, cryptographic_token: string | null, force = false, rights: string[]): Promise<ReplyType> {
     // Implementation for registering the user in the API
     const registerUser = async () => {
         const usersCollection = db.collection('users');
@@ -111,27 +112,24 @@ export default async function registerUserInAPI(user: User, apiID: string, codeN
     if (force) {
         const registration = await registerUser();
         return registration;
-    } else if (!force && codeNumber === null) {
+    } else if (!force && (cryptographic_token === null || cryptographic_token === "")) {
         return software.methods.serverReply(400, "Bad Request: Security code must be provided when force is true.");
     }
 
 
 
-    if (codeNumber) {
-        console.log("Code provided, verifying...");
-        const code: SecurityCode = await secure.code.get(null, codeNumber);
-        if (!code) {
-            return software.methods.serverReply(404, "Security code not found.");
-        }
+    if (cryptographic_token) {
+        const isRequestCorrect = await twoFA.analysis.context(user,{
+            action : "JOIN_SERVICE",
+            data : {
+                serviceID: apiID
+            }
+        }, cryptographic_token);
 
-        const isCodeValid = await secure.code.check(code, user, apiID, "SELF_SERVICE_MANAGEMENT");
-        if (!isCodeValid) {
-            return software.methods.serverReply(400, "Bad Request: Invalid or expired security code.");
-        }
-
-        const updatedCode = await secure.code.invalidate(code.id);
-        if (!updatedCode.success) {
-            return software.methods.serverReply(500, "Failed to invalidate security code.");
+        console.log("2FA analysis result:", isRequestCorrect);
+        
+        if (!isRequestCorrect.valid) {
+            return software.methods.serverReply(401, "Unauthorized: Invalid or expired security request.");
         }
 
         const registration = await registerUser();
