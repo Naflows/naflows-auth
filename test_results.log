@@ -160,3 +160,5 @@ b43c0ef97168ccc0aebe0f2eed7c9c134e83f57f dev                  join-service PASS
 2026-01-10 08:15:40                                                                          
 469508e3a585a03401f961f83d071c202a35d5ea dev                  2fa        PASS                
 2026-01-10 08:16:50                                                                          
+6e249c2c6e8502436dd58cc95021c49d603ffdcb dev                  join-service FAIL                
+2026-03-30 18:22:41                                                                          

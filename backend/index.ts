@@ -48,99 +48,9 @@ app.use('/client/secure/user', userRoutes);
 
 
 
-app.post('/client/build/service', async (req: Request, res: Response) => {
-    const { userID, password, identifier, details } = req.body;
-    const builtService: ReplyType = await services.service.build(
-        userID, password, identifier, details
-    );
-
-    if (!builtService.success) {
-        return res.status(builtService.status).json(builtService);
-    }
-
-    res.status(200).json(builtService.data);
-})
-
-// app.post('/contract-debug/get-api-key', async (req, res) => {
-//     const { userID, serviceID, password, identifier } = req.body;
-//     const token = await services.token.get(userID, serviceID, password, identifier)
-//     res.status(token.status).json(token);
-// })
-app.post('/contract-debug/validate-token', async (req, res) => {
-    const { serviceID, token, creation_date } = req.body;
-    const t: boolean = await services.token.check(serviceID, token, creation_date)
-    res.status(t ? 200 : 403).json(t);
-})
-
-app.post('/test', (req: Request, res: Response) => {
-    const newSessionID = (req as any).newSessionID;
-    const newTokenID = (req as any).newTokenID;
-    const retryAfter = (req as any).retry_after;
-    const token = (req as any).token;
-    const data: ReplyType = {
-        status: 200,
-        message: "Successful connection",
-        success: true,
-    };
-    // I don't like when there are duplicated lines ugh
-    if (newSessionID) {
-        data.data = data.data || {};
-        data.data['session'] = newSessionID;
-    }
-    if (newTokenID) {
-        data.data = data.data || {};
-        data.data['token'] = newTokenID;
-    }
-    if (token) {
-        data.data = data.data || {};
-        data.data['token'] = token;
-    }
-    if (retryAfter) {
-        data.data = data.data || {};
-        data.data['retry_after'] = retryAfter;
-    }
-    res.status(200).json(data);
-});
 
 
 
-
-
-/*
-
-    WARNING : THIS PART IS THE ONLY ONE THAT IS NOT 
-    SUBMITTED TO THE NASS. 
-
-*/
-app.post('/team/add/service/post', async (req, res) => {
-    // Handle the request to add a service that comes from a form
-    const body = req.body;
-    if (body.db_username != process.env.MONGO_INITDB_ROOT_USERNAME || body.db_password != process.env.MONGO_INITDB_ROOT_PASSWORD) {
-        await secure.blacklist(mongoose, req, res, "Invalid MongoDB credentials provided when trying to add a new session to the NASS.");
-    } else {
-        const usersCollection = mongoose.connection.collection('users');
-        const user = await usersCollection.findOne({
-            identifier: secure.crypt(body.user_identifier),
-        });
-        if (
-            !user ||
-            user === null ||
-            user === undefined ||
-            (user && user.password !== secure.crypt(body.user_password) && user.password !== body.user_password)
-        ) {
-            await secure.blacklist(mongoose, req, res, "Invalid user credentials provided when trying to add a new service to the NASS.");
-        } else {
-            // Add connection and service token
-            return res.status(200).send(`Service ${body.name} added successfully`);
-        }
-
-    }
-})
-
-
-app.get('/team/add/service', (req, res) => {
-    serve("Add service", "form-style.css", "add-service.html", res);
-})
 
 
 
@@ -429,43 +339,6 @@ app.put('/client/secure/user/update', async (req, res) => {
 
 
 
-app.post('/client/secure/data/services/build', async (req, res) => {
-
-    console.log("Request to build service received:", req.body);
-
-    const service = req.body.service;
-    if (!service) {
-        console.log("Bad Request: Missing service details.");
-        return res.status(400).json(software.methods.serverReply(400, "Bad Request: No service data provided.", {
-            middleware: req.middleware.data,
-        }));
-    }
-    const create: ReplyType = await services.service.register({
-        id: service.public.id,
-        name: service.public.name,
-        description: service.public.description || null,
-        ip_address: service.configuration.config.ip_address,
-        dns: service.configuration.config.dns,
-        picture: service.public.profileImage || null,
-        banner: service.public.bannerImage || null,
-    }, {
-        rates: service.configuration.plans.RPS || 100,
-    }, {
-        allow_public_visibility: service.public.allow_public_visibility || false,
-        allow_user_registration: service.public.allow_user_registration || false,
-    }, {
-        id: service.configuration.plans
-    }, req, res);
-    res.status(create.status).json({
-        status: create.status,
-        message: create.message,
-        success: create.success,
-        data: {
-            middleware: req.middleware.data,
-        }
-    });
-});
-
 app.post('/client/secure/session-check', async (req, res) => {
     return res.status(200).json({
         status: 200,
@@ -556,13 +429,13 @@ app.post('/public/services/plans', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`NASS is running on http://localhost:${PORT}`);
+    console.log(`Naflows Authentication Secure System is running on http://localhost:${PORT}`);
 
     if (process.env.DEV_SEND_SENSITIVE_DATA === "true") {
         console.log("WARNING: DEV_SEND_SENSITIVE_DATA is enabled. Sensitive data may be exposed in responses.");
         // Close after 10 seconds
         setTimeout(() => {
-            console.log("Shutting down NASS due to DEV_SEND_SENSITIVE_DATA being enabled.");
+            console.log("Shutting down Naflows Authentication Secure System due to DEV_SEND_SENSITIVE_DATA being enabled.");
             process.exit(0);
         }, 10000);
     }

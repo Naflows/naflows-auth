@@ -1,0 +1,25 @@
+{
+    "name" : "Naflows Business",
+    "description" : "Naflows Business is a comprehensive platform designed to streamline and optimize business operations. It offers a suite of tools and services that cater to various aspects of business management, including customer relationship management (CRM), project management, financial tracking, and analytics. With its user-friendly interface and robust features, Naflows Business empowers businesses to enhance productivity, improve decision-making, and drive growth.",
+    "picture" : "@/assets/images/naflows-business-logo.png",
+    "banner" : "@/assets/images/naflows-business-banner.png",
+    "parameters" : {
+        "user-rate-per-second" : 5,
+        "enable-sso" : true,
+        "enable-2fa" : true,
+        "enable-email-notifications" : true
+    },
+    "network" : {
+        "ip-address" : [
+            "localhost", "4.65.32.16"
+        ],
+        "domain-names" : [
+            "naflows.com", "www.naflows.com", "api.naflows.com"
+        ]
+    },
+    "env" : {
+        "production" : {
+            "service-email" : "service@naflows.com"
+        }
+    }
+}

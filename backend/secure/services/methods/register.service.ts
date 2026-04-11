@@ -24,55 +24,21 @@ import { Collection } from "mongoose";
 import secure from "../../global/dir";
 import { uploadPicture } from "../../../software/data-management/manage-pictures";
 
-export async function registerService(
-    // These data are the one defined by the user creating the service
-    pub: {
-        name: string, description: string | null, picture, banner, ip_address: string, dns: string, id: string
-    }, settings: {
-        rates: 100 | 500 | 1000 | 10000;
-    },
-    public_settings: {
-        allow_public_visibility: boolean;
-        allow_user_registration: boolean;
-    }, plan: {
-        id: number,
-    }, req, res
-): Promise<ReplyType> {
+export async function registerService(): Promise<ReplyType> {
 
     const serviceCollection: Collection<Service> = db.collection("services");
     const serviceTrafficCollection: Collection<ServiceTraffic> = db.collection("service_traffic");
 
-    // Check if the service id, name, ip address or dns already exists
-    const existingService: Service | null = await serviceCollection.findOne({
-        $or: [
-            { id: pub.id },
-            { name: pub.name },
-            { dns: pub.dns }
-        ]
-    });
+
 
     if (existingService) {
         return software.methods.serverReply(409, "Conflict: Service with same ID, name, IP address or DNS already exists.");
     }
 
 
-    const user = await secure.user.manageConnection(req, res);
 
-    if (!user) {
-        return software.methods.serverReply(401, "Unauthorized: User not found.");
-    }
 
-    const plans = await services.service.plan.getAll() as ReplyType;
 
-    if (!plans.success) {
-        return software.methods.serverReply(500, "Internal Server Error: Failed to fetch service plans.");
-    }
-
-    const planData = plans.data.plans.find((p: ServicePlan) => p.id === plan.id);
-
-    if (!planData) {
-        return software.methods.serverReply(404, "Not Found: Service plan not found.");
-    }
 
     const service: Service = {
         id: pub.id,

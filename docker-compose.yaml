@@ -61,6 +61,7 @@ services:
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASS=${SMTP_PASS}
       - SMTP_SECURE=${SMTP_SECURE}
+      - MONGO_URL=${MONGO_URL}
     ports:
       - "3000:3000"
     expose:
@@ -93,20 +94,6 @@ services:
     logging:
       driver: none
 
-  dummy-api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-    restart: always
-    profiles: ["dummy-api"]
-    container_name: dummy-api
-    networks:
-      nass-network:
-        ipv4_address: 172.28.0.10
-    ports:
-      - "3005:3005"
-    expose:
-      - "3005"
 
   auth-api-test:
     build:

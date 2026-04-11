@@ -184,7 +184,6 @@ export interface Service {
   status: "ACTIVE" | "INACTIVE" | "DEPRECATED"; // Service status, ACTIVE means the service is running, INACTIVE means the service is not running, DEPRECATED means the service is no longer supported
   dns: string; // DNS of the service, used to identify the service
   ip_address: string[]; // IP address of the service
-  plan : number;
   settings: ServiceSettings;
   apiKey?: string; // The API key associated with the service
   picture?: string; // URL to the service picture, optional
@@ -204,45 +203,7 @@ export interface Service {
     users: number; // Number of users in the service
     official?: boolean; // Whether the service is verified or not, verified services are services that have been verified by the NASS team to be legitimate and secure
     user_is_registered? : boolean; // Whether the user is registered in the service
-    owner? : {
-      username : string;
-      profile_picture : string;
-      verified : boolean;
-      first_name? : string;
-      last_name? : string;
-    },
-    naflows_allows_registration? : {
-      message : string;
-      allowed : boolean;
-    },
-    public : {
-      privacy_policy_url? : {
-        value : string,
-        approved : boolean,
-        history? : Array<{
-          updated_at : number,
-          previous_value : string
-        }>;
-      };
-      terms_of_service_url? : {
-        value : string,
-        approved : boolean,
-        history? : Array<{
-          updated_at : number,
-          previous_value : string
-        }>;
-      };
-      contact_email? : {
-        value : string,
-        approved : boolean,
-        history? : Array<{
-          updated_at : number,
-          previous_value : string
-        }>;
-      };
-    }
   },
-  alerts? : ServiceAlert[]; // List of alerts related to the service
 }
 
 export interface ServiceLog {

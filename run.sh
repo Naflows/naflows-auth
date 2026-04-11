@@ -1,6 +1,6 @@
 #!/bin/bash
-set -e  # Exit on any error
-
+# set -e  # Exit on any error
+trap 'echo -e "\033[1;31mScript exited with code $?. Press Enter to close...\033[0m"; read' EXIT
 
 RESET_ENVIRONMENT=$1
 RESET_DB=$2

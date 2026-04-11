@@ -1,4 +1,3 @@
-import { get } from "mongoose";
 import { createAPIKey } from "./keys/create";
 import { getKeyByIPID } from "./keys/get-by-api";
 import { getKeyByValue } from "./keys/get-by-value";
